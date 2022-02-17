@@ -1,0 +1,38 @@
+.dish-container .dish-img{
+    width: 100%;
+    border-radius: 5px;
+}
+
+.dish-container .dish-name{
+    font-weight: 650;
+}
+
+.dish-container .heart-icon{
+    text-align: right;
+    font-size: 2rem;
+    margin-bottom: -1rem;
+}
+
+.dish-container .heart-icon .icon:hover{
+    cursor: pointer;
+    fill: red;
+}
+
+.dish-container .dish-info{
+    display: flex;
+    align-items: center;
+}
+
+.dish-container .dish-info .info-detail{
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.dish-container .dish-info .info-detail .icon{
+    vertical-align: middle;
+    font-size: 1.2rem;
+}
+.dish-container .dish-info .info-detail span{
+    font-weight: bold;
+}

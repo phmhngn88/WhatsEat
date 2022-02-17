@@ -1,0 +1,56 @@
+.top-dishes-container{
+    display: flex;
+    justify-content: center;
+}
+
+.top-dishes{
+    width: 70%;
+    margin-top: 4rem;
+}
+
+.top-dishes .title{
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.top-dishes-container .top-dishes .dish-col:hover{
+    cursor: pointer;
+}
+.top-dishes-container .top-dishes .dish-col .dish-container .dish-img{
+    width: 100%;
+    border-radius: 5px;
+}
+
+.top-dishes-container .top-dishes .dish-col .dish-container .dish-name{
+    font-weight: 650;
+}
+
+.top-dishes-container .top-dishes .dish-col .dish-container .heart-icon{
+    text-align: right;
+    font-size: 2rem;
+    margin-bottom: -1rem;
+}
+
+.top-dishes-container .top-dishes .dish-col .dish-container .heart-icon .icon:hover{
+    cursor: pointer;
+    fill: red;
+}
+
+.top-dishes-container .top-dishes .dish-col .dish-container .dish-info{
+    display: flex;
+    align-items: center;
+}
+
+.top-dishes-container .top-dishes .dish-col .dish-container .dish-info .info-detail{
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.top-dishes-container .top-dishes .dish-col .dish-container .dish-info .info-detail .icon{
+    vertical-align: middle;
+    font-size: 1.2rem;
+}
+.top-dishes-container .top-dishes .dish-col .dish-container .dish-info .info-detail span{
+    font-weight: bold;
+}

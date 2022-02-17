@@ -1,0 +1,54 @@
+.search{
+}
+
+.search .search-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search .search-container .search-fluid{
+    width: 70%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.search .search-container .search-fluid .search-nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: -1rem;
+}
+
+.search .search-container .search-fluid .search-nav .ant-dropdown-link{
+    color: brown;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.search .search-container .search-fluid .title{
+    font-weight: 650;
+}
+
+.search .search-container .search-fluid .menu{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.search .search-container .search-fluid .menu .single-item{
+    display: flex;
+    justify-content: flex-start;
+    width: 17%;
+}
+
+.search .search-container .search-fluid .menu .single-item .item-name{
+    font-weight: bold;
+    margin-left: 0.5rem
+}
+
+.search .search-container .search-fluid .notice{
+    color: #858383;
+    margin-bottom: 2rem;
+}
+
