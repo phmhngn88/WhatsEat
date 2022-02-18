@@ -1,0 +1,19 @@
+.item-container .item-img{
+    width: 100%;
+    border-radius: 5px;
+}
+
+.item-container .item-name{
+    font-weight: 650;
+    padding-top: 1rem;
+}
+
+.item-container .item-quantity{
+    margin-top: -0.5rem;
+    margin-bottom: 0rem;
+}
+
+.item-container .item-price{
+    font-weight: 650;
+    font-size: 1rem;
+}

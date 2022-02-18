@@ -3,6 +3,8 @@ import "./TopItems.css";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 
+import Product from "../Product/Product";
+
 const items = [
   {
     id: 1,
@@ -80,17 +82,7 @@ const TopItems = () => {
             const { id, img_url, item_name, weight, price } = item;
             return (
               <Col span={6} className="item-col" key={id}>
-                <div className="item-container">
-                  <img src={img_url} alt={item_name} className="item-img" />
-                  <h3 className="item-name">{item_name}</h3>
-                  <p className="item-quantity">{weight}</p>
-                  <p className="item-price">
-                    {price.toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
-                  </p>
-                </div>
+                <Product {...item} />
               </Col>
             );
           })}
