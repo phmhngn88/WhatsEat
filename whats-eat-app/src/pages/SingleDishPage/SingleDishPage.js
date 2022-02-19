@@ -2,6 +2,8 @@ import React from "react";
 import "./SingleDishPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import Guide from "../../components/Guide/Guide";
+import Comment from "../../components/Comment/Comment";
 import { FaAngleDown } from "react-icons/fa";
 import {
   AiFillStar,
@@ -107,13 +109,15 @@ const SingleDishPage = () => {
             {ingredients.map((item) => {
               const { id, product_name } = item;
               return (
-                <div className="ingredient-box">
+                <div className="ingredient-box" key={id}>
                   <h3 className="ingredient-name">{product_name}</h3>
                   <FaAngleDown className="icon" />
                 </div>
               );
             })}
           </div>
+          <Guide />
+          <Comment />
         </div>
       </div>
       <Footer />
