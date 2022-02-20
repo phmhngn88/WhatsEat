@@ -1,0 +1,8 @@
+using whatseat_server.Configuration;
+
+namespace whatseat_server.Models.DTOs.Responses;
+
+public class RegistrationResponseDto : AuthResult
+{
+
+}
