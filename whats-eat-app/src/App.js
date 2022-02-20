@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import RecommendPage from "./pages/RecommendPage/RecommendPage";
 import SingleDishPage from "./pages/SingleDishPage/SingleDishPage";
+import SingleProductPage from "./pages/SingleProductPage/SingleProductPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import Cart from "./components/Cart/Cart";
 import ShopPage from "./pages/ShopPage/ShopPage";
@@ -20,6 +21,7 @@ function App() {
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/recommender" element={<RecommendPage />}></Route>
         <Route path="/singledish" element={<SingleDishPage />}></Route>
+        <Route path="/singleproduct" element={<SingleProductPage />}></Route>
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/shop" element={<ShopPage />}></Route>
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
