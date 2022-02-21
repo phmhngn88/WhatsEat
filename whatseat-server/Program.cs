@@ -15,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 
 builder.Services.AddDbContext<WhatsEatContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+    options.UseMySql(builder.Configuration.GetConnectionString("Database"),
+        new MySqlServerVersion(new Version())));
 
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<ProductService>();
