@@ -7,7 +7,9 @@ import SingleDishPage from "./pages/SingleDishPage/SingleDishPage";
 import SingleProductPage from "./pages/SingleProductPage/SingleProductPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import Cart from "./components/Cart/Cart";
+import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ShopPage from "./pages/ShopPage/ShopPage";
+import ViewShopPage from "./pages/ViewShopPage/ViewShopPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -19,12 +21,14 @@ function App() {
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/payment" element={<PaymentPage />}></Route>
         <Route path="/recommender" element={<RecommendPage />}></Route>
         <Route path="/singledish" element={<SingleDishPage />}></Route>
         <Route path="/singleproduct" element={<SingleProductPage />}></Route>
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/shop" element={<ShopPage />}></Route>
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
+        <Route path="/viewshop" element={<ViewShopPage />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,7 @@
 import { Button, Checkbox } from "antd";
 import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 import Counter from "../../components/Counter/Counter";
 import Footer from "../../components/Footer/Footer";
@@ -100,9 +101,9 @@ const Cart = () => {
                   </div>
                 );
               })}
-              <Button className="pay-btn" type="primary">
-                THANH TOÁN
-              </Button>
+              <Link to="/payment" className="pay-btn">
+                MUA HÀNG
+              </Link>
             </div>
           </div>
         </div>

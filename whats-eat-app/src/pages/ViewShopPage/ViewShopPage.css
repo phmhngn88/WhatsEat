@@ -1,0 +1,55 @@
+.view-shop-fluid{
+    display: flex;
+    justify-content: center;
+}
+
+.view-shop-container{
+    width: 70%;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+}
+
+.view-shop-container .shop-info-block{
+    width: 40%;
+    height: 10rem;
+    background: url('https://cf.shopee.vn/file/dcfd242ff453fa010aa6196af133a944_tn') no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+}
+
+.view-shop-container .shop-info-block .img-box{
+    display: flex;
+}
+ .view-shop-container .shop-info-block .avt-img{
+     width: 5rem;
+     height: 5rem;
+     border-radius: 50%;
+     border: 2px solid #c4c4c4;
+ }
+
+ .view-shop-container .shop-info-block .shop-name{
+     float: right;
+     text-transform: capitalize;
+     color: #fff;
+     font-weight: 650;
+     margin-top: 0.5rem;
+     margin-left: 0.5rem;
+ }
+
+ .view-shop-container .shop-info-block .btn-box .btn{
+     width: 46%;
+     padding: 0.2rem 0rem;
+     margin:1rem 0.5rem 0rem 0.5rem;
+     border-radius: 2px;
+     border: none;
+     text-transform: uppercase;
+     background-color: brown;
+     color: #fff;
+ }
+
+ .shop-info-block .btn-box .btn:hover,
+ .shop-info-block .btn-box .btn:active{
+     background-color: red;
+ }
