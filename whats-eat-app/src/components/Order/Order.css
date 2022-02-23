@@ -1,0 +1,40 @@
+.order-container{
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 2px solid #c4c4c4;
+    border-radius: 5px;
+}
+
+.order-container .title{
+    font-weight: 650;
+    border-bottom: 1px solid #c4c4c4;
+}
+
+.order-container .order-block{
+    display: flex;
+    justify-content: space-between;
+    padding: 0rem 1rem 1rem 1rem;
+    border-bottom: 1px solid #c4c4c4;
+}
+
+.order-container .order-block .item-info{
+    display: flex;
+}
+
+.order-container .order-block .item-info .item-img{
+    width: 5rem;
+    height: 5rem;
+    margin-right: 0.8rem;
+    border-radius: 2px;
+}
+
+.order-container .order-block .price{
+    font-weight: 650;
+}
+
+.order-container .total{
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 650;
+    padding: 0.5rem 1rem 0rem 1rem;
+}

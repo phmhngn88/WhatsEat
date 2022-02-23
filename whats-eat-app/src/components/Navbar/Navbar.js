@@ -40,9 +40,9 @@ const options = (
       </a>
     </Menu.Item>
     <Menu.Item key="3">
-      <a href="#" className="single-option">
+      <Link to="/orders" className="single-option">
         <BsFillCartFill /> <span>Đơn hàng</span>
-      </a>
+      </Link>
     </Menu.Item>
     <Menu.Item key="4">
       <a href="#" className="single-option">
