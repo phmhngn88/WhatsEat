@@ -38,3 +38,21 @@
     font-weight: 650;
     padding: 0.5rem 1rem 0rem 1rem;
 }
+
+.cancel-block{
+    text-align: right;
+}
+
+.cancel-block .cancel-btn{
+    margin-right: 1rem;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    background-color: brown;
+    border: none;
+    border-radius: 3px;
+}
+
+.cancel-block .cancel-btn:hover{
+    cursor: pointer;
+    background-color: red;
+}

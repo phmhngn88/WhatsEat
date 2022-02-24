@@ -3,11 +3,14 @@ import "./Order.css";
 
 const Order = ({ props }) => {
   console.log(props);
-  const { id, img_url, item_name, price } = props;
+  const { id, img_url, item_name, price, status } = props;
   return (
     <div className="order">
       <div className="order-container">
-        <h2 className="title">Đơn hàng thành công</h2>
+        <h2 className="title">
+          {status === 0 ? "Đơn hàng đang xử lý" : "Đơn hàng thành công"}
+        </h2>
+
         <div className="order-block">
           <div className="item-info">
             <img className="item-img" src={img_url} alt={item_name} />
@@ -28,6 +31,13 @@ const Order = ({ props }) => {
               currency: "VND",
             })}
           </p>
+        </div>
+        <div className="cancel-block">
+          {status === 0 ? (
+            <button className="btn cancel-btn">Hủy đơn hàng</button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

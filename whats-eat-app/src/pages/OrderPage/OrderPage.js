@@ -19,6 +19,7 @@ const items = [
       "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
     price: 169000,
     quantity: "500g",
+    status: 0,
   },
   {
     id: 1,
@@ -27,6 +28,7 @@ const items = [
       "https://image.cooky.vn/posproduct/g0/14322/s/587a187b-069d-479d-87b7-3d5299cd5382.jpeg",
     price: 159000,
     quantity: "1",
+    status: 0,
   },
   {
     id: 2,
@@ -35,6 +37,7 @@ const items = [
       "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
     price: 119000,
     quantity: "500g",
+    status: 1,
   },
 ];
 
@@ -60,10 +63,14 @@ const OrderPage = () => {
               })}
             </TabPane>
             <TabPane tab="Chờ thanh toán" key="2">
-              Content of Tab Pane 2
+              {allOrders.map((order) => {
+                return <Order key={order.id} props={order} />;
+              })}
             </TabPane>
             <TabPane tab="Đang xử lý" key="3">
-              Content of Tab Pane 3
+              {allOrders.map((order) => {
+                return <Order key={order.id} props={order} />;
+              })}
             </TabPane>
             <TabPane tab="Đang vận chuyển" key="4">
               Content of Tab Pane 4
