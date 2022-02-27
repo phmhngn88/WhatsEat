@@ -1,0 +1,59 @@
+.shop-cpn{
+    width: 100%;
+}
+
+.shop-cpn-fluid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #F6F6F6;
+}
+
+.shop-cpn-fluid .shop-cpn-container{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    background-color: #f6f6f6;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 2px;
+}
+
+.shop-cpn-container .collapse-side-bar{
+    width: 20%;
+    padding: 1rem;
+    background-color: #fff;
+}
+
+.Collapsible__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem;
+    opacity: 0.8;
+}
+ 
+.Collapsible__trigger:hover{
+    cursor: pointer;
+    background-color: #F6F6F6;
+}
+
+.Collapsible__trigger.is-open svg {
+    transform: rotate(180deg);
+}
+
+.Collapsible div{
+    padding-left: 0.5rem;
+}
+
+.Collapsible a{
+    display: block;
+    text-transform: capitalize;
+    color: #000;
+    font-size: 650;
+}
+
+.shop-cpn-container .content-container{
+    width: 75%;
+}
