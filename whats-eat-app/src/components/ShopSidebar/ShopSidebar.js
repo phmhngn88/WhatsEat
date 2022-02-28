@@ -8,6 +8,7 @@ const ShopSidebar = () => {
   return (
     <div className="collapse-side-bar">
       <Collapsible
+        open={true}
         trigger={["Quản Lý Shop", <BsChevronDown />]}
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
@@ -22,11 +23,12 @@ const ShopSidebar = () => {
         </div>
       </Collapsible>
       <Collapsible
+        open={true}
         trigger={["Quản Lý Đơn Hàng", <BsChevronDown />]}
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/">Tất cả đơn</Link>
+          <Link to="/shop/orders">Tất cả đơn</Link>
         </div>
         <div>
           <Link to="/">Đơn hủy</Link>
@@ -36,6 +38,7 @@ const ShopSidebar = () => {
         </div>
       </Collapsible>
       <Collapsible
+        open={true}
         trigger={["Quản Lý Sản Phẩm", <BsChevronDown />]}
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
@@ -50,6 +53,7 @@ const ShopSidebar = () => {
         </div>
       </Collapsible>
       <Collapsible
+        open={true}
         trigger={["Thiết Lập Shop", <BsChevronDown />]}
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >

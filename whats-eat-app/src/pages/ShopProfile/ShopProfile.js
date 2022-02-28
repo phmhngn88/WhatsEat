@@ -12,7 +12,14 @@ const ShopProfile = () => {
         <div className="shop-profile-container">
           <ShopSidebar />
           <div className="content-container">
-            <h1>Profile content</h1>
+            <h1 className="title">Hồ Sơ Shop</h1>
+            <p className="note">
+              Xem tình trạng Shop và cập nhật hồ sơ Shop của bạn
+            </p>
+            <div className="basic-info">
+              <h3>Thông tin cơ bản</h3>
+              <div className="detail-info">Info container</div>
+            </div>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ShopPage from "./pages/ShopPage/ShopPage";
 import ViewShopPage from "./pages/ViewShopPage/ViewShopPage";
 import ShopProfile from "./pages/ShopProfile/ShopProfile";
+import ShopOrders from "./pages/ShopOrders/ShopOrders";
 import OrderPage from "./pages/OrderPage/OrderPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/shop" element={<ShopPage />}></Route>
         <Route path="/shop/profile" element={<ShopProfile />}></Route>
+        <Route path="/shop/orders" element={<ShopOrders />}></Route>
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
         <Route path="/viewshop" element={<ViewShopPage />}></Route>
         <Route path="/orders" element={<OrderPage />}></Route>

@@ -38,4 +38,5 @@
 }
 .Collapsible a:active{
     color: brown;
+    font-weight: 900;
 }
