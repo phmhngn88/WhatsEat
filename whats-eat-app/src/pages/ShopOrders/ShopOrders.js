@@ -12,7 +12,7 @@ const ShopOrders = () => {
         <div className="shop-orders-container">
           <ShopSidebar />
           <div className="content-container">
-            <h1>Shop Orders</h1>
+            <h1 className="title">Tất cả đơn hàng</h1>
           </div>
         </div>
       </div>

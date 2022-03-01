@@ -42,3 +42,11 @@
     color: brown;
     border-bottom: 1.5px solid #C4C4C4;
 }
+
+
+.content-container .basic-info .detail-info .register-form{
+    margin-top: 2rem;
+    margin-right: 10rem;
+}
+
+.register-form {}
