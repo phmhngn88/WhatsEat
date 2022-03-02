@@ -16,7 +16,7 @@ const ShopSidebar = () => {
           <Link to="/shop/profile">Hồ sơ Shop</Link>
         </div>
         <div>
-          <Link to="/">Danh mục của Shop</Link>
+          <Link to="/shop/categories">Danh mục của Shop</Link>
         </div>
         <div>
           <Link to="#">Đánh giá Shop</Link>
