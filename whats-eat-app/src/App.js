@@ -15,6 +15,7 @@ import ShopOrders from "./pages/ShopOrders/ShopOrders";
 import ShopCategories from "./pages/ShopCategories/ShopCategories";
 import OrderPage from "./pages/OrderPage/OrderPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
+import ShopItems from "./pages/ShopItems/ShopItems";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
         <Route path="/viewshop" element={<ViewShopPage />}></Route>
         <Route path="/orders" element={<OrderPage />}></Route>
+        <Route path="/shop/items" element={<ShopItems />}></Route>
       </Routes>
     </BrowserRouter>
   );
