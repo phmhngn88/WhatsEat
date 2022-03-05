@@ -49,7 +49,7 @@ const ShopSidebar = () => {
           <Link to="/">thêm sản phẩm</Link>
         </div>
         <div>
-          <Link to="/">sản phẩm vi phạm</Link>
+          <Link to="/shop/infringingitems">sản phẩm vi phạm</Link>
         </div>
       </Collapsible>
       <Collapsible
