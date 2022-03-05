@@ -41,7 +41,7 @@ const InfringingItems = () => {
             const { id, img_url, item_name, weight, price } = item;
             return (
               <Col span={6} className="item-col" key={id}>
-                <h2>Lỗi: Thông tin mô tả sản phẩm chưa rõ ràng</h2>
+                <h2>Lỗi: Thông tin sản phẩm chưa rõ ràng</h2>
                 <Product {...item} />
                 <button className="btn">Xóa</button>
                 <button className="btn">Sửa</button>

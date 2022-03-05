@@ -46,7 +46,7 @@ const ShopSidebar = () => {
           <Link to="/shop/items">tất cả sản phẩm</Link>
         </div>
         <div>
-          <Link to="/">thêm sản phẩm</Link>
+          <Link to="/shop/additem">thêm sản phẩm</Link>
         </div>
         <div>
           <Link to="/shop/infringingitems">sản phẩm vi phạm</Link>

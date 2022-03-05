@@ -16,6 +16,7 @@ import ShopCategories from "./pages/ShopCategories/ShopCategories";
 import OrderPage from "./pages/OrderPage/OrderPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import ShopItems from "./pages/ShopItems/ShopItems";
+import ShopAddItem from "./pages/ShopAddItem/ShopAddItem";
 import ShopInfringingItems from "./pages/ShopInfringingItems/ShopInfringingItems";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/viewshop" element={<ViewShopPage />}></Route>
         <Route path="/orders" element={<OrderPage />}></Route>
         <Route path="/shop/items" element={<ShopItems />}></Route>
+        <Route path="/shop/additem" element={<ShopAddItem />}></Route>
         <Route path="/shop/infringingitems" element={<ShopInfringingItems />}></Route>
       </Routes>
     </BrowserRouter>
