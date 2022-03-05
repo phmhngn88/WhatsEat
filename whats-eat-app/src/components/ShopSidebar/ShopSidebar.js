@@ -19,7 +19,7 @@ const ShopSidebar = () => {
           <Link to="/shop/categories">Danh mục của Shop</Link>
         </div>
         <div>
-          <Link to="#">Đánh giá Shop</Link>
+          <Link to="/shop/rating">Đánh giá Shop</Link>
         </div>
       </Collapsible>
       <Collapsible
@@ -43,7 +43,7 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/">tất cả sản phẩm</Link>
+          <Link to="/shop/orders">tất cả sản phẩm</Link>
         </div>
         <div>
           <Link to="/">thêm sản phẩm</Link>
