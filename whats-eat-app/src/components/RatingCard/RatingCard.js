@@ -33,6 +33,7 @@ const RatingCard = ({
               numberOfStars={5}
               name="rating"
               starDimension="25px"
+              starSpacing="3px"
             />
           </div>
           <div className="content-box">{rate_content}</div>
