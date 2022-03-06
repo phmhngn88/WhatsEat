@@ -13,6 +13,13 @@
     background-color: brown;
     padding: 0 1rem;
     margin-right: 0.2rem;
+    border: none;
+    border-radius: 5px;
+}
+
+.items .btn:hover{
+    cursor: pointer;
+    background-color: red;
 }
 
 .items-container .items .item-col{
