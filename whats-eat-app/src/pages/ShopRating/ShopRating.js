@@ -18,7 +18,7 @@ const mock_rating = [
     item_name: "Gà Ta Bình Định Thả Vườn",
     item_img:
       "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
-    stars: 5,
+    stars: 4,
     rate_content: "Sản phẩm chất lượng tuyệt vời",
     rate_time: "25/10/2021",
     is_reply: true,

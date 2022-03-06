@@ -1,8 +1,6 @@
 import React from "react";
 import "./RatingCard.css";
-
-import { AiFillStar } from "react-icons/ai";
-
+import StarRatings from "react-star-ratings";
 const RatingCard = ({
   order_ID,
   username,
@@ -29,11 +27,13 @@ const RatingCard = ({
         </div>
         <div className="rating-content">
           <div className="star-box">
-            <AiFillStar className="star-icon" />
-            <AiFillStar className="star-icon" />
-            <AiFillStar className="star-icon" />
-            <AiFillStar className="star-icon" />
-            <AiFillStar className="star-icon" />
+            <StarRatings
+              rating={stars}
+              starRatedColor="brown"
+              numberOfStars={5}
+              name="rating"
+              starDimension="25px"
+            />
           </div>
           <div className="content-box">{rate_content}</div>
           <div className="img-box"></div>
