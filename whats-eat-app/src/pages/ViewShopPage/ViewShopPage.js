@@ -2,6 +2,12 @@ import React from "react";
 import "./ViewShopPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import { Row, Col, Tabs } from "antd";
+import "antd/dist/antd.css";
+import { BsShopWindow, BsFillPeopleFill, BsFillStarFill } from "react-icons/bs";
+import { GiStabbedNote } from "react-icons/gi";
+
+const { TabPane } = Tabs;
 
 const shopInfo = {
   id: 1,
@@ -41,7 +47,48 @@ const ViewShopPage = () => {
                 <button className="btn">chat</button>
               </div>
             </div>
-            <div className="shop-info"></div>
+            <div className="shop-info">
+              <Row gutter={[16, 16]}>
+                <Col span={12}>
+                  <BsShopWindow className="icon" />
+                  Sản Phẩm: <span>78</span>
+                </Col>
+                <Col span={12}>
+                  <BsFillPeopleFill className="icon" />
+                  Người Theo Dõi: <span>1k</span>
+                </Col>
+                <Col span={12}>
+                  <BsFillStarFill className="icon" />
+                  Đánh Giá: <span>4.8</span>
+                </Col>
+                <Col span={12}>
+                  <GiStabbedNote className="icon" />
+                  Tỉ Lệ Hủy Đơn Của Shop: <span>3%</span>
+                </Col>
+              </Row>
+            </div>
+          </div>
+          <div className="shop-products">
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="TẤT CẢ SẢN PHẨM" key="1">
+                Tất cả sản phẩm của shop
+              </TabPane>
+              <TabPane tab="Category 1" key="2">
+                Danh mục hàng 1
+              </TabPane>
+              <TabPane tab="Category 2" key="3">
+                Danh mục hàng 2
+              </TabPane>
+              <TabPane tab="Category 3" key="3">
+                Danh mục hàng 3
+              </TabPane>
+              <TabPane tab="Category 4" key="3">
+                Danh mục hàng 4
+              </TabPane>
+              <TabPane tab="Category 5" key="3">
+                Danh mục hàng 5
+              </TabPane>
+            </Tabs>
           </div>
         </div>
       </div>
