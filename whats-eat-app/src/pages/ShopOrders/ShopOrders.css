@@ -27,3 +27,19 @@
 .content-container .title{
     
 }
+
+.orders .table-title{
+    display: flex;
+    padding: 0.7rem 1rem;
+    background-color: #F6F6F6;
+    border-radius: 5px;
+}
+
+.orders .table-title p{
+    width: 15%;
+    margin-bottom: 0;
+}
+
+.orders .product-name{
+    width: 40% !important;
+}
