@@ -43,7 +43,7 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/shop/orders">tất cả sản phẩm</Link>
+          <Link to="/">tất cả sản phẩm</Link>
         </div>
         <div>
           <Link to="/">thêm sản phẩm</Link>
@@ -58,7 +58,7 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/">Địa chỉ</Link>
+          <Link to="/shop/address">Địa chỉ</Link>
         </div>
         <div>
           <Link to="/">Tài khoản</Link>
