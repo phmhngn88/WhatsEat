@@ -11,6 +11,7 @@ import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ShopPage from "./pages/ShopPage/ShopPage";
 import ViewShopPage from "./pages/ViewShopPage/ViewShopPage";
 import ShopAddress from "./pages/ShopAddress/ShopAddress";
+import ShopAccount from "./pages/ShopAccount/ShopAccount";
 import ShopProfile from "./pages/ShopProfile/ShopProfile";
 import ShopRating from "./pages/ShopRating/ShopRating";
 import ShopOrders from "./pages/ShopOrders/ShopOrders";
@@ -37,6 +38,7 @@ function App() {
         <Route path="/shop/rating" element={<ShopRating />}></Route>
         <Route path="/shop/orders" element={<ShopOrders />}></Route>
         <Route path="/shop/address" element={<ShopAddress />}></Route>
+        <Route path="/shop/account" element={<ShopAccount />}></Route>
         <Route path="/shop/categories" element={<ShopCategories />}></Route>
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
         <Route path="/viewshop" element={<ViewShopPage />}></Route>

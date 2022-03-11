@@ -61,7 +61,7 @@ const ShopSidebar = () => {
           <Link to="/shop/address">Địa chỉ</Link>
         </div>
         <div>
-          <Link to="/">Tài khoản</Link>
+          <Link to="/shop/account">Tài khoản</Link>
         </div>
       </Collapsible>
     </div>
