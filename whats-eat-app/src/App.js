@@ -2,6 +2,7 @@ import React from "react";
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import CategoryPage from "./pages/CategoryPage/CategoryPage";
 import RecommendPage from "./pages/RecommendPage/RecommendPage";
 import SingleDishPage from "./pages/SingleDishPage/SingleDishPage";
 import SingleProductPage from "./pages/SingleProductPage/SingleProductPage";
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element={<HomePage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/register" element={<RegisterPage />}></Route>
+        <Route path="/category" element={<CategoryPage />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/payment" element={<PaymentPage />}></Route>
         <Route path="/recommender" element={<RecommendPage />}></Route>
