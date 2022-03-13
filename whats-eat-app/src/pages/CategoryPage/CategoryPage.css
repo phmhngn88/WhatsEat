@@ -15,10 +15,14 @@
 }
 
 .option-btn-group .btn{
+    margin-right: 0.5rem;
     padding: 0.2rem 0.6rem;
     color: #000;
     border: 1px solid #c4c4c4;
     border-radius: 50px;
+}
+.btn:hover{
+    cursor: pointer;
 }
 
 .option-btn-group .active-btn{

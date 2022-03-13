@@ -13,6 +13,9 @@ const CategoryPage = () => {
         <div className="category-container">
           <div className="option-btn-group">
             <button className="btn active-btn">Tất cả</button>
+            {mock_type.map((type, idx) => {
+              return <button className="btn">{type.type_name}</button>;
+            })}
           </div>
           <div className="content">
             <h3 className="title">
@@ -32,6 +35,29 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
+
+const mock_type = [
+  {
+    id: 1,
+    type_name: "Ba rọi",
+  },
+  {
+    id: 2,
+    type_name: "Sườn",
+  },
+  {
+    id: 3,
+    type_name: "Đùi heo",
+  },
+  {
+    id: 4,
+    type_name: "Thăn heo",
+  },
+  {
+    id: 6,
+    type_name: "Giò & đuôi heo",
+  },
+];
 
 const mock_products = [
   {
