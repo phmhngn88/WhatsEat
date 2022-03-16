@@ -29,15 +29,15 @@ const options = (
       </a>
     </Menu.Item>
     <Menu.Item key="1">
-      <a href="#" className="single-option">
+      <Link to="/fav/recipe" className="single-option">
         <BsFillSuitHeartFill /> <span>Công thức yêu thích</span>
-      </a>
+      </Link>
     </Menu.Item>
     <Menu.Item key="2">
-      <a href="#" className="single-option">
+      <Link to="/fav/menu" className="single-option">
         <BsMenuButtonWideFill />
         <span> Menu của tôi</span>
-      </a>
+      </Link>
     </Menu.Item>
     <Menu.Item key="3">
       <Link to="/orders" className="single-option">

@@ -9,6 +9,8 @@ import SingleProductPage from "./pages/SingleProductPage/SingleProductPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import Cart from "./components/Cart/Cart";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
+import FavRecipe from "./pages/FavRecipe/FavRecipe";
+import FavMenu from "./pages/FavMenu/FavMenu";
 import ShopPage from "./pages/ShopPage/ShopPage";
 import ViewShopPage from "./pages/ViewShopPage/ViewShopPage";
 import ShopProfile from "./pages/ShopProfile/ShopProfile";
@@ -33,6 +35,8 @@ function App() {
         <Route path="/singledish" element={<SingleDishPage />}></Route>
         <Route path="/singleproduct" element={<SingleProductPage />}></Route>
         <Route path="/search" element={<SearchPage />}></Route>
+        <Route path="/fav/recipe" element={<FavRecipe />}></Route>
+        <Route path="/fav/menu" element={<FavMenu />}></Route>
         <Route path="/shop" element={<ShopPage />}></Route>
         <Route path="/shop/profile" element={<ShopProfile />}></Route>
         <Route path="/shop/rating" element={<ShopRating />}></Route>
