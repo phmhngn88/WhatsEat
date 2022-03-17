@@ -45,7 +45,7 @@ const options = (
       </Link>
     </Menu.Item>
     <Menu.Item key="4">
-      <a href="#" className="single-option">
+      <a href="/favorshop" className="single-option">
         <BsShop /> <span>Shop yêu thích</span>
       </a>
     </Menu.Item>

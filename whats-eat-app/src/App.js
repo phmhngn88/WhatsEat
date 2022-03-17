@@ -20,6 +20,7 @@ import ShopCategories from "./pages/ShopCategories/ShopCategories";
 import OrderPage from "./pages/OrderPage/OrderPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import FavorShop from "./pages/FavorShop/FavorShop";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
         <Route path="/viewshop" element={<ViewShopPage />}></Route>
         <Route path="/orders" element={<OrderPage />}></Route>
+        <Route path="/favorshop" element={<FavorShop />}></Route>
       </Routes>
     </BrowserRouter>
   );
