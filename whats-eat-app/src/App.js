@@ -21,6 +21,7 @@ import OrderPage from "./pages/OrderPage/OrderPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FavorShop from "./pages/FavorShop/FavorShop";
+import FavorItem from "./pages/FavorItem/FavorItem";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/viewshop" element={<ViewShopPage />}></Route>
         <Route path="/orders" element={<OrderPage />}></Route>
         <Route path="/favorshop" element={<FavorShop />}></Route>
+        <Route path="/favoritem" element={<FavorItem />}></Route>
       </Routes>
     </BrowserRouter>
   );
