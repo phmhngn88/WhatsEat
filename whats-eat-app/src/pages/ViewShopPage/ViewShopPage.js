@@ -79,13 +79,13 @@ const ViewShopPage = () => {
               <TabPane tab="Category 2" key="3">
                 Danh mục hàng 2
               </TabPane>
-              <TabPane tab="Category 3" key="3">
+              <TabPane tab="Category 3" key="4">
                 Danh mục hàng 3
               </TabPane>
-              <TabPane tab="Category 4" key="3">
+              <TabPane tab="Category 4" key="5">
                 Danh mục hàng 4
               </TabPane>
-              <TabPane tab="Category 5" key="3">
+              <TabPane tab="Category 5" key="6">
                 Danh mục hàng 5
               </TabPane>
             </Tabs>

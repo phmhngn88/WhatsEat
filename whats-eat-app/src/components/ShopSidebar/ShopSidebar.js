@@ -43,13 +43,13 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/">tất cả sản phẩm</Link>
+          <Link to="/shop/items">tất cả sản phẩm</Link>
         </div>
         <div>
-          <Link to="/">thêm sản phẩm</Link>
+          <Link to="/shop/additem">thêm sản phẩm</Link>
         </div>
         <div>
-          <Link to="/">sản phẩm vi phạm</Link>
+          <Link to="/shop/infringingitems">sản phẩm vi phạm</Link>
         </div>
       </Collapsible>
       <Collapsible
