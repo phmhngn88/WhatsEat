@@ -19,7 +19,7 @@ const ShopSidebar = () => {
           <Link to="/shop/categories">Danh mục của Shop</Link>
         </div>
         <div>
-          <Link to="#">Đánh giá Shop</Link>
+          <Link to="/shop/rating">Đánh giá Shop</Link>
         </div>
       </Collapsible>
       <Collapsible

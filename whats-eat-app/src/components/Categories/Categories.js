@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Categories.css";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
@@ -79,6 +80,7 @@ const categories = [
 ];
 
 const Categories = () => {
+  const navigate = useNavigate();
   return (
     <div className="categories">
       <div className="categories-container">
@@ -86,7 +88,12 @@ const Categories = () => {
           {categories.map((category) => {
             const { id, img_url, title } = category;
             return (
-              <Col span={4} key={id} className="category-col">
+              <Col
+                span={4}
+                key={id}
+                className="category-col"
+                onClick={() => navigate("/category")}
+              >
                 <img src={img_url} alt={title} className="category-img" />
                 <h3 className="category-title">{title}</h3>
               </Col>
