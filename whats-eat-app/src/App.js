@@ -50,14 +50,14 @@ function App() {
         <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
         <Route path="/viewshop" element={<ViewShopPage />}></Route>
         <Route path="/orders" element={<OrderPage />}></Route>
-<<<<<<< HEAD
         <Route path="/shop/items" element={<ShopItems />}></Route>
         <Route path="/shop/additem" element={<ShopAddItem />}></Route>
-        <Route path="/shop/infringingitems" element={<ShopInfringingItems />}></Route>
-=======
+        <Route
+          path="/shop/infringingitems"
+          element={<ShopInfringingItems />}
+        ></Route>
         <Route path="/favorshop" element={<FavorShop />}></Route>
         <Route path="/favoritem" element={<FavorItem />}></Route>
->>>>>>> 1d85744dac77cf572b9b1752c0375055c319cf4d
       </Routes>
     </BrowserRouter>
   );
