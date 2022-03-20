@@ -10,6 +10,17 @@ using whatseat_server.Data;
 using whatseat_server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://example.com",
+                                              "http://www.contoso.com");
+                      });
+});
 
 // Add services to the container.
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
@@ -52,6 +63,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
     .AddEntityFrameworkStores<WhatsEatContext>();
 
 builder.Services.AddControllers();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -67,6 +80,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 
