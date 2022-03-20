@@ -1,0 +1,10 @@
+insert into whatseat.productcategories (ProductCategoryId, Name) values (1, 'Trái Cây');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (2, 'Hải Sản');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (3, 'Thịt Heo');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (4, 'Gà Vịt');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (5, 'Bò Dê');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (6, 'Trứng/Đậu');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (7, 'Rau Củ');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (8, 'Món Chay');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (9, 'Sữa/Phô Mai');
+insert into whatseat.productcategories (ProductCategoryId, Name) values (10, 'Gia Vị');
