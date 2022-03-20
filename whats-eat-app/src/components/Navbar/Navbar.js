@@ -67,7 +67,7 @@ const options = (
 );
 
 const Navbar = () => {
-  const [isLoggedin, setIsLoggedin] = useState(true);
+  const [isLoggedin, setIsLoggedin] = useState(false);
   return (
     <div className="navbar">
       <div className="logo-and-search">

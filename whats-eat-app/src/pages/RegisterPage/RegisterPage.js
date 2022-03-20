@@ -1,12 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import "./RegisterPage.css";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const getUserName = (event) => {
+    setUserName(event.target.value);
+  };
+  const getEmail = (event) => {
+    setEmail(event.target.value);
+  };
+  const getPassword = (event) => {
+    setPassword(event.target.value);
+  };
+  const handleSubmit = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/auth/register",
+      data: {
+        tenKhachHang: userName,
+        email: email,
+        password: password,
+      },
+    })
+      .then((res) => {
+        message.success("Đăng ký tài khoản thành công!");
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="register-container">
       <h1 className="logo">WhatsEat</h1>
@@ -23,6 +57,7 @@ const RegisterPage = () => {
           <Input
             prefix={<AiOutlineMail className="site-form-item-icon" />}
             placeholder="Email"
+            onChange={getEmail}
           />
         </Form.Item>
         <Form.Item
@@ -32,6 +67,7 @@ const RegisterPage = () => {
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Tên đăng nhập"
+            onChange={getUserName}
           />
         </Form.Item>
         <Form.Item
@@ -42,6 +78,7 @@ const RegisterPage = () => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
+            onChange={getPassword}
           />
         </Form.Item>
 
@@ -60,6 +97,7 @@ const RegisterPage = () => {
             type="primary"
             htmlType="submit"
             className="register-form-button"
+            onClick={handleSubmit}
           >
             Đăng ký
           </Button>

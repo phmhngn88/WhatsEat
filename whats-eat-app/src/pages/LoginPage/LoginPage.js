@@ -1,11 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import "./LoginPage.css";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Checkbox, message } from "antd";
+import { LockOutlined } from "@ant-design/icons";
+import { AiOutlineMail } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signin } from "../../actions/userActions";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const getPassword = (event) => {
+    setPassword(event.target.value);
+  };
+  const getEmail = (event) => {
+    setEmail(event.target.value);
+  };
+  const dispatch = useDispatch();
+  const handleSubmit = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/auth/login",
+      data: {
+        email: email,
+        password: password,
+      },
+    })
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        dispatch(signin(res.data.email, res.data.id));
+        message.success("Đăng nhập thành công!");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="login-container">
       <h1 className="logo">WhatsEat</h1>
@@ -17,11 +53,12 @@ const LoginPage = () => {
         <h1>Đăng nhập</h1>
         <Form.Item
           name="username"
-          rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+          rules={[{ required: true, message: "Vui lòng nhập email!" }]}
         >
           <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Tên đăng nhập"
+            prefix={<AiOutlineMail className="site-form-item-icon" />}
+            placeholder="Email"
+            onChange={getEmail}
           />
         </Form.Item>
         <Form.Item
@@ -32,6 +69,7 @@ const LoginPage = () => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
+            onChange={getPassword}
           />
         </Form.Item>
         <Form.Item>
@@ -45,6 +83,7 @@ const LoginPage = () => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
+            onClick={handleSubmit}
           >
             Đăng nhập
           </Button>

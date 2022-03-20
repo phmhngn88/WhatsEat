@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Categories.css";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 
-const categories = [
+const list_categories = [
   {
     id: 1,
     img_url:
@@ -80,12 +81,31 @@ const categories = [
 ];
 
 const Categories = () => {
+  const [category, setCategory] = useState([]);
+
+  const getCategories = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Product/categories`,
+    })
+      .then((res) => {
+        const result = res.data.data;
+        setCategory(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   const navigate = useNavigate();
   return (
     <div className="categories">
       <div className="categories-container">
         <Row gutter={[8, 16]}>
-          {categories.map((category) => {
+          {list_categories.map((category) => {
             const { id, img_url, title } = category;
             return (
               <Col
