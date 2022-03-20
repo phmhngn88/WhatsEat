@@ -13,28 +13,39 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const getUserName = (event) => {
-    setUserName(event.target.value);
-  };
-  const getEmail = (event) => {
-    setEmail(event.target.value);
-  };
-  const getPassword = (event) => {
-    setPassword(event.target.value);
-  };
+  // const getUserName = (event) => {
+  //   setUserName(event.target.value);
+  //   console.log(userName);
+  // };
+  // const getEmail = (event) => {
+  //   setEmail(event.target.value);
+  //   console.log(email);
+  // };
+  // const getPassword = (event) => {
+  //   setPassword(event.target.value);
+  // };
   const handleSubmit = () => {
+    console.log(userName);
+    console.log(email);
+    console.log(password);
     axios({
-      method: "POST",
+      method: "post",
       url: "https://localhost:7029/api/auth/register",
       data: {
-        tenKhachHang: userName,
+        userName: userName,
         email: email,
         password: password,
       },
     })
       .then((res) => {
         message.success("Đăng ký tài khoản thành công!");
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login", {
+            state:{
+              userName: userName
+            }
+          });
+        }, 3000);
       })
       .catch((err) => {
         console.log(err);
@@ -57,7 +68,7 @@ const RegisterPage = () => {
           <Input
             prefix={<AiOutlineMail className="site-form-item-icon" />}
             placeholder="Email"
-            onChange={getEmail}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Item>
         <Form.Item
@@ -67,7 +78,7 @@ const RegisterPage = () => {
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Tên đăng nhập"
-            onChange={getUserName}
+            onChange={(e) => setUserName(e.target.value)}
           />
         </Form.Item>
         <Form.Item
@@ -78,7 +89,7 @@ const RegisterPage = () => {
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
-            onChange={getPassword}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
 
@@ -87,6 +98,7 @@ const RegisterPage = () => {
           rules={[{ required: true, message: "Vui lòng nhập lại mật khẩu!" }]}
         >
           <Input
+            id="confirm_register_password"
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Nhập lại mật khẩu"
