@@ -40,12 +40,8 @@ const RegisterPage = () => {
       .then((res) => {
         message.success("Đăng ký tài khoản thành công!");
         setTimeout(() => {
-          navigate("/login", {
-            state:{
-              userName: userName
-            }
-          });
-        }, 3000);
+          navigate("/login");
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);

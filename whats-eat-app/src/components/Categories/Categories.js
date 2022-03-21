@@ -81,7 +81,7 @@ const list_categories = [
 ];
 
 const Categories = () => {
-  const [category, setCategory] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const getCategories = () => {
     axios({
@@ -89,8 +89,9 @@ const Categories = () => {
       url: `https://localhost:7029/api/Product/categories`,
     })
       .then((res) => {
-        const result = res.data.data;
-        setCategory(result);
+        const result = res.data;
+        console.log(result);
+        setCategories(result);
       })
       .catch((error) => {
         console.log(error);
@@ -105,17 +106,17 @@ const Categories = () => {
     <div className="categories">
       <div className="categories-container">
         <Row gutter={[8, 16]}>
-          {list_categories.map((category) => {
-            const { id, img_url, title } = category;
+          {categories.map((category) => {
+            // const { id, img_url, title } = category;
             return (
               <Col
                 span={4}
-                key={id}
+                key={category.productCategoryId}
                 className="category-col"
                 onClick={() => navigate("/category")}
               >
-                <img src={img_url} alt={title} className="category-img" />
-                <h3 className="category-title">{title}</h3>
+                {/* <img src={img_url} alt={title} className="category-img" /> */}
+                <h3 className="category-title">{category.name}</h3>
               </Col>
             );
           })}
