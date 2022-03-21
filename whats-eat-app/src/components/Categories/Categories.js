@@ -106,7 +106,7 @@ const Categories = () => {
     <div className="categories">
       <div className="categories-container">
         <Row gutter={[8, 16]}>
-          {categories.map((category) => {
+          {categories?.map((category) => {
             // const { id, img_url, title } = category;
             return (
               <Col

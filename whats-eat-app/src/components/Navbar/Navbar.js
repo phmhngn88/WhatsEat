@@ -68,9 +68,9 @@ const options = (
 );
 
 const Navbar = () => {
-  //const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
-  console.log(userSignin);
+
   return (
     <div className="navbar">
       <div className="logo-and-search">
@@ -95,7 +95,7 @@ const Navbar = () => {
           <AiOutlineShoppingCart className="option-icon" />{" "}
           <span>Giỏ hàng</span>
         </Link>
-        {userSignin.userInfo.userName === null ? (
+        {isLoggedin === false ? (
           <Link to="/login" className="btn option-btn">
             <BsFillPersonFill className="option-icon" /> <span>Đăng nhập</span>
           </Link>
@@ -111,7 +111,7 @@ const Navbar = () => {
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
-                {userSignin.userInfo.email} <DownOutlined />
+                Hiii <DownOutlined />
               </a>
             </Dropdown>
           </button>
