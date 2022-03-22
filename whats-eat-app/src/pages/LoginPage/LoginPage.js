@@ -13,6 +13,7 @@ import { signin } from "../../actions/userActions";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedin, setIsLoggedin] = useState(false);
   const navigate = useNavigate();
   const getPassword = (event) => {
     setPassword(event.target.value);
@@ -34,9 +35,10 @@ const LoginPage = () => {
         localStorage.setItem("token", res.data.token);
         dispatch(signin(res.data.email, res.data.id));
         message.success("Đăng nhập thành công!");
+        setIsLoggedin(true);
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);
