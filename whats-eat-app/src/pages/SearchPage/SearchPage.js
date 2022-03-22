@@ -7,6 +7,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Dish from "../../components/Dish/Dish";
 import RecommendItems from '../../components/RecommendItems/RecommendItems'
+import SearchItems from "../../components/SearchItems/SearchItems";
 const searchResults = [
   {
     id: 1,
@@ -119,7 +120,6 @@ const menuList = [
 
 const SearchPage = () => {
   const [searchResult, setSearchResult] = useState([]);
-
   useEffect(() => {
     setSearchResult(searchResults);
   }, []);
@@ -127,7 +127,7 @@ const SearchPage = () => {
   return (
     <div className="search">
       <Navbar />
-      <div className="search-container">
+      {/* <div className="search-container">
         <div className="search-fluid">
           <div className="search-nav">
             <h1 className="title">Kết quả tìm kiếm</h1>
@@ -163,8 +163,9 @@ const SearchPage = () => {
             })}
           </Row>
         </div>
-      </div>
+      </div> */}
       <RecommendItems />
+      <SearchItems />
       <Footer />
     </div>
   );

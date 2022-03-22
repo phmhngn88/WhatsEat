@@ -39,7 +39,7 @@ function App() {
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/payment" element={<PaymentPage />}></Route>
         <Route path="/recommender" element={<RecommendPage />}></Route>
-        <Route path="/singledish" element={<SingleDishPage />}></Route>
+        <Route path="/singledish/:id" element={<SingleDishPage />}></Route>
         <Route path="/singleproduct" element={<SingleProductPage />}></Route>
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/fav/recipe" element={<FavRecipe />}></Route>

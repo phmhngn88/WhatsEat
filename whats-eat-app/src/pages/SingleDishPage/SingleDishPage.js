@@ -15,12 +15,12 @@ import {
 } from "react-icons/ai";
 
 const dish = {
-  id: 1,
+  recipeId: 1,
   img_url:
     "https://media.cooky.vn/recipe/g6/50880/s320x240/cooky-recipe-637102372207865706.png",
-  dish_name: "Smoothie xoài chuối kiwi",
+  name: "Smoothie xoài chuối kiwi",
   love_count: 24,
-  time: "30p",
+  totalTime: "30p",
   level: "Dễ",
   view: 20,
 };

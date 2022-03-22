@@ -7,38 +7,38 @@ import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import Dish from "../Dish/Dish";
-
+import axios from 'axios';
 const recommendedMenu = [
   {
     id: 1,
     dish_label: "Món chính",
-    dish_name: "Ba Chỉ Rim Tôm Khô",
+    name: "Ba Chỉ Rim Tôm Khô",
     img_url:
       "https://image.cooky.vn/recipe/g4/35480/s360x360/cooky-recipe-cover-r35480.JPG",
     love_count: 12,
-    time: "30p",
+    totalTime: "30p",
     level: "Dễ",
     view: 20,
   },
   {
     id: 2,
     dish_label: "Món khai vị",
-    dish_name: "Củ Kiệu Ngâm Chanh Dây",
+    name: "Củ Kiệu Ngâm Chanh Dây",
     img_url:
       "https://image.cooky.vn/recipe/g3/28772/s360x360/recipe-cover-r28772.jpg",
     love_count: 12,
-    time: "30p",
+    totalTime: "30p",
     level: "Dễ",
     view: 20,
   },
   {
     id: 3,
     dish_label: "Thức uống",
-    dish_name: "Trà Vải Tươi",
+    name: "Trà Vải Tươi",
     img_url:
       "https://image.cooky.vn/recipe/g3/24673/s360x360/recipe-cover-r24673.jpg",
     love_count: 12,
-    time: "30p",
+    totalTime: "30p",
     level: "Dễ",
     view: 20,
   },
@@ -56,8 +56,20 @@ const categories = [
 
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
-
+  const [mainDish, setMainDish] = useState([]);
+  
   useEffect(() => {
+    axios({
+      method: "GET",
+      url: "http://127.0.0.1:5000/individual/food/?id_user=3",
+    })
+      .then((res) => {
+        console.log(res.data);
+        setMainDish(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setMenu(recommendedMenu);
   }, []);
 
@@ -103,7 +115,9 @@ const Recommender = () => {
                   </div>
                 </div>
                 <div className="list-dish">
-                  <Dish {...dish} className="single-dish" />
+                  {mainDish.map((item) => { 
+                    item.img_url='https://media.cooky.vn/recipe/g1/4014/s320x240/recipe4014-636009205974008541.jpg'
+                    return <Dish key={item.recipeId} {...item} className="single-dish" />})}
                 </div>
               </div>
             );

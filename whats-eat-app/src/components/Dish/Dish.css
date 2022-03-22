@@ -36,3 +36,6 @@
 .dish-container .dish-info .info-detail span{
     font-weight: bold;
 }
+.dish-link{
+    text-decoration: none;
+}
