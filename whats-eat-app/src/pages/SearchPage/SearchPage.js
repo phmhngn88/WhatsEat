@@ -6,7 +6,7 @@ import "antd/dist/antd.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Dish from "../../components/Dish/Dish";
-
+import RecommendItems from '../../components/RecommendItems/RecommendItems'
 const searchResults = [
   {
     id: 1,
@@ -164,6 +164,7 @@ const SearchPage = () => {
           </Row>
         </div>
       </div>
+      <RecommendItems />
       <Footer />
     </div>
   );

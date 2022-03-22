@@ -20,6 +20,8 @@ import {
 
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const options = (
   <Menu>
@@ -69,8 +71,30 @@ const options = (
 
 const Navbar = () => {
   const [isLoggedin, setIsLoggedin] = useState(false);
+  const [keyword, setKeyword] = useState('');
   const userSignin = useSelector((state) => state.userSignin);
+  const navigate = useNavigate();
 
+  const onSearchChange = (e) => {
+    setKeyword(e.target.value)
+  }
+
+  const onSearchClick = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Product/search",
+      data: {
+        keyword: keyword,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        navigate(`/search?keyword=${keyword}`)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   return (
     <div className="navbar">
       <div className="logo-and-search">
@@ -83,8 +107,9 @@ const Navbar = () => {
             className="search-input"
             type="text"
             placeholder="Bạn muốn tìm gì vậy?"
+            onChange={onSearchChange}
           />
-          <button className="btn search-btn">Tìm kiếm</button>
+          <button className="btn search-btn" onClick={onSearchClick}>Tìm kiếm</button>
         </div>
       </div>
       <div className="options">
