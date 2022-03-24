@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   AiOutlineSearch,
   AiOutlineShoppingCart,
@@ -68,6 +69,8 @@ const options = (
 
 const Navbar = () => {
   const [isLoggedin, setIsLoggedin] = useState(false);
+  const userSignin = useSelector((state) => state.userSignin);
+
   return (
     <div className="navbar">
       <div className="logo-and-search">
@@ -92,7 +95,11 @@ const Navbar = () => {
           <AiOutlineShoppingCart className="option-icon" />{" "}
           <span>Giỏ hàng</span>
         </Link>
-        {isLoggedin ? (
+        {isLoggedin === false ? (
+          <Link to="/login" className="btn option-btn">
+            <BsFillPersonFill className="option-icon" /> <span>Đăng nhập</span>
+          </Link>
+        ) : (
           <button className="btn option-btn">
             <BsFillPersonFill className="option-icon" />
             <Dropdown
@@ -104,14 +111,10 @@ const Navbar = () => {
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
-                Trần Nhật Hiệp <DownOutlined />
+                Hiii <DownOutlined />
               </a>
             </Dropdown>
           </button>
-        ) : (
-          <Link to="/login" className="btn option-btn">
-            <BsFillPersonFill className="option-icon" /> <span>Đăng nhập</span>
-          </Link>
         )}
       </div>
     </div>
