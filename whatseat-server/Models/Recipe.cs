@@ -13,6 +13,7 @@ public class Recipe
     public string Description { get; set; }
     public int Serving { get; set; }
     public DateTime CreatedOn { get; set; }
+    public Customer Creator { get; set; }
     public int TotalTime { get; set; }
     public RecipeType RecipeType { get; set; }
     public ICollection<RecipeStep> RecipeSteps { get; set; }
