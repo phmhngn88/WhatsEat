@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import { Row, Col, Tabs } from "antd";
 import "antd/dist/antd.css";
 import { BsShopWindow, BsFillPeopleFill, BsFillStarFill } from "react-icons/bs";
+import { AiOutlineHeart} from "react-icons/ai";
 import { GiStabbedNote } from "react-icons/gi";
 
 const { TabPane } = Tabs;
@@ -41,6 +42,9 @@ const ViewShopPage = () => {
               <div className="img-box">
                 <img src={shop_avt} alt={shop_name} className="avt-img" />
                 <h2 className="shop-name">{shop_name}</h2>
+                <div className="heart-icon">
+                <AiOutlineHeart className="hicon" />
+                </div>
               </div>
               <div className="btn-box">
                 <button className="btn">Theo dõi</button>

@@ -557,6 +557,9 @@ namespace whatseat_server.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime");
 
+                    b.Property<Guid?>("CreatorCustomerId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
@@ -576,6 +579,8 @@ namespace whatseat_server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("RecipeId");
+
+                    b.HasIndex("CreatorCustomerId");
 
                     b.HasIndex("RecipeTypeId");
 
@@ -608,6 +613,21 @@ namespace whatseat_server.Migrations
                     b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeRatings");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.RecipeRecipeType", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipeTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecipeId", "RecipeTypeId");
+
+                    b.HasIndex("RecipeTypeId");
+
+                    b.ToTable("RecipeRecipeTypes");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.RecipeStep", b =>
@@ -1078,9 +1098,15 @@ namespace whatseat_server.Migrations
 
             modelBuilder.Entity("whatseat_server.Models.Recipe", b =>
                 {
+                    b.HasOne("whatseat_server.Models.Customer", "Creator")
+                        .WithMany("Recipes")
+                        .HasForeignKey("CreatorCustomerId");
+
                     b.HasOne("whatseat_server.Models.RecipeType", "RecipeType")
                         .WithMany()
                         .HasForeignKey("RecipeTypeId");
+
+                    b.Navigation("Creator");
 
                     b.Navigation("RecipeType");
                 });
@@ -1098,6 +1124,25 @@ namespace whatseat_server.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.RecipeRecipeType", b =>
+                {
+                    b.HasOne("whatseat_server.Models.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("whatseat_server.Models.RecipeType", "RecipeType")
+                        .WithMany()
+                        .HasForeignKey("RecipeTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("RecipeType");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.RecipeStep", b =>
@@ -1166,6 +1211,8 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.Customer", b =>
                 {
                     b.Navigation("CartDetails");
+
+                    b.Navigation("Recipes");
 
                     b.Navigation("ShippingInfos");
                 });
