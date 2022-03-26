@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button, Checkbox } from "antd";
 import "antd/dist/antd.css";
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
 import Counter from "../../components/Counter/Counter";
@@ -35,6 +36,22 @@ const items = [
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
+  // const getCardItems = () => {
+  //   axios({
+  //     method: "get",
+  //     url: `https://localhost:7029/api/Store/${id}`,
+  //   })
+  //     .then((res) => {
+  //       const result = res.data;
+  //       setCardItems(result);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  // useEffect(() => {
+  //   getCardItems();
+  // }, []);
 
   const handleEmptyCart = () => {
     setCartItems([]);

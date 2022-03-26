@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./SingleDishPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -44,8 +45,26 @@ const ingredients = [
 ];
 
 const SingleDishPage = () => {
+  const [dishDetail, setDishDetail] = useState([]);
   const { id, img_url, dish_name, love_count, time, level, view } = dish;
   const price = 230000;
+
+  const getDishDetail = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Recipe/${id}`,
+    })
+      .then((res) => {
+        const result = res.data;
+        setDishDetail(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getDishDetail();
+  }, []);
   return (
     <div className="single-dish">
       <Navbar />

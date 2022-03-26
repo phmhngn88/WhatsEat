@@ -90,7 +90,6 @@ const Categories = () => {
     })
       .then((res) => {
         const result = res.data;
-        console.log(result);
         setCategories(result);
       })
       .catch((error) => {

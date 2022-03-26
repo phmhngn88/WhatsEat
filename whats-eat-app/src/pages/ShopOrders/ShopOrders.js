@@ -1,6 +1,7 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Tabs } from "antd";
 import "antd/dist/antd.css";
-import React from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import ShopOrderCard from "../../components/ShopOrderCard/ShopOrderCard";
@@ -33,6 +34,25 @@ const orders = [
 ];
 
 const ShopOrders = () => {
+  const [shopOrders, setShopOrders] = useState([]);
+
+  const getShopOrders = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Store/orders`,
+    })
+      .then((res) => {
+        const result = res.data;
+        setShopOrders(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getShopOrders();
+  }, []);
+
   return (
     <div className="shop-orders">
       <Navbar />

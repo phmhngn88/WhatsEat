@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./ViewShopPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -22,6 +23,7 @@ const shopInfo = {
 };
 
 const ViewShopPage = () => {
+  const [shopInfo, setShopInfo] = useState({});
   const {
     id,
     shop_name,
@@ -31,6 +33,24 @@ const ViewShopPage = () => {
     rating,
     rating_num,
   } = shopInfo;
+
+  const getShopInfo = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Store/${id}`,
+    })
+      .then((res) => {
+        const result = res.data;
+        setShopInfo(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getShopInfo();
+  }, []);
+
   return (
     <div className="view-shop">
       <Navbar />

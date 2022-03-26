@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./SingleProductPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -22,6 +23,7 @@ const product = {
 };
 
 const SingleProductPage = () => {
+  const [productDetail, setProductDetail] = useState({});
   const {
     id,
     product_name,
@@ -34,6 +36,23 @@ const SingleProductPage = () => {
     origin,
     description,
   } = product;
+
+  const getProductDetail = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Product/${id}`,
+    })
+      .then((res) => {
+        const result = res.data;
+        setProductDetail(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getProductDetail();
+  }, []);
   return (
     <div className="single-product">
       <Navbar />
