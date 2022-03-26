@@ -28,6 +28,10 @@
     width: 100%;
 }
 
+.product-block .product-info{
+    margin-bottom: 2rem;
+}
+
 .product-block .product-info .product-name{
     font-weight: 900;
     text-transform: capitalize;

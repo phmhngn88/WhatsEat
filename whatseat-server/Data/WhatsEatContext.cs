@@ -16,6 +16,7 @@ public class WhatsEatContext : IdentityDbContext
         modelBuilder.Entity<OrderDetail>().HasKey(od => new { od.OrderId, od.ProductId });
         modelBuilder.Entity<CartDetail>().HasKey(cd => new { cd.ProductId, cd.CustomerId });
         modelBuilder.Entity<CustomerStore>().HasKey(cs => new { cs.CustomerId, cs.StoreId });
+        modelBuilder.Entity<RecipeRecipeType>().HasKey(rrt => new { rrt.RecipeId, rrt.RecipeTypeId });
         base.OnModelCreating(modelBuilder);
     }
 
@@ -44,4 +45,5 @@ public class WhatsEatContext : IdentityDbContext
     public DbSet<Store> Stores => Set<Store>();
     public DbSet<Unit> Units => Set<Unit>();
     public DbSet<RecipeStep> RecipeSteps => Set<RecipeStep>();
+    public DbSet<RecipeRecipeType> RecipeRecipeTypes => Set<RecipeRecipeType>();
 }

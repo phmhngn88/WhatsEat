@@ -14,11 +14,11 @@ public class RecipeService
     public async Task<List<Recipe>> FindAllRecipes()
     {
         // TODO: sort, paginate
-        return await _context.Recipes.AsNoTracking().ToListAsync();
+        return await _context.Recipes.Include(p => p.RecipeSteps).AsNoTracking().ToListAsync();
     }
 
     public async Task<Recipe> FindRecipeById(int recipeId)
     {
-        return await _context.Recipes.FirstOrDefaultAsync(p => p.RecipeId == recipeId);
+        return await _context.Recipes.Include(p => p.RecipeSteps).FirstOrDefaultAsync(p => p.RecipeId == recipeId);
     }
 }

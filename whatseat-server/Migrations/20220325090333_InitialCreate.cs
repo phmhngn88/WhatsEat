@@ -360,34 +360,6 @@ namespace whatseat_server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Recipes",
-                columns: table => new
-                {
-                    RecipeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Serving = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false),
-                    TotalTime = table.Column<int>(type: "int", nullable: false),
-                    RecipeTypeId = table.Column<int>(type: "int", nullable: true),
-                    ThumbnailUrl = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Recipes", x => x.RecipeId);
-                    table.ForeignKey(
-                        name: "FK_Recipes_RecipeTypes_RecipeTypeId",
-                        column: x => x.RecipeTypeId,
-                        principalTable: "RecipeTypes",
-                        principalColumn: "RecipeTypeId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -420,55 +392,6 @@ namespace whatseat_server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Ingredients",
-                columns: table => new
-                {
-                    IngredientId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: true),
-                    IsMainIngredient = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    RecipeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
-                    table.ForeignKey(
-                        name: "FK_Ingredients_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "RecipeId");
-                    table.ForeignKey(
-                        name: "FK_Ingredients_Units_UnitId",
-                        column: x => x.UnitId,
-                        principalTable: "Units",
-                        principalColumn: "UnitId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "RecipeSteps",
-                columns: table => new
-                {
-                    RecipeStepId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Step = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RecipeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeSteps", x => x.RecipeStepId);
-                    table.ForeignKey(
-                        name: "FK_RecipeSteps_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "RecipeId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "ProductImages",
                 columns: table => new
                 {
@@ -486,27 +409,6 @@ namespace whatseat_server.Migrations
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "RecipeStepImages",
-                columns: table => new
-                {
-                    RecipeStepImageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RecipeStepId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeStepImages", x => x.RecipeStepImageId);
-                    table.ForeignKey(
-                        name: "FK_RecipeStepImages_RecipeSteps_RecipeStepId",
-                        column: x => x.RecipeStepId,
-                        principalTable: "RecipeSteps",
-                        principalColumn: "RecipeStepId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -634,6 +536,93 @@ namespace whatseat_server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Recipes",
+                columns: table => new
+                {
+                    RecipeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Serving = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CreatorCustomerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    TotalTime = table.Column<int>(type: "int", nullable: false),
+                    RecipeTypeId = table.Column<int>(type: "int", nullable: true),
+                    ThumbnailUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Recipes", x => x.RecipeId);
+                    table.ForeignKey(
+                        name: "FK_Recipes_Customers_CreatorCustomerId",
+                        column: x => x.CreatorCustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId");
+                    table.ForeignKey(
+                        name: "FK_Recipes_RecipeTypes_RecipeTypeId",
+                        column: x => x.RecipeTypeId,
+                        principalTable: "RecipeTypes",
+                        principalColumn: "RecipeTypeId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ShippingInfos",
+                columns: table => new
+                {
+                    ShippingInfoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProvinceCode = table.Column<int>(type: "int", nullable: false),
+                    DistrictCode = table.Column<int>(type: "int", nullable: false),
+                    WardCode = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShippingInfos", x => x.ShippingInfoId);
+                    table.ForeignKey(
+                        name: "FK_ShippingInfos_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    IngredientId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitId = table.Column<int>(type: "int", nullable: true),
+                    IsMainIngredient = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RecipeId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
+                    table.ForeignKey(
+                        name: "FK_Ingredients_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "RecipeId");
+                    table.ForeignKey(
+                        name: "FK_Ingredients_Units_UnitId",
+                        column: x => x.UnitId,
+                        principalTable: "Units",
+                        principalColumn: "UnitId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "RecipeRatings",
                 columns: table => new
                 {
@@ -654,6 +643,53 @@ namespace whatseat_server.Migrations
                         principalColumn: "CustomerId");
                     table.ForeignKey(
                         name: "FK_RecipeRatings_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "RecipeId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeRecipeTypes",
+                columns: table => new
+                {
+                    RecipeId = table.Column<int>(type: "int", nullable: false),
+                    RecipeTypeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeRecipeTypes", x => new { x.RecipeId, x.RecipeTypeId });
+                    table.ForeignKey(
+                        name: "FK_RecipeRecipeTypes_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "RecipeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeRecipeTypes_RecipeTypes_RecipeTypeId",
+                        column: x => x.RecipeTypeId,
+                        principalTable: "RecipeTypes",
+                        principalColumn: "RecipeTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeSteps",
+                columns: table => new
+                {
+                    RecipeStepId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Step = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RecipeId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeSteps", x => x.RecipeStepId);
+                    table.ForeignKey(
+                        name: "FK_RecipeSteps_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "RecipeId");
@@ -687,32 +723,6 @@ namespace whatseat_server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ShippingInfos",
-                columns: table => new
-                {
-                    ShippingInfoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProvinceCode = table.Column<int>(type: "int", nullable: false),
-                    DistrictCode = table.Column<int>(type: "int", nullable: false),
-                    WardCode = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShippingInfos", x => x.ShippingInfoId);
-                    table.ForeignKey(
-                        name: "FK_ShippingInfos_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -742,6 +752,27 @@ namespace whatseat_server.Migrations
                         column: x => x.ShippingInfoId,
                         principalTable: "ShippingInfos",
                         principalColumn: "ShippingInfoId");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeStepImages",
+                columns: table => new
+                {
+                    RecipeStepImageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RecipeStepId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeStepImages", x => x.RecipeStepImageId);
+                    table.ForeignKey(
+                        name: "FK_RecipeStepImages_RecipeSteps_RecipeStepId",
+                        column: x => x.RecipeStepId,
+                        principalTable: "RecipeSteps",
+                        principalColumn: "RecipeStepId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -938,6 +969,16 @@ namespace whatseat_server.Migrations
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RecipeRecipeTypes_RecipeTypeId",
+                table: "RecipeRecipeTypes",
+                column: "RecipeTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_CreatorCustomerId",
+                table: "Recipes",
+                column: "CreatorCustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recipes_RecipeTypeId",
                 table: "Recipes",
                 column: "RecipeTypeId");
@@ -1045,6 +1086,9 @@ namespace whatseat_server.Migrations
 
             migrationBuilder.DropTable(
                 name: "RecipeRatings");
+
+            migrationBuilder.DropTable(
+                name: "RecipeRecipeTypes");
 
             migrationBuilder.DropTable(
                 name: "RecipeStepImages");

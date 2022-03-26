@@ -79,3 +79,14 @@
      margin: 3rem 1rem;
 
  }
+
+.img-box .heart-icon{
+    text-align: right;
+    font-size: 2rem;
+    margin-top: 0.4rem;
+}
+
+.img-box .heart-icon .hicon:hover{
+    cursor: pointer;
+    fill: brown;
+}
