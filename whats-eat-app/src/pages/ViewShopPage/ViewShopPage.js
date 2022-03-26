@@ -6,7 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import { Row, Col, Tabs } from "antd";
 import "antd/dist/antd.css";
 import { BsShopWindow, BsFillPeopleFill, BsFillStarFill } from "react-icons/bs";
-import { AiOutlineHeart} from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 import { GiStabbedNote } from "react-icons/gi";
 
 const { TabPane } = Tabs;
@@ -25,6 +25,7 @@ const shopInfo = {
 
 const ViewShopPage = () => {
   const [shopInfo, setShopInfo] = useState({});
+  const [isLiked, setIsLiked] = useState(false);
   const {
     id,
     shop_name,
@@ -48,9 +49,25 @@ const ViewShopPage = () => {
         console.log(error);
       });
   };
+  const postLikeShop = () => {
+    axios({
+      method: "POST",
+      url: `https://localhost:7029/api/Store/like/${id}`,
+      data: {
+        storeId: id,
+      },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     getShopInfo();
   }, []);
+  useEffect(() => {
+    postLikeShop();
+  }, [isLiked]);
 
   return (
     <div className="view-shop">
@@ -62,12 +79,11 @@ const ViewShopPage = () => {
               <div className="img-box">
                 <img src={shop_avt} alt={shop_name} className="avt-img" />
                 <h2 className="shop-name">{shop_name}</h2>
-                <div className="heart-icon">
-                <AiOutlineHeart className="hicon" />
-                </div>
               </div>
               <div className="btn-box">
-                <button className="btn">Theo dõi</button>
+                <button className="btn" onClick={() => setIsLiked(true)}>
+                  {isLiked ? "Hủy theo dõi" : "Theo dõi"}
+                </button>
                 <button className="btn">chat</button>
               </div>
             </div>

@@ -52,60 +52,56 @@ const mock_rating = [
       "Cảm ơn bạn đã ủng hộ shop ạ, chúc bạn nhiều sức khỏe và mua đồ của shop nhiều hơn nhaaa!",
   },
   {
-      order_ID: 3,
-      username: "tranthivi",
-      item_name: "Ba rọi heo (thịt tươi)",
-      item_img:
-        "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
-      stars: 1,
-      rate_content:
-        "Sản phẩm quá tệ, không bao giờ mua lại",
-      rate_time: "25/10/2021",
-      is_reply: false,
-      reply:
-        "Bạn ơi có nhầm lẫn gì không ạ? Thịt bên mình đảm bảo tươi và ngon ạ :(",
-    },
-    {
-      order_ID: 4,
-      username: "dinhthiminhhieu",
-      item_name: "Ba rọi heo (thịt tươi)",
-      item_img:
-        "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
-      stars: 4,
-      rate_content: "Sản phẩm cũng được, luộc chấm mắm nêm bá cháy",
-      rate_time: "25/10/2021",
-      is_reply: true,
-      reply:
-        "Cảm ơn bạn đã ủng hộ shop ạ, chúc bạn nhiều sức khỏe và mua đồ của shop nhiều hơn nhaaa!",
-    },
-    {
-      order_ID: 5,
-      username: "phamhoangan",
-      item_name: "Ba rọi heo (thịt tươi)",
-      item_img:
-        "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
-      stars: 5,
-      rate_content:
-        "Sản phẩm chất lượng tuyệt vời, mình kho ny mình khen nức nở hehe",
-      rate_time: "25/10/2021",
-      is_reply: true,
-      reply:
-        "Cảm ơn bạn đã ủng hộ shop ạ, chúc bạn và người yêu mãi mận nhaaa!",
-    },
-    {
-        order_ID: 6,
-        username: "nguyenvanhao",
-        item_name: "Ba rọi heo (thịt tươi)",
-        item_img:
-          "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
-        stars: 1,
-        rate_content:
-          "Sản phẩm ngon nhưng cờ Việt Nam có 1 sao nên :)))",
-        rate_time: "25/10/2021",
-        is_reply: false,
-        reply:
-          "Bạn ơi bạn đừng làm thế tội shop ạ :(",
-      },
+    order_ID: 3,
+    username: "tranthivi",
+    item_name: "Ba rọi heo (thịt tươi)",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
+    stars: 1,
+    rate_content: "Sản phẩm quá tệ, không bao giờ mua lại",
+    rate_time: "25/10/2021",
+    is_reply: false,
+    reply:
+      "Bạn ơi có nhầm lẫn gì không ạ? Thịt bên mình đảm bảo tươi và ngon ạ :(",
+  },
+  {
+    order_ID: 4,
+    username: "dinhthiminhhieu",
+    item_name: "Ba rọi heo (thịt tươi)",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
+    stars: 4,
+    rate_content: "Sản phẩm cũng được, luộc chấm mắm nêm bá cháy",
+    rate_time: "25/10/2021",
+    is_reply: true,
+    reply:
+      "Cảm ơn bạn đã ủng hộ shop ạ, chúc bạn nhiều sức khỏe và mua đồ của shop nhiều hơn nhaaa!",
+  },
+  {
+    order_ID: 5,
+    username: "phamhoangan",
+    item_name: "Ba rọi heo (thịt tươi)",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
+    stars: 5,
+    rate_content:
+      "Sản phẩm chất lượng tuyệt vời, mình kho ny mình khen nức nở hehe",
+    rate_time: "25/10/2021",
+    is_reply: true,
+    reply: "Cảm ơn bạn đã ủng hộ shop ạ, chúc bạn và người yêu mãi mận nhaaa!",
+  },
+  {
+    order_ID: 6,
+    username: "nguyenvanhao",
+    item_name: "Ba rọi heo (thịt tươi)",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/9593/s400x400/37b78803-7264-42da-a39c-c48d3796d803.jpeg",
+    stars: 1,
+    rate_content: "Sản phẩm ngon nhưng cờ Việt Nam có 1 sao nên :)))",
+    rate_time: "25/10/2021",
+    is_reply: false,
+    reply: "Bạn ơi bạn đừng làm thế tội shop ạ :(",
+  },
 ];
 
 const SingleProductPage = () => {
@@ -198,20 +194,20 @@ const SingleProductPage = () => {
           <div>
             <h2> Đánh giá sản phẩm</h2>
             <div>
-            {mock_rating.map((rating, idx) => {
-                    const {
-                      order_ID,
-                      username,
-                      item_name,
-                      item_img,
-                      stars,
-                      rate_content,
-                      rate_time,
-                      is_reply,
-                      reply,
-                    } = rating;
-                    return <RatingCard key={idx} {...rating} />;
-                  })}
+              {mock_rating.map((rating, idx) => {
+                const {
+                  order_ID,
+                  username,
+                  item_name,
+                  item_img,
+                  stars,
+                  rate_content,
+                  rate_time,
+                  is_reply,
+                  reply,
+                } = rating;
+                return <RatingCard key={idx} {...rating} />;
+              })}
             </div>
           </div>
         </div>
