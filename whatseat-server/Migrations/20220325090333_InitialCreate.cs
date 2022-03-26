@@ -1037,6 +1037,8 @@ namespace whatseat_server.Migrations
                 column: "DefaultShippingInfoShippingInfoId",
                 principalTable: "ShippingInfos",
                 principalColumn: "ShippingInfoId");
+
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

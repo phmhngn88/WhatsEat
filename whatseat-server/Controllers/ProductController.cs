@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
@@ -33,6 +34,24 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> GetProducts()
     {
         return Ok(await _productService.FindAllProducts());
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SearchProduct([FromQuery] SearchParams searchParams)
+    {
+        var products = await _productService.FullTextSearchProduct(searchParams);
+        var metadata = new
+        {
+            products.TotalCount,
+            products.PageSize,
+            products.CurrentPage,
+            products.TotalPages,
+            products.HasNext,
+            products.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        return Ok(products);
     }
 
     [HttpGet]

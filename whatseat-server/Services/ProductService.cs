@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using whatseat_server.Data;
 using whatseat_server.Models;
+using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 
 namespace whatseat_server.Services;
 
@@ -21,5 +23,14 @@ public class ProductService
     public async Task<Product> FindProductById(int productId)
     {
         return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.ProductId == productId);
+    }
+
+    public async Task<PagedList<Product>> FullTextSearchProduct(SearchParams searchParams)
+    {
+        var products = _context.Products.FromSqlInterpolated($"select * from products where MATCH(name) against ({searchParams.searchTerm})");
+
+        var res = await PagedList<Product>.ToPagedList(products, searchParams.PageNumber, searchParams.PageSize);
+
+        return res;
     }
 }

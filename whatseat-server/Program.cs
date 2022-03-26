@@ -10,7 +10,7 @@ using whatseat_server.Data;
 using whatseat_server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
@@ -34,6 +34,7 @@ builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<StoreService>();
+builder.Services.AddScoped<RecipeService>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]);
 
