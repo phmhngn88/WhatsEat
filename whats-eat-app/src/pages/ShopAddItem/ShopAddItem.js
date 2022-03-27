@@ -5,7 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import { BsPlus } from "react-icons/bs";
 
-import { Form, Input, Modal } from "antd";
+import { Dropdown, Form, Input, Modal, Select } from "antd";
 import "antd/dist/antd.css";
 
 const layout = {
@@ -35,6 +35,17 @@ const ShopAddItem = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+
+const options=[
+  {label: "Còn hàng", value: "Còn hàng"},
+  {label: "Hết hàng", value: "Hết hàng"}
+]
+
+function onChangeInput(value)
+{
+  console.log(value);
+}
 
   return (
     <div className="shop-add-item">
@@ -67,36 +78,44 @@ const ShopAddItem = () => {
 
                     <Form.Item
                       className="input"
-                      name="unit"
-                      label="Đơn vị"
+                      name="instock"
+                      label="Tình trạng hàng"
                       rules={[{required: true }]}
                     >
-                      <Input placeholder="Nhập rõ khối lượng/ đơn vị (1 con, 300g,...)" />
-                    </Form.Item>
-
-                    <Form.Item
-                      className="input"
-                      name="number"
-                      label="Số lượng"
-                      rules={[{required: true }]}
-                    >
-                      <Input placeholder="Nhập số lượng còn trong kho..." />
+                      <Select options={options} onChange={onChangeInput} placeholder="Chọn tình trạng hàng (còn hàng, hết hàng,...)" />
                     </Form.Item>
         
                     <Form.Item
                       className="input"
-                      name="image"
-                      label="Hình ảnh"
+                      name="price"
+                      label="Giá sản phẩm"
                       rules={[{ required: true }]}
                     >
+                      <Input placeholder="Nhập giá sản phẩm..." />
+                    </Form.Item>
+
+                    <Form.Item
+                      className="input"
+                      name="image"
+                      label="Hình minh họa"
+                    >
                       <button
-                        className="btn add-img-btn"
+                        className="btn add-image-btn"
                         onClick={showModal}
                       >
                         <BsPlus className="plus-icon" /> Thêm
                       </button>
-
+                      <Modal
+                        title="Thêm hình ảnh mới"
+                        visible={isModalVisible}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                        cancelText="Hủy"
+                        okText="Lưu"
+                      >
+                    </Modal>
                     </Form.Item>
+
                     <Form.Item
                       className="input"
                       name="description"
@@ -104,6 +123,7 @@ const ShopAddItem = () => {
                     >
                       <Input.TextArea placeholder="Nhập mô tả..." />
                     </Form.Item>
+                    
                     <Form.Item
                       className="input"
                       wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
