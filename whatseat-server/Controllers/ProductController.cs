@@ -31,12 +31,6 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProducts()
-    {
-        return Ok(await _productService.FindAllProducts());
-    }
-
-    [HttpGet]
     public async Task<IActionResult> SearchProduct([FromQuery] SearchParams searchParams)
     {
         var products = await _productService.FullTextSearchProduct(searchParams);

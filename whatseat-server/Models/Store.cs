@@ -19,6 +19,9 @@ public class Store
     public bool IsActive { get; set; } = false;
     public string AvatarUrl { get; set; }
     public String UserId { get; set; }
+    [EmailAddress]
+    public string Email { get; set; }
+    public string ShopName { get; set; }
     [ForeignKey(nameof(UserId))]
     public IdentityUser User { get; set; }
 

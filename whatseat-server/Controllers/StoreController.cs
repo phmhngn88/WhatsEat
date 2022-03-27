@@ -93,6 +93,8 @@ public class StoreController : ControllerBase
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
         Store newStore = new Store
         {
+            Email = request.Email,
+            ShopName = request.ShopName,
             PhoneNumber = request.PhoneNumber,
             Address = request.Address,
             ProvinceCode = request.ProvinceCode,
