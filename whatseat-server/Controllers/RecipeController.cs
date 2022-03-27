@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 using whatseat_server.Services;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -42,5 +45,26 @@ public class RecipeController : ControllerBase
         var recipe = await _recipeService.FindRecipeById(recipeId);
         return recipe is not null ? Ok(recipe) : NotFound(new { message = "recipe not found" });
     }
-    
+
+    [HttpGet]
+    [Route("search")]
+    public async Task<IActionResult> SearchRecipes([FromQuery] SearchParams searchParams)
+    {
+        var recipes = await _recipeService.SearchRecipeFullText(searchParams);
+
+        var metadata = new
+        {
+            recipes.TotalCount,
+            recipes.PageSize,
+            recipes.CurrentPage,
+            recipes.TotalPages,
+            recipes.HasNext,
+            recipes.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+        return Ok(recipes);
+    }
+
 }
