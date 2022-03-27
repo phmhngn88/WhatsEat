@@ -6,7 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import Shop from "../../components/Shop/Shop";
 
 const ShopPage = () => {
-  const [isRegistered, setIsRegistered] = useState(true);
+  const [isRegistered, setIsRegistered] = useState(false);
   return (
     <div className="shop">
       <Navbar />

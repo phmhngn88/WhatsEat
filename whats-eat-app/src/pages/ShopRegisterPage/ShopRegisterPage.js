@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "./ShopRegisterPage.css";
+import axios from "axios";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 import { BsPlus } from "react-icons/bs";
 
-import { Form, Input, Modal } from "antd";
+import { Form, Input, message, Modal } from "antd";
 import "antd/dist/antd.css";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
@@ -24,6 +25,11 @@ const validateMessages = {
 };
 
 const ShopRegisterPage = () => {
+  const [shopName, setShopName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [description, setDescription] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -35,6 +41,26 @@ const ShopRegisterPage = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleSubmitShopRegister = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Store/register",
+      data: {
+        shopName: shopName,
+        email: email,
+        phoneNumber: phoneNumber,
+        address: address,
+        description: description,
+      },
+    })
+      .then((res) => {
+        message.success("Thông tin đăng ký của hàng của bạn đã được ghi nhận!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -57,7 +83,7 @@ const ShopRegisterPage = () => {
                 label="Tên Shop"
                 rules={[{ required: true }]}
               >
-                <Input />
+                <Input onChange={(e) => setShopName(e.target.value)} />
               </Form.Item>
               <Form.Item
                 className="input"
@@ -65,7 +91,7 @@ const ShopRegisterPage = () => {
                 label="Email"
                 rules={[{ type: "email", required: true }]}
               >
-                <Input />
+                <Input onChange={(e) => setEmail(e.target.value)} />
               </Form.Item>
               <Form.Item
                 className="input"
@@ -73,7 +99,7 @@ const ShopRegisterPage = () => {
                 label="Số điện thoại"
                 rules={[{ required: true }]}
               >
-                <Input />
+                <Input onChange={(e) => setPhoneNumber(e.target.value)} />
               </Form.Item>
               <Form.Item
                 className="input"
@@ -102,45 +128,34 @@ const ShopRegisterPage = () => {
                         <Input placeholder="Nhập vào" />
                       </Form.Item>
                       <Form.Item
-                        label="Số điện thoại"
-                        required
-                        tooltip="Đây là thông tin bắt buộc"
-                      >
-                        <Input placeholder="Nhập vào" />
-                      </Form.Item>
-                      <Form.Item
                         label="Địa chỉ"
                         required
                         tooltip="Đây là thông tin bắt buộc"
                       >
-                        <Input placeholder="Nhập vào" />
+                        <Input
+                          placeholder="Nhập vào"
+                          onChange={(e) => setAddress(e.target.value)}
+                        />
                       </Form.Item>
                     </Form>
-                    {/* <div className="info">
-                      <div className="detail">
-                        <p className="label">Họ và Tên</p>
-                        <Input placeholder="Nhập vào" />
-                      </div>
-                      <div className="detail">
-                        <p className="label">Số điện thoại</p>
-                        <Input placeholder="Nhập vào" />
-                      </div>
-                      <div className="detail">
-                        <p className="label">Địa chỉ</p>
-                        <Input placeholder="Nhập vào" />
-                      </div>
-                    </div> */}
                   </div>
                 </Modal>
               </Form.Item>
               <Form.Item className="input" name="description" label="Mô tả">
-                <Input.TextArea />
+                <Input.TextArea
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 className="input"
                 wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
               >
-                <button className="btn submit-btn">Đăng ký cửa hàng</button>
+                <button
+                  className="btn submit-btn"
+                  onClick={handleSubmitShopRegister}
+                >
+                  Đăng ký cửa hàng
+                </button>
               </Form.Item>
             </Form>
           </div>

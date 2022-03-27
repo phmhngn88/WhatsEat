@@ -68,7 +68,7 @@ const options = (
 );
 
 const Navbar = () => {
-  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(true);
   const userSignin = useSelector((state) => state.userSignin);
 
   return (
