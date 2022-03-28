@@ -7,6 +7,6 @@ namespace whatseat_server.Models.DTOs.Requests
         public int Serving { get; set; }
         public int TotalTime { get; set; }
         public string ThumbnailUrl { get; set; }
-        public string RecipeTypeId { get; set; }
+        public int RecipeTypeId { get; set; }
     }
 }
