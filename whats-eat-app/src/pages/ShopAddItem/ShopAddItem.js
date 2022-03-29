@@ -4,8 +4,10 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import { BsPlus } from "react-icons/bs";
+import { Upload, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 
-import { Dropdown, Form, Input, Modal, Select } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import "antd/dist/antd.css";
 
 const layout = {
@@ -41,6 +43,25 @@ const options=[
   {label: "Còn hàng", value: "Còn hàng"},
   {label: "Hết hàng", value: "Hết hàng"}
 ]
+
+
+const props = {
+  action: '//jsonplaceholder.typicode.com/posts/',
+  listType: 'picture',
+  previewFile(file) {
+    console.log('Your upload file:', file);
+    // Your process logic. Here we just mock to the same file
+    return fetch('https://next.json-generator.com/api/json/get/4ytyBoLK8', {
+      method: 'POST',
+      body: file,
+    })
+      .then(res => res.json())
+      .then(({ thumbnail }) => thumbnail);
+  },
+};
+
+
+
 
 function onChangeInput(value)
 {
@@ -99,21 +120,9 @@ function onChangeInput(value)
                       name="image"
                       label="Hình minh họa"
                     >
-                      <button
-                        className="btn add-image-btn"
-                        onClick={showModal}
-                      >
-                        <BsPlus className="plus-icon" /> Thêm
-                      </button>
-                      <Modal
-                        title="Thêm hình ảnh mới"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                        cancelText="Hủy"
-                        okText="Lưu"
-                      >
-                    </Modal>
+                    <Upload {...props}>
+                    <Button icon={<UploadOutlined />}>Upload</Button>
+                    </Upload>
                     </Form.Item>
 
                     <Form.Item
