@@ -13,6 +13,6 @@ public class Order
     public Shipper Shipper { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
     public ICollection<OrderDetail> OrderDetails { get; set; }
-    Customer Customer { get; set; }
+    public Customer Customer { get; set; }
     public ShippingInfo ShippingInfo { get; set; }
 }

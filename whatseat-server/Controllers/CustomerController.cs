@@ -16,16 +16,22 @@ public class CustomerController : ControllerBase
     private readonly ProductService _productService;
     private readonly CartService _cartService;
     private readonly WhatsEatContext _context;
+    private readonly OrderService _orderService;
+    private readonly ILogger<CustomerController> _logger;
     public CustomerController(CustomerService customerService,
         ProductService productService,
         CartService cartService,
+        OrderService orderService,
+        ILogger<CustomerController> logger,
         WhatsEatContext context
     )
     {
+        _orderService = orderService;
         _customerService = customerService;
         _productService = productService;
         _cartService = cartService;
         _context = context;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -139,5 +145,68 @@ public class CustomerController : ControllerBase
         {
             message = "Success"
         });
+    }
+
+    [HttpGet]
+    [Route("orders-list")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> GetOrders([FromQuery] OrderPagedRequest request)
+    {
+        try
+        {
+            Guid userId = new Guid(User.FindFirst("Id")?.Value);
+            var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+            var orderList = await _orderService.GetUserPagedOrders(customer, request);
+
+            return Ok(orderList);
+        }
+        catch (Exception e)
+        {
+            _logger.LogInformation(e.Message);
+            return Forbid();
+        }
+    }
+
+    [HttpGet]
+    [Route("order/{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> GetOrderDetails(int id)
+    {
+        try
+        {
+            Guid userId = new Guid(User.FindFirst("Id")?.Value);
+            var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+            var order = await _orderService.getOrderDetails(customer, id);
+
+            return Ok(order);
+        }
+        catch (Exception e)
+        {
+            _logger.LogInformation(e.Message);
+            return Forbid();
+        }
+    }
+
+    [HttpPut]
+    [Route("order/{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> CancelOrder(int id)
+    {
+        try
+        {
+            Guid userId = new Guid(User.FindFirst("Id")?.Value);
+            var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+            var order = await _orderService.getOrderDetails(customer, id);
+
+            return Ok(order);
+        }
+        catch (Exception e)
+        {
+            _logger.LogInformation(e.Message);
+            return Forbid();
+        }
     }
 }
