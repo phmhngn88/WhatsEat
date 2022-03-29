@@ -121,7 +121,7 @@ function onChangeInput(value)
                       label="Hình minh họa"
                     >
                     <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>Upload</Button>
+                    <Button icon={<UploadOutlined />}>Thêm hình ảnh</Button>
                     </Upload>
                     </Form.Item>
 
