@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import {
   AiOutlineSearch,
@@ -70,6 +71,27 @@ const options = (
 const Navbar = () => {
   const [isLoggedin, setIsLoggedin] = useState(true);
   const userSignin = useSelector((state) => state.userSignin);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Recipe/search",
+      data: {
+        searchTerm: searchTerm,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        navigate(`/search?searchTerm=${searchTerm}`, {
+          state: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="navbar">
@@ -83,8 +105,11 @@ const Navbar = () => {
             className="search-input"
             type="text"
             placeholder="Bạn muốn tìm gì vậy?"
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="btn search-btn">Tìm kiếm</button>
+          <button className="btn search-btn" onClick={handleSearch}>
+            Tìm kiếm
+          </button>
         </div>
       </div>
       <div className="options">

@@ -140,4 +140,33 @@ public class CustomerController : ControllerBase
             message = "Success"
         });
     }
+
+    [HttpPost]
+    [Route("add-recipe")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> AddRecipe([FromBody] AddRecipeRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        var recipeType = await _context.RecipeTypes
+            .FirstOrDefaultAsync(pc => pc.RecipeTypeId == request.RecipeTypeId);
+
+        Recipe recipe = new Recipe
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Serving = request.Serving,
+            TotalTime = request.TotalTime,
+            ThumbnailUrl = request.ThumbnailUrl,
+            RecipeType = recipeType
+        };
+
+        await _context.Recipes.AddAsync(recipe);
+        await _context.SaveChangesAsync();
+        return Ok(new
+        {
+            message = "Success"
+        });
+    }
 }

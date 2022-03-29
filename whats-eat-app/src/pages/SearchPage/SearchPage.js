@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./SearchPage.css";
+import { useLocation } from "react-router-dom";
 import { Button, Checkbox, Row, Col, Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
@@ -119,6 +120,8 @@ const menuList = [
 
 const SearchPage = () => {
   const [searchResult, setSearchResult] = useState([]);
+  const { state } = useLocation();
+  //setSearchResult(state)
 
   useEffect(() => {
     setSearchResult(searchResults);
