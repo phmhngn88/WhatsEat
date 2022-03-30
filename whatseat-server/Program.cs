@@ -35,6 +35,7 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<StoreService>();
 builder.Services.AddScoped<RecipeService>();
+builder.Services.AddScoped<OrderService>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]);
 

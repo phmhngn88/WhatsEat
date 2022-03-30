@@ -15,6 +15,11 @@ public class Recipe
     public DateTime CreatedOn { get; set; }
     public Customer Creator { get; set; }
     public int TotalTime { get; set; }
+    public float AvgRating { get; set; }
+    public int TotalRating { get; set; }
+    public int TotalView { get; set; }
+    public int totalLike { get; set; }
+    public string videoUrl { get; set; }
     public RecipeType RecipeType { get; set; }
     public ICollection<RecipeStep> RecipeSteps { get; set; }
     public ICollection<Ingredient> Ingredients { get; set; }

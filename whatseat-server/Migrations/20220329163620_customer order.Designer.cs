@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220329163620_customer order")]
+    partial class customerorder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -559,9 +561,6 @@ namespace whatseat_server.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(0);
 
-                    b.Property<float>("AvgRating")
-                        .HasColumnType("float");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime");
 
@@ -583,20 +582,8 @@ namespace whatseat_server.Migrations
                     b.Property<string>("ThumbnailUrl")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("TotalRating")
-                        .HasColumnType("int");
-
                     b.Property<int>("TotalTime")
                         .HasColumnType("int");
-
-                    b.Property<int>("TotalView")
-                        .HasColumnType("int");
-
-                    b.Property<int>("totalLike")
-                        .HasColumnType("int");
-
-                    b.Property<string>("videoUrl")
-                        .HasColumnType("longtext");
 
                     b.HasKey("RecipeId");
 
@@ -1017,7 +1004,7 @@ namespace whatseat_server.Migrations
 
             modelBuilder.Entity("whatseat_server.Models.Order", b =>
                 {
-                    b.HasOne("whatseat_server.Models.Customer", "Customer")
+                    b.HasOne("whatseat_server.Models.Customer", null)
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId");
 
@@ -1032,8 +1019,6 @@ namespace whatseat_server.Migrations
                     b.HasOne("whatseat_server.Models.ShippingInfo", "ShippingInfo")
                         .WithMany()
                         .HasForeignKey("ShippingInfoId");
-
-                    b.Navigation("Customer");
 
                     b.Navigation("PaymentMethod");
 
