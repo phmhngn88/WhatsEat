@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ShopAddItem.css";
+import axios from "axios";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
@@ -23,6 +24,10 @@ const validateMessages = {
 };
 
 const ShopAddItem = () => {
+  const [name, setName] = useState("");
+  const [inStock, setInStock] = useState(true);
+  const [basePrice, setBasePrice] = useState(0);
+  const [description, setDescription] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true);
@@ -36,16 +41,29 @@ const ShopAddItem = () => {
     setIsModalVisible(false);
   };
 
+  const options = [
+    { label: "Còn hàng", value: "Còn hàng" },
+    { label: "Hết hàng", value: "Hết hàng" },
+  ];
 
-const options=[
-  {label: "Còn hàng", value: "Còn hàng"},
-  {label: "Hết hàng", value: "Hết hàng"}
-]
-
-function onChangeInput(value)
-{
-  console.log(value);
-}
+  const handleAddItem = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Store/add-product",
+      data: {
+        name: name,
+        inStock: inStock,
+        basePrice: basePrice,
+        description: description,
+      },
+    })
+      .then((res) => {
+        console.log("Thêm sản phẩm thành công!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="shop-add-item">
@@ -73,25 +91,35 @@ function onChangeInput(value)
                       label="Tên sản phẩm"
                       rules={[{ required: true }]}
                     >
-                      <Input placeholder="Nhập tên sản phẩm..." />
+                      <Input
+                        placeholder="Nhập tên sản phẩm..."
+                        onChange={(e) => setName(e.target.value)}
+                      />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
                       name="instock"
                       label="Tình trạng hàng"
-                      rules={[{required: true }]}
+                      rules={[{ required: true }]}
                     >
-                      <Select options={options} onChange={onChangeInput} placeholder="Chọn tình trạng hàng (còn hàng, hết hàng,...)" />
+                      <Select
+                        options={options}
+                        onChange={(e) => setInStock(e.target.value)}
+                        placeholder="Chọn tình trạng hàng (còn hàng, hết hàng,...)"
+                      />
                     </Form.Item>
-        
+
                     <Form.Item
                       className="input"
                       name="price"
                       label="Giá sản phẩm"
                       rules={[{ required: true }]}
                     >
-                      <Input placeholder="Nhập giá sản phẩm..." />
+                      <Input
+                        placeholder="Nhập giá sản phẩm..."
+                        onChange={(e) => setBasePrice(e.target.value)}
+                      />
                     </Form.Item>
 
                     <Form.Item
@@ -99,10 +127,7 @@ function onChangeInput(value)
                       name="image"
                       label="Hình minh họa"
                     >
-                      <button
-                        className="btn add-image-btn"
-                        onClick={showModal}
-                      >
+                      <button className="btn add-image-btn" onClick={showModal}>
                         <BsPlus className="plus-icon" /> Thêm
                       </button>
                       <Modal
@@ -112,8 +137,7 @@ function onChangeInput(value)
                         onCancel={handleCancel}
                         cancelText="Hủy"
                         okText="Lưu"
-                      >
-                    </Modal>
+                      ></Modal>
                     </Form.Item>
 
                     <Form.Item
@@ -121,14 +145,22 @@ function onChangeInput(value)
                       name="description"
                       label="Mô tả sản phẩm"
                     >
-                      <Input.TextArea placeholder="Nhập mô tả..." />
+                      <Input.TextArea
+                        placeholder="Nhập mô tả..."
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
                     </Form.Item>
-                    
+
                     <Form.Item
                       className="input"
                       wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
                     >
-                      <button className="btn submit-btn">Lưu thông tin</button>
+                      <button
+                        className="btn submit-btn"
+                        onClick={handleAddItem}
+                      >
+                        Lưu thông tin
+                      </button>
                     </Form.Item>
                   </Form>
                 </div>
