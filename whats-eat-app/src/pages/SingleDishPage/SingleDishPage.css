@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+.single-dish-fluid img{
+    object-fit: cover;
+}
+
 .single-dish-fluid .single-dish-container{
     width: 70%;
     margin-top: 2rem;

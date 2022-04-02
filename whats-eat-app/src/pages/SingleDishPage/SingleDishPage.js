@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./SingleDishPage.css";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Guide from "../../components/Guide/Guide";
@@ -46,17 +47,20 @@ const ingredients = [
 
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
+  let [searchParams, setSearchParams] = useSearchParams();
+  const idRecipe = searchParams.get("id");
   const { id, img_url, dish_name, love_count, time, level, view } = dish;
   const price = 230000;
 
   const getDishDetail = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/${id}`,
+      url: `https://localhost:7029/api/Recipe/${597}`, //TODO: replace hardcode into idRecipe
     })
       .then((res) => {
         const result = res.data;
-        setDishDetail(result);
+        console.log(result);
+        // setDishDetail(result);
       })
       .catch((error) => {
         console.log(error);

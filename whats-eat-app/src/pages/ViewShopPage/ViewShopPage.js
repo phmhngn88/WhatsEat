@@ -62,9 +62,26 @@ const ViewShopPage = () => {
         console.log(err);
       });
   };
+  const getLikeShop = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Store/is-like/${id}`,
+    })
+      .then((res) => {
+        // setIsLiked(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     getShopInfo();
   }, []);
+
+  useEffect(() => {
+    getLikeShop();
+  }, []);
+
   useEffect(() => {
     postLikeShop();
   }, [isLiked]);

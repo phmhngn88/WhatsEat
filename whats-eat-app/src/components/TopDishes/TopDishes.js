@@ -2,6 +2,7 @@ import React from "react";
 import "./TopDishes.css";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
+import { useNavigate } from "react-router-dom";
 import Dish from "../Dish/Dish";
 import {
   AiOutlineHeart,
@@ -94,6 +95,7 @@ const dishes = [
 ];
 
 const TopDishes = () => {
+  const navigate = useNavigate();
   return (
     <div className="top-dishes-container">
       <div className="top-dishes">
@@ -103,7 +105,12 @@ const TopDishes = () => {
             const { id, img_url, dish_name, love_count, time, level, view } =
               dish;
             return (
-              <Col span={6} key={id} className="dish-col">
+              <Col
+                span={6}
+                key={id}
+                className="dish-col"
+                onClick={() => navigate(`/singledish?id=${id}`)}
+              >
                 <Dish {...dish} />
               </Col>
             );

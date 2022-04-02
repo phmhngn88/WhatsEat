@@ -39,7 +39,8 @@ const menuList = [
 const SearchPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchRecipeResult, setSearchRecipeResult] = useState([]);
+  const [searchProductResult, setSearchProductResult] = useState([]);
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
@@ -47,22 +48,34 @@ const SearchPage = () => {
   //setSearchResult(state)
 
   useEffect(() => {
-    setSearchResult(searchResults);
+    setSearchRecipeResult(searchResults);
   }, []);
 
   axios({
-    method: "POST",
-    url: `https://localhost:7029/api/Product?PageNumber=${pageNumber}&searchTerm=${searchTerm}&PageSize=${pageSize}h`,
-    data: {
-      searchTerm: searchTerm,
-    },
+    method: "get",
+    url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
   })
     .then((res) => {
-      console.log(res.data);
+      console.log("Data product search:", res.data);
+      //setSearchProductResult(res.data)
     })
     .catch((err) => {
       console.log(err);
     });
+
+  axios({
+    method: "get",
+    url: `https://localhost:7029/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+  })
+    .then((res) => {
+      console.log("Data recipe search:", res.data);
+      //setSearchRecipeResult(res.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const data = [...searchRecipeResult, ...searchProductResult];
   return (
     <div className="search">
       <Navbar />
@@ -91,7 +104,7 @@ const SearchPage = () => {
             })}
           </div>
           <Row gutter={[16, 16]}>
-            {searchResult.map((item) => {
+            {searchRecipeResult.map((item) => {
               const { id, img_url, dish_name, love_count, time, level, view } =
                 item;
               return (
