@@ -1,12 +1,114 @@
 import React, { useState, useEffect } from "react";
 import "./SearchPage.css";
-import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Button, Checkbox, Row, Col, Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Dish from "../../components/Dish/Dish";
+
+const menu = (
+  <Menu>
+    <Menu.Item key="0">
+      <a href="#">Độ khó</a>
+    </Menu.Item>
+    <Menu.Item key="1">
+      <a href="#">Thời gian</a>
+    </Menu.Item>
+    <Menu.Item key="3">
+      <a href="#">Lượt xem</a>
+    </Menu.Item>
+  </Menu>
+);
+
+const menuList = [
+  { id: 1, name: "Món chay" },
+  { id: 2, name: "Thức uống" },
+  { id: 3, name: "Bánh - Bánh ngọt" },
+  { id: 4, name: "Món ăn cho trẻ" },
+  { id: 5, name: "Món khai vị" },
+  { id: 6, name: "Nhanh và dễ" },
+  { id: 7, name: "Món ăn sáng" },
+  { id: 8, name: "Món nhậu" },
+  { id: 9, name: "Món chính" },
+  { id: 10, name: "Món tráng miệng" },
+];
+
+const SearchPage = () => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
+  const [searchResult, setSearchResult] = useState([]);
+
+  let [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get("searchTerm");
+  console.log("searchTerm", searchTerm);
+  //setSearchResult(state)
+
+  useEffect(() => {
+    setSearchResult(searchResults);
+  }, []);
+
+  axios({
+    method: "POST",
+    url: `https://localhost:7029/api/Product?PageNumber=${pageNumber}&searchTerm=${searchTerm}&PageSize=${pageSize}h`,
+    data: {
+      searchTerm: searchTerm,
+    },
+  })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return (
+    <div className="search">
+      <Navbar />
+      <div className="search-container">
+        <div className="search-fluid">
+          <div className="search-nav">
+            <h1 className="title">Kết quả tìm kiếm</h1>
+            <Dropdown className="drop-down" overlay={menu} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                Sắp xếp theo <DownOutlined />
+              </a>
+            </Dropdown>
+          </div>
+          <p className="notice">Kết quả tìm kiếm cho "..."</p>
+          <div className="menu">
+            {menuList.map((item) => {
+              return (
+                <div className="single-item">
+                  <Checkbox />
+                  <p className="item-name">{item.name}</p>
+                </div>
+              );
+            })}
+          </div>
+          <Row gutter={[16, 16]}>
+            {searchResult.map((item) => {
+              const { id, img_url, dish_name, love_count, time, level, view } =
+                item;
+              return (
+                <Col span={6} key={id} className="dish-col">
+                  <Dish {...item} />
+                </Col>
+              );
+            })}
+          </Row>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default SearchPage;
 
 const searchResults = [
   {
@@ -90,86 +192,3 @@ const searchResults = [
     view: 20,
   },
 ];
-
-const menu = (
-  <Menu>
-    <Menu.Item key="0">
-      <a href="#">Độ khó</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="#">Thời gian</a>
-    </Menu.Item>
-    <Menu.Item key="3">
-      <a href="#">Lượt xem</a>
-    </Menu.Item>
-  </Menu>
-);
-
-const menuList = [
-  { id: 1, name: "Món chay" },
-  { id: 2, name: "Thức uống" },
-  { id: 3, name: "Bánh - Bánh ngọt" },
-  { id: 4, name: "Món ăn cho trẻ" },
-  { id: 5, name: "Món khai vị" },
-  { id: 6, name: "Nhanh và dễ" },
-  { id: 7, name: "Món ăn sáng" },
-  { id: 8, name: "Món nhậu" },
-  { id: 9, name: "Món chính" },
-  { id: 10, name: "Món tráng miệng" },
-];
-
-const SearchPage = () => {
-  const [searchResult, setSearchResult] = useState([]);
-  const { state } = useLocation();
-  //setSearchResult(state)
-
-  useEffect(() => {
-    setSearchResult(searchResults);
-  }, []);
-
-  return (
-    <div className="search">
-      <Navbar />
-      <div className="search-container">
-        <div className="search-fluid">
-          <div className="search-nav">
-            <h1 className="title">Kết quả tìm kiếm</h1>
-            <Dropdown className="drop-down" overlay={menu} trigger={["click"]}>
-              <a
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                Sắp xếp theo <DownOutlined />
-              </a>
-            </Dropdown>
-          </div>
-          <p className="notice">Kết quả tìm kiếm cho "..."</p>
-          <div className="menu">
-            {menuList.map((item) => {
-              return (
-                <div className="single-item">
-                  <Checkbox />
-                  <p className="item-name">{item.name}</p>
-                </div>
-              );
-            })}
-          </div>
-          <Row gutter={[16, 16]}>
-            {searchResult.map((item) => {
-              const { id, img_url, dish_name, love_count, time, level, view } =
-                item;
-              return (
-                <Col span={6} key={id} className="dish-col">
-                  <Dish {...item} />
-                </Col>
-              );
-            })}
-          </Row>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-};
-
-export default SearchPage;

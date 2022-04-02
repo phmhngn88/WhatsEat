@@ -75,22 +75,22 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    axios({
-      method: "POST",
-      url: "https://localhost:7029/api/Recipe/search",
-      data: {
-        searchTerm: searchTerm,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        navigate(`/search?searchTerm=${searchTerm}`, {
-          state: res.data,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    navigate(`/search?searchTerm=${searchTerm}`);
+    // axios({
+    //   method: "POST",
+    //   url: "https://localhost:7029/api/Recipe/search",
+    //   data: {
+    //     searchTerm: searchTerm,
+    //   },
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //       state: res.data,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (

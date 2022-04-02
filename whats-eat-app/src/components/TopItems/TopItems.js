@@ -2,8 +2,37 @@ import React from "react";
 import "./TopItems.css";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
+import { useNavigate } from "react-router-dom";
 
 import Product from "../Product/Product";
+
+const TopItems = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="top-items-container">
+      <div className="top-items">
+        <h1 className="title">Top thực phẩm yêu thích</h1>
+        <Row gutter={[16, 16]}>
+          {items.map((item) => {
+            const { id, img_url, item_name, weight, price } = item;
+            return (
+              <Col
+                span={6}
+                className="item-col"
+                key={id}
+                onClick={() => navigate(`/singleproduct?id=${id}`)}
+              >
+                <Product {...item} />
+              </Col>
+            );
+          })}
+        </Row>
+      </div>
+    </div>
+  );
+};
+
+export default TopItems;
 
 const items = [
   {
@@ -71,25 +100,3 @@ const items = [
     price: 22000,
   },
 ];
-
-const TopItems = () => {
-  return (
-    <div className="top-items-container">
-      <div className="top-items">
-        <h1 className="title">Top thực phẩm yêu thích</h1>
-        <Row gutter={[16, 16]}>
-          {items.map((item) => {
-            const { id, img_url, item_name, weight, price } = item;
-            return (
-              <Col span={6} className="item-col" key={id}>
-                <Product {...item} />
-              </Col>
-            );
-          })}
-        </Row>
-      </div>
-    </div>
-  );
-};
-
-export default TopItems;
