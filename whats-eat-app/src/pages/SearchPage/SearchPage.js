@@ -56,8 +56,8 @@ const SearchPage = () => {
     url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
   })
     .then((res) => {
-      console.log("Data product search:", res.data);
-      //setSearchProductResult(res.data)
+      // console.log("Data product search:", res.data);
+      setSearchProductResult(res.data);
     })
     .catch((err) => {
       console.log(err);
@@ -68,14 +68,15 @@ const SearchPage = () => {
     url: `https://localhost:7029/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
   })
     .then((res) => {
-      console.log("Data recipe search:", res.data);
-      //setSearchRecipeResult(res.data)
+      // console.log("Data recipe search:", res.data);
+      setSearchRecipeResult(res.data);
     })
     .catch((err) => {
       console.log(err);
     });
 
-  const data = [...searchRecipeResult, ...searchProductResult];
+  const searchResults = [...searchRecipeResult, ...searchProductResult];
+  console.log("search result:", searchResults);
   return (
     <div className="search">
       <Navbar />
@@ -104,7 +105,7 @@ const SearchPage = () => {
             })}
           </div>
           <Row gutter={[16, 16]}>
-            {searchRecipeResult.map((item) => {
+            {searchResults.map((item) => {
               const { id, img_url, dish_name, love_count, time, level, view } =
                 item;
               return (
@@ -123,85 +124,85 @@ const SearchPage = () => {
 
 export default SearchPage;
 
-const searchResults = [
-  {
-    id: 1,
-    img_url:
-      "https://media.cooky.vn/recipe/g1/393/s320x240/Recipe393-635402710349446250.jpg",
-    dish_name: "Cháo thịt heo bí đỏ",
-    love_count: 12,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 2,
-    img_url:
-      "https://media.cooky.vn/recipe/g6/50880/s320x240/cooky-recipe-637102372207865706.png",
-    dish_name: "Smoothie xoài chuối kiwi",
-    love_count: 24,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 3,
-    img_url:
-      "https://media.cooky.vn/recipe/g2/15298/s320x240/recipe15298-635736102975470370.jpg",
-    dish_name: "Bánh bông lan trà xanh",
-    love_count: 31,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 4,
-    img_url:
-      "https://media.cooky.vn/recipe/g3/20185/s320x240/cooky-recipe-636318376852793754.jpg",
-    dish_name: "Bún chay kiểu Huế",
-    love_count: 145,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 5,
-    img_url:
-      "https://media.cooky.vn/recipe/g1/3030/s320x240/recipe3030-635643660376673456.jpg",
-    dish_name: "Cá Basa kho tộ",
-    love_count: 44,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 6,
-    img_url:
-      "https://media.cooky.vn/recipe/g1/4014/s320x240/recipe4014-636009205974008541.jpg",
-    dish_name: "Cơm chiên Dương Châu",
-    love_count: 122,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 7,
-    img_url:
-      "https://media.cooky.vn/recipe/g5/48083/s320x240/cooky-recipe-cover-r48083.jpg",
-    dish_name: "Đậu hũ om rau nấm rơm",
-    love_count: 12,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 8,
-    img_url:
-      "https://media.cooky.vn/recipe/g5/48084/s320x240/cooky-recipe-cover-r48084.jpg",
-    dish_name: "Canh đu đủ hầm nấm rơm",
-    love_count: 12,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-];
+// const searchResults = [
+//   {
+//     id: 1,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g1/393/s320x240/Recipe393-635402710349446250.jpg",
+//     dish_name: "Cháo thịt heo bí đỏ",
+//     love_count: 12,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 2,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g6/50880/s320x240/cooky-recipe-637102372207865706.png",
+//     dish_name: "Smoothie xoài chuối kiwi",
+//     love_count: 24,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 3,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g2/15298/s320x240/recipe15298-635736102975470370.jpg",
+//     dish_name: "Bánh bông lan trà xanh",
+//     love_count: 31,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 4,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g3/20185/s320x240/cooky-recipe-636318376852793754.jpg",
+//     dish_name: "Bún chay kiểu Huế",
+//     love_count: 145,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 5,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g1/3030/s320x240/recipe3030-635643660376673456.jpg",
+//     dish_name: "Cá Basa kho tộ",
+//     love_count: 44,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 6,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g1/4014/s320x240/recipe4014-636009205974008541.jpg",
+//     dish_name: "Cơm chiên Dương Châu",
+//     love_count: 122,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 7,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g5/48083/s320x240/cooky-recipe-cover-r48083.jpg",
+//     dish_name: "Đậu hũ om rau nấm rơm",
+//     love_count: 12,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+//   {
+//     id: 8,
+//     img_url:
+//       "https://media.cooky.vn/recipe/g5/48084/s320x240/cooky-recipe-cover-r48084.jpg",
+//     dish_name: "Canh đu đủ hầm nấm rơm",
+//     love_count: 12,
+//     time: "30p",
+//     level: "Dễ",
+//     view: 20,
+//   },
+// ];
