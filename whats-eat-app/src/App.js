@@ -27,6 +27,7 @@ import ShopInfringingItems from "./pages/ShopInfringingItems/ShopInfringingItems
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FavorShop from "./pages/FavorShop/FavorShop";
 import FavorItem from "./pages/FavorItem/FavorItem";
+import RateItem from "./pages/RateItem/RateItem";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
         <Route path="/orders" element={<OrderPage />}></Route>
         <Route path="/shop/items" element={<ShopItems />}></Route>
         <Route path="/shop/additem" element={<ShopAddItem />}></Route>
+        <Route path="/rateitem" element={<RateItem />}></Route>
         <Route
           path="/shop/infringingitems"
           element={<ShopInfringingItems />}
