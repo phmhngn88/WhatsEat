@@ -1,6 +1,7 @@
 .dish-container .dish-img{
     width: 100%;
     border-radius: 5px;
+    object-fit: cover;
 }
 
 .dish-container .dish-name{

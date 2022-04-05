@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./OrderPage.css";
+import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import Order from "../../components/Order/Order";
@@ -44,6 +45,23 @@ const items = [
 const OrderPage = () => {
   const onSearch = () => {};
   const [allOrders, setAllOrders] = useState([]);
+
+  const getCustomerOrders = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Customer/orders-list?PageNumber=${1}&PageSize=${8}`,
+    })
+      .then((res) => {
+        const result = res.data;
+        // setAllOrders(result)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getCustomerOrders();
+  }, []);
 
   useEffect(() => {
     setAllOrders(items);

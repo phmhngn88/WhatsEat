@@ -40,7 +40,8 @@
 }
 
 .cancel-block{
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
 }
 
 .cancel-block .cancel-btn{

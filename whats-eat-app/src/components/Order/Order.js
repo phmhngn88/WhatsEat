@@ -1,8 +1,8 @@
 import React from "react";
 import "./Order.css";
+import { Link } from "react-router-dom";
 
 const Order = ({ props }) => {
-  console.log(props);
   const { id, img_url, item_name, price, status } = props;
   return (
     <div className="order">
@@ -33,6 +33,7 @@ const Order = ({ props }) => {
           </p>
         </div>
         <div className="cancel-block">
+          <Link to={`/orders/${id}`}>Xem chi tiết...</Link>
           {status === 0 ? (
             <button className="btn cancel-btn">Hủy đơn hàng</button>
           ) : (
