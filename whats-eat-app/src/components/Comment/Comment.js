@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from "react";
 import "./Comment.css";
+
+import { message, Rate } from "antd";
+import "antd/dist/antd.css";
 import { AiOutlineCamera, AiFillStar, AiFillFileImage } from "react-icons/ai";
 import { FiSend } from "react-icons/fi";
 
 const Comment = () => {
   const [isCommented, setIsCommented] = useState(false);
-
-  console.log(isCommented);
+  const [rateValue, setRateValue] = useState(5);
+  const [comment, setComment] = useState("");
 
   if (isCommented) {
     return (
       <div className="comment-container">
         <h1 className="title">Bình luận</h1>
         <div className="rating-area">
-          <AiFillStar className="star-icon" />
-          <AiFillStar className="star-icon" />
-          <AiFillStar className="star-icon" />
-          <AiFillStar className="star-icon" />
-          <AiFillStar className="star-icon" />
+          <Rate
+            className="stars"
+            onChange={(value) => setRateValue(value)}
+            value={rateValue}
+          />
         </div>
         <div className="comment-area">
-          <textarea cols="30" rows="10" placeholder="Mô tả"></textarea>
+          <textarea
+            cols="30"
+            rows="10"
+            placeholder="Mô tả"
+            onChange={(e) => setComment(e.target.value)}
+          ></textarea>
         </div>
         <div className="submit-area">
           <button className="btn img-load-btn">

@@ -9,3 +9,50 @@
     margin-top: 2rem;
     margin-bottom: 3rem;
 }
+
+h2{
+    margin-bottom: 2rem;
+}
+
+.order-detail-container .rate-area .rate-container{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+
+.rate-container .stars{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #c4c4c4;
+}
+
+.rate-container .comment-area textarea{
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    
+}
+
+.rate-container .comment-area textarea:focus{
+    outline: none;
+    border: 2px solid #c4c4c4;
+    border-radius: 10px;
+}
+
+.rate-container .submit-btn{
+    width: fit-content;
+    align-self: flex-end;
+    font-weight: 650;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    background-color: brown;
+}
