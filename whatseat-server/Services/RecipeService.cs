@@ -32,4 +32,12 @@ public class RecipeService
 
         return res;
     }
+
+    public async Task<PagedList<RecipeReview>> GetAllRecipeReviews(PagedRequest pagedRequest)
+    {
+        var recipeReviews = _context.RecipeReviews.AsNoTracking().OrderByDescending(rr => rr.CreatedOn);
+
+        var res = await PagedList<RecipeReview>.ToPagedList(recipeReviews, pagedRequest.PageNumber, pagedRequest.PageSize);
+        return res;
+    }
 }

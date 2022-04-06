@@ -67,4 +67,47 @@ public class RecipeController : ControllerBase
         return Ok(recipes);
     }
 
+    [HttpGet("reviews")]
+    public async Task<IActionResult> GetReviews([FromBody] PagedRequest request)
+    {
+        var reviews = await _recipeService.GetAllRecipeReviews(request);
+
+        var metadata = new
+        {
+            reviews.TotalCount,
+            reviews.PageSize,
+            reviews.CurrentPage,
+            reviews.TotalPages,
+            reviews.HasNext,
+            reviews.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+        return Ok(reviews);
+    }
+
+    [HttpPost]
+    [Route("reviews")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> PostReview([FromBody] RecipeReviewRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipe = await _recipeService.FindRecipeById(request.RecipeId);
+        RecipeReview recipeReview = new RecipeReview
+        {
+            Rating = request.Rating,
+            Comment = request.Comment,
+            CreatedOn = DateTime.UtcNow,
+            Recipe = recipe,
+            Customer = customer
+        };
+
+        var addRes = await _context.RecipeReviews.AddAsync(recipeReview);
+        var changRes = await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Success" });
+    }
+
 }
