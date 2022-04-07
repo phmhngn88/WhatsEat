@@ -220,16 +220,32 @@ public class CustomerController : ControllerBase
     [HttpPut]
     [Route("order/{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
-    public async Task<IActionResult> CancelOrder(int id)
+    public async Task<IActionResult> CancelOrder([FromBody] OrderStatusRequest request)
     {
         try
         {
             Guid userId = new Guid(User.FindFirst("Id")?.Value);
             var customer = await _customerService.FindCustomerByIdAsync(userId);
 
-            var order = await _orderService.getOrderDetails(customer, id);
+            var order = await _orderService.getOrderDetails(customer, request.OrderId);
 
-            return Ok(order);
+            var OrderStatusHistory = await _orderService.GetLatestOrderStatus(order);
+
+            if (_orderService.IsCancelable(OrderStatusHistory.OrderStatus.Value))
+            {
+                await _orderService.CancelOrder(customer, order, request.Message);
+                var orderRes = await _orderService.getOrderDetails(customer, request.OrderId);
+                return Ok(orderRes);
+            }
+            else
+            {
+                return BadRequest(
+                    new
+                    {
+                        message = "Order cancelation failed"
+                    }
+                );
+            }
         }
         catch (Exception e)
         {

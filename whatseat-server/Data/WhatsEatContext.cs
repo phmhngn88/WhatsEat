@@ -46,4 +46,5 @@ public class WhatsEatContext : IdentityDbContext
     public DbSet<Unit> Units => Set<Unit>();
     public DbSet<RecipeStep> RecipeSteps => Set<RecipeStep>();
     public DbSet<RecipeRecipeType> RecipeRecipeTypes => Set<RecipeRecipeType>();
+    public DbSet<RecipeReview> RecipeReviews => Set<RecipeReview>();
 }
