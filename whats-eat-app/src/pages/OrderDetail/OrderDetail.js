@@ -13,8 +13,11 @@ const OrderDetail = () => {
   const [order, setOrder] = useState(null);
   const [rateValue, setRateValue] = useState(5);
   const [comment, setComment] = useState("");
+  
+  const [done] = useState(true);
 
   const getOrder = () => {
+
     axios({
       method: "get",
       url: `https://localhost:7029/api/Customer/order/${id}`,
@@ -31,6 +34,7 @@ const OrderDetail = () => {
   };
 
   const handleSubmitRating = (id) => {
+    
     axios({
       method: "POST",
       url: "https://localhost:7029/api/Product/review",
@@ -51,11 +55,15 @@ const OrderDetail = () => {
   useEffect(() => {
     getOrder();
   }, []);
+  
   return (
-    <div className="order-detail">
-      <Navbar />
-      <div className="order-detail-fluid">
-        <div className="order-detail-container">
+
+   <div className="order-detail">
+    <Navbar />
+    <div className="order-detail-fluid">
+      {done ?
+      (
+      <div className="order-detail-container">
           <h1 className="title" style={{ fontWeight: "650" }}>
             Chi tiết đơn hàng
           </h1>
@@ -84,9 +92,17 @@ const OrderDetail = () => {
             </div>
           </div>
         </div>
+        )
+        :
+        (
+          <div></div>
+        )
+        }
       </div>
+
       <Footer />
     </div>
+      
   );
 };
 
