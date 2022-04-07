@@ -7,6 +7,12 @@ namespace whatseat_server.Models.DTOs.Requests
         public int Serving { get; set; }
         public int TotalTime { get; set; }
         public string ThumbnailUrl { get; set; }
+        public float AvgRating { get; set; }
+        public int TotalRating { get; set; }
+        public int TotalView { get; set; }
+        public int totalLike { get; set; }
+        public string videoUrl { get; set; }
         public int RecipeTypeId { get; set; }
+        public ICollection<RecipeStep> RecipeSteps { get; set; }
     }
 }
