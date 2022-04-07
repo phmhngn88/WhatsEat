@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import "./LoginPage.css";
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, message } from "antd";
-import { LockOutlined } from "@ant-design/icons";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  LockOutlined,
+} from "@ant-design/icons";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -37,7 +41,11 @@ const LoginPage = () => {
         message.success("Đăng nhập thành công!");
         setIsLoggedin(true);
         setTimeout(() => {
-          navigate("/");
+          navigate(`/`, {
+            state: {
+              email: email,
+            },
+          });
         }, 1000);
       })
       .catch((err) => {
@@ -65,12 +73,21 @@ const LoginPage = () => {
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+          rules={[
+            {
+              required: true,
+              message:
+                "Mật khẩu phải bao gồm ít nhất 8 ký tự, chứa cả chữ thường, in hoa, số và lý tự đặc biệt!",
+            },
+          ]}
         >
-          <Input
+          <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
             onChange={getPassword}
           />
         </Form.Item>

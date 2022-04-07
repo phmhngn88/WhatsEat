@@ -44,7 +44,6 @@ const SearchPage = () => {
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
-  console.log("searchTerm", searchTerm);
   //setSearchResult(state)
 
   useEffect(() => {

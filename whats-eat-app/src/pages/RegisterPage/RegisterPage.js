@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import "./RegisterPage.css";
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  UserOutlined,
+  LockOutlined,
+} from "@ant-design/icons";
 import { AiOutlineMail } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -79,25 +84,38 @@ const RegisterPage = () => {
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+          rules={[
+            {
+              required: true,
+              message:
+                "Mật khẩu phải bao gồm ít nhất 8 ký tự, chứa cả chữ thường, in hoa, số và lý tự đặc biệt!",
+            },
+          ]}
         >
-          <Input
+          <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
-
         <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Vui lòng nhập lại mật khẩu!" }]}
+          name="confirm"
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "Mật khẩu bạn nhập không trùng khớp!" },
+          ]}
         >
-          <Input
-            id="confirm_register_password"
+          <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Nhập lại mật khẩu"
+            placeholder="Mật khẩu"
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
           />
         </Form.Item>
         <Form.Item>

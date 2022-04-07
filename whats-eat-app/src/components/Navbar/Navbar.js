@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import {
@@ -68,11 +68,15 @@ const options = (
   </Menu>
 );
 
-const Navbar = () => {
-  const [isLoggedin, setIsLoggedin] = useState(true);
+const Navbar = (email) => {
+  const [isLoggedin, setIsLoggedin] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  // if (email.email) {
+  //   setIsLoggedin(true);
+  // }
+  console.log("email đăng nhập:", email.email);
 
   const handleSearch = () => {
     navigate(`/search?searchTerm=${searchTerm}`);
@@ -105,11 +109,7 @@ const Navbar = () => {
           <AiOutlineShoppingCart className="option-icon" />{" "}
           <span>Giỏ hàng</span>
         </Link>
-        {isLoggedin === false ? (
-          <Link to="/login" className="btn option-btn">
-            <BsFillPersonFill className="option-icon" /> <span>Đăng nhập</span>
-          </Link>
-        ) : (
+        {email.email ? (
           <button className="btn option-btn">
             <BsFillPersonFill className="option-icon" />
             <Dropdown
@@ -121,10 +121,14 @@ const Navbar = () => {
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
-                Hiii <DownOutlined />
+                {email.email} <DownOutlined />
               </a>
             </Dropdown>
           </button>
+        ) : (
+          <Link to="/login" className="btn option-btn">
+            <BsFillPersonFill className="option-icon" /> <span>Đăng nhập</span>
+          </Link>
         )}
       </div>
     </div>
