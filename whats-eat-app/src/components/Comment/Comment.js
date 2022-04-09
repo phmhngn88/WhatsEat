@@ -1,15 +1,36 @@
 import React, { useState, useEffect } from "react";
 import "./Comment.css";
 
+import axios from "axios";
 import { message, Rate } from "antd";
 import "antd/dist/antd.css";
-import { AiOutlineCamera, AiFillStar, AiFillFileImage } from "react-icons/ai";
+import { AiOutlineCamera, AiFillFileImage } from "react-icons/ai";
 import { FiSend } from "react-icons/fi";
 
 const Comment = () => {
   const [isCommented, setIsCommented] = useState(false);
   const [rateValue, setRateValue] = useState(5);
+  const [id, setId] = useState(1);
   const [comment, setComment] = useState("");
+
+  const handleSubmitRating = (id) => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Recipe/review",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data: {
+        recipeId: id,
+        rating: rateValue,
+        comment: comment,
+      },
+    })
+      .then((res) => {
+        message.success("Cảm ơn đánh giá của bạn!");
+      })
+      .catch((err) => {
+        message.error("Đánh giá không thành công!");
+      });
+  };
 
   if (isCommented) {
     return (
@@ -34,7 +55,9 @@ const Comment = () => {
           <button className="btn img-load-btn">
             <AiFillFileImage className="img-icon" /> TẢI THÊM ẢNH
           </button>
-          <button className="btn submit-btn">GỬI BÌNH LUẬN</button>
+          <button className="btn submit-btn" onClick={handleSubmitRating(id)}>
+            GỬI BÌNH LUẬN
+          </button>
         </div>
       </div>
     );
