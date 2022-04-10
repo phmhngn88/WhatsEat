@@ -2,7 +2,10 @@ import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  token: null,
+  userInfo: {
+    userName: null,
+    token: null
+  },
 };
 
 const auth = createSlice({
@@ -10,7 +13,8 @@ const auth = createSlice({
   initialState,
   reducers: {
     loginSuccess(state, action) {
-      state.token = action.payload.token;
+      state.userInfo.userName = action.payload.userName;
+      state.userInfo.token = action.payload.token;
     },
   },
 });
@@ -24,6 +28,7 @@ export const login =
       email,
       password,
     });
+    console.log(res.data)
     dispatch(loginSuccess(res.data));
   };
 

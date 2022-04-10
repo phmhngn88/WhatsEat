@@ -159,7 +159,8 @@ public class AuthManagementController : ControllerBase
             return Ok(new RegistrationResponseDto()
             {
                 Success = true,
-                Token = jwtToken
+                Token = jwtToken,
+                UserName = existingUser.UserName
             });
         }
         return BadRequest(new RegistrationResponseDto()

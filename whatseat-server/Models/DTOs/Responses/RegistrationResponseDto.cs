@@ -4,5 +4,5 @@ namespace whatseat_server.Models.DTOs.Responses;
 
 public class RegistrationResponseDto : AuthResult
 {
-
+    public string UserName { get; set; }
 }

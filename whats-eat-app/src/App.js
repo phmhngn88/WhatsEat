@@ -4,7 +4,7 @@ import "antd/dist/antd.css";
 import { Layout } from "antd";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
-import LoginPage from "./pages/LoginPage/LoginPage";
+import LoginPage from "./containers/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import CategoryPage from "./pages/CategoryPage/CategoryPage";
 import RecommendPage from "./pages/RecommendPage/RecommendPage";
@@ -40,7 +40,7 @@ function App({ auth }) {
     <Layout className="mainLayout">
       <Router>
         <Header>
-          <Navbar />
+          <Navbar auth={auth} />
         </Header>
         <Content>
           <Routes>

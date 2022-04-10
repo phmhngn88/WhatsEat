@@ -68,7 +68,7 @@ const options = (
   </Menu>
 );
 
-const Navbar = (email) => {
+const Navbar = (props) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const userSignin = useSelector((state) => state.userSignin);
   const [searchTerm, setSearchTerm] = useState("");
@@ -76,8 +76,7 @@ const Navbar = (email) => {
   // if (email.email) {
   //   setIsLoggedin(true);
   // }
-  console.log("email đăng nhập:", email.email);
-
+  console.log(props.auth)
   const handleSearch = () => {
     navigate(`/search?searchTerm=${searchTerm}`);
   };
@@ -109,7 +108,7 @@ const Navbar = (email) => {
           <AiOutlineShoppingCart className="option-icon" />{" "}
           <span>Giỏ hàng</span>
         </Link>
-        {email.email ? (
+        {props.auth.userInfo.userName ? (
           <button className="btn option-btn">
             <BsFillPersonFill className="option-icon" />
             <Dropdown
@@ -121,7 +120,7 @@ const Navbar = (email) => {
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
               >
-                {email.email} <DownOutlined />
+                {props.auth.userInfo.userName} <DownOutlined />
               </a>
             </Dropdown>
           </button>
