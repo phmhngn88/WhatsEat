@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import "./ShopProfile.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
-import { BsPlus } from "react-icons/bs";
-
 import { Form, Input, Modal } from "antd";
 import "antd/dist/antd.css";
+import React, { useState } from "react";
+import { BsPlus } from "react-icons/bs";
+import Footer from "../../components/Footer/Footer";
+import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
+import "./ShopProfile.css";
 
 const layout = {
   labelCol: { span: 8 },
@@ -38,7 +36,6 @@ const ShopProfile = () => {
 
   return (
     <div className="shop-profile">
-      <Navbar />
       <div className="shop-profile-fluid">
         <div className="shop-profile-container">
           <ShopSidebar />

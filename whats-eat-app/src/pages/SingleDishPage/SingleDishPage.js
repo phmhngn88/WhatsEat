@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./SingleDishPage.css";
-import { useSearchParams } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import Guide from "../../components/Guide/Guide";
-import Comment from "../../components/Comment/Comment";
-import { FaAngleDown } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 import {
   AiFillStar,
-  AiOutlineBarChart,
   AiFillThunderbolt,
-  AiOutlineHeart,
-  AiOutlineEye,
+  AiOutlineBarChart,
   AiOutlineClockCircle,
+  AiOutlineEye,
+  AiOutlineHeart,
 } from "react-icons/ai";
+import { FaAngleDown } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
+import Comment from "../../components/Comment/Comment";
+import Footer from "../../components/Footer/Footer";
+import Guide from "../../components/Guide/Guide";
+import "./SingleDishPage.css";
 
 const dish = {
   id: 1,
@@ -71,7 +70,6 @@ const SingleDishPage = () => {
   }, []);
   return (
     <div className="single-dish">
-      <Navbar />
       <div className="single-dish-fluid">
         <div className="single-dish-container">
           <h1 className="title">Chi tiết món ăn</h1>

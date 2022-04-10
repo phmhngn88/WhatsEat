@@ -96,9 +96,9 @@ const Navbar = (email) => {
             placeholder="Bạn muốn tìm gì vậy?"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="btn search-btn" onClick={handleSearch}>
-            Tìm kiếm
-          </button>
+        </div>
+        <div className="btn search-btn" onClick={handleSearch}>
+          <p>Tìm kiếm</p>
         </div>
       </div>
       <div className="options">

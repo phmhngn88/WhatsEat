@@ -28,6 +28,11 @@
   color: #61dafb;
 }
 
+.mainLayout .ant-layout-header {
+  background: #f8f8f8;
+  padding: 0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

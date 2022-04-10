@@ -1,7 +1,6 @@
 import React from "react";
-import "./PaymentPage.css";
 import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
+import "./PaymentPage.css";
 
 const items = [
   {
@@ -38,7 +37,6 @@ const PaymentPage = () => {
   const [totalPayment, setTotalPayment] = React.useState(90000);
   return (
     <div className="payment">
-      <Navbar />
       <div className="payment-fluid">
         <div className="payment-container">
           <h1 className="hero" style={{ fontWeight: "650" }}>

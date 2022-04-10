@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "./SearchPage.css";
-import axios from "axios";
-import { useLocation, useSearchParams } from "react-router-dom";
-import { Button, Checkbox, Row, Col, Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { Checkbox, Col, Dropdown, Menu, Row } from "antd";
 import "antd/dist/antd.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Dish from "../../components/Dish/Dish";
+import Footer from "../../components/Footer/Footer";
+import "./SearchPage.css";
 
 const menu = (
   <Menu>
@@ -78,7 +77,6 @@ const SearchPage = () => {
   console.log("search result:", searchResults);
   return (
     <div className="search">
-      <Navbar />
       <div className="search-container">
         <div className="search-fluid">
           <div className="search-nav">

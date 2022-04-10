@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./SingleProductPage.css";
+import React, { useEffect, useState } from "react";
+import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
 import { useSearchParams } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import RatingCard from "../../components/RatingCard/RatingCard";
 import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
-import RatingCard from "../../components/RatingCard/RatingCard";
-import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
+import "./SingleProductPage.css";
 
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
@@ -46,7 +45,6 @@ const SingleProductPage = () => {
   }, []);
   return (
     <div className="single-product">
-      <Navbar />
       <div className="single-product-fluid">
         <div className="single-product-container">
           <h1 className="title">Chi tiết sản phẩm</h1>

@@ -1,16 +1,14 @@
-import React from "react";
-import "./FavMenu.css";
-import { getCurrentDate } from "../../utils/GetDate";
-import FavMenuCard from "../../components/FavMenuCard/FavMenuCard";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import { Col, Row } from "antd";
 import "antd/dist/antd.css";
-import { Row, Col } from "antd";
+import React from "react";
+import FavMenuCard from "../../components/FavMenuCard/FavMenuCard";
+import Footer from "../../components/Footer/Footer";
+import { getCurrentDate } from "../../utils/GetDate";
+import "./FavMenu.css";
 
 const FavMenu = () => {
   return (
     <div className="fav-menu">
-      <Navbar />
       <div className="fav-menu-fluid">
         <div className="fav-menu-container">
           <div className="profile">

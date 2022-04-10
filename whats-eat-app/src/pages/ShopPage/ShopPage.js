@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import "./ShopPage.css";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Shop from "../../components/Shop/Shop";
+import "./ShopPage.css";
 
 const ShopPage = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   return (
     <div className="shop">
-      <Navbar />
       <div className="shop-fluid">
         {isRegistered ? (
           <Shop />

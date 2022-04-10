@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import "./ShopRating.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
-import Ratingcard from "../../components/RatingCard/RatingCard";
-import { Tabs, Input, Space } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
+import { Input, Tabs } from "antd";
 import "antd/dist/antd.css";
+import React, { useState } from "react";
+import Footer from "../../components/Footer/Footer";
+import Ratingcard from "../../components/RatingCard/RatingCard";
+import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
+import "./ShopRating.css";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -45,7 +43,6 @@ const ShopRating = () => {
   const [shopRating, setShopRating] = useState(5);
   return (
     <div className="shop-rating">
-      <Navbar />
       <div className="shop-rating-fluid">
         <div className="shop-rating-container">
           <ShopSidebar />

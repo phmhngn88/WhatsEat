@@ -1,9 +1,8 @@
-import React from "react";
-import "./FavorShop.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import { Table, Space } from "antd";
+import { Space, Table } from "antd";
 import "antd/dist/antd.css";
+import React from "react";
+import Footer from "../../components/Footer/Footer";
+import "./FavorShop.css";
 
 const columns = [
   {
@@ -29,41 +28,40 @@ const columns = [
       <Space size="middle">
         <a>Bỏ theo dõi</a>
       </Space>
-    )
+    ),
   },
 ];
 
 const data = [
   {
     key: 1,
-    shop: "lyquynhtram"
+    shop: "lyquynhtram",
   },
   {
     key: 2,
-    shop: "trannhathiep"
+    shop: "trannhathiep",
   },
   {
     key: 3,
-    shop: "tranthivi"
+    shop: "tranthivi",
   },
   {
     key: 4,
-    shop: "dinhthiminhhieu"
+    shop: "dinhthiminhhieu",
   },
   {
     key: 5,
-    shop: "nguyenvanhao"
+    shop: "nguyenvanhao",
   },
   {
     key: 6,
-    shop: "phamhoangan"
+    shop: "phamhoangan",
   },
 ];
 
 const FavorShop = () => {
   return (
     <div className="favor-shop">
-      <Navbar />
       <div className="favor-shop-fluid">
         <div className="favor-shop-container">
           <div className="content-container">

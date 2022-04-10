@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Tabs } from "antd";
 import "antd/dist/antd.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
 import ShopOrderCard from "../../components/ShopOrderCard/ShopOrderCard";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopOrders.css";
@@ -55,7 +54,6 @@ const ShopOrders = () => {
 
   return (
     <div className="shop-orders">
-      <Navbar />
       <div className="shop-orders-fluid">
         <div className="shop-orders-container">
           <ShopSidebar />

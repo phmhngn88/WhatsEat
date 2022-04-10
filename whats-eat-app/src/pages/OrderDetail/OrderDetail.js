@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { message, Rate } from "antd";
+import "antd/dist/antd.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Footer from "../../components/Footer/Footer";
 import "./OrderDetail.css";
 
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { message, Rate, Row, Col } from "antd";
-import "antd/dist/antd.css";
-import { useParams } from "react-router-dom";
-import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
 
 const OrderDetail = () => {
   const { id } = useParams();
@@ -55,7 +53,6 @@ const OrderDetail = () => {
   }, []);
   return (
     <div className="order-detail">
-      <Navbar />
       <div className="order-detail-fluid">
         <div className="order-detail-container">
           <h1 className="title" style={{ fontWeight: "650" }}>

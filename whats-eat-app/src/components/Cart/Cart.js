@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Button, Checkbox } from "antd";
 import "antd/dist/antd.css";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Counter from "../../components/Counter/Counter";
 import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
 import TopItems from "../../components/TopItems/TopItems";
 import "./Cart.css";
 
@@ -69,7 +67,6 @@ const Cart = () => {
 
   return (
     <div className="cart">
-      <Navbar />
       {cartItems.length === 0 ? (
         <div className="empty-cart-container">
           <img

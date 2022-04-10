@@ -1,17 +1,14 @@
-import React from "react";
-import "./FavRecipe.css";
-import { getCurrentDate } from "../../utils/GetDate";
-import FavDishCard from "../../components/FavDishCard/FavDishCard";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import { Col, Row } from "antd";
 import "antd/dist/antd.css";
-import { Row, Col } from "antd";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import React from "react";
+import FavDishCard from "../../components/FavDishCard/FavDishCard";
+import Footer from "../../components/Footer/Footer";
+import { getCurrentDate } from "../../utils/GetDate";
+import "./FavRecipe.css";
 
 const FavRecipe = () => {
   return (
     <div className="fav-recipe">
-      <Navbar />
       <div className="fav-recipe-fluid">
         <div className="fav-recipe-container">
           <div className="profile">

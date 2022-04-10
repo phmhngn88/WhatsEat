@@ -1,14 +1,11 @@
 import React from "react";
-import "./CategoryPage.css";
-
-import ProductCard from "../../components/ProductCard/ProductCard";
-import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import ProductCard from "../../components/ProductCard/ProductCard";
+import "./CategoryPage.css";
 
 const CategoryPage = () => {
   return (
     <div className="category">
-      <Navbar />
       <div className="category-fluid">
         <div className="category-container">
           <div className="option-btn-group">

@@ -1,36 +1,34 @@
-import React from "react";
-import "./FavorItem.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import { Col, Row } from "antd";
 import "antd/dist/antd.css";
-import { Row, Col } from "antd";
+import React from "react";
+import { AiFillHeart } from "react-icons/ai";
+import Footer from "../../components/Footer/Footer";
 import Product from "../../components/Product/Product";
-import {AiFillHeart} from "react-icons/ai";
+import "./FavorItem.css";
 
 const FavorItem = () => {
   return (
     <div className="fav-item">
-      <Navbar />
       <div className="fav-item-nav">
         <h1 className="title">Thực phẩm yêu thích</h1>
       </div>
       <div className="fav-item-fluid">
         <div className="fav-item-container">
-        <Row gutter={[16, 16]}>
-          {items.map((item) => {
-            const { id, img_url, item_name, weight, price } = item;
-            return (
-              <Col span={6} className="item-col" key={id}>
-                <div class="fav-item-card">
-                <Product {...item} />
-                <div className="heart-icon">
-                <AiFillHeart className="icon" style={{ color: "red" }} />
-                </div>
-                </div>
-              </Col>
-            );
-          })}
-        </Row>
+          <Row gutter={[16, 16]}>
+            {items.map((item) => {
+              const { id, img_url, item_name, weight, price } = item;
+              return (
+                <Col span={6} className="item-col" key={id}>
+                  <div class="fav-item-card">
+                    <Product {...item} />
+                    <div className="heart-icon">
+                      <AiFillHeart className="icon" style={{ color: "red" }} />
+                    </div>
+                  </div>
+                </Col>
+              );
+            })}
+          </Row>
         </div>
       </div>
       <Footer />

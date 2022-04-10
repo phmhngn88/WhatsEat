@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
-import "./OrderPage.css";
-import axios from "axios";
-import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
-import Order from "../../components/Order/Order";
-
-import { Tabs, Input, Space } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
+import { Input, Tabs } from "antd";
 import "antd/dist/antd.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Footer from "../../components/Footer/Footer";
+import Order from "../../components/Order/Order";
+import "./OrderPage.css";
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -68,7 +65,6 @@ const OrderPage = () => {
   }, []);
   return (
     <div className="orders">
-      <Navbar />
       <div className="orders-fluid">
         <div className="orders-container">
           <h1 className="title" style={{ fontWeight: "650" }}>

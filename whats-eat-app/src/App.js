@@ -1,4 +1,8 @@
 import React from "react";
+import "./App.css";
+import "antd/dist/antd.css";
+import { Layout } from "antd";
+import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -24,48 +28,94 @@ import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import ShopItems from "./pages/ShopItems/ShopItems";
 import ShopAddItem from "./pages/ShopAddItem/ShopAddItem";
 import ShopInfringingItems from "./pages/ShopInfringingItems/ShopInfringingItems";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FavorShop from "./pages/FavorShop/FavorShop";
 import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
+const { Header, Content, Footer } = Layout;
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/register" element={<RegisterPage />}></Route>
-        <Route path="/category" element={<CategoryPage />}></Route>
-        <Route path="/cart" element={<Cart />}></Route>
-        <Route path="/payment" element={<PaymentPage />}></Route>
-        <Route path="/recommender" element={<RecommendPage />}></Route>
-        <Route path="/singledish" element={<SingleDishPage />}></Route>
-        <Route path="/singleproduct" element={<SingleProductPage />}></Route>
-        <Route path="/search" element={<SearchPage />}></Route>
-        <Route path="/fav/recipe" element={<FavRecipe />}></Route>
-        <Route path="/fav/menu" element={<FavMenu />}></Route>
-        <Route path="/shop" element={<ShopPage />}></Route>
-        <Route path="/shop/profile" element={<ShopProfile />}></Route>
-        <Route path="/shop/rating" element={<ShopRating />}></Route>
-        <Route path="/shop/orders" element={<ShopOrders />}></Route>
-        <Route path="/shop/address" element={<ShopAddress />}></Route>
-        <Route path="/shop/account" element={<ShopAccount />}></Route>
-        <Route path="/shop/categories" element={<ShopCategories />}></Route>
-        <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
-        <Route path="/viewshop" element={<ViewShopPage />}></Route>
-        <Route path="/orders" element={<OrderPage />}></Route>
-        <Route path="/orders/:id" element={<OrderDetail />}></Route>
-        <Route path="/shop/items" element={<ShopItems />}></Route>
-        <Route path="/shop/additem" element={<ShopAddItem />}></Route>
-        <Route
-          path="/shop/infringingitems"
-          element={<ShopInfringingItems />}
-        ></Route>
-        <Route path="/favorshop" element={<FavorShop />}></Route>
-        <Route path="/favoritem" element={<FavorItem />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <Layout className="mainLayout">
+      <Router>
+        <Header>
+          <Navbar />
+        </Header>
+        <Content>
+          <Routes>
+            <Route path="/" element={<HomePage />}></Route>
+            <Route path="/login" element={<LoginPage />}></Route>
+            <Route path="/register" element={<RegisterPage />}></Route>
+            <Route path="/category" element={<CategoryPage />}></Route>
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/payment" element={<PaymentPage />}></Route>
+            <Route path="/recommender" element={<RecommendPage />}></Route>
+            <Route path="/singledish" element={<SingleDishPage />}></Route>
+            <Route
+              path="/singleproduct"
+              element={<SingleProductPage />}
+            ></Route>
+            <Route path="/search" element={<SearchPage />}></Route>
+            <Route path="/fav/recipe" element={<FavRecipe />}></Route>
+            <Route path="/fav/menu" element={<FavMenu />}></Route>
+            <Route path="/shop" element={<ShopPage />}></Route>
+            <Route path="/shop/profile" element={<ShopProfile />}></Route>
+            <Route path="/shop/rating" element={<ShopRating />}></Route>
+            <Route path="/shop/orders" element={<ShopOrders />}></Route>
+            <Route path="/shop/address" element={<ShopAddress />}></Route>
+            <Route path="/shop/account" element={<ShopAccount />}></Route>
+            <Route path="/shop/categories" element={<ShopCategories />}></Route>
+            <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
+            <Route path="/viewshop" element={<ViewShopPage />}></Route>
+            <Route path="/orders" element={<OrderPage />}></Route>
+            <Route path="/orders/:id" element={<OrderDetail />}></Route>
+            <Route path="/shop/items" element={<ShopItems />}></Route>
+            <Route path="/shop/additem" element={<ShopAddItem />}></Route>
+            <Route
+              path="/shop/infringingitems"
+              element={<ShopInfringingItems />}
+            ></Route>
+            <Route path="/favorshop" element={<FavorShop />}></Route>
+            <Route path="/favoritem" element={<FavorItem />}></Route>
+          </Routes>
+        </Content>
+      </Router>
+    </Layout>
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route path="/" element={<HomePage />}></Route>
+    //     <Route path="/login" element={<LoginPage />}></Route>
+    //     <Route path="/register" element={<RegisterPage />}></Route>
+    //     <Route path="/category" element={<CategoryPage />}></Route>
+    //     <Route path="/cart" element={<Cart />}></Route>
+    //     <Route path="/payment" element={<PaymentPage />}></Route>
+    //     <Route path="/recommender" element={<RecommendPage />}></Route>
+    //     <Route path="/singledish" element={<SingleDishPage />}></Route>
+    //     <Route path="/singleproduct" element={<SingleProductPage />}></Route>
+    //     <Route path="/search" element={<SearchPage />}></Route>
+    //     <Route path="/fav/recipe" element={<FavRecipe />}></Route>
+    //     <Route path="/fav/menu" element={<FavMenu />}></Route>
+    //     <Route path="/shop" element={<ShopPage />}></Route>
+    //     <Route path="/shop/profile" element={<ShopProfile />}></Route>
+    //     <Route path="/shop/rating" element={<ShopRating />}></Route>
+    //     <Route path="/shop/orders" element={<ShopOrders />}></Route>
+    //     <Route path="/shop/address" element={<ShopAddress />}></Route>
+    //     <Route path="/shop/account" element={<ShopAccount />}></Route>
+    //     <Route path="/shop/categories" element={<ShopCategories />}></Route>
+    //     <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
+    //     <Route path="/viewshop" element={<ViewShopPage />}></Route>
+    //     <Route path="/orders" element={<OrderPage />}></Route>
+    //     <Route path="/orders/:id" element={<OrderDetail />}></Route>
+    //     <Route path="/shop/items" element={<ShopItems />}></Route>
+    //     <Route path="/shop/additem" element={<ShopAddItem />}></Route>
+    //     <Route
+    //       path="/shop/infringingitems"
+    //       element={<ShopInfringingItems />}
+    //     ></Route>
+    //     <Route path="/favorshop" element={<FavorShop />}></Route>
+    //     <Route path="/favoritem" element={<FavorItem />}></Route>
+    //   </Routes>
+    // </BrowserRouter>
   );
 }
 

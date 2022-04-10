@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./ViewShopPage.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import { Row, Col, Tabs } from "antd";
+import { Col, Row, Tabs } from "antd";
 import "antd/dist/antd.css";
-import { BsShopWindow, BsFillPeopleFill, BsFillStarFill } from "react-icons/bs";
-import { AiOutlineHeart } from "react-icons/ai";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { BsFillPeopleFill, BsFillStarFill, BsShopWindow } from "react-icons/bs";
 import { GiStabbedNote } from "react-icons/gi";
+import Footer from "../../components/Footer/Footer";
+import "./ViewShopPage.css";
 
 const { TabPane } = Tabs;
 
@@ -88,7 +86,6 @@ const ViewShopPage = () => {
 
   return (
     <div className="view-shop">
-      <Navbar />
       <div className="view-shop-fluid">
         <div className="view-shop-container">
           <div className="shop-info-block">

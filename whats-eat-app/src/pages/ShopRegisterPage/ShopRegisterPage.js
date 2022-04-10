@@ -1,14 +1,10 @@
-import React, { useState } from "react";
-import "./ShopRegisterPage.css";
-import axios from "axios";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-
-import { BsPlus } from "react-icons/bs";
-
 import { Form, Input, message, Modal } from "antd";
 import "antd/dist/antd.css";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import axios from "axios";
+import React, { useState } from "react";
+import { BsPlus } from "react-icons/bs";
+import Footer from "../../components/Footer/Footer";
+import "./ShopRegisterPage.css";
 
 const layout = {
   labelCol: { span: 8 },
@@ -65,7 +61,6 @@ const ShopRegisterPage = () => {
 
   return (
     <div className="shop-register">
-      <Navbar />
       <div className="shop-register-fluid">
         <div className="shop-register-container">
           <h1 className="title-container">

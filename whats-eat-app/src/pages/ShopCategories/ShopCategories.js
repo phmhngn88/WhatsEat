@@ -1,11 +1,10 @@
+import { Space, Table } from "antd";
+import "antd/dist/antd.css";
 import React from "react";
-import "./ShopCategories.css";
-import Navbar from "../../components/Navbar/Navbar";
+import { AiOutlineEye, AiOutlinePlus } from "react-icons/ai";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
-import { AiOutlineEye, AiOutlinePlus } from "react-icons/ai";
-import { Table, Tag, Space } from "antd";
-import "antd/dist/antd.css";
+import "./ShopCategories.css";
 
 const columns = [
   {
@@ -61,7 +60,6 @@ const data = [
 const ShopCategories = () => {
   return (
     <div className="shop-categories">
-      <Navbar />
       <div className="shop-categories-fluid">
         <div className="shop-categories-container">
           <ShopSidebar />

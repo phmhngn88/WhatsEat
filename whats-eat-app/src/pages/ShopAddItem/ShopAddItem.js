@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import "./ShopAddItem.css";
+import { Form, Input, Modal, Select } from "antd";
+import "antd/dist/antd.css";
 import axios from "axios";
-import Navbar from "../../components/Navbar/Navbar";
+import React, { useState } from "react";
+import { BsPlus } from "react-icons/bs";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
-import { BsPlus } from "react-icons/bs";
-
-import { Dropdown, Form, Input, Modal, Select } from "antd";
-import "antd/dist/antd.css";
+import "./ShopAddItem.css";
 
 const layout = {
   labelCol: { span: 8 },
@@ -67,7 +65,6 @@ const ShopAddItem = () => {
 
   return (
     <div className="shop-add-item">
-      <Navbar />
       <div className="shop-add-item-fluid">
         <div className="shop-add-item-container">
           <ShopSidebar />
