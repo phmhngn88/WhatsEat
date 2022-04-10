@@ -1,5 +1,10 @@
+.dish-container{
+    position: relative;
+}
 .dish-container .dish-img{
     width: 100%;
+    max-height: 156px;
+    margin-bottom: 0.5rem;
     border-radius: 5px;
     object-fit: cover;
 }
@@ -9,9 +14,14 @@
 }
 
 .dish-container .heart-icon{
-    text-align: right;
+    position: absolute;
+    top: 115px;
+    right: 15px;
     font-size: 2rem;
-    margin-bottom: -1rem;
+}
+
+.dish-container .heart-icon .icon{
+    color: #fff;
 }
 
 .dish-container .heart-icon .icon:hover{

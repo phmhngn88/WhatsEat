@@ -1,34 +1,34 @@
 import React from "react";
 import "./Dish.css";
 import {
-  AiOutlineHeart,
+  AiFillHeart,
   AiOutlineClockCircle,
   AiFillThunderbolt,
   AiOutlineBarChart,
 } from "react-icons/ai";
 
-const Dish = ({ id, img_url, dish_name, love_count, time, level, view }) => {
+const Dish = ({ name, totalTime, totalView, level, images }) => {
   return (
     <div className="dish-container">
-      <img src={img_url} alt={dish_name} className="dish-img" />
+      <img src={images[0].url || ""} alt={name} className="dish-img" />
       <div className="heart-icon">
-        <AiOutlineHeart className="icon" />
+        <AiFillHeart className="icon" />
       </div>
-      <h3 className="dish-name">{dish_name}</h3>
+      <h3 className="dish-name">{name}</h3>
       <div className="dish-info">
         <div className="info-detail">
           <div>
-            <AiOutlineClockCircle className="icon" /> <span>{time}</span>
+            <AiOutlineClockCircle className="icon" /> <span>{totalTime}</span>
           </div>
         </div>
         <div className="info-detail">
           <div>
-            <AiFillThunderbolt className="icon" /> <span>{level}</span>
+            <AiFillThunderbolt className="icon" /> <span>{level || "Dễ"}</span>
           </div>
         </div>
         <div className="info-detail">
           <div>
-            <AiOutlineBarChart className="icon" /> <span>{view}</span> xem
+            <AiOutlineBarChart className="icon" /> <span>{totalView}</span> xem
           </div>
         </div>
       </div>

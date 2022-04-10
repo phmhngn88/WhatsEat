@@ -73,10 +73,6 @@ const Navbar = (props) => {
   const userSignin = useSelector((state) => state.userSignin);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  // if (email.email) {
-  //   setIsLoggedin(true);
-  // }
-  console.log(props.auth);
   const handleSearch = () => {
     navigate(`/search?searchTerm=${searchTerm}`);
   };

@@ -46,34 +46,35 @@ const SearchPage = () => {
   //setSearchResult(state)
 
   useEffect(() => {
-    setSearchRecipeResult(searchResults);
-  }, []);
-
-  axios({
-    method: "get",
-    url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
-  })
-    .then((res) => {
-      // console.log("Data product search:", res.data);
-      setSearchProductResult(res.data);
+    // setSearchRecipeResult(searchResults);
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((res) => {
+        // console.log("Data product search:", res.data);
+        setSearchProductResult(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchTerm]);
 
-  axios({
-    method: "get",
-    url: `https://localhost:7029/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
-  })
-    .then((res) => {
-      // console.log("Data recipe search:", res.data);
-      setSearchRecipeResult(res.data);
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((res) => {
+        // console.log("Data recipe search:", res.data);
+        setSearchRecipeResult(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchTerm]);
 
-  const searchResults = [...searchRecipeResult, ...searchProductResult];
+  const searchResults = [...searchRecipeResult];
   console.log("search result:", searchResults);
   return (
     <div className="search">
@@ -90,7 +91,7 @@ const SearchPage = () => {
               </a>
             </Dropdown>
           </div>
-          <p className="notice">Kết quả tìm kiếm cho "..."</p>
+          <p className="notice">Kết quả tìm kiếm cho "{searchTerm}"</p>
           <div className="menu">
             {menuList.map((item) => {
               return (
@@ -103,10 +104,10 @@ const SearchPage = () => {
           </div>
           <Row gutter={[16, 16]}>
             {searchResults.map((item) => {
-              const { id, img_url, dish_name, love_count, time, level, view } =
+              const { recipeId, name, totalTime, totalView, level, images } =
                 item;
               return (
-                <Col span={6} key={id} className="dish-col">
+                <Col span={6} key={recipeId} className="dish-col">
                   <Dish {...item} />
                 </Col>
               );
