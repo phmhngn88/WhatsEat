@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220409151414_recipe level")]
+    partial class recipelevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -571,9 +573,6 @@ namespace whatseat_server.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Ingredients")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Level")
                         .HasColumnType("longtext");
 
@@ -585,9 +584,6 @@ namespace whatseat_server.Migrations
 
                     b.Property<int>("Serving")
                         .HasColumnType("int");
-
-                    b.Property<string>("Steps")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("ThumbnailUrl")
                         .HasColumnType("longtext");
@@ -700,10 +696,15 @@ namespace whatseat_server.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Step")
                         .HasColumnType("int");
 
                     b.HasKey("RecipeStepId");
+
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeSteps");
                 });
@@ -1038,7 +1039,7 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.Ingredient", b =>
                 {
                     b.HasOne("whatseat_server.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("Ingredients")
                         .HasForeignKey("RecipeId");
 
                     b.HasOne("whatseat_server.Models.Unit", "Unit")
@@ -1227,6 +1228,13 @@ namespace whatseat_server.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("whatseat_server.Models.RecipeStep", b =>
+                {
+                    b.HasOne("whatseat_server.Models.Recipe", null)
+                        .WithMany("RecipeSteps")
+                        .HasForeignKey("RecipeId");
+                });
+
             modelBuilder.Entity("whatseat_server.Models.RecipeStepImage", b =>
                 {
                     b.HasOne("whatseat_server.Models.RecipeStep", null)
@@ -1306,6 +1314,13 @@ namespace whatseat_server.Migrations
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductImages");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.Recipe", b =>
+                {
+                    b.Navigation("Ingredients");
+
+                    b.Navigation("RecipeSteps");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.RecipeStep", b =>

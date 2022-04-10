@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
@@ -16,12 +17,12 @@ public class RecipeService
     public async Task<List<Recipe>> FindAllRecipes()
     {
         // TODO: sort, paginate
-        return await _context.Recipes.Include(p => p.RecipeSteps).AsNoTracking().ToListAsync();
+        return await _context.Recipes.AsNoTracking().ToListAsync();
     }
 
     public async Task<Recipe> FindRecipeById(int recipeId)
     {
-        return await _context.Recipes.Include(p => p.RecipeSteps).FirstOrDefaultAsync(p => p.RecipeId == recipeId);
+        return await _context.Recipes.FirstOrDefaultAsync(p => p.RecipeId == recipeId);
     }
 
     public async Task<PagedList<Recipe>> SearchRecipeFullText(SearchParams searchParams)
@@ -33,6 +34,7 @@ public class RecipeService
         return res;
     }
 
+
     public async Task<PagedList<RecipeReview>> GetAllRecipeReviews(PagedRequest pagedRequest)
     {
         var recipeReviews = _context.RecipeReviews.AsNoTracking().OrderByDescending(rr => rr.CreatedOn);
@@ -40,4 +42,12 @@ public class RecipeService
         var res = await PagedList<RecipeReview>.ToPagedList(recipeReviews, pagedRequest.PageNumber, pagedRequest.PageSize);
         return res;
     }
+
+    public List<Photo> ConvertJsonToPhotos(string jsonPhotos)
+    {
+        jsonPhotos = jsonPhotos.Substring(1, jsonPhotos.Length - 2);
+        List<Photo> result = JsonConvert.DeserializeObject<List<Photo>>(jsonPhotos);
+        return result;
+    }
+
 }

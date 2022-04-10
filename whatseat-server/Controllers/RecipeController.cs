@@ -52,6 +52,30 @@ public class RecipeController : ControllerBase
     {
         var recipes = await _recipeService.SearchRecipeFullText(searchParams);
 
+        var recipeRes = new List<RecipeResponse>();
+
+        foreach (var item in recipes)
+        {
+            recipeRes.Add(new RecipeResponse
+            {
+                RecipeId = item.RecipeId,
+                Name = item.Name,
+                Description = item.Description,
+                Serving = item.Serving,
+                CreatedOn = item.CreatedOn,
+                Creator = item.Creator,
+                TotalTime = item.TotalTime,
+                AvgRating = item.AvgRating,
+                TotalRating = item.TotalRating,
+                TotalView = item.TotalView,
+                totalLike = item.totalLike,
+                videoUrl = item.videoUrl,
+                RecipeType = item.RecipeType,
+                Level = item.Level,
+                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl)
+            });
+        }
+
         var metadata = new
         {
             recipes.TotalCount,
@@ -64,7 +88,7 @@ public class RecipeController : ControllerBase
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-        return Ok(recipes);
+        return Ok(recipeRes);
     }
 
     [HttpGet("reviews")]

@@ -1,13 +1,7 @@
-using System.Collections;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+namespace whatseat_server.Models.DTOs.Responses;
 
-namespace whatseat_server.Models;
-
-public class Recipe
+public class RecipeResponse
 {
-    [Key, Column(Order = 0)]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int RecipeId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -22,7 +16,5 @@ public class Recipe
     public string videoUrl { get; set; }
     public RecipeType RecipeType { get; set; }
     public string Level { get; set; }
-    public string ThumbnailUrl { get; set; }
-    public string Ingredients { get; set; }
-    public string Steps { get; set; }
+    public List<Photo> Images { get; set; }
 }
