@@ -580,8 +580,8 @@ namespace whatseat_server.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("RecipeTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("RecipeTypeId")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Serving")
                         .HasColumnType("int");
@@ -610,8 +610,6 @@ namespace whatseat_server.Migrations
                     b.HasKey("RecipeId");
 
                     b.HasIndex("CreatorCustomerId");
-
-                    b.HasIndex("RecipeTypeId");
 
                     b.ToTable("Recipes");
                 });
@@ -1169,13 +1167,7 @@ namespace whatseat_server.Migrations
                         .WithMany("Recipes")
                         .HasForeignKey("CreatorCustomerId");
 
-                    b.HasOne("whatseat_server.Models.RecipeType", "RecipeType")
-                        .WithMany()
-                        .HasForeignKey("RecipeTypeId");
-
                     b.Navigation("Creator");
-
-                    b.Navigation("RecipeType");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.RecipeRating", b =>
@@ -1196,13 +1188,13 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.RecipeRecipeType", b =>
                 {
                     b.HasOne("whatseat_server.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("RecipeRecipeTypes")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("whatseat_server.Models.RecipeType", "RecipeType")
-                        .WithMany()
+                        .WithMany("RecipeRecipeTypes")
                         .HasForeignKey("RecipeTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1308,9 +1300,19 @@ namespace whatseat_server.Migrations
                     b.Navigation("ProductImages");
                 });
 
+            modelBuilder.Entity("whatseat_server.Models.Recipe", b =>
+                {
+                    b.Navigation("RecipeRecipeTypes");
+                });
+
             modelBuilder.Entity("whatseat_server.Models.RecipeStep", b =>
                 {
                     b.Navigation("RecipeStepImages");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.RecipeType", b =>
+                {
+                    b.Navigation("RecipeRecipeTypes");
                 });
 #pragma warning restore 612, 618
         }

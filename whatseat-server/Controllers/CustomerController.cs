@@ -155,8 +155,7 @@ public class CustomerController : ControllerBase
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
         var customer = await _customerService.FindCustomerByIdAsync(userId);
 
-        var recipeType = await _context.RecipeTypes
-            .FirstOrDefaultAsync(pc => pc.RecipeTypeId == request.RecipeTypeId);
+        List<RecipeRecipeType> recipeTypes = new List<RecipeRecipeType>();
 
         Recipe recipe = new Recipe
         {
@@ -170,9 +169,27 @@ public class CustomerController : ControllerBase
             TotalView = 0,
             totalLike = 0,
             videoUrl = request.videoUrl,
-            RecipeType = recipeType,
+            Creator = customer
         };
 
+        foreach (var item in request.RecipeTypeIds)
+        {
+            var recipeType = await _context.RecipeTypes
+            .FirstOrDefaultAsync(pc => pc.RecipeTypeId == item);
+
+            RecipeRecipeType recipeRecipeType = new RecipeRecipeType
+            {
+                RecipeType = recipeType,
+                Recipe = recipe
+            };
+
+            if (recipeType is not null)
+            {
+                recipeTypes.Add(recipeRecipeType);
+            }
+        }
+
+        await _context.RecipeRecipeTypes.AddRangeAsync(recipeTypes);
         await _context.Recipes.AddAsync(recipe);
         await _context.SaveChangesAsync();
         return Ok(new

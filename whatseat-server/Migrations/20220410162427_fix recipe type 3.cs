@@ -4,24 +4,34 @@
 
 namespace whatseat_server.Migrations
 {
-    public partial class recipeingredientsandsteps1 : Migration
+    public partial class fixrecipetype3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Steps",
+                name: "RecipeTypeId",
                 table: "Recipes",
                 type: "longtext",
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "int")
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.Sql(
+            sql: "alter table Recipes add fulltext (Name);",
+            suppressTransaction: true
+            );
+
+            migrationBuilder.Sql(
+                sql: "alter table Products add fulltext (Name);",
+                suppressTransaction: true
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "Steps",
+                name: "RecipeTypeId",
                 table: "Recipes",
                 type: "int",
                 nullable: false,

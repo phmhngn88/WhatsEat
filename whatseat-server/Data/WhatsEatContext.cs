@@ -17,6 +17,16 @@ public class WhatsEatContext : IdentityDbContext
         modelBuilder.Entity<CartDetail>().HasKey(cd => new { cd.ProductId, cd.CustomerId });
         modelBuilder.Entity<CustomerStore>().HasKey(cs => new { cs.CustomerId, cs.StoreId });
         modelBuilder.Entity<RecipeRecipeType>().HasKey(rrt => new { rrt.RecipeId, rrt.RecipeTypeId });
+
+        modelBuilder.Entity<RecipeRecipeType>()
+            .HasOne<Recipe>(rrt => rrt.Recipe)
+            .WithMany(r => r.RecipeRecipeTypes)
+            .HasForeignKey(rrt => rrt.RecipeId);
+        modelBuilder.Entity<RecipeRecipeType>()
+            .HasOne<RecipeType>(rrt => rrt.RecipeType)
+            .WithMany(rt => rt.RecipeRecipeTypes)
+            .HasForeignKey(rrt => rrt.RecipeTypeId);
+
         base.OnModelCreating(modelBuilder);
     }
 

@@ -48,9 +48,9 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Route("search")]
-    public async Task<IActionResult> SearchRecipes([FromQuery] SearchParams searchParams)
+    public async Task<IActionResult> SearchRecipes([FromQuery] RecipeFilter recipeFilter)
     {
-        var recipes = await _recipeService.SearchRecipeFullText(searchParams);
+        var recipes = await _recipeService.SearchRecipeFullText(recipeFilter);
 
         var recipeRes = new List<RecipeResponse>();
 
@@ -70,7 +70,7 @@ public class RecipeController : ControllerBase
                 TotalView = item.TotalView,
                 totalLike = item.totalLike,
                 videoUrl = item.videoUrl,
-                RecipeType = item.RecipeType,
+                RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == item.RecipeId).ToListAsync(),
                 Level = item.Level,
                 Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl)
             });

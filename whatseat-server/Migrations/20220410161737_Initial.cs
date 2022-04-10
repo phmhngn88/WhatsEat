@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace whatseat_server.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -109,6 +109,22 @@ namespace whatseat_server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategories", x => x.ProductCategoryId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeSteps",
+                columns: table => new
+                {
+                    RecipeStepId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Step = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeSteps", x => x.RecipeStepId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -346,6 +362,10 @@ namespace whatseat_server.Migrations
                     AvatarUrl = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<string>(type: "varchar(95)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ShopName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -356,6 +376,27 @@ namespace whatseat_server.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeStepImages",
+                columns: table => new
+                {
+                    RecipeStepImageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RecipeStepId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeStepImages", x => x.RecipeStepImageId);
+                    table.ForeignKey(
+                        name: "FK_RecipeStepImages_RecipeSteps_RecipeStepId",
+                        column: x => x.RecipeStepId,
+                        principalTable: "RecipeSteps",
+                        principalColumn: "RecipeStepId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -549,8 +590,19 @@ namespace whatseat_server.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatorCustomerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     TotalTime = table.Column<int>(type: "int", nullable: false),
-                    RecipeTypeId = table.Column<int>(type: "int", nullable: true),
+                    AvgRating = table.Column<float>(type: "float", nullable: false),
+                    TotalRating = table.Column<int>(type: "int", nullable: false),
+                    TotalView = table.Column<int>(type: "int", nullable: false),
+                    totalLike = table.Column<int>(type: "int", nullable: false),
+                    videoUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Level = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ThumbnailUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Ingredients = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Steps = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -561,11 +613,6 @@ namespace whatseat_server.Migrations
                         column: x => x.CreatorCustomerId,
                         principalTable: "Customers",
                         principalColumn: "CustomerId");
-                    table.ForeignKey(
-                        name: "FK_Recipes_RecipeTypes_RecipeTypeId",
-                        column: x => x.RecipeTypeId,
-                        principalTable: "RecipeTypes",
-                        principalColumn: "RecipeTypeId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -675,21 +722,28 @@ namespace whatseat_server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "RecipeSteps",
+                name: "RecipeReviews",
                 columns: table => new
                 {
-                    RecipeStepId = table.Column<int>(type: "int", nullable: false)
+                    RecipeReviewId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Step = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "longtext", nullable: true)
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RecipeId = table.Column<int>(type: "int", nullable: true)
+                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false),
+                    RecipeId = table.Column<int>(type: "int", nullable: true),
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeSteps", x => x.RecipeStepId);
+                    table.PrimaryKey("PK_RecipeReviews", x => x.RecipeReviewId);
                     table.ForeignKey(
-                        name: "FK_RecipeSteps_Recipes_RecipeId",
+                        name: "FK_RecipeReviews_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId");
+                    table.ForeignKey(
+                        name: "FK_RecipeReviews_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "RecipeId");
@@ -732,11 +786,17 @@ namespace whatseat_server.Migrations
                     IsPaid = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ShipperId = table.Column<int>(type: "int", nullable: true),
                     PaymentMethodId = table.Column<int>(type: "int", nullable: true),
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     ShippingInfoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "CustomerId");
                     table.ForeignKey(
                         name: "FK_Orders_PaymentMethods_PaymentMethodId",
                         column: x => x.PaymentMethodId,
@@ -752,27 +812,6 @@ namespace whatseat_server.Migrations
                         column: x => x.ShippingInfoId,
                         principalTable: "ShippingInfos",
                         principalColumn: "ShippingInfoId");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "RecipeStepImages",
-                columns: table => new
-                {
-                    RecipeStepImageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RecipeStepId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeStepImages", x => x.RecipeStepImageId);
-                    table.ForeignKey(
-                        name: "FK_RecipeStepImages_RecipeSteps_RecipeStepId",
-                        column: x => x.RecipeStepId,
-                        principalTable: "RecipeSteps",
-                        principalColumn: "RecipeStepId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -899,6 +938,11 @@ namespace whatseat_server.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomerId",
+                table: "Orders",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_PaymentMethodId",
                 table: "Orders",
                 column: "PaymentMethodId");
@@ -974,24 +1018,24 @@ namespace whatseat_server.Migrations
                 column: "RecipeTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RecipeReviews_CustomerId",
+                table: "RecipeReviews",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeReviews_RecipeId",
+                table: "RecipeReviews",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recipes_CreatorCustomerId",
                 table: "Recipes",
                 column: "CreatorCustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipes_RecipeTypeId",
-                table: "Recipes",
-                column: "RecipeTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RecipeStepImages_RecipeStepId",
                 table: "RecipeStepImages",
                 column: "RecipeStepId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RecipeSteps_RecipeId",
-                table: "RecipeSteps",
-                column: "RecipeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeViewHistories_CustomerId",
@@ -1037,8 +1081,6 @@ namespace whatseat_server.Migrations
                 column: "DefaultShippingInfoShippingInfoId",
                 principalTable: "ShippingInfos",
                 principalColumn: "ShippingInfoId");
-
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1093,6 +1135,9 @@ namespace whatseat_server.Migrations
                 name: "RecipeRecipeTypes");
 
             migrationBuilder.DropTable(
+                name: "RecipeReviews");
+
+            migrationBuilder.DropTable(
                 name: "RecipeStepImages");
 
             migrationBuilder.DropTable(
@@ -1117,7 +1162,13 @@ namespace whatseat_server.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
+                name: "RecipeTypes");
+
+            migrationBuilder.DropTable(
                 name: "RecipeSteps");
+
+            migrationBuilder.DropTable(
+                name: "Recipes");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethods");
@@ -1132,13 +1183,7 @@ namespace whatseat_server.Migrations
                 name: "Stores");
 
             migrationBuilder.DropTable(
-                name: "Recipes");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "RecipeTypes");
 
             migrationBuilder.DropTable(
                 name: "Customers");

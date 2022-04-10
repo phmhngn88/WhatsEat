@@ -14,7 +14,7 @@ public class RecipeResponse
     public int TotalView { get; set; }
     public int totalLike { get; set; }
     public string videoUrl { get; set; }
-    public RecipeType RecipeType { get; set; }
+    public List<RecipeRecipeType> RecipeTypes { get; set; }
     public string Level { get; set; }
     public List<Photo> Images { get; set; }
 }

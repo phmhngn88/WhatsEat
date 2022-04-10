@@ -1,6 +1,7 @@
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace whatseat_server.Models;
 
@@ -20,9 +21,11 @@ public class Recipe
     public int TotalView { get; set; }
     public int totalLike { get; set; }
     public string videoUrl { get; set; }
-    public RecipeType RecipeType { get; set; }
     public string Level { get; set; }
     public string ThumbnailUrl { get; set; }
     public string Ingredients { get; set; }
     public string Steps { get; set; }
+    [JsonIgnore]
+    public List<RecipeRecipeType> RecipeRecipeTypes { get; set; }
+    public string RecipeTypeId { get; set; }
 }
