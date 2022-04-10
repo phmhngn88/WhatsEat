@@ -165,7 +165,13 @@ public class CustomerController : ControllerBase
             Serving = request.Serving,
             TotalTime = request.TotalTime,
             ThumbnailUrl = request.ThumbnailUrl,
-            RecipeType = recipeType
+            AvgRating = 0,
+            TotalRating = 0,
+            TotalView = 0,
+            totalLike = 0,
+            videoUrl = request.videoUrl,
+            RecipeType = recipeType,
+            RecipeSteps = request.RecipeSteps,
         };
 
         await _context.Recipes.AddAsync(recipe);
