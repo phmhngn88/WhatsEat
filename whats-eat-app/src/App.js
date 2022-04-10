@@ -35,7 +35,6 @@ import OrderDetail from "./pages/OrderDetail/OrderDetail";
 const { Header, Content, Footer } = Layout;
 
 function App({ auth }) {
-  console.log("Auth", auth);
   return (
     <Layout className="mainLayout">
       <Router>

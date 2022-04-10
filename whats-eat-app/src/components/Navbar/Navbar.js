@@ -22,6 +22,10 @@ import {
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
+const handleLogout = () => {
+  localStorage.removeItem("persist:root");
+};
+
 const options = (
   <Menu>
     <Menu.Item key="0">
@@ -57,11 +61,7 @@ const options = (
       </Link>
     </Menu.Item>
     <Menu.Item key="6">
-      <a
-        href="#"
-        className="single-option"
-        onClick={() => console.log("clicked")}
-      >
+      <a href="/" className="single-option" onClick={handleLogout}>
         <AiOutlineLogout /> <span>Đăng xuất</span>
       </a>
     </Menu.Item>
@@ -76,7 +76,7 @@ const Navbar = (props) => {
   // if (email.email) {
   //   setIsLoggedin(true);
   // }
-  console.log(props.auth)
+  console.log(props.auth);
   const handleSearch = () => {
     navigate(`/search?searchTerm=${searchTerm}`);
   };
@@ -109,7 +109,7 @@ const Navbar = (props) => {
           <span>Giỏ hàng</span>
         </Link>
         {props.auth.userInfo.userName ? (
-          <button className="btn option-btn">
+          <div className="btn option-btn">
             <BsFillPersonFill className="option-icon" />
             <Dropdown
               className="option-dropdown"
@@ -123,7 +123,7 @@ const Navbar = (props) => {
                 {props.auth.userInfo.userName} <DownOutlined />
               </a>
             </Dropdown>
-          </button>
+          </div>
         ) : (
           <Link to="/login" className="btn option-btn">
             <BsFillPersonFill className="option-icon" /> <span>Đăng nhập</span>

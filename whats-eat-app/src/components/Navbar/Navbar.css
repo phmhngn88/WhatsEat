@@ -79,10 +79,17 @@
 }
 
 .options{
+    display: flex;
     margin-right: 5rem;
+    height: 2.5rem;
 }
 
 .options .option-btn{
+    height: 2.5rem;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 0.9rem;
     padding: 0.3rem 0.3rem;
     margin-left: 1rem;
@@ -114,7 +121,7 @@
 }
 
 .options .option-btn .option-dropdown{
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
 }
 
 .single-option{
