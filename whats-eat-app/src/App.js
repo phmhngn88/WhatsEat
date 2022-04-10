@@ -34,7 +34,8 @@ import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
 const { Header, Content, Footer } = Layout;
 
-function App() {
+function App({ auth }) {
+  console.log("Auth", auth);
   return (
     <Layout className="mainLayout">
       <Router>

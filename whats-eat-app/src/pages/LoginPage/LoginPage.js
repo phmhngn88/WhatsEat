@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signin } from "../../actions/userActions";
 
-const LoginPage = () => {
+const LoginPage = ({ login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -27,30 +27,34 @@ const LoginPage = () => {
   };
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    axios({
-      method: "POST",
-      url: "https://localhost:7029/api/auth/login",
-      data: {
-        email: email,
-        password: password,
-      },
-    })
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-        dispatch(signin(res.data.email, res.data.id));
-        message.success("Đăng nhập thành công!");
-        setIsLoggedin(true);
-        setTimeout(() => {
-          navigate(`/`, {
-            state: {
-              email: email,
-            },
-          });
-        }, 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    login({ email, password });
+    setTimeout(() => {
+      navigate(`/`);
+    }, 1000);
+    // axios({
+    //   method: "POST",
+    //   url: "https://localhost:7029/api/auth/login",
+    //   data: {
+    //     email: email,
+    //     password: password,
+    //   },
+    // })
+    // .then((res) => {
+    //   localStorage.setItem("token", res.data.token);
+    //   dispatch(signin(res.data.email, res.data.id));
+    //   message.success("Đăng nhập thành công!");
+    //   setIsLoggedin(true);
+    //   setTimeout(() => {
+    //     navigate(`/`, {
+    //       state: {
+    //         email: email,
+    //       },
+    //     });
+    //   }, 1000);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
   };
   return (
     <div className="login-container">
