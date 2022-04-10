@@ -171,7 +171,6 @@ public class CustomerController : ControllerBase
             totalLike = 0,
             videoUrl = request.videoUrl,
             RecipeType = recipeType,
-            RecipeSteps = request.RecipeSteps,
         };
 
         await _context.Recipes.AddAsync(recipe);
