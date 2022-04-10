@@ -5,6 +5,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Dish from "../../components/Dish/Dish";
+import Pagination from "../../components/Pagination/Pagination";
 import Footer from "../../components/Footer/Footer";
 import "./SearchPage.css";
 
@@ -43,7 +44,13 @@ const SearchPage = () => {
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
-  //setSearchResult(state)
+
+  const handleClickNext = () => {
+    setPageNumber((pageNumber) => pageNumber + 1);
+  };
+  const handleClickPrev = () => {
+    setPageNumber((pageNumber) => pageNumber - 1);
+  };
 
   useEffect(() => {
     // setSearchRecipeResult(searchResults);
@@ -58,7 +65,7 @@ const SearchPage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [searchTerm]);
+  }, [searchTerm, pageNumber]);
 
   useEffect(() => {
     axios({
@@ -72,7 +79,7 @@ const SearchPage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [searchTerm]);
+  }, [searchTerm, pageNumber]);
 
   const searchResults = [...searchRecipeResult];
   console.log("search result:", searchResults);
@@ -103,16 +110,20 @@ const SearchPage = () => {
             })}
           </div>
           <Row gutter={[16, 16]}>
-            {searchResults.map((item) => {
+            {searchResults.map((item, idx) => {
               const { recipeId, name, totalTime, totalView, level, images } =
                 item;
               return (
-                <Col span={6} key={recipeId} className="dish-col">
+                <Col span={6} key={idx} className="dish-col">
                   <Dish {...item} />
                 </Col>
               );
             })}
           </Row>
+          <Pagination
+            onClickNext={handleClickNext}
+            onClickPrev={handleClickPrev}
+          />
         </div>
       </div>
       <Footer />

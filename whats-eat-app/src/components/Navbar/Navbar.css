@@ -102,10 +102,6 @@
 
 .ant-dropdown-link{
     color: #000;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 10ch;
     }
 .ant-dropdown-link:hover,
 .ant-dropdown-link:active{
