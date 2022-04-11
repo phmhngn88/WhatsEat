@@ -101,7 +101,10 @@ public class RecipeService
     {
 
         var recipe = _context.Recipes.FirstOrDefault(r => r.RecipeId == pagedRequest.RecipeId);
-        var recipeReviews = _context.RecipeReviews.AsNoTracking().OrderByDescending(rr => rr.CreatedOn).Where(rr => rr.Recipe == recipe);
+        var recipeReviews = _context.RecipeReviews.AsNoTracking()
+            .OrderByDescending(rr => rr.CreatedOn)
+            .Include(rv => rv.Customer)
+            .Where(rr => rr.Recipe == recipe);
 
         var res = await PagedList<RecipeReview>.ToPagedList(recipeReviews, pagedRequest.PageNumber, pagedRequest.PageSize);
         return res;
