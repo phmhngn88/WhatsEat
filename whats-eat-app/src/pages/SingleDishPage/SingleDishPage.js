@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import StarRatings from "react-star-ratings";
 import {
   AiFillStar,
   AiFillThunderbolt,
@@ -9,8 +10,9 @@ import {
   AiOutlineHeart,
 } from "react-icons/ai";
 import { FaAngleDown } from "react-icons/fa";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import Comment from "../../components/Comment/Comment";
+import RecipeReview from "../../components/RecipeReview/RecipeReview";
 import Footer from "../../components/Footer/Footer";
 import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
@@ -47,26 +49,35 @@ const ingredients = [
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   let [searchParams, setSearchParams] = useSearchParams();
-  const idRecipe = searchParams.get("id");
-  const { id, img_url, dish_name, love_count, time, level, view } = dish;
+  const location = useLocation();
+  const recipeId = location.state.recipeId;
+  console.log("Recipe id:", recipeId);
+  // const recipeId = searchParams.get("recipeId");
+  const {
+    id,
+    avgRating,
+    thumbnailUrl,
+    name,
+    totalLike,
+    totalTime,
+    level,
+    totalView,
+  } = dishDetail;
   const price = 230000;
 
-  const getDishDetail = () => {
+  useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/${597}`, //TODO: replace hardcode into idRecipe
+      url: `https://localhost:7029/api/Recipe/${recipeId}`, //TODO: replace hardcode into idRecipe
     })
       .then((res) => {
         const result = res.data;
-        console.log(result);
-        // setDishDetail(result);
+        console.log("Single dish info:", result);
+        setDishDetail(result);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
-  useEffect(() => {
-    getDishDetail();
   }, []);
   return (
     <div className="single-dish">
@@ -74,47 +85,51 @@ const SingleDishPage = () => {
         <div className="single-dish-container">
           <h1 className="title">Chi tiết món ăn</h1>
           <div className="dish-block">
-            <img src={img_url} alt={dish_name} className="dish-img" />
-            <h1 className="dish-name">{dish_name}</h1>
+            <img src={thumbnailUrl} alt={name} className="whatseat" />
+            <h1 className="dish-name">{name}</h1>
             <div className="rating-block">
               <div className="stars">
-                <AiFillStar className="icon" />
-                <AiFillStar className="icon" />
-                <AiFillStar className="icon" />
-                <AiFillStar className="icon" />
-                <AiFillStar className="icon" />
+                <StarRatings
+                  rating={avgRating}
+                  starRatedColor="brown"
+                  numberOfStars={5}
+                  name="rating"
+                  starDimension="25px"
+                  starSpacing="3px"
+                />
               </div>
               <div className="love">
-                <AiOutlineHeart className="icon" /> <span>{love_count}</span>
+                <AiOutlineHeart className="icon" /> <span>{totalLike}</span>
               </div>
               <div className="view">
-                <AiOutlineEye className="icon" /> <span>{view}</span>
+                <AiOutlineEye className="icon" /> <span>{totalView}</span>
               </div>
             </div>
             <div className="dish-info">
               <div className="info-detail">
                 <div>
-                  <AiOutlineClockCircle className="icon" /> <span>{time}</span>
+                  <AiOutlineClockCircle className="icon" />{" "}
+                  <span>{totalTime}</span>
                 </div>
               </div>
               <div className="info-detail">
                 <div>
-                  <AiFillThunderbolt className="icon" /> <span>{level}</span>
+                  <AiFillThunderbolt className="icon" />{" "}
+                  <span>{level || "Dễ"}</span>
                 </div>
               </div>
               <div className="info-detail">
                 <div>
-                  <AiOutlineBarChart className="icon" /> <span>{view}</span> xem
+                  <AiOutlineBarChart className="icon" />{" "}
+                  <span>{totalView}</span> xem
                 </div>
               </div>
             </div>
           </div>
           <div className="combo-box">
-            <p className="noti">
-              Mua ngay combo thực phẩm chế biến {dish_name}
-            </p>
-            <img src={img_url} alt="combo" className="combo-img" />
-            <p className="combo-name">Combo {dish_name}</p>
+            <p className="noti">Mua ngay combo thực phẩm chế biến {name}</p>
+            <img src={thumbnailUrl} alt="combo" className="combo-img" />
+            <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
               Xoài, chuối, kiwi và 2 thực phẩm khác
             </p>
@@ -138,7 +153,8 @@ const SingleDishPage = () => {
             })}
           </div>
           <Guide />
-          <Comment />
+          <Comment recipeId={recipeId} />
+          <RecipeReview recipeId={recipeId} />
         </div>
       </div>
       <Footer />

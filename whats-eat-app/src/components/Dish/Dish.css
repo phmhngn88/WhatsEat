@@ -20,7 +20,10 @@
     font-size: 2rem;
 }
 
-.dish-container .heart-icon .icon{
+.dish-container .recipe-liked .icon{
+    color: red;
+}
+.dish-container .recipe-not-liked .icon{
     color: #fff;
 }
 

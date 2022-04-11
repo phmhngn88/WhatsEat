@@ -7,19 +7,18 @@ import "antd/dist/antd.css";
 import { AiOutlineCamera, AiFillFileImage } from "react-icons/ai";
 import { FiSend } from "react-icons/fi";
 
-const Comment = () => {
+const Comment = ({ recipeId }) => {
   const [isCommented, setIsCommented] = useState(false);
   const [rateValue, setRateValue] = useState(5);
-  const [id, setId] = useState(1);
   const [comment, setComment] = useState("");
 
-  const handleSubmitRating = (id) => {
+  const handleSubmitRating = (recipeId) => {
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Recipe/review",
+      url: "https://localhost:7029/api/Recipe/reviews",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       data: {
-        recipeId: id,
+        recipeId: recipeId,
         rating: rateValue,
         comment: comment,
       },
@@ -55,7 +54,10 @@ const Comment = () => {
           <button className="btn img-load-btn">
             <AiFillFileImage className="img-icon" /> TẢI THÊM ẢNH
           </button>
-          <button className="btn submit-btn" onClick={handleSubmitRating(id)}>
+          <button
+            className="btn submit-btn"
+            onClick={handleSubmitRating(recipeId)}
+          >
             GỬI BÌNH LUẬN
           </button>
         </div>
