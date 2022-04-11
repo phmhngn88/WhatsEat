@@ -1,0 +1,70 @@
+.add-recipe-fluid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #FFF;
+}
+    
+.add-recipe-fluid .add-recipe-container{
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    height: 100vh;
+    background-color: #fff;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+    
+.add-recipe-container .content-container{
+    width: 100%;
+    background-color: #fff;
+    padding: 1.5rem;
+}
+    
+.add-recipe-container .content-container .title{
+    font-weight: 650;
+    margin-bottom: 0rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+    
+.add-recipe-container .content-container .note{
+    opacity: 0.8;
+    margin-top: -0.3rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+    
+.add-recipe-container .content-container .basic-info h3
+    {
+    font-weight: 900;
+    padding-bottom: 0.5rem;
+    margin-top: 1rem;
+    color: brown;
+    border-bottom: 1.5px solid #C4C4C4;
+}
+    
+    
+.add-recipe-container .content-container .basic-info .detail-info .register-form{
+    margin-top: 2rem;
+    margin-right: 10rem;
+}
+
+.input .steps{
+    margin-left: 1rem;
+}
+
+.input .steps .step{
+    margin: 0.5rem 0;
+}
+
+.input .steps .step-des{
+    margin-top: 1rem;
+}
+
+.recipe-input{
+    width: 100%;
+}

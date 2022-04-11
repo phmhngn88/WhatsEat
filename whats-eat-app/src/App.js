@@ -32,6 +32,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FavorShop from "./pages/FavorShop/FavorShop";
 import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
+import AddRecipe from "./pages/AddRecipe/AddRecipe";
 const { Header, Content, Footer } = Layout;
 
 function App({ auth }) {
@@ -71,6 +72,7 @@ function App({ auth }) {
             <Route path="/orders/:id" element={<OrderDetail />}></Route>
             <Route path="/shop/items" element={<ShopItems />}></Route>
             <Route path="/shop/additem" element={<ShopAddItem />}></Route>
+            <Route path="/addrecipe" element={<AddRecipe />}></Route>
             <Route
               path="/shop/infringingitems"
               element={<ShopInfringingItems />}
