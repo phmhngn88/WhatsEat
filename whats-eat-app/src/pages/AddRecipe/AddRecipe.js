@@ -143,7 +143,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-1"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -155,7 +155,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-2"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -167,7 +167,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-3"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -179,7 +179,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-4"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -191,7 +191,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-5"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -203,7 +203,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-6"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -215,7 +215,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-7"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -227,7 +227,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-8"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -239,7 +239,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-9"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -251,7 +251,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-10"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -263,7 +263,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-11"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -275,7 +275,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-12"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -287,7 +287,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-13"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -299,7 +299,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-14"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
@@ -311,7 +311,7 @@ const AddRecipe = () => {
                         </Upload>
                         <Form.Item 
                         className="step-des"
-                        name="step-description"
+                        name="step-15"
                         label="Hướng dẫn"
                         >
                         <Input.TextArea placeholder="Nhập hướng dẫn..." />
