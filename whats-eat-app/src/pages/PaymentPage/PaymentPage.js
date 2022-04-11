@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import "./PaymentPage.css";
+
+import { Select } from "antd";
+
+const { Option } = Select;
 
 const items = [
   {
@@ -30,11 +34,15 @@ const items = [
 ];
 
 const PaymentPage = () => {
-  const [deliver, setDeliver] = React.useState("Giao hàng tiết kiệm");
-  const [paymentMethod, setPaymentMethod] = React.useState(
+  const [deliver, setDeliver] = useState("Giao hàng tiết kiệm");
+  const [paymentMethod, setPaymentMethod] = useState(
     "Thanh toán khi nhận hàng"
   );
-  const [totalPayment, setTotalPayment] = React.useState(90000);
+  const [totalPayment, setTotalPayment] = useState(90000);
+
+  const handleChange = (value) => {
+    setPaymentMethod(value);
+  };
   return (
     <div className="payment">
       <div className="payment-fluid">
@@ -91,12 +99,25 @@ const PaymentPage = () => {
               <div className="deliver">
                 <p className="title">Đơn vị vận chuyển:</p>
                 <p className="deli-unit">Giao hàng tiết kiệm</p>
-                <a href="#">thay đổi</a>
               </div>
             </div>
             <div className="payment-method-box">
-              <p className="title">Hình thức thanh toán: {paymentMethod}</p>
-              <a href="">thay đổi</a>
+              <p className="title">
+                Hình thức thanh toán:{" "}
+                <Select
+                  labelInValue
+                  defaultValue={{ value: "Thanh toán khi nhận hàng" }}
+                  onChange={handleChange}
+                  bordered={false}
+                >
+                  <Option value="Thanh toán khi nhận hàng">
+                    Thanh toán khi nhận hàng
+                  </Option>
+                  <Option value="Thanh toán trả trước">
+                    Thanh toán trả trước
+                  </Option>
+                </Select>
+              </p>
             </div>
             <div className="total-box">
               <p className="total-payment">

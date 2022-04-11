@@ -20,10 +20,17 @@
     margin-bottom: -1rem;
 }
 
-.search .search-container .search-fluid .search-nav .ant-dropdown-link{
+.search .search-container .search-fluid .search-nav .drop-down{
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    color: brown;
+}
+
+.search .search-container .search-fluid .search-nav .ant-select{
     color: brown;
     font-size: 1.2rem;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 .search .search-container .search-fluid .title{

@@ -1,27 +1,15 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Checkbox, Col, Dropdown, Menu, Row } from "antd";
+import { Checkbox, Col, Row, Select } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Dish from "../../components/Dish/Dish";
-import Pagination from "../../components/Pagination/Pagination";
 import Footer from "../../components/Footer/Footer";
+import Pagination from "../../components/Pagination/Pagination";
+import { AiTwotoneFilter } from "react-icons/ai";
 import "./SearchPage.css";
 
-const menu = (
-  <Menu>
-    <Menu.Item key="0">
-      <a href="#">Độ khó</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="#">Thời gian</a>
-    </Menu.Item>
-    <Menu.Item key="3">
-      <a href="#">Lượt xem</a>
-    </Menu.Item>
-  </Menu>
-);
+const { Option } = Select;
 
 const menuList = [
   { id: 1, name: "Món chay" },
@@ -41,6 +29,7 @@ const SearchPage = () => {
   const [pageSize, setPageSize] = useState(8);
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);
+  const [filterCondition, setFilterCondition] = useState("Độ khó");
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
@@ -50,6 +39,9 @@ const SearchPage = () => {
   };
   const handleClickPrev = () => {
     setPageNumber((pageNumber) => pageNumber - 1);
+  };
+  const handleChange = (value) => {
+    setFilterCondition(value);
   };
 
   useEffect(() => {
@@ -89,16 +81,21 @@ const SearchPage = () => {
         <div className="search-fluid">
           <div className="search-nav">
             <h1 className="title">Kết quả tìm kiếm</h1>
-            <Dropdown className="drop-down" overlay={menu} trigger={["click"]}>
-              <a
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}
+            <div className="drop-down">
+              <AiTwotoneFilter />
+              <Select
+                labelInValue
+                defaultValue={{ value: "Độ khó" }}
+                onChange={handleChange}
+                bordered={false}
               >
-                Sắp xếp theo <DownOutlined />
-              </a>
-            </Dropdown>
+                <Option value="Độ khó">Độ khó</Option>
+                <Option value="Thời gian">Thời gian</Option>
+                <Option value="Lượt xem">Lượt xem</Option>
+              </Select>
+            </div>
           </div>
-          <p className="notice">Kết quả tìm kiếm cho "{searchTerm}"</p>
+          <p className="notice">Kết quả tìm kiếm cho "{searchTerm || "..."}"</p>
           <div className="menu">
             {menuList.map((item) => {
               return (
@@ -120,10 +117,12 @@ const SearchPage = () => {
               );
             })}
           </Row>
-          <Pagination
-            onClickNext={handleClickNext}
-            onClickPrev={handleClickPrev}
-          />
+          {searchResults.length !== 0 && (
+            <Pagination
+              onClickNext={handleClickNext}
+              onClickPrev={handleClickPrev}
+            />
+          )}
         </div>
       </div>
       <Footer />
