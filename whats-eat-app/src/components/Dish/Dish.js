@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Dish.css";
+import { useNavigate } from "react-router-dom";
 import {
   AiFillHeart,
   AiOutlineClockCircle,
@@ -7,11 +8,33 @@ import {
   AiOutlineBarChart,
 } from "react-icons/ai";
 
-const Dish = ({ name, totalTime, totalView, level, images }) => {
+const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
+  const [isLikeRecipe, setIsLikeRecipe] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLikeRecipe = () => {
+    setIsLikeRecipe(!isLikeRecipe);
+    console.log(isLikeRecipe);
+  };
+
   return (
-    <div className="dish-container">
+    <div
+      className="dish-container"
+      onClick={() =>
+        navigate(`/singledish/${recipeId}`, {
+          state: {
+            recipeId: recipeId,
+          },
+        })
+      }
+    >
       <img src={images[0].url || ""} alt={name} className="dish-img" />
-      <div className="heart-icon">
+      <div
+        className={`${
+          isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
+        } heart-icon`}
+        onClick={handleLikeRecipe}
+      >
         <AiFillHeart className="icon" />
       </div>
       <h3 className="dish-name">{name}</h3>
