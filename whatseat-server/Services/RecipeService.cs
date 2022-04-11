@@ -88,7 +88,7 @@ public class RecipeService
         {
             recipes = recipes
                 .Where(r => r.RecipeRecipeTypes
-                    .Any(rrt => recipeFilter.recipeTypes.Contains(rrt.RecipeTypeId)));
+                    .Any(rrt => rrt.RecipeType != null && recipeFilter.recipeTypes.Contains(rrt.RecipeTypeId)));
         }
 
         var res = await PagedList<Recipe>.ToPagedList(recipes, recipeFilter.PageNumber, recipeFilter.PageSize);
@@ -97,9 +97,11 @@ public class RecipeService
     }
 
 
-    public async Task<PagedList<RecipeReview>> GetAllRecipeReviews(PagedRequest pagedRequest)
+    public async Task<PagedList<RecipeReview>> GetAllRecipeReviews(PagedRecipeRequest pagedRequest)
     {
-        var recipeReviews = _context.RecipeReviews.AsNoTracking().OrderByDescending(rr => rr.CreatedOn);
+
+        var recipe = _context.Recipes.FirstOrDefault(r => r.RecipeId == pagedRequest.RecipeId);
+        var recipeReviews = _context.RecipeReviews.AsNoTracking().OrderByDescending(rr => rr.CreatedOn).Where(rr => rr.Recipe == recipe);
 
         var res = await PagedList<RecipeReview>.ToPagedList(recipeReviews, pagedRequest.PageNumber, pagedRequest.PageSize);
         return res;

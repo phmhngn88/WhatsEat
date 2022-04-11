@@ -92,7 +92,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet("reviews")]
-    public async Task<IActionResult> GetReviews([FromBody] PagedRequest request)
+    public async Task<IActionResult> GetReviews([FromBody] PagedRecipeRequest request)
     {
         var reviews = await _recipeService.GetAllRecipeReviews(request);
 
