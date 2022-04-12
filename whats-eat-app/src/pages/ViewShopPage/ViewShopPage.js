@@ -51,6 +51,21 @@ const ViewShopPage = () => {
     axios({
       method: "POST",
       url: `https://localhost:7029/api/Store/like/${id}`,
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      data: {
+        storeId: id,
+      },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const deleteLikeShop = () => {
+    axios({
+      method: "DELETE",
+      url: `https://localhost:7029/api/Store/dislike/${id}`,
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       data: {
         storeId: id,
       },
@@ -81,7 +96,9 @@ const ViewShopPage = () => {
   }, []);
 
   useEffect(() => {
-    postLikeShop();
+    if (isLiked) {
+      postLikeShop();
+    } else deleteLikeShop();
   }, [isLiked]);
 
   return (
