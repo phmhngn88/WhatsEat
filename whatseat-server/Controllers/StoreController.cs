@@ -85,6 +85,32 @@ public class StoreController : ControllerBase
         }
     }
 
+    [HttpGet]
+    [Route("followings")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> GetFollowingStores([FromQuery] PagedRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+
+        List<CustomerStore> stores = await _storeService.GetStoreList(request, userId);
+
+        List<SimpleStoreResponse> simpleStoreResponses = new List<SimpleStoreResponse>();
+
+        foreach (var item in stores)
+        {
+            simpleStoreResponses.Add(
+                new SimpleStoreResponse
+                {
+                    ShopName = item.Store.ShopName,
+                    StoreId = item.Store.StoreId,
+                    AvatarUrl = item.Store.AvatarUrl
+                }
+            );
+        }
+
+        return Ok(simpleStoreResponses);
+    }
+
     [HttpPost]
     [Route("register")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]

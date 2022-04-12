@@ -84,7 +84,7 @@ public class RecipeService
             recipes = recipes.Where(r => r.TotalTime <= recipeFilter.MaxTotalTime);
         }
 
-        if (recipeFilter.recipeTypes.Length > 0)
+        if (recipeFilter.recipeTypes != null && recipeFilter.recipeTypes.Length > 0)
         {
             recipes = recipes
                 .Where(r => r.RecipeRecipeTypes

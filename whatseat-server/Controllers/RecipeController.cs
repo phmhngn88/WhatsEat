@@ -91,6 +91,45 @@ public class RecipeController : ControllerBase
         return Ok(recipeRes);
     }
 
+    [HttpGet]
+    [Route("top-eight")]
+    public async Task<IActionResult> GetTopEight()
+    {
+        RecipeFilter recipeFilter = new RecipeFilter
+        {
+            PageSize = 8,
+            sortAvgRating = "desc"
+        };
+        var recipes = await _recipeService.SearchRecipeFullText(recipeFilter);
+
+        var recipeRes = new List<RecipeResponse>();
+
+        foreach (var item in recipes)
+        {
+            recipeRes.Add(new RecipeResponse
+            {
+                RecipeId = item.RecipeId,
+                Name = item.Name,
+                Description = item.Description,
+                Serving = item.Serving,
+                CreatedOn = item.CreatedOn,
+                Creator = item.Creator,
+                TotalTime = item.TotalTime,
+                AvgRating = item.AvgRating,
+                TotalRating = item.TotalRating,
+                TotalView = item.TotalView,
+                totalLike = item.totalLike,
+                videoUrl = item.videoUrl,
+                RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == item.RecipeId).ToListAsync(),
+                Level = item.Level,
+                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl)
+            });
+        }
+
+        return Ok(recipeRes);
+
+    }
+
     [HttpGet("reviews")]
     public async Task<IActionResult> GetReviews([FromQuery] PagedRecipeRequest request)
     {

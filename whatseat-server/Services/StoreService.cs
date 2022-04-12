@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
+using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 
 namespace whatseat_server.Services;
 
@@ -36,5 +39,20 @@ public class StoreService
             (s) =>
                  s.StoreId == storeId && s.UserId == userId.ToString()
         );
+    }
+
+    public async Task<List<CustomerStore>> GetStoreList(PagedRequest pagedRequest, Guid userId)
+    {
+        var stores = _context.CustomerStores.AsNoTracking().Where(cs => cs.CustomerId == userId).AsQueryable();
+        var res = await PagedList<CustomerStore>.ToPagedList(stores, pagedRequest.PageNumber, pagedRequest.PageSize);
+
+        return res;
+    }
+
+    public List<Photo> ConvertJsonToPhotos(string jsonPhotos)
+    {
+        jsonPhotos = jsonPhotos.Substring(1, jsonPhotos.Length - 2);
+        List<Photo> result = JsonConvert.DeserializeObject<List<Photo>>(jsonPhotos);
+        return result;
     }
 }

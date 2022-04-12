@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 using whatseat_server.Services;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -34,6 +35,25 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> SearchProduct([FromQuery] SearchParams searchParams)
     {
         var products = await _productService.FullTextSearchProduct(searchParams);
+
+        var productRes = new List<ProductResponse>();
+        foreach (var item in products)
+        {
+            productRes.Add(new ProductResponse
+            {
+                Images = _productService.ConvertJsonToPhotos(item.PhotoJson),
+                ProductId = item.ProductId,
+                Name = item.Name,
+                InStock = item.InStock,
+                BasePrice = item.BasePrice,
+                Description = item.Description,
+                WeightServing = item.WeightServing,
+                TotalSell = item.TotalSell,
+                ProductCategoryId = item.ProductCategory.ProductCategoryId,
+                Store = item.Store,
+                CreatedOn = item.CreatedOn
+            });
+        }
         var metadata = new
         {
             products.TotalCount,
@@ -45,7 +65,7 @@ public class ProductController : ControllerBase
         };
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-        return Ok(products);
+        return Ok(productRes);
     }
 
     [HttpGet]
