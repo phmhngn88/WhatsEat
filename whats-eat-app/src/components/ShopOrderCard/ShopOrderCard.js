@@ -26,7 +26,24 @@ const ShopOrderCard = ({ props }) => {
         </p>
         <p className="delivery">{delivery}</p>
         <a href="#">Xem chi tiết</a>
-      </div>
+        <div className="cancel">
+        {((status === "Chờ xác nhận")||(status ==="Chờ lấy hàng")) ? (
+              <button className="btn cancel-btn">Hủy đơn</button>
+          ):(
+            <></>
+          )
+        }
+        </div>
+        </div>
+        <div className="accept">
+        {
+        status === "Chờ xác nhận" ? (
+          <button className="btn accept-btn">Xác nhận</button>
+          ):(
+            <></>
+          )
+        }
+        </div>
     </div>
   );
 };

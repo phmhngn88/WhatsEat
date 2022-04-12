@@ -25,11 +25,11 @@
 }
 
 .order-card .order-info p{
-    width: 15%;
+    width: 13.5%;
 }
 
 .order-card .order-info .product-info{
-    width: 40%;
+    width: 31%;
     display: flex;
 }
 
@@ -44,4 +44,42 @@
     max-width: 20ch;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.order-info .cancel{
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-info .cancel .cancel-btn{
+    margin-left: 4.5rem;
+    padding: 0.4rem 1rem;
+    color: #fff;
+    background-color: brown;
+    border: none;
+    border-radius: 3px;
+}
+
+.order-info .cancel .cancel-btn:hover{
+    cursor: pointer;
+    background-color: red;
+}
+
+.order-card .accept{
+    display: flex;
+    justify-content: center;
+}
+
+.order-card .accept .accept-btn{
+    padding: 0.4rem 1rem;
+    color: #fff;
+    background-color: brown;
+    border: none;
+    border-radius: 3px;
+    margin: -1.5rem 0.5rem 1rem 0;
+}
+
+.order-card .accept .accept-btn:hover{
+    cursor: pointer;
+    background-color: red;
 }

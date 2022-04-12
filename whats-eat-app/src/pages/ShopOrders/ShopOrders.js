@@ -28,7 +28,17 @@ const orders = [
       "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
     total: 190000,
     delivery: "Giao hàng nhanh",
-    status: "Đã giao",
+    status: "Chờ xác nhận",
+  },
+  {
+    order_ID: 3,
+    username: "tramcute",
+    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
+    total: 190000,
+    delivery: "Giao hàng nhanh",
+    status: "Chờ lấy hàng",
   },
 ];
 
@@ -65,10 +75,11 @@ const ShopOrders = () => {
                 <TabPane tab="Tất cả" key="1">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
-                    <p>Tổng đơn hàng</p>
+                    <p>Tổng tiền</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
+                    <p></p>
                   </div>
                   {orders.map((order, idx) => {
                     return <ShopOrderCard key={idx} props={order} />;
