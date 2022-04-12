@@ -1,4 +1,4 @@
-import { message, Rate } from "antd";
+import { message, Rate, Timeline } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -6,13 +6,11 @@ import { Link, useParams } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import "./OrderDetail.css";
 
-
 const OrderDetail = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [rateValue, setRateValue] = useState(5);
   const [comment, setComment] = useState("");
-  console.log(mock_order);
 
   const getOrder = () => {
     axios({
@@ -70,7 +68,12 @@ const OrderDetail = () => {
               </div>
               <div className="status">
                 <p className="order-id">Mã đơn hàng: abcxyz</p>
-                <div>This is for the delivering timeline</div>
+                <Timeline>
+                  <Timeline.Item>Giao hàng thành công</Timeline.Item>
+                  <Timeline.Item>Đang vận chuyển</Timeline.Item>
+                  <Timeline.Item>Đang chuẩn bị hàng</Timeline.Item>
+                  <Timeline.Item>Chờ xác nhận</Timeline.Item>
+                </Timeline>
               </div>
             </div>
             <div className="detail">

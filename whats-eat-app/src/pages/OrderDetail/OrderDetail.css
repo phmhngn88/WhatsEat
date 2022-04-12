@@ -33,9 +33,13 @@ h2{
     font-weight: 650;
 }
 
+.address-and-status .status{
+    width: 40%;
+}
+
 .address-and-status .status .order-id{
     text-transform: uppercase;
-    text-align: left;
+    margin-bottom: 1rem;
 }
 
 .order-detail-container .order-info .detail{
