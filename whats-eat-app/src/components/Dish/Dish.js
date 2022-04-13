@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Dish.css";
+
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   AiFillHeart,
   AiOutlineClockCircle,
@@ -10,12 +13,42 @@ import {
 
 const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
+  const userName = useSelector((state) => state.userInfo.userName);
   const navigate = useNavigate();
 
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
-    console.log(isLikeRecipe);
+    if (isLikeRecipe) {
+      axios({
+        method: "POST",
+        url: `https://localhost:7029/api/Recipe/like/${recipeId}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        data: {
+          recipeId: recipeId,
+          userName: userName,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios({
+        method: "DELETE",
+        url: `https://localhost:7029/api/Recipe/dislike/${recipeId}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        data: {
+          recipeId: recipeId,
+          userName: userName,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
+  console.log(isLikeRecipe);
 
   return (
     <div
