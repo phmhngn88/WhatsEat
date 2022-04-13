@@ -97,9 +97,9 @@ const SearchPage = () => {
           </div>
           <p className="notice">Kết quả tìm kiếm cho "{searchTerm || "..."}"</p>
           <div className="menu">
-            {menuList.map((item) => {
+            {menuList.map((item,idx) => {
               return (
-                <div className="single-item">
+                <div key={idx} className="single-item">
                   <Checkbox />
                   <p className="item-name">{item.name}</p>
                 </div>
