@@ -84,7 +84,7 @@ const SearchPage = () => {
     if (filterCondition.value === "justItem") {
       setSearchResults([...searchProductResult]);
     }
-  }, [filterCondition]);
+  }, [filterCondition, searchTerm, pageNumber]);
 
   console.log("search result:", searchRecipeResult);
   return (
