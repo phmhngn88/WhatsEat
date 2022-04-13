@@ -72,7 +72,7 @@ const orders = [
   },
 ];
 
-var waitAccOrders= orders.filter(order => order.status==="Chờ xác nhận");
+const waitAccOrders= orders.filter(order => order.status==="Chờ xác nhận");
 const waitShipOrders= orders.filter(order => order.status==="Chờ lấy hàng")
 const shippingOrders= orders.filter(order => order.status==="Đang giao")
 const shippedOrders= orders.filter(order => order.status==="Đã giao")
