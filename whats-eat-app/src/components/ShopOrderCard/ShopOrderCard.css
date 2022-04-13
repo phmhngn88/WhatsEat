@@ -25,11 +25,11 @@
 }
 
 .order-card .order-info p{
-    width: 13.5%;
+    width: 16%;
 }
 
 .order-card .order-info .product-info{
-    width: 31%;
+    width: 35%;
     display: flex;
 }
 
@@ -46,40 +46,47 @@
     white-space: nowrap;
 }
 
-.order-info .cancel{
+.order-card .cancel{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-.order-info .cancel .cancel-btn{
-    margin-left: 4.5rem;
-    padding: 0.4rem 1rem;
+.order-card .cancel .cancel-btn{
+    padding: 0.4rem 1.14rem;
     color: #fff;
     background-color: brown;
     border: none;
     border-radius: 3px;
+    margin-top: -1.5rem;
+    margin-right: 1.28rem;
 }
 
-.order-info .cancel .cancel-btn:hover{
+.order-card .cancel .cancel-btn:hover{
     cursor: pointer;
     background-color: red;
 }
 
-.order-card .accept{
+.order-info .accept{
     display: flex;
-    justify-content: center;
+    justify-content: flex-end
 }
 
-.order-card .accept .accept-btn{
+.order-info .accept .accept-btn{
     padding: 0.4rem 1rem;
-    color: #fff;
-    background-color: brown;
+    color: white;
+    background-color: rgb(8, 162, 155);
     border: none;
     border-radius: 3px;
-    margin: -1.5rem 0.5rem 1rem 0;
+    margin-top: -0.5rem;
+    margin-left: 3rem;
 }
 
-.order-card .accept .accept-btn:hover{
+.order-info .accept .accept-btn:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: rgb(16, 208, 208);
+}
+
+.order-card .more-info{
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
 }

@@ -40,7 +40,44 @@ const orders = [
     delivery: "Giao hàng nhanh",
     status: "Chờ lấy hàng",
   },
+  {
+    order_ID: 4,
+    username: "an",
+    item_name: "Gà Ta Bình Định Thả Vườn",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
+    total: 190000,
+    delivery: "Giao hàng nhanh",
+    status: "Đang giao",
+  },
+  {
+    order_ID: 5,
+    username: "vixinhdep",
+    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
+    total: 190000,
+    delivery: "Giao hàng nhanh",
+    status: "Đã hủy",
+  },
+  {
+    order_ID: 6,
+    username: "hieudinh",
+    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
+    item_img:
+      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
+    total: 190000,
+    delivery: "Giao hàng nhanh",
+    status: "Trả hàng/hoàn tiền",
+  },
 ];
+
+var waitAccOrders= orders.filter(order => order.status==="Chờ xác nhận");
+const waitShipOrders= orders.filter(order => order.status==="Chờ lấy hàng")
+const shippingOrders= orders.filter(order => order.status==="Đang giao")
+const shippedOrders= orders.filter(order => order.status==="Đã giao")
+const canceledOrders= orders.filter(order => order.status==="Đã hủy")
+const refundOrders= orders.filter(order => order.status==="Trả hàng/hoàn tiền")
 
 const ShopOrders = () => {
   const [shopOrders, setShopOrders] = useState([]);
@@ -78,7 +115,6 @@ const ShopOrders = () => {
                     <p>Tổng tiền</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
                     <p></p>
                   </div>
                   {orders.map((order, idx) => {
@@ -91,9 +127,10 @@ const ShopOrders = () => {
                     <p>Tổng đơn hàng</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
-                  </div>
-                  Những đơn hàng chờ xác nhận
+                  </div>         
+                  {waitAccOrders.map((order, idx) => {
+                    return <ShopOrderCard key={idx} props={order} />;
+                  })}
                 </TabPane>
                 <TabPane tab="Chờ lấy hàng" key="3">
                   <div className="table-title">
@@ -101,9 +138,10 @@ const ShopOrders = () => {
                     <p>Tổng đơn hàng</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
                   </div>
-                  Những đơn hàng chờ lấy hàng
+                  {waitShipOrders.map((order, idx) => {
+                    return <ShopOrderCard key={idx} props={order} />;
+                  })}
                 </TabPane>
                 <TabPane tab="Đang giao" key="4">
                   <div className="table-title">
@@ -111,9 +149,10 @@ const ShopOrders = () => {
                     <p>Tổng đơn hàng</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
                   </div>
-                  Những đơn hàng đang giao
+                  {shippingOrders.map((order, idx) => {
+                    return <ShopOrderCard key={idx} props={order} />;
+                  })}
                 </TabPane>
                 <TabPane tab="Đã giao" key="5">
                   <div className="table-title">
@@ -121,9 +160,10 @@ const ShopOrders = () => {
                     <p>Tổng đơn hàng</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
                   </div>
-                  Những đã giao
+                  {shippedOrders.map((order, idx) => {
+                    return <ShopOrderCard key={idx} props={order} />;
+                  })}
                 </TabPane>
                 <TabPane tab="Đã hủy" key="6">
                   <div className="table-title">
@@ -131,9 +171,10 @@ const ShopOrders = () => {
                     <p>Tổng đơn hàng</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
                   </div>
-                  Những đơn hàng đã hủy
+                  {canceledOrders.map((order, idx) => {
+                    return <ShopOrderCard key={idx} props={order} />;
+                  })}
                 </TabPane>
                 <TabPane tab="Trả hàng/hoàn tiền" key="7">
                   <div className="table-title">
@@ -141,9 +182,10 @@ const ShopOrders = () => {
                     <p>Tổng đơn hàng</p>
                     <p>Trạng thái</p>
                     <p>Vận chuyển</p>
-                    <p>Thao tác</p>
                   </div>
-                  Những đơn hàng trả hàng/hoàn tiền
+                  {refundOrders.map((order, idx) => {
+                    return <ShopOrderCard key={idx} props={order} />;
+                  })}
                 </TabPane>
               </Tabs>
             </div>
