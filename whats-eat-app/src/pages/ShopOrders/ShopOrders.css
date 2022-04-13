@@ -24,10 +24,6 @@
     box-shadow: 0px 0px 5px 1px #C4C4C4;
 }
 
-.content-container .title{
-    
-}
-
 .orders .table-title{
     display: flex;
     padding: 0.7rem 1rem;
@@ -36,10 +32,10 @@
 }
 
 .orders .table-title p{
-    width: 15%;
+    width: 16%;
     margin-bottom: 0;
 }
 
 .orders .product-name{
-    width: 40% !important;
+    width: 35% !important;
 }
