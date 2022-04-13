@@ -27,9 +27,10 @@ const menuList = [
 const SearchPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
+  const [searchResults, setSearchResults] = useState([]);
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);
-  const [filterCondition, setFilterCondition] = useState("Độ khó");
+  const [filterCondition, setFilterCondition] = useState("all");
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
@@ -73,8 +74,19 @@ const SearchPage = () => {
       });
   }, [searchTerm, pageNumber]);
 
-  const searchResults = [...searchRecipeResult];
-  console.log("search result:", searchResults);
+  useEffect(() => {
+    if (filterCondition.value === "all") {
+      setSearchResults([...searchRecipeResult]);
+    }
+    if (filterCondition.value === "justRecipe") {
+      setSearchResults([...searchRecipeResult]);
+    }
+    if (filterCondition.value === "justItem") {
+      setSearchResults([...searchProductResult]);
+    }
+  }, [filterCondition]);
+
+  console.log("search result:", searchRecipeResult);
   return (
     <div className="search">
       <div className="search-container">
@@ -85,13 +97,15 @@ const SearchPage = () => {
               <AiTwotoneFilter />
               <Select
                 labelInValue
-                defaultValue={{ value: "Độ khó" }}
+                defaultValue={{ value: "justRecipe" }}
                 onChange={handleChange}
                 bordered={false}
               >
-                <Option value="Độ khó">Độ khó</Option>
-                <Option value="Thời gian">Thời gian</Option>
-                <Option value="Lượt xem">Lượt xem</Option>
+                <Option value="justRecipe">Chỉ có công thức</Option>
+                <Option value="justItem">Chỉ có sản phẩm</Option>
+                <Option value="difficulty">Độ khó công thức</Option>
+                <Option value="timeTaken">Thời gian nấu</Option>
+                <Option value="view">Lượt xem</Option>
               </Select>
             </div>
           </div>
