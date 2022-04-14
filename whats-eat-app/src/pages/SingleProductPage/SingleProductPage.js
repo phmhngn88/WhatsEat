@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
+import Counter from "../../components/Counter/Counter";
 import RatingCard from "../../components/RatingCard/RatingCard";
 import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
@@ -10,35 +11,35 @@ import "./SingleProductPage.css";
 
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
-  let [searchParams, setSearchParams] = useSearchParams();
-  const idProduct = searchParams.get("id");
+  const [count, setCount] = useState(1);
+  const location = useLocation();
+  const productId = location.state.productId;
+  console.log("Product id:", productId);
 
-  const {
-    id,
-    product_name,
-    product_type,
-    img_url,
-    sale_count,
-    price,
-    weight,
-    brand,
-    origin,
-    description,
-  } = product;
+  const { name, priceJson, inStock, weightServing, store } = productDetail;
 
   const getProductDetail = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/${2945}`, //TODO: Changle hard code into idProduct
+      url: `https://localhost:7029/api/Product/${productId}`, //TODO: Changle hard code into idProduct
     })
       .then((res) => {
         console.log("product", res.data);
-        // const result = res.data;
-        // setProductDetail(result);
+        const result = res.data;
+        setProductDetail(result);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+  const handleIncrease = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrease = () => {
+    if (count === 1) {
+      setCount(1);
+    } else setCount(count - 1);
   };
   useEffect(() => {
     getProductDetail();
@@ -50,23 +51,32 @@ const SingleProductPage = () => {
           <h1 className="title">Chi tiết sản phẩm</h1>
           <div className="product-block">
             <div className="img-container">
-              <img src={img_url} alt={product_name} className="main-img" />
+              <img src="" alt={name} className="main-img" />
             </div>
             <div className="product-info">
-              <h1 className="product-name">{product_name}</h1>
+              <h1 className="product-name">{name}</h1>
               <div className="detail">
-                <h3 className="product-type">{product_type}</h3>
+                <h3 className="product-type">Đồ Tươi</h3>
                 <div className="sales-info">
                   <BsCartCheck className="cart-icon" />
-                  <span>{sale_count}</span>
+                  <span>50</span>
                 </div>
               </div>
               <h1 className="price">
-                {price.toLocaleString("vi-VN", {
+                500
+                {/* {JSON.parse(priceJson).toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                })}
+                })} */}
               </h1>
+              <div className="instock">
+                <Counter
+                  count={count}
+                  onIncrease={handleIncrease}
+                  onDecrease={handleDecrease}
+                />
+                <p className="item-left">{inStock} sản phẩm có sẵn</p>
+              </div>
               <div className="btn-block">
                 <button className="btn save-btn">
                   <BsHeart className="icon" />
@@ -81,20 +91,20 @@ const SingleProductPage = () => {
               <div className="brand-info-block">
                 <div>
                   <p>Định lượng</p>
-                  <p className="content weight">{weight}</p>
+                  <p className="content weight">{weightServing}</p>
                 </div>
                 <div>
                   <p>Thương hiệu</p>
-                  <p className="content brand">{brand}</p>
+                  <p className="content brand">{store || "DONA FARM"}</p>
                 </div>
                 <div>
                   <p>Xuất xứ</p>
-                  <p className="content origin">{origin}</p>
+                  <p className="content origin">Đồng Nai</p>
                 </div>
               </div>
               <div className="description-block">
                 <h2>Mô tả sản phẩm</h2>
-                <p>{description}</p>
+                <p>ipsumakjhdkfjadkljsakd</p>
               </div>
             </div>
           </div>
@@ -120,7 +130,7 @@ const SingleProductPage = () => {
         </div>
       </div>
       <TopDishes />
-      <TopItems />
+      {/* <TopItems /> */}
       <Footer />
     </div>
   );

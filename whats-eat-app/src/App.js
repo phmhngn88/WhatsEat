@@ -53,7 +53,7 @@ function App({ auth }) {
             <Route path="/recommender" element={<RecommendPage />}></Route>
             <Route path="/singledish/:id" element={<SingleDishPage />}></Route>
             <Route
-              path="/singleproduct"
+              path="/singleproduct/:id"
               element={<SingleProductPage />}
             ></Route>
             <Route path="/search" element={<SearchPage />}></Route>

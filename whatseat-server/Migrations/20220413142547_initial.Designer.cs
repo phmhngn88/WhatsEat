@@ -11,8 +11,8 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    [Migration("20220412162736_prod")]
-    partial class prod
+    [Migration("20220413142547_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -458,6 +458,12 @@ namespace whatseat_server.Migrations
 
                     b.Property<int?>("StoreId")
                         .HasColumnType("int");
+
+                    b.Property<int>("TotalSell")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WeightServing")
+                        .HasColumnType("longtext");
 
                     b.HasKey("ProductId");
 

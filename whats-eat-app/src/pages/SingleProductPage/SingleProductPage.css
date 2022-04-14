@@ -71,6 +71,15 @@
 .product-block .product-info .price{
     font-weight: 900;
 }
+.product-block .product-info .instock{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.product-block .product-info .instock .item-left{
+    margin-left: 1rem;
+}
 
 .product-block .product-info .btn-block{
     display: flex;

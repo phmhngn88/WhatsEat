@@ -3,6 +3,7 @@ import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Product from "../../components/Product/Product";
 import Dish from "../../components/Dish/Dish";
 import Footer from "../../components/Footer/Footer";
 import Pagination from "../../components/Pagination/Pagination";
@@ -29,7 +30,7 @@ const SearchPage = () => {
   const [pageSize, setPageSize] = useState(8);
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);
-  const [filterCondition, setFilterCondition] = useState("Độ khó");
+  const [filterCondition, setFilterCondition] = useState("");
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
@@ -51,7 +52,7 @@ const SearchPage = () => {
       url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
-        // console.log("Data product search:", res.data);
+        console.log("Data product search:", res.data);
         setSearchProductResult(res.data);
       })
       .catch((err) => {
@@ -73,7 +74,18 @@ const SearchPage = () => {
       });
   }, [searchTerm, pageNumber]);
 
-  const searchResults = [...searchRecipeResult];
+  // useEffect(() => {
+  //   if (filterCondition.value === "all") {
+  //     searchResults = searchRecipeResult;
+  //   }
+  //   if (filterCondition.value === "justRecipe") {
+  //     searchResults = searchRecipeResult;
+  //   }
+  //   if (filterCondition.value === "justItem") {
+  //     searchResults = searchProductResult;
+  //   }
+  // }, [filterCondition, searchTerm, pageNumber]);
+  const searchResults = [...searchRecipeResult, ...searchProductResult];
   console.log("search result:", searchResults);
   return (
     <div className="search">
@@ -85,21 +97,21 @@ const SearchPage = () => {
               <AiTwotoneFilter />
               <Select
                 labelInValue
-                defaultValue={{ value: "Độ khó" }}
+                defaultValue={{ value: "difficulty" }}
                 onChange={handleChange}
                 bordered={false}
               >
-                <Option value="Độ khó">Độ khó</Option>
-                <Option value="Thời gian">Thời gian</Option>
-                <Option value="Lượt xem">Lượt xem</Option>
+                <Option value="difficulty">Độ khó công thức</Option>
+                <Option value="timeTaken">Thời gian nấu</Option>
+                <Option value="view">Lượt xem</Option>
               </Select>
             </div>
           </div>
           <p className="notice">Kết quả tìm kiếm cho "{searchTerm || "..."}"</p>
           <div className="menu">
-            {menuList.map((item) => {
+            {menuList.map((item, idx) => {
               return (
-                <div className="single-item">
+                <div key={idx} className="single-item">
                   <Checkbox />
                   <p className="item-name">{item.name}</p>
                 </div>
@@ -107,12 +119,31 @@ const SearchPage = () => {
             })}
           </div>
           <Row gutter={[16, 16]}>
-            {searchResults.map((item, idx) => {
+            {searchRecipeResult.map((item, idx) => {
               const { recipeId, name, totalTime, totalView, level, images } =
                 item;
               return (
                 <Col span={6} key={idx} className="dish-col">
                   <Dish {...item} />
+                </Col>
+              );
+            })}
+          </Row>
+          {searchProductResult.length > 0 && (
+            <h1
+              className="title"
+              style={{ marginTop: "3rem", fontSize: "1.5rem" }}
+            >
+              Sản phẩm bạn cần
+            </h1>
+          )}
+          <Row gutter={[16, 16]}>
+            {searchProductResult.map((item, idx) => {
+              const { productId, name, basePrice, weightServing, images } =
+                item;
+              return (
+                <Col span={6} key={idx} className="dish-col">
+                  <Product {...item} />
                 </Col>
               );
             })}

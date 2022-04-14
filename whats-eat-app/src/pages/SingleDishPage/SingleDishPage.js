@@ -73,6 +73,7 @@ const SingleDishPage = () => {
       .then((res) => {
         const result = res.data;
         console.log("Single dish info:", result);
+
         setDishDetail(result);
       })
       .catch((error) => {
@@ -85,7 +86,11 @@ const SingleDishPage = () => {
         <div className="single-dish-container">
           <h1 className="title">Chi tiết món ăn</h1>
           <div className="dish-block">
-            <img src={thumbnailUrl} alt={name} className="whatseat" />
+            <img
+              src={thumbnailUrl} //JSON.parse(thumbnailUrl)[0][0].url
+              alt={name}
+              className="whatseat"
+            />
             <h1 className="dish-name">{name}</h1>
             <div className="rating-block">
               <div className="stars">
@@ -128,7 +133,11 @@ const SingleDishPage = () => {
           </div>
           <div className="combo-box">
             <p className="noti">Mua ngay combo thực phẩm chế biến {name}</p>
-            <img src={thumbnailUrl} alt="combo" className="combo-img" />
+            <img
+              src={thumbnailUrl} //JSON.parse(thumbnailUrl)[0][0].url
+              alt="combo"
+              className="combo-img"
+            />
             <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
               Xoài, chuối, kiwi và 2 thực phẩm khác

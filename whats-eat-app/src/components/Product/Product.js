@@ -1,21 +1,34 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import "./Product.css";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { BsCartPlus } from "react-icons/bs";
 
-const Product = ({ item_name, weight, price, img_url }) => {
-  let [searchParams, setSearchParams] = useSearchParams();
-  const idProduct = searchParams.get("id");
+const Product = ({ productId, name, basePrice, weightServing, images }) => {
+  // let [searchParams, setSearchParams] = useSearchParams();
+  // const idProduct = searchParams.get("id");
+  const navigate = useNavigate();
 
   return (
-    <div className="item-container">
-      <img src={img_url} alt={item_name} className="item-img" />
-      <h3 className="item-name">{item_name}</h3>
-      <p className="item-quantity">{weight}</p>
+    <div
+      className="item-container"
+      onClick={() =>
+        navigate(`/singleproduct/${productId}`, {
+          state: {
+            productId: productId,
+          },
+        })
+      }
+    >
+      <img src={images[1][1].url} alt={name} className="item-img" />
+      <h3 className="item-name">{name}</h3>
+      <p className="item-quantity">{weightServing}</p>
       <p className="item-price">
-        {price.toLocaleString("vi-VN", {
+        {basePrice.toLocaleString("vi-VN", {
           style: "currency",
           currency: "VND",
         })}
       </p>
+      <BsCartPlus className="icon" />
     </div>
   );
 };

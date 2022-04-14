@@ -1,6 +1,11 @@
 .dish-container{
     position: relative;
 }
+
+.dish-container:hover{
+    cursor: pointer;
+}
+
 .dish-container .dish-img{
     width: 100%;
     max-height: 156px;
@@ -11,6 +16,8 @@
 
 .dish-container .dish-name{
     font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dish-container .heart-icon{
