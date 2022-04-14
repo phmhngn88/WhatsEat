@@ -11,6 +11,7 @@ import "./SingleProductPage.css";
 
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
+  const [count, setCount] = useState(1);
   const location = useLocation();
   const productId = location.state.productId;
   console.log("Product id:", productId);
@@ -30,6 +31,15 @@ const SingleProductPage = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+  const handleIncrease = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrease = () => {
+    if (count === 1) {
+      setCount(1);
+    } else setCount(count - 1);
   };
   useEffect(() => {
     getProductDetail();
@@ -60,7 +70,11 @@ const SingleProductPage = () => {
                 })} */}
               </h1>
               <div className="instock">
-                <Counter />
+                <Counter
+                  count={count}
+                  onIncrease={handleIncrease}
+                  onDecrease={handleDecrease}
+                />
                 <p className="item-left">{inStock} sản phẩm có sẵn</p>
               </div>
               <div className="btn-block">
