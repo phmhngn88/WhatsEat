@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./TopDishes.css";
 import "antd/dist/antd.css";
+import axios from "axios";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import Dish from "../Dish/Dish";
@@ -95,21 +96,48 @@ const dishes = [
 ];
 
 const TopDishes = () => {
+  const [topRecipe, setTopRecipe] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "https://localhost:7029/api/Recipe/top-eight",
+    })
+      .then((res) => {
+        setTopRecipe(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const navigate = useNavigate();
   return (
     <div className="top-dishes-container">
       <div className="top-dishes">
         <h1 className="title">Top món ăn thịnh hành</h1>
         <Row gutter={[16, 16]}>
-          {dishes.map((dish) => {
-            const { id, img_url, dish_name, love_count, time, level, view } =
-              dish;
+          {topRecipe.map((dish) => {
+            const {
+              recipeId,
+              images,
+              name,
+              totalLike,
+              totalTime,
+              level,
+              totalView,
+            } = dish;
             return (
               <Col
                 span={6}
-                key={id}
+                key={recipeId}
                 className="dish-col"
-                onClick={() => navigate(`/singledish?id=${id}`)}
+                onClick={() =>
+                  navigate(`/singledish/${recipeId}`, {
+                    state: {
+                      recipeId: recipeId,
+                    },
+                  })
+                }
               >
                 <Dish {...dish} />
               </Col>

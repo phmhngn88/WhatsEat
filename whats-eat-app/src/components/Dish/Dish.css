@@ -16,6 +16,8 @@
 
 .dish-container .dish-name{
     font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dish-container .heart-icon{

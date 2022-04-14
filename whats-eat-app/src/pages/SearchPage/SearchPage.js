@@ -27,7 +27,6 @@ const menuList = [
 const SearchPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const [searchResults, setSearchResults] = useState([]);
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);
   const [filterCondition, setFilterCondition] = useState("all");
@@ -52,7 +51,7 @@ const SearchPage = () => {
       url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
-        // console.log("Data product search:", res.data);
+        console.log("Data product search:", res.data);
         setSearchProductResult(res.data);
       })
       .catch((err) => {
@@ -74,19 +73,19 @@ const SearchPage = () => {
       });
   }, [searchTerm, pageNumber]);
 
-  useEffect(() => {
-    if (filterCondition.value === "all") {
-      setSearchResults([...searchRecipeResult]);
-    }
-    if (filterCondition.value === "justRecipe") {
-      setSearchResults([...searchRecipeResult]);
-    }
-    if (filterCondition.value === "justItem") {
-      setSearchResults([...searchProductResult]);
-    }
-  }, [filterCondition, searchTerm, pageNumber]);
-
-  console.log("search result:", searchRecipeResult);
+  // useEffect(() => {
+  //   if (filterCondition.value === "all") {
+  //     searchResults = searchRecipeResult;
+  //   }
+  //   if (filterCondition.value === "justRecipe") {
+  //     searchResults = searchRecipeResult;
+  //   }
+  //   if (filterCondition.value === "justItem") {
+  //     searchResults = searchProductResult;
+  //   }
+  // }, [filterCondition, searchTerm, pageNumber]);
+  const searchResults = [...searchRecipeResult, ...searchProductResult];
+  console.log("search result:", searchResults);
   return (
     <div className="search">
       <div className="search-container">
@@ -111,7 +110,7 @@ const SearchPage = () => {
           </div>
           <p className="notice">Kết quả tìm kiếm cho "{searchTerm || "..."}"</p>
           <div className="menu">
-            {menuList.map((item,idx) => {
+            {menuList.map((item, idx) => {
               return (
                 <div key={idx} className="single-item">
                   <Checkbox />

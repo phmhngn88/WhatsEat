@@ -13,7 +13,7 @@ import {
 
 const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
-  const userName = useSelector((state) => state.userInfo.userName);
+  // const userName = useSelector((state) => state.userInfo.userName);
   const navigate = useNavigate();
 
   const handleLikeRecipe = () => {
@@ -25,7 +25,7 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         data: {
           recipeId: recipeId,
-          userName: userName,
+          // userName: userName,
         },
       })
         .then((res) => {})
@@ -39,7 +39,7 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         data: {
           recipeId: recipeId,
-          userName: userName,
+          // userName: userName,
         },
       })
         .then((res) => {})
