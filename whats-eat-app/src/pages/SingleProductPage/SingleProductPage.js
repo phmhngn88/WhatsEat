@@ -12,20 +12,9 @@ const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
   const location = useLocation();
   const productId = location.state.productId;
-  console.log("Recipe id:", productId);
+  console.log("Product id:", productId);
 
-  const {
-    id,
-    product_name,
-    product_type,
-    img_url,
-    sale_count,
-    price,
-    weight,
-    brand,
-    origin,
-    description,
-  } = product;
+  const { name, priceJson, weightServing, store } = productDetail;
 
   const getProductDetail = () => {
     axios({
@@ -34,8 +23,8 @@ const SingleProductPage = () => {
     })
       .then((res) => {
         console.log("product", res.data);
-        // const result = res.data;
-        // setProductDetail(result);
+        const result = res.data;
+        setProductDetail(result);
       })
       .catch((error) => {
         console.log(error);
@@ -51,22 +40,23 @@ const SingleProductPage = () => {
           <h1 className="title">Chi tiết sản phẩm</h1>
           <div className="product-block">
             <div className="img-container">
-              <img src={img_url} alt={product_name} className="main-img" />
+              <img src="" alt={name} className="main-img" />
             </div>
             <div className="product-info">
-              <h1 className="product-name">{product_name}</h1>
+              <h1 className="product-name">{name}</h1>
               <div className="detail">
-                <h3 className="product-type">{product_type}</h3>
+                <h3 className="product-type">Đồ Tươi</h3>
                 <div className="sales-info">
                   <BsCartCheck className="cart-icon" />
-                  <span>{sale_count}</span>
+                  <span>50</span>
                 </div>
               </div>
               <h1 className="price">
-                {price.toLocaleString("vi-VN", {
+                500
+                {/* {JSON.parse(priceJson).toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                })}
+                })} */}
               </h1>
               <div className="btn-block">
                 <button className="btn save-btn">
@@ -82,20 +72,20 @@ const SingleProductPage = () => {
               <div className="brand-info-block">
                 <div>
                   <p>Định lượng</p>
-                  <p className="content weight">{weight}</p>
+                  <p className="content weight">{weightServing}</p>
                 </div>
                 <div>
                   <p>Thương hiệu</p>
-                  <p className="content brand">{brand}</p>
+                  <p className="content brand">{store || "DONA FARM"}</p>
                 </div>
                 <div>
                   <p>Xuất xứ</p>
-                  <p className="content origin">{origin}</p>
+                  <p className="content origin">Đồng Nai</p>
                 </div>
               </div>
               <div className="description-block">
                 <h2>Mô tả sản phẩm</h2>
-                <p>{description}</p>
+                <p>ipsumakjhdkfjadkljsakd</p>
               </div>
             </div>
           </div>
@@ -121,7 +111,7 @@ const SingleProductPage = () => {
         </div>
       </div>
       <TopDishes />
-      <TopItems />
+      {/* <TopItems /> */}
       <Footer />
     </div>
   );

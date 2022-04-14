@@ -1,3 +1,7 @@
+.item-container{
+    position: relative;
+}
+
 .item-container:hover{
     cursor: pointer;
 }
@@ -21,4 +25,16 @@
 .item-container .item-price{
     font-weight: 650;
     font-size: 1rem;
+}
+
+.item-container .icon{
+    position: absolute;
+    font-size: 30px;
+    bottom: 0.2rem;
+    right: 0.2rem;
+}
+
+.item-container .icon:hover{
+    cursor: pointer;
+    color: blue;
 }

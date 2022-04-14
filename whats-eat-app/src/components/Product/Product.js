@@ -1,6 +1,7 @@
 import React from "react";
 import "./Product.css";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { BsCartPlus } from "react-icons/bs";
 
 const Product = ({ productId, name, basePrice, weightServing, images }) => {
   // let [searchParams, setSearchParams] = useSearchParams();
@@ -27,6 +28,7 @@ const Product = ({ productId, name, basePrice, weightServing, images }) => {
           currency: "VND",
         })}
       </p>
+      <BsCartPlus className="icon" />
     </div>
   );
 };
