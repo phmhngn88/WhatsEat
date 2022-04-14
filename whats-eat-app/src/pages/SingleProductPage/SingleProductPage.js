@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import RatingCard from "../../components/RatingCard/RatingCard";
 import TopDishes from "../../components/TopDishes/TopDishes";
@@ -10,8 +10,9 @@ import "./SingleProductPage.css";
 
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
-  let [searchParams, setSearchParams] = useSearchParams();
-  const idProduct = searchParams.get("id");
+  const location = useLocation();
+  const productId = location.state.productId;
+  console.log("Recipe id:", productId);
 
   const {
     id,
@@ -29,7 +30,7 @@ const SingleProductPage = () => {
   const getProductDetail = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/${2945}`, //TODO: Changle hard code into idProduct
+      url: `https://localhost:7029/api/Product/${productId}`, //TODO: Changle hard code into idProduct
     })
       .then((res) => {
         console.log("product", res.data);
