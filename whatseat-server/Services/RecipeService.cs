@@ -117,4 +117,13 @@ public class RecipeService
         return result;
     }
 
+    public List<IngredientRes> ConvertJsonToIngredients(string jsonIngredient)
+    {
+        return JsonConvert.DeserializeObject<List<IngredientRes>>(jsonIngredient);
+    }
+
+    public List<Step> ConvertJsonToSteps(string jsonSteps)
+    {
+        return JsonConvert.DeserializeObject<List<Step>>(jsonSteps);
+    }
 }

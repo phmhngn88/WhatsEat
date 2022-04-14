@@ -72,8 +72,21 @@ public class ProductController : ControllerBase
     [Route("{productId}", Name = "productId")]
     public async Task<IActionResult> GetProductDetails(int productId)
     {
-        var product = await _productService.FindProductById(productId);
-        return product is not null ? Ok(product) : NotFound(new { message = "product not found" });
+        var item = await _productService.FindProductById(productId);
+        return item is not null ? Ok(new ProductResponse
+        {
+            Images = _productService.ConvertJsonToPhotos(item.PhotoJson),
+            ProductId = item.ProductId,
+            Name = item.Name,
+            InStock = item.InStock,
+            BasePrice = item.BasePrice,
+            Description = item.Description,
+            WeightServing = item.WeightServing,
+            TotalSell = item.TotalSell,
+            ProductCategoryId = item.ProductCategory is not null ? item.ProductCategory.ProductCategoryId : -1,
+            Store = item.Store,
+            CreatedOn = item.CreatedOn
+        }) : NotFound(new { message = "product not found" });
     }
 
     [HttpPost]

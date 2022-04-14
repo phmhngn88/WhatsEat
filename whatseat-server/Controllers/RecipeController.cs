@@ -42,8 +42,28 @@ public class RecipeController : ControllerBase
     [Route("{recipeId}", Name = "recipeId")]
     public async Task<IActionResult> GetRecipeDetails(int recipeId)
     {
-        var recipe = await _recipeService.FindRecipeById(recipeId);
-        return recipe is not null ? Ok(recipe) : NotFound(new { message = "recipe not found" });
+        var item = await _recipeService.FindRecipeById(recipeId);
+        return item is not null ? Ok(new RecipeDetailResponse
+        {
+            RecipeId = item.RecipeId,
+            Name = item.Name,
+            Description = item.Description,
+            Serving = item.Serving,
+            CreatedOn = item.CreatedOn,
+            Creator = item.Creator,
+            TotalTime = item.TotalTime,
+            AvgRating = item.AvgRating,
+            TotalRating = item.TotalRating,
+            TotalView = item.TotalView,
+            totalLike = item.totalLike,
+            videoUrl = item.videoUrl,
+            RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == item.RecipeId).ToListAsync(),
+            Level = item.Level,
+            Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl),
+            Ingredients = _recipeService.ConvertJsonToIngredients(item.Ingredients),
+            Steps = _recipeService.ConvertJsonToSteps(item.Steps)
+
+        }) : NotFound(new { message = "recipe not found" });
     }
 
     [HttpGet]
