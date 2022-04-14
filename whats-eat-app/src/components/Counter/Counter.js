@@ -10,8 +10,8 @@ const Counter = () => {
   };
 
   const handleDecrease = () => {
-    if (count === 0) {
-      setCount(0);
+    if (count === 1) {
+      setCount(1);
     } else setCount(count - 1);
   };
   return (

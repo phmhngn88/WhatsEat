@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
 import { useSearchParams, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
+import Counter from "../../components/Counter/Counter";
 import RatingCard from "../../components/RatingCard/RatingCard";
 import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
@@ -14,7 +15,7 @@ const SingleProductPage = () => {
   const productId = location.state.productId;
   console.log("Product id:", productId);
 
-  const { name, priceJson, weightServing, store } = productDetail;
+  const { name, priceJson, inStock, weightServing, store } = productDetail;
 
   const getProductDetail = () => {
     axios({
@@ -58,6 +59,10 @@ const SingleProductPage = () => {
                   currency: "VND",
                 })} */}
               </h1>
+              <div className="instock">
+                <Counter />
+                <p className="item-left">{inStock} sản phẩm có sẵn</p>
+              </div>
               <div className="btn-block">
                 <button className="btn save-btn">
                   <BsHeart className="icon" />
