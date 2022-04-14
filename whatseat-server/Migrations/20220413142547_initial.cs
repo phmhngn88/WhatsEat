@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace whatseat_server.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -410,8 +410,15 @@ namespace whatseat_server.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     InStock = table.Column<int>(type: "int", nullable: false),
                     BasePrice = table.Column<int>(type: "int", nullable: false),
+                    PriceJson = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhotoJson = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    WeightServing = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TotalSell = table.Column<int>(type: "int", nullable: false),
                     ProductCategoryId = table.Column<int>(type: "int", nullable: true),
                     StoreId = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: false)
@@ -603,6 +610,8 @@ namespace whatseat_server.Migrations
                     Ingredients = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Steps = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RecipeTypeId = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
