@@ -60,7 +60,7 @@ const SingleProductPage = () => {
           <h1 className="title">Chi tiết sản phẩm</h1>
           <div className="product-block">
             <div className="img-container">
-              <img src={images[0][1].url} alt={name} className="main-img" />
+              <img src="" alt={name} className="main-img" />
             </div>
             <div className="product-info">
               <h1 className="product-name">{name}</h1>
@@ -72,10 +72,10 @@ const SingleProductPage = () => {
                 </div>
               </div>
               <h1 className="price">
-                {basePrice.toLocaleString("vi-VN", {
+                {basePrice?.toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                })}
+                }) || 40000}
               </h1>
               <div className="instock">
                 <Counter
