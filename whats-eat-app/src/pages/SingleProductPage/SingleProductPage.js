@@ -16,7 +16,16 @@ const SingleProductPage = () => {
   const productId = location.state.productId;
   console.log("Product id:", productId);
 
-  const { name, priceJson, inStock, weightServing, store } = productDetail;
+  const {
+    name,
+    description,
+    basePrice,
+    inStock,
+    weightServing,
+    store,
+    totalSell,
+    images,
+  } = productDetail;
 
   const getProductDetail = () => {
     axios({
@@ -51,7 +60,7 @@ const SingleProductPage = () => {
           <h1 className="title">Chi tiết sản phẩm</h1>
           <div className="product-block">
             <div className="img-container">
-              <img src="" alt={name} className="main-img" />
+              <img src={images[0][1].url} alt={name} className="main-img" />
             </div>
             <div className="product-info">
               <h1 className="product-name">{name}</h1>
@@ -59,15 +68,14 @@ const SingleProductPage = () => {
                 <h3 className="product-type">Đồ Tươi</h3>
                 <div className="sales-info">
                   <BsCartCheck className="cart-icon" />
-                  <span>50</span>
+                  <span>{totalSell}</span>
                 </div>
               </div>
               <h1 className="price">
-                500
-                {/* {JSON.parse(priceJson).toLocaleString("vi-VN", {
+                {basePrice.toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                })} */}
+                })}
               </h1>
               <div className="instock">
                 <Counter
@@ -104,7 +112,7 @@ const SingleProductPage = () => {
               </div>
               <div className="description-block">
                 <h2>Mô tả sản phẩm</h2>
-                <p>ipsumakjhdkfjadkljsakd</p>
+                <p>{description || "Sản phẩm đảm bảo chất lượng"}</p>
               </div>
             </div>
           </div>
