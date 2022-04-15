@@ -17,7 +17,6 @@ import { signin } from "../../actions/userActions";
 const LoginPage = ({ login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedin, setIsLoggedin] = useState(false);
   const navigate = useNavigate();
   const getPassword = (event) => {
     setPassword(event.target.value);
@@ -25,36 +24,11 @@ const LoginPage = ({ login }) => {
   const getEmail = (event) => {
     setEmail(event.target.value);
   };
-  const dispatch = useDispatch();
   const handleSubmit = () => {
     login({ email, password });
     setTimeout(() => {
       navigate(`/`);
     }, 1000);
-    // axios({
-    //   method: "POST",
-    //   url: "https://localhost:7029/api/auth/login",
-    //   data: {
-    //     email: email,
-    //     password: password,
-    //   },
-    // })
-    // .then((res) => {
-    //   localStorage.setItem("token", res.data.token);
-    //   dispatch(signin(res.data.email, res.data.id));
-    //   message.success("Đăng nhập thành công!");
-    //   setIsLoggedin(true);
-    //   setTimeout(() => {
-    //     navigate(`/`, {
-    //       state: {
-    //         email: email,
-    //       },
-    //     });
-    //   }, 1000);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
   };
   return (
     <div className="login-container">

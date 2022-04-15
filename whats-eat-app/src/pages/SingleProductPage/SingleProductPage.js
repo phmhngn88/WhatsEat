@@ -2,6 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
 import { useSearchParams, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+import { Modal } from 'antd'
+import { useNavigate } from "react-router-dom";
+
+import { addItemToCart } from '../../reducers/cart'
+
 import Footer from "../../components/Footer/Footer";
 import Counter from "../../components/Counter/Counter";
 import RatingCard from "../../components/RatingCard/RatingCard";
@@ -13,9 +19,11 @@ const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
   const [count, setCount] = useState(1);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth.userInfo);
+  const navigate = useNavigate();
   const productId = location.state.productId;
   console.log("Product id:", productId);
-
   const getProductDetail = () => {
     axios({
       method: "get",
@@ -39,6 +47,26 @@ const SingleProductPage = () => {
       setCount(1);
     } else setCount(count - 1);
   };
+
+  const addToCart = () => {
+    if(auth.userName){
+      dispatch(addItemToCart({ productDetail, count }))
+      let secondsToGo = 5;
+      const modal = Modal.success({
+        title: "Sản phẩm đã được thêm vào giỏ hàng",
+        okButtonProps: { disabled: true, className: "modal-footer-hiden-button" }
+      });
+      const timer = setInterval(() => {
+        secondsToGo -= 1;
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(timer);
+        modal.destroy();
+      }, secondsToGo * 1000);
+    }else{
+      navigate(`/login`);
+    }
+  }
   useEffect(() => {
     getProductDetail();
   }, []);
@@ -90,7 +118,7 @@ const SingleProductPage = () => {
                   <BsHeart className="icon" />
                   <span>Lưu</span>
                 </button>
-                <button className="btn cart-btn">
+                <button className="btn cart-btn" onClick={addToCart}>
                   <BsCartPlus className="icon" />
                   <span>Thêm vào giỏ</span>
                 </button>
