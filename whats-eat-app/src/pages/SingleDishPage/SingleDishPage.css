@@ -31,6 +31,11 @@
     text-transform: capitalize;
 }
 
+.single-dish-container .dish-block .desc{
+    margin-bottom: 1rem;
+    max-width: 640px;
+}
+
 .single-dish-container .dish-block .rating-block{
     width: 35%;
     display: flex;

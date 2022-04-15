@@ -87,6 +87,7 @@ const SearchPage = () => {
   // }, [filterCondition, searchTerm, pageNumber]);
   const searchResults = [...searchRecipeResult, ...searchProductResult];
   console.log("search result:", searchResults);
+
   return (
     <div className="search">
       <div className="search-container">

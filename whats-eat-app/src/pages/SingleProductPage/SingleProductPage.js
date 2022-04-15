@@ -16,17 +16,6 @@ const SingleProductPage = () => {
   const productId = location.state.productId;
   console.log("Product id:", productId);
 
-  const {
-    name,
-    description,
-    basePrice,
-    inStock,
-    weightServing,
-    store,
-    totalSell,
-    images,
-  } = productDetail;
-
   const getProductDetail = () => {
     axios({
       method: "get",
@@ -53,6 +42,11 @@ const SingleProductPage = () => {
   useEffect(() => {
     getProductDetail();
   }, []);
+
+  if (!productDetail.images) {
+    return <img src="../../assets/Banner/preloader.gif" alt="" />;
+  }
+
   return (
     <div className="single-product">
       <div className="single-product-fluid">
@@ -60,19 +54,23 @@ const SingleProductPage = () => {
           <h1 className="title">Chi tiết sản phẩm</h1>
           <div className="product-block">
             <div className="img-container">
-              <img src="" alt={name} className="main-img" />
+              <img
+                src={productDetail.images[0][1].url}
+                alt={productDetail.name}
+                className="main-img"
+              />
             </div>
             <div className="product-info">
-              <h1 className="product-name">{name}</h1>
+              <h1 className="product-name">{productDetail.name}</h1>
               <div className="detail">
                 <h3 className="product-type">Đồ Tươi</h3>
                 <div className="sales-info">
                   <BsCartCheck className="cart-icon" />
-                  <span>{totalSell}</span>
+                  <span>{productDetail.totalSell}</span>
                 </div>
               </div>
               <h1 className="price">
-                {basePrice?.toLocaleString("vi-VN", {
+                {productDetail.basePrice?.toLocaleString("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 }) || 40000}
@@ -83,7 +81,9 @@ const SingleProductPage = () => {
                   onIncrease={handleIncrease}
                   onDecrease={handleDecrease}
                 />
-                <p className="item-left">{inStock} sản phẩm có sẵn</p>
+                <p className="item-left">
+                  {productDetail.inStock} sản phẩm có sẵn
+                </p>
               </div>
               <div className="btn-block">
                 <button className="btn save-btn">
@@ -99,11 +99,15 @@ const SingleProductPage = () => {
               <div className="brand-info-block">
                 <div>
                   <p>Định lượng</p>
-                  <p className="content weight">{weightServing}</p>
+                  <p className="content weight">
+                    {productDetail.weightServing}
+                  </p>
                 </div>
                 <div>
                   <p>Thương hiệu</p>
-                  <p className="content brand">{store || "DONA FARM"}</p>
+                  <p className="content brand">
+                    {productDetail.store || "DONA FARM"}
+                  </p>
                 </div>
                 <div>
                   <p>Xuất xứ</p>
@@ -112,7 +116,9 @@ const SingleProductPage = () => {
               </div>
               <div className="description-block">
                 <h2>Mô tả sản phẩm</h2>
-                <p>{description || "Sản phẩm đảm bảo chất lượng"}</p>
+                <p>
+                  {productDetail.description || "Sản phẩm đảm bảo chất lượng"}
+                </p>
               </div>
             </div>
           </div>

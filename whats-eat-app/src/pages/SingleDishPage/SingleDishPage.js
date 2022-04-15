@@ -17,17 +17,6 @@ import Footer from "../../components/Footer/Footer";
 import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
 
-const dish = {
-  id: 1,
-  img_url:
-    "https://media.cooky.vn/recipe/g6/50880/s320x240/cooky-recipe-637102372207865706.png",
-  dish_name: "Smoothie xoài chuối kiwi",
-  love_count: 24,
-  time: "30p",
-  level: "Dễ",
-  view: 20,
-};
-
 const combo = {
   img_url:
     "https://media.cooky.vn/recipe/g6/50880/s320x240/cooky-recipe-637102372207865706.png",
@@ -38,14 +27,6 @@ const combo = {
   view: 20,
 };
 
-const ingredients = [
-  { id: 1, product_name: "Xoài" },
-  { id: 2, product_name: "Chuối" },
-  { id: 3, product_name: "Kiwi" },
-  { id: 4, product_name: "Đậu Phộng" },
-  { id: 5, product_name: "Sữa" },
-];
-
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   let [searchParams, setSearchParams] = useSearchParams();
@@ -54,9 +35,11 @@ const SingleDishPage = () => {
   console.log("Recipe id:", recipeId);
   // const recipeId = searchParams.get("recipeId");
   const {
-    id,
+    description,
     avgRating,
-    thumbnailUrl,
+    images,
+    ingredients,
+    steps,
     name,
     totalLike,
     totalTime,
@@ -68,7 +51,7 @@ const SingleDishPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/${recipeId}`, //TODO: replace hardcode into idRecipe
+      url: `https://localhost:7029/api/Recipe/${recipeId}`,
     })
       .then((res) => {
         const result = res.data;
@@ -80,18 +63,22 @@ const SingleDishPage = () => {
         console.log(error);
       });
   }, []);
+  if (!steps || !images || !ingredients) {
+    return <img src="../../assets/Banner/preloader.gif" alt="" />;
+  }
+
   return (
     <div className="single-dish">
       <div className="single-dish-fluid">
         <div className="single-dish-container">
           <h1 className="title">Chi tiết món ăn</h1>
           <div className="dish-block">
-            <img
-              src={thumbnailUrl} //JSON.parse(thumbnailUrl)[0][0].url
-              alt={name}
-              className="whatseat"
-            />
+            <img src={images[0].url} alt={name} className="whatseat" />
             <h1 className="dish-name">{name}</h1>
+            <p
+              className="desc"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
             <div className="rating-block">
               <div className="stars">
                 <StarRatings
@@ -134,7 +121,7 @@ const SingleDishPage = () => {
           <div className="combo-box">
             <p className="noti">Mua ngay combo thực phẩm chế biến {name}</p>
             <img
-              src={thumbnailUrl} //JSON.parse(thumbnailUrl)[0][0].url
+              src="" //JSON.parse(thumbnailUrl)[0][0].url
               alt="combo"
               className="combo-img"
             />
@@ -151,17 +138,17 @@ const SingleDishPage = () => {
           </div>
           <div className="ingredients">
             <h2>Thành Phần</h2>
-            {ingredients.map((item) => {
-              const { id, product_name } = item;
+            {ingredients.map((item, idx) => {
+              const { name } = item;
               return (
-                <div className="ingredient-box" key={id}>
-                  <h3 className="ingredient-name">{product_name}</h3>
+                <div className="ingredient-box" key={idx}>
+                  <h3 className="ingredient-name">{name}</h3>
                   <FaAngleDown className="icon" />
                 </div>
               );
             })}
           </div>
-          <Guide />
+          <Guide steps={steps} />
           <Comment recipeId={recipeId} />
           <RecipeReview recipeId={recipeId} />
         </div>
