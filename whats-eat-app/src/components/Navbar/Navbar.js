@@ -71,7 +71,7 @@ const Navbar = (props) => {
   const handleSearch = () => {
     navigate(`/search?searchTerm=${searchTerm}`);
   };
-  console.log(props)
+  console.log(props);
   return (
     <div className="navbar">
       <div className="logo-and-search">
@@ -85,6 +85,11 @@ const Navbar = (props) => {
             type="text"
             placeholder="Bạn muốn tìm gì vậy?"
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                return handleSearch();
+              }
+            }}
           />
         </div>
         <div className="btn search-btn" onClick={handleSearch}>
@@ -98,7 +103,12 @@ const Navbar = (props) => {
         <Link to="/cart" className="btn option-btn">
           <AiOutlineShoppingCart className="option-icon" />{" "}
           <span>Giỏ hàng</span>
-          <span> {props.auth.userInfo.userName && props.cart.length > 0 ? `(${props.cart.length})` : ``}</span>
+          <span>
+            {" "}
+            {props.auth.userInfo.userName && props.cart.length > 0
+              ? `(${props.cart.length})`
+              : ``}
+          </span>
         </Link>
         {props.auth.userInfo.userName ? (
           <div className="btn option-btn">
