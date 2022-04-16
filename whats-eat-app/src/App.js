@@ -33,6 +33,7 @@ import FavorShop from "./pages/FavorShop/FavorShop";
 import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import AddRecipe from "./pages/AddRecipe/AddRecipe";
+import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 const { Header, Content, Footer } = Layout;
 
 function App({ auth, cartItems }) {
@@ -73,12 +74,11 @@ function App({ auth, cartItems }) {
             <Route path="/shop/items" element={<ShopItems />}></Route>
             <Route path="/shop/additem" element={<ShopAddItem />}></Route>
             <Route path="/addrecipe" element={<AddRecipe />}></Route>
-            <Route
-              path="/shop/infringingitems"
-              element={<ShopInfringingItems />}
-            ></Route>
+            <Route path="/shop/infringingitems" element={<ShopInfringingItems />}></Route>
             <Route path="/favorshop" element={<FavorShop />}></Route>
             <Route path="/favoritem" element={<FavorItem />}></Route>
+            <Route path="/payment/success" element={<PaymentSuccess />}></Route>
+            
           </Routes>
         </Content>
       </Router>
