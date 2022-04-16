@@ -11,7 +11,7 @@ import RecommendPage from "./pages/RecommendPage/RecommendPage";
 import SingleDishPage from "./pages/SingleDishPage/SingleDishPage";
 import SingleProductPage from "./pages/SingleProductPage/SingleProductPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
-import Cart from "./components/Cart/Cart";
+import Cart from "./containers/Cart";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import FavRecipe from "./pages/FavRecipe/FavRecipe";
 import FavMenu from "./pages/FavMenu/FavMenu";

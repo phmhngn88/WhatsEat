@@ -48,6 +48,15 @@ const SingleProductPage = () => {
     } else setCount(count - 1);
   };
 
+  const buyNow = () => {
+    if(auth.userName){
+      dispatch(addItemToCart({ productId , productDetail, count }))
+      navigate(`/cart`);
+    }else{
+      navigate(`/login`);
+    }
+  }
+
   const addToCart = () => {
     if(auth.userName){
       dispatch(addItemToCart({ productId , productDetail, count }))
@@ -122,7 +131,7 @@ const SingleProductPage = () => {
                   <BsCartPlus className="icon" />
                   <span>Thêm vào giỏ</span>
                 </button>
-                <button className="btn buy-btn">Mua ngay</button>
+                <button onClick={buyNow} className="btn buy-btn">Mua ngay</button>
               </div>
               <div className="brand-info-block">
                 <div>
