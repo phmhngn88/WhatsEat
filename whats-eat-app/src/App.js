@@ -11,7 +11,7 @@ import RecommendPage from "./pages/RecommendPage/RecommendPage";
 import SingleDishPage from "./pages/SingleDishPage/SingleDishPage";
 import SingleProductPage from "./pages/SingleProductPage/SingleProductPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
-import Cart from "./components/Cart/Cart";
+import Cart from "./containers/Cart";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import FavRecipe from "./pages/FavRecipe/FavRecipe";
 import FavMenu from "./pages/FavMenu/FavMenu";
@@ -33,14 +33,15 @@ import FavorShop from "./pages/FavorShop/FavorShop";
 import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import AddRecipe from "./pages/AddRecipe/AddRecipe";
+import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 const { Header, Content, Footer } = Layout;
 
-function App({ auth }) {
+function App({ auth, cartItems }) {
   return (
     <Layout className="mainLayout">
       <Router>
         <Header>
-          <Navbar auth={auth} />
+          <Navbar auth={auth} cart={cartItems} />
         </Header>
         <Content>
           <Routes>
@@ -73,12 +74,11 @@ function App({ auth }) {
             <Route path="/shop/items" element={<ShopItems />}></Route>
             <Route path="/shop/additem" element={<ShopAddItem />}></Route>
             <Route path="/addrecipe" element={<AddRecipe />}></Route>
-            <Route
-              path="/shop/infringingitems"
-              element={<ShopInfringingItems />}
-            ></Route>
+            <Route path="/shop/infringingitems" element={<ShopInfringingItems />}></Route>
             <Route path="/favorshop" element={<FavorShop />}></Route>
             <Route path="/favoritem" element={<FavorItem />}></Route>
+            <Route path="/payment/success" element={<PaymentSuccess />}></Route>
+            
           </Routes>
         </Content>
       </Router>

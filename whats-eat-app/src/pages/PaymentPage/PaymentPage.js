@@ -1,47 +1,53 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./PaymentPage.css";
-
-import { Select } from "antd";
+import axios from "axios";
+import { Select, message } from "antd";
 
 const { Option } = Select;
-
-const items = [
-  {
-    id: 0,
-    item_name: "Gà Ta Bình Định Thả Vườn",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
-    price: 169000,
-    quantity: "500g",
-  },
-  {
-    id: 1,
-    item_name: "Classic Romance Set",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/14322/s/587a187b-069d-479d-87b7-3d5299cd5382.jpeg",
-    price: 159000,
-    quantity: "1",
-  },
-  {
-    id: 2,
-    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
-    price: 119000,
-    quantity: "500g",
-  },
-];
 
 const PaymentPage = () => {
   const [deliver, setDeliver] = useState("Giao hàng tiết kiệm");
   const [paymentMethod, setPaymentMethod] = useState(
     "Thanh toán khi nhận hàng"
   );
-  const [totalPayment, setTotalPayment] = useState(90000);
-
+  const cartItems = useSelector((state) => state.cart.cartItems)
+  const token = useSelector((state) => state.auth.userInfo.token)
+  const getTotalPrice = (cartItems) => {
+    return cartItems.reduce((total,cartItem) => {
+          return cartItem.totalPrice + total
+      },0);
+    }
   const handleChange = (value) => {
     setPaymentMethod(value);
+  };
+
+  const carts = cartItems.map((item) => {
+    const container = {};
+    container.productId = item.productId;
+    container.price = item.price;
+    container.quantity = item.quantity;
+    return container;
+  })
+
+  const handleSubmitPayment = () => {
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Customer/order",
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        paymentMethodId: 1,
+        shippingInfoId: 1,
+        productList: carts,
+      },
+    })
+      .then((res) => {
+        message.success("Cảm ơn đánh giá của bạn!");
+      })
+      .catch((err) => {
+        message.error("Đánh giá không thành công!");
+      });
   };
   return (
     <div className="payment">
@@ -70,13 +76,13 @@ const PaymentPage = () => {
                 <div className="total">Thành tiền</div>
               </div>
               <div className="product-detail">
-                {items.map((item) => {
-                  const { id, img_url, item_name, quantity, price } = item;
+                {cartItems.map((item) => {
+                  const { productId, image, productName, quantity, totalPrice, price, weightServing } = item;
                   return (
-                    <div className="single-item" key={id}>
+                    <div className="single-item" key={productId}>
                       <div className="info">
-                        <img src={img_url} alt={item_name} />
-                        <p style={{ fontSize: "1.2rem" }}>{item_name}</p>
+                        <img src={image} alt={productName} />
+                        <p style={{ fontSize: "1.2rem" }}>{productName} ({weightServing})</p>
                       </div>
                       <h3>
                         {price.toLocaleString("vi-VN", {
@@ -85,7 +91,10 @@ const PaymentPage = () => {
                         })}
                       </h3>
                       <h3>{quantity}</h3>
-                      <h3>000</h3>
+                      <h3>{totalPrice.toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}</h3>
                     </div>
                   );
                 })}
@@ -123,7 +132,7 @@ const PaymentPage = () => {
               <p className="total-payment">
                 Tổng tiền:{" "}
                 <span>
-                  {totalPayment.toLocaleString("vi-VN", {
+                  {getTotalPrice(cartItems).toLocaleString("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   })}
@@ -131,7 +140,7 @@ const PaymentPage = () => {
               </p>
             </div>
           </div>
-          <button className="btn confirm-btn">xác nhận</button>
+          <button className="btn confirm-btn" onClick={handleSubmitPayment}>xác nhận</button>
         </div>
       </div>
       <Footer />

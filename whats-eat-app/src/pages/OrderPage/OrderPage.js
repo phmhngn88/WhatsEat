@@ -42,7 +42,6 @@ const items = [
 const OrderPage = () => {
   const onSearch = () => {};
   const [allOrders, setAllOrders] = useState([]);
-
   const getCustomerOrders = () => {
     axios({
       method: "get",

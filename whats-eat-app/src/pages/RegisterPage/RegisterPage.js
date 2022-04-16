@@ -50,6 +50,7 @@ const RegisterPage = () => {
       })
       .catch((err) => {
         console.log(err);
+        message.error("Tên đăng nhập hoặc email đã tồn tại!");
       });
   };
 
@@ -87,8 +88,11 @@ const RegisterPage = () => {
           rules={[
             {
               required: true,
+              pattern: new RegExp(
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+              ),
               message:
-                "Mật khẩu phải bao gồm ít nhất 8 ký tự, chứa cả chữ thường, in hoa, số và lý tự đặc biệt!",
+                "Mật khẩu phải bao gồm ít nhất 8 ký tự, chứa cả chữ thường, in hoa, số và ký tự đặc biệt!",
             },
           ]}
         >
@@ -106,7 +110,18 @@ const RegisterPage = () => {
           name="confirm"
           dependencies={["password"]}
           rules={[
-            { required: true, message: "Mật khẩu bạn nhập không trùng khớp!" },
+            {
+              required: true,
+              message: "Mật khẩu nhắc lại phải trùng khớp!",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Mật khẩu chưa trùng khớp!"));
+              },
+            }),
           ]}
         >
           <Input.Password
@@ -118,6 +133,7 @@ const RegisterPage = () => {
             }
           />
         </Form.Item>
+
         <Form.Item>
           <Button
             type="primary"

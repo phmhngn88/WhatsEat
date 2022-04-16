@@ -6,65 +6,10 @@ import { Link } from "react-router-dom";
 import Counter from "../../components/Counter/Counter";
 import Footer from "../../components/Footer/Footer";
 import TopItems from "../../components/TopItems/TopItems";
+import CartItem from "../CartItem/CartItem";
 import "./Cart.css";
 
-const items = [
-  {
-    id: 0,
-    item_name: "Gà Ta Bình Định Thả Vườn",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
-    price: 169000,
-  },
-  {
-    id: 1,
-    item_name: "Classic Romance Set",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/14322/s/587a187b-069d-479d-87b7-3d5299cd5382.jpeg",
-    price: 159000,
-  },
-  {
-    id: 2,
-    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
-    price: 119000,
-  },
-];
-
-const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  // const getCardItems = () => {
-  //   axios({
-  //     method: "get",
-  //     url: `https://localhost:7029/api/Store/${id}`,
-  //   })
-  //     .then((res) => {
-  //       const result = res.data;
-  //       setCardItems(result);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-  // useEffect(() => {
-  //   getCardItems();
-  // }, []);
-
-  const handleEmptyCart = () => {
-    setCartItems([]);
-  };
-
-  const handleDelete = (index) => {
-    const newCartItems = [...cartItems];
-    newCartItems.splice(index, 1);
-    setCartItems(newCartItems);
-  };
-
-  useEffect(() => {
-    setCartItems(items);
-  }, []);
-
+const Cart = ({ cartItems, decreaseQuantity, increaseQuantity, removeItem, clearCart }) => {
   return (
     <div className="cart">
       {cartItems.length === 0 ? (
@@ -83,36 +28,20 @@ const Cart = () => {
           <div className="cart-fluid">
             <div className="cart-nav">
               <h1 className="title">Giỏ hàng của bạn</h1>
-              <h1 className="empty-cart" onClick={handleEmptyCart}>
+              <h1 className="empty-cart" onClick={clearCart}>
                 Xóa hết
               </h1>
             </div>
             <div className="items-container">
               {cartItems.map((item, index) => {
-                const { id, item_name, img_url, price } = item;
                 return (
-                  <div key={id} className="single-item">
-                    <Checkbox></Checkbox>
-                    <img className="item-img" src={img_url} alt={item_name} />
-                    <div className="item-fluid">
-                      <div className="item-info">
-                        <h3 className="item-name">{item_name}</h3>
-                        <p className="price">
-                          {price.toLocaleString("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          })}
-                        </p>
-                      </div>
-                      <div className="count-and-delete">
-                        <Counter />
-                        <FaTrashAlt
-                          className="delete-btn"
-                          onClick={() => handleDelete(index)}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                  <CartItem
+                    key={index}
+                    {...item}
+                    decreaseQuantity={decreaseQuantity}
+                    increaseQuantity={increaseQuantity}
+                    onDelete={() => removeItem(item.productId)}
+                  />
                 );
               })}
               <Link to="/payment" className="pay-btn">
@@ -122,7 +51,7 @@ const Cart = () => {
           </div>
         </div>
       )}
-      <TopItems />
+      {/* <TopItems /> */}
       <Footer />
     </div>
   );

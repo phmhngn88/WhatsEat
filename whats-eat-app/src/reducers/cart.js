@@ -9,19 +9,21 @@ const cart = createSlice({
     reducers: {
         addItemToCart(state,action) {
             const cartId = (new Date()).getTime()
-            const existItem = state.cartItems.findIndex(item => item.productId === action.payload.product.id);
+            const existItem = state.cartItems.findIndex(item => item.productId === action.payload.productId);
             if(existItem >= 0){
-                state.cartItems[existItem].quantity = state.cartItems[existItem].quantity + 1
-                state.cartItems[existItem].totalPrice = action.payload.product.price * state.cartItems[existItem].quantity
+                state.cartItems[existItem].quantity = state.cartItems[existItem].quantity + action.payload.count
+                state.cartItems[existItem].totalPrice = action.payload.productDetail.basePrice * state.cartItems[existItem].quantity
             }
             else{
                 state.cartItems.push({
                     id:cartId,
-                    productId: action.payload.product.id,
-                    productName: action.payload.product.title,
-                    quantity: action.payload.quantity,
-                    price: action.payload.product.price,
-                    totalPrice: action.payload.quantity * action.payload.product.price
+                    productId: action.payload.productId,
+                    productName: action.payload.productDetail.name,
+                    quantity: action.payload.count,
+                    price: action.payload.productDetail.basePrice,
+                    image: action.payload.productDetail.images[0][1].url,
+                    weightServing: action.payload.productDetail.weightServing,
+                    totalPrice: action.payload.count * action.payload.productDetail.basePrice
                 }) 
             }
         },
