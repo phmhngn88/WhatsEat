@@ -85,15 +85,6 @@
     cursor: pointer;
 }
 
-.recommender-body .recommender-container .menu-items .dish-box .dish-box-nav .dish-label{
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-.recommender-body .recommender-container .menu-items .dish-box .list-dish{
-    width: 20%;
-}
-
 .recommender-body .recommender-container .expand-container{
     margin-top: 2rem;
 }

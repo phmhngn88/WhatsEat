@@ -5,8 +5,8 @@ import "antd/dist/antd.css";
 import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
+import DishBox from "../DishBox/DishBox";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
-import Dish from "../Dish/Dish";
 
 const recommendedMenu = [
   {
@@ -56,10 +56,6 @@ const categories = [
 
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
-  const [isShowRecipe, setIsShowRecipe] = useState(true);
-
-  const handleShow = () => setIsShowRecipe(true);
-  const handleHidden = () => setIsShowRecipe(false);
 
   useEffect(() => {
     setMenu(recommendedMenu);
@@ -97,29 +93,7 @@ const Recommender = () => {
         <div className="menu-items">
           {menu.map((dish) => {
             const { id, dish_name, img_url, dish_label } = dish;
-            return (
-              <div className="dish-box" key={id}>
-                <div className="dish-box-nav">
-                  <h2 className="dish-label">{dish_label}</h2>
-                  <div className="icons">
-                    <AiOutlinePlusCircle
-                      onClick={handleShow}
-                      className="icon"
-                    />
-                    <AiOutlineMinusCircle
-                      onClick={handleHidden}
-                      className="icon"
-                    />
-                  </div>
-                </div>
-                {isShowRecipe && (
-                  <div className="list-dish">
-                    hehe
-                    {/* <Dish {...dish} className="single-dish" /> */}
-                  </div>
-                )}
-              </div>
-            );
+            return <DishBox {...dish} />;
           })}
         </div>
         <div className="expand-container">
