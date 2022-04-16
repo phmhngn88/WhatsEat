@@ -7,21 +7,23 @@ const Guide = ({ steps }) => {
       <h1 className="title">Hướng dẫn thực hiện</h1>
       <div className="guide-box">
         {steps.map((step, idx) => {
-          const { content } = step;
+          const { content, photos } = step;
           return (
             <div className="step-container" key={idx}>
               <span className="step-number">{idx + 1}.</span>
               <div className="step-content">
                 <p>{content}</p>
-                {/* {<div className="img-box">
-                  {photos?.map((image, idx) => {
-                    return (
-                      <div className="img" key={idx}>
-                        <img src={image.url} alt="whatseat" />
-                      </div>
-                    );
-                  })}
-                </div>} */}
+                {
+                  <div className="img-box">
+                    {photos?.map((image, idx) => {
+                      return (
+                        <div className="img" key={idx}>
+                          <img src={image[1].url} alt="whatseat" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                }
               </div>
             </div>
           );
