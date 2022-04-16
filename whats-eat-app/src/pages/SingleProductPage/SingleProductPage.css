@@ -171,3 +171,8 @@
 .product-block .product-info .description-block h2{
     font-weight: 650;
 }
+
+.modal-footer-hiden-button {
+    display: none;
+  }
+  

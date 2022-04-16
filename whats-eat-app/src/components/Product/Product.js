@@ -21,7 +21,7 @@ const Product = ({ productId, name, basePrice, weightServing, images }) => {
       <h3 className="item-name">{name}</h3>
       <p className="item-quantity">{weightServing}</p>
       <p className="item-price">
-        {basePrice.toLocaleString("vi-VN", {
+        {basePrice?.toLocaleString("vi-VN", {
           style: "currency",
           currency: "VND",
         })}
