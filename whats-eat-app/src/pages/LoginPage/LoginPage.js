@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./LoginPage.css";
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, message } from "antd";
@@ -18,6 +18,7 @@ const LoginPage = ({ login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   const getPassword = (event) => {
     setPassword(event.target.value);
   };
@@ -30,6 +31,16 @@ const LoginPage = ({ login }) => {
       navigate(-1);
     }, 1000);
   };
+
+  useEffect(() => {
+    const header = document.getElementById("header");
+
+    header.classList.add("hidden");
+
+    return () => {
+      header.classList.remove("hidden");
+    };
+  }, []);
   return (
     <div className="login-container">
       <h1 className="logo">WhatsEat</h1>

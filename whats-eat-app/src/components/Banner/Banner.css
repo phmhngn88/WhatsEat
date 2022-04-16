@@ -14,3 +14,7 @@
     width: 100%;
     height: 50%;
 }
+
+.slide-container .slide .react-slideshow-container .default-nav{
+    z-index: 1;
+}

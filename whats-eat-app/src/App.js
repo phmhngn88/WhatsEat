@@ -40,7 +40,7 @@ function App({ auth, cartItems }) {
   return (
     <Layout className="mainLayout">
       <Router>
-        <Header>
+        <Header id="header">
           <Navbar auth={auth} cart={cartItems} />
         </Header>
         <Content>
@@ -74,11 +74,13 @@ function App({ auth, cartItems }) {
             <Route path="/shop/items" element={<ShopItems />}></Route>
             <Route path="/shop/additem" element={<ShopAddItem />}></Route>
             <Route path="/addrecipe" element={<AddRecipe />}></Route>
-            <Route path="/shop/infringingitems" element={<ShopInfringingItems />}></Route>
+            <Route
+              path="/shop/infringingitems"
+              element={<ShopInfringingItems />}
+            ></Route>
             <Route path="/favorshop" element={<FavorShop />}></Route>
             <Route path="/favoritem" element={<FavorItem />}></Route>
             <Route path="/payment/success" element={<PaymentSuccess />}></Route>
-            
           </Routes>
         </Content>
       </Router>

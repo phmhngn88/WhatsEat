@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RegisterPage.css";
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, message } from "antd";
@@ -18,21 +18,8 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  // const getUserName = (event) => {
-  //   setUserName(event.target.value);
-  //   console.log(userName);
-  // };
-  // const getEmail = (event) => {
-  //   setEmail(event.target.value);
-  //   console.log(email);
-  // };
-  // const getPassword = (event) => {
-  //   setPassword(event.target.value);
-  // };
+
   const handleSubmit = () => {
-    console.log(userName);
-    console.log(email);
-    console.log(password);
     axios({
       method: "post",
       url: "https://localhost:7029/api/auth/register",
@@ -54,6 +41,15 @@ const RegisterPage = () => {
       });
   };
 
+  useEffect(() => {
+    const header = document.getElementById("header");
+
+    header.classList.add("hidden");
+
+    return () => {
+      header.classList.remove("hidden");
+    };
+  }, []);
   return (
     <div className="register-container">
       <h1 className="logo">WhatsEat</h1>

@@ -31,6 +31,11 @@
 .mainLayout .ant-layout-header {
   background: #f8f8f8;
   padding: 0;
+  z-index: 10;
+}
+
+.mainLayout .hidden{
+  display: none;
 }
 
 @keyframes App-logo-spin {
