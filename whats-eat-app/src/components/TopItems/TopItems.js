@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./TopItems.css";
+import axios from "axios";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -7,21 +8,35 @@ import { useNavigate } from "react-router-dom";
 import Product from "../Product/Product";
 
 const TopItems = () => {
+  const [topProduct, setTopProduct] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "https://localhost:7029/api/Product/top-8",
+    })
+      .then((res) => {
+        setTopProduct(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const navigate = useNavigate();
+  console.log("Top product:", topProduct);
+
+  if (!topProduct) {
+    return <h1 className="loading">Loading...</h1>;
+  }
   return (
     <div className="top-items-container">
       <div className="top-items">
         <h1 className="title">Top thực phẩm yêu thích</h1>
         <Row gutter={[16, 16]}>
-          {items.map((item) => {
-            const { id, img_url, item_name, weight, price } = item;
+          {topProduct.map((item) => {
+            const { productId, name, basePrice, weightServing, images } = item;
             return (
-              <Col
-                span={6}
-                className="item-col"
-                key={id}
-                onClick={() => navigate(`/singleproduct?id=${id}`)}
-              >
+              <Col span={6} className="item-col" key={productId}>
                 <Product {...item} />
               </Col>
             );

@@ -9,7 +9,13 @@ import TopItems from "../../components/TopItems/TopItems";
 import CartItem from "../CartItem/CartItem";
 import "./Cart.css";
 
-const Cart = ({ cartItems, decreaseQuantity, increaseQuantity, removeItem, clearCart }) => {
+const Cart = ({
+  cartItems,
+  decreaseQuantity,
+  increaseQuantity,
+  removeItem,
+  clearCart,
+}) => {
   return (
     <div className="cart">
       {cartItems.length === 0 ? (
@@ -51,7 +57,7 @@ const Cart = ({ cartItems, decreaseQuantity, increaseQuantity, removeItem, clear
           </div>
         </div>
       )}
-      {/* <TopItems /> */}
+      <TopItems />
       <Footer />
     </div>
   );

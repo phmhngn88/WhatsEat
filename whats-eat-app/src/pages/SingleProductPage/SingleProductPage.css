@@ -26,6 +26,8 @@
 }
 .single-product-container .img-container .main-img{
     width: 100%;
+    max-height: 425px;
+    object-fit: cover;
 }
 
 .product-block .product-info{
@@ -170,6 +172,15 @@
 
 .product-block .product-info .description-block h2{
     font-weight: 650;
+}
+
+.product-block .product-info .description-block p{
+    margin: 0;
+    max-width: 100%;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
 }
 
 .modal-footer-hiden-button {

@@ -56,6 +56,10 @@ const categories = [
 
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
+  const [isShowRecipe, setIsShowRecipe] = useState(true);
+
+  const handleShow = () => setIsShowRecipe(true);
+  const handleHidden = () => setIsShowRecipe(false);
 
   useEffect(() => {
     setMenu(recommendedMenu);
@@ -98,13 +102,22 @@ const Recommender = () => {
                 <div className="dish-box-nav">
                   <h2 className="dish-label">{dish_label}</h2>
                   <div className="icons">
-                    <AiOutlinePlusCircle className="icon" />
-                    <AiOutlineMinusCircle className="icon" />
+                    <AiOutlinePlusCircle
+                      onClick={handleShow}
+                      className="icon"
+                    />
+                    <AiOutlineMinusCircle
+                      onClick={handleHidden}
+                      className="icon"
+                    />
                   </div>
                 </div>
-                <div className="list-dish">
-                  <Dish {...dish} className="single-dish" />
-                </div>
+                {isShowRecipe && (
+                  <div className="list-dish">
+                    hehe
+                    {/* <Dish {...dish} className="single-dish" /> */}
+                  </div>
+                )}
               </div>
             );
           })}

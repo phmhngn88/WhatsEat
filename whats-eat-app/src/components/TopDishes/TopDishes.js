@@ -111,10 +111,15 @@ const TopDishes = () => {
       });
   }, []);
   const navigate = useNavigate();
+
+  if (!topRecipe) {
+    return <h1 className="loading...">Loading</h1>;
+  }
   return (
     <div className="top-dishes-container">
       <div className="top-dishes">
         <h1 className="title">Top món ăn thịnh hành</h1>
+
         <Row gutter={[16, 16]}>
           {topRecipe.map((dish) => {
             const {
