@@ -120,14 +120,12 @@ const SingleDishPage = () => {
           </div>
           <div className="combo-box">
             <p className="noti">Mua ngay combo thực phẩm chế biến {name}</p>
-            <img
-              src="" //JSON.parse(thumbnailUrl)[0][0].url
-              alt="combo"
-              className="combo-img"
-            />
+            <img src={images[1].url} alt="combo" className="combo-img" />
             <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
-              Xoài, chuối, kiwi và 2 thực phẩm khác
+              {`${ingredients[0].name}, ${ingredients[1].name}, ${
+                ingredients[2].name
+              } và ${ingredients.length - 3} thực phẩm khác`}
             </p>
             <p className="combo-price">
               {price.toLocaleString("vi-VN", {
@@ -139,10 +137,20 @@ const SingleDishPage = () => {
           <div className="ingredients">
             <h2>Thành Phần</h2>
             {ingredients.map((item, idx) => {
-              const { name } = item;
+              const { name, quantity, unit } = item;
               return (
                 <div className="ingredient-box" key={idx}>
-                  <h3 className="ingredient-name">{name}</h3>
+                  <h3 className="ingredient-name">
+                    {name}{" "}
+                    <span
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "lighter",
+                        textTransform: "toLowerCase",
+                      }}
+                    >{`(${quantity} ${unit.unit})`}</span>
+                  </h3>
+
                   <FaAngleDown className="icon" />
                 </div>
               );

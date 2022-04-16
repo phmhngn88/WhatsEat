@@ -15,6 +15,10 @@
 .item-container .item-name{
     font-weight: 650;
     padding-top: 1rem;
+    overflow: hidden;
+    max-width: 35ch;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .item-container .item-quantity{
