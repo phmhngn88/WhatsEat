@@ -89,6 +89,29 @@ public class CustomerController : ControllerBase
     public async Task<IActionResult> AddOrder([FromBody] OrderRequest request)
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
+
+        Dictionary<int, List<CartDetailRequest>> classifiedCarts = new Dictionary<int, List<CartDetailRequest>>();
+
+        foreach (var productReq in request.ProductList)
+        {
+            var product = await _productService.FindProductById(productReq.ProductId);
+            try
+            {
+                int storeId = product.Store.StoreId;
+
+                if (product.InStock < productReq.Quantity)
+                {
+                    continue;
+                }
+
+                classifiedCarts[storeId].Add(productReq);
+            }
+            catch (NullReferenceException ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
         Order order = new Order
         {
             CreatedOn = DateTime.UtcNow,
@@ -97,13 +120,14 @@ public class CustomerController : ControllerBase
             OrderDetails = new List<OrderDetail>()
         };
 
-        foreach (var productRes in request.ProductList)
+
+        foreach (var productReq in request.ProductList)
         {
             order.OrderDetails.Add(new OrderDetail
             {
-                ProductId = productRes.ProductId,
-                Quantity = productRes.Quantity,
-                Price = productRes.Price
+                ProductId = productReq.ProductId,
+                Quantity = productReq.Quantity,
+                Price = productReq.Price
             });
         }
         var newOrder = await _context.Orders.AddAsync(order);

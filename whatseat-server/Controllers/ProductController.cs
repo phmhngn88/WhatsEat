@@ -32,9 +32,47 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> SearchProduct([FromQuery] SearchParams searchParams)
+    public async Task<IActionResult> SearchProduct([FromQuery] ProductFilter searchParams)
     {
         var products = await _productService.FullTextSearchProduct(searchParams);
+
+        var productRes = new List<ProductResponse>();
+        foreach (var item in products)
+        {
+            productRes.Add(new ProductResponse
+            {
+                Images = _productService.ConvertJsonToPhotos(item.PhotoJson),
+                ProductId = item.ProductId,
+                Name = item.Name,
+                InStock = item.InStock,
+                BasePrice = item.BasePrice,
+                Description = item.Description,
+                WeightServing = item.WeightServing,
+                TotalSell = item.TotalSell,
+                ProductCategoryId = item.ProductCategory.ProductCategoryId,
+                Store = item.Store,
+                CreatedOn = item.CreatedOn
+            });
+        }
+        var metadata = new
+        {
+            products.TotalCount,
+            products.PageSize,
+            products.CurrentPage,
+            products.TotalPages,
+            products.HasNext,
+            products.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        return Ok(productRes);
+    }
+
+    [HttpGet]
+    [Route("top-8")]
+    public async Task<IActionResult> GetBestSellers()
+    {
+        var products = await _productService.Get8BestSellerProduct();
 
         var productRes = new List<ProductResponse>();
         foreach (var item in products)
@@ -87,6 +125,26 @@ public class ProductController : ControllerBase
             Store = item.Store,
             CreatedOn = item.CreatedOn
         }) : NotFound(new { message = "product not found" });
+    }
+
+    [HttpGet("reviews")]
+    public async Task<IActionResult> GetReviews([FromQuery] PagedProductReviewRequest request)
+    {
+        var reviews = await _productService.GetAllProductReviews(request);
+
+        var metadata = new
+        {
+            reviews.TotalCount,
+            reviews.PageSize,
+            reviews.CurrentPage,
+            reviews.TotalPages,
+            reviews.HasNext,
+            reviews.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+        return Ok(reviews);
     }
 
     [HttpPost]
