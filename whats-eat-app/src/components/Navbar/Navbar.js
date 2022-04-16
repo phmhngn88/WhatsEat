@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import {
   AiOutlineSearch,
   AiOutlineShoppingCart,
@@ -18,7 +16,6 @@ import {
   BsShop,
   BsShopWindow,
 } from "react-icons/bs";
-
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
@@ -69,14 +66,12 @@ const options = (
 );
 
 const Navbar = (props) => {
-  const [isLoggedin, setIsLoggedin] = useState(false);
-  const userSignin = useSelector((state) => state.userSignin);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const handleSearch = () => {
     navigate(`/search?searchTerm=${searchTerm}`);
   };
-
+  console.log(props)
   return (
     <div className="navbar">
       <div className="logo-and-search">
@@ -103,6 +98,7 @@ const Navbar = (props) => {
         <Link to="/cart" className="btn option-btn">
           <AiOutlineShoppingCart className="option-icon" />{" "}
           <span>Giỏ hàng</span>
+          <span> {props.auth.userInfo.userName && props.cart.length > 0 ? `(${props.cart.length})` : ``}</span>
         </Link>
         {props.auth.userInfo.userName ? (
           <div className="btn option-btn">

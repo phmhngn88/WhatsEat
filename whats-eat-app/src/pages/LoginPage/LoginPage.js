@@ -27,7 +27,7 @@ const LoginPage = ({ login }) => {
   const handleSubmit = () => {
     login({ email, password });
     setTimeout(() => {
-      navigate(`/`);
+      navigate(-1);
     }, 1000);
   };
   return (

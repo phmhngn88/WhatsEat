@@ -34,6 +34,8 @@ const items = [
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [count, setCount] = useState(1);
+
   // const getCardItems = () => {
   //   axios({
   //     method: "get",
@@ -51,6 +53,16 @@ const Cart = () => {
   //   getCardItems();
   // }, []);
 
+  const handleIncrease = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrease = () => {
+    if (count === 1) {
+      setCount(1);
+    } else setCount(count - 1);
+  };
+  
   const handleEmptyCart = () => {
     setCartItems([]);
   };
@@ -105,7 +117,11 @@ const Cart = () => {
                         </p>
                       </div>
                       <div className="count-and-delete">
-                        <Counter />
+                        <Counter
+                          count={count}
+                          onIncrease={handleIncrease}
+                          onDecrease={handleDecrease}
+                        />
                         <FaTrashAlt
                           className="delete-btn"
                           onClick={() => handleDelete(index)}

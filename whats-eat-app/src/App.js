@@ -35,12 +35,12 @@ import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import AddRecipe from "./pages/AddRecipe/AddRecipe";
 const { Header, Content, Footer } = Layout;
 
-function App({ auth }) {
+function App({ auth, cartItems }) {
   return (
     <Layout className="mainLayout">
       <Router>
         <Header>
-          <Navbar auth={auth} />
+          <Navbar auth={auth} cart={cartItems} />
         </Header>
         <Content>
           <Routes>
