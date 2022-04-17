@@ -206,4 +206,27 @@ public class RecipeController : ControllerBase
         return Ok(new { message = "Success" });
     }
 
+    [HttpPost]
+    [Route("love/{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> LoveRecipe(int recipeId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipe = await _recipeService.FindRecipeById(recipeId);
+        await _recipeService.AddLoveHistory(customer, recipe);
+        return Ok();
+    }
+
+    [HttpDelete]
+    [Route("love/{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> UnLoveRecipe(int recipeId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipe = await _recipeService.FindRecipeById(recipeId);
+        return Ok(await _recipeService.RemoveLoveHistory(customer, recipe));
+    }
+
 }

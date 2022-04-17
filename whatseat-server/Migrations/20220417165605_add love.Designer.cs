@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220417165605_add love")]
+    partial class addlove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,42 +306,6 @@ namespace whatseat_server.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Ingredients");
-                });
-
-            modelBuilder.Entity("whatseat_server.Models.LovedProduct", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("ProductId", "CustomerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("LovedProducts");
-                });
-
-            modelBuilder.Entity("whatseat_server.Models.LovedRecipe", b =>
-                {
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("RecipeId", "CustomerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("LovedRecipes");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.Order", b =>
@@ -1101,44 +1067,6 @@ namespace whatseat_server.Migrations
                     b.Navigation("Unit");
                 });
 
-            modelBuilder.Entity("whatseat_server.Models.LovedProduct", b =>
-                {
-                    b.HasOne("whatseat_server.Models.Customer", "Customer")
-                        .WithMany("LovedProducts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("whatseat_server.Models.Product", "Product")
-                        .WithMany("LovedProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("whatseat_server.Models.LovedRecipe", b =>
-                {
-                    b.HasOne("whatseat_server.Models.Customer", "Customer")
-                        .WithMany("LovedRecipes")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("whatseat_server.Models.Recipe", "Recipe")
-                        .WithMany("LovedRecipes")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Recipe");
-                });
-
             modelBuilder.Entity("whatseat_server.Models.Order", b =>
                 {
                     b.HasOne("whatseat_server.Models.Customer", "Customer")
@@ -1376,10 +1304,6 @@ namespace whatseat_server.Migrations
                 {
                     b.Navigation("CartDetails");
 
-                    b.Navigation("LovedProducts");
-
-                    b.Navigation("LovedRecipes");
-
                     b.Navigation("Orders");
 
                     b.Navigation("Recipes");
@@ -1396,8 +1320,6 @@ namespace whatseat_server.Migrations
                 {
                     b.Navigation("CartDetails");
 
-                    b.Navigation("LovedProducts");
-
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductImages");
@@ -1405,8 +1327,6 @@ namespace whatseat_server.Migrations
 
             modelBuilder.Entity("whatseat_server.Models.Recipe", b =>
                 {
-                    b.Navigation("LovedRecipes");
-
                     b.Navigation("RecipeRecipeTypes");
                 });
 
