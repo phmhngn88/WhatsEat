@@ -28,6 +28,7 @@ const Comment = ({ recipeId }) => {
     })
       .then((res) => {
         message.success("Cảm ơn đánh giá của bạn!");
+        setComment("");
       })
       .catch((err) => {
         message.error("Đánh giá không thành công!");
