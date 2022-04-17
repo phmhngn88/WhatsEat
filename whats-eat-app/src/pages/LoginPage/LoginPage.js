@@ -10,7 +10,7 @@ import {
 import { AiOutlineMail } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signin } from "../../actions/userActions";
 
@@ -18,6 +18,10 @@ const LoginPage = ({ login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const startPath = location?.state?.startPath;
+
+  console.log("startPath:", startPath);
 
   const getPassword = (event) => {
     setPassword(event.target.value);
@@ -28,7 +32,9 @@ const LoginPage = ({ login }) => {
   const handleSubmit = () => {
     login({ email, password });
     setTimeout(() => {
-      navigate(-1);
+      if (startPath) {
+        navigate("/");
+      } else navigate(-1);
     }, 1000);
   };
 

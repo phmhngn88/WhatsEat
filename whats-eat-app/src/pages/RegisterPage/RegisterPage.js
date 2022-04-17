@@ -32,7 +32,11 @@ const RegisterPage = () => {
       .then((res) => {
         message.success("Đăng ký tài khoản thành công!");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/login", {
+            state: {
+              startPath: "register",
+            },
+          });
         }, 1000);
       })
       .catch((err) => {
@@ -141,7 +145,20 @@ const RegisterPage = () => {
           </Button>
         </Form.Item>
         <p>
-          Bạn đã có tài khoản? <Link to="/login">Đăng nhập</Link>.
+          Bạn đã có tài khoản?{" "}
+          <button
+            className="back-home"
+            onClick={() => {
+              navigate("/login", {
+                state: {
+                  startPath: "register",
+                },
+              });
+            }}
+          >
+            Đăng nhập
+          </button>
+          .
         </p>
         <p>
           <Link to="/">Về trang chủ</Link>

@@ -39,3 +39,13 @@
     background-color: red;
     border: none;
 }
+
+.back-home{
+    border: none;
+    background-color: #fff;
+    color: #1890ff;
+}
+
+.back-home:hover{
+    cursor: pointer;
+}
