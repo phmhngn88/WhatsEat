@@ -128,4 +128,21 @@ public class ProductService
         var res = await PagedList<ProductReview>.ToPagedList(productReviews, pagedRequest.PageNumber, pagedRequest.PageSize);
         return res;
     }
+
+    public async Task<int> AddProductHistory(Customer customer, Product product)
+    {
+        var res = await _context.ProductViewHistories.AddAsync(new ProductViewHistory
+        {
+            CreatedOn = DateTime.UtcNow,
+            Customer = customer,
+            Product = product
+        });
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<int> GetProductViews(Product product)
+    {
+        return await _context.ProductViewHistories.AsNoTracking().CountAsync(p => p.Product == product);
+    }
+
 }

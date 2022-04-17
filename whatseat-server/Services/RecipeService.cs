@@ -126,4 +126,18 @@ public class RecipeService
     {
         return JsonConvert.DeserializeObject<List<Step>>(jsonSteps);
     }
+
+    public async Task<int> AddRecipeHistory(Customer customer, Recipe recipe)
+    {
+        var res = await _context.RecipeViewHistories.AddAsync(new RecipeViewHistory
+        {
+            CreatedOn = DateTime.UtcNow,
+            Customer = customer,
+            Recipe = recipe
+        });
+
+        recipe.TotalView += 1;
+
+        return await _context.SaveChangesAsync();
+    }
 }
