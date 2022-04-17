@@ -4,6 +4,9 @@
     align-items: center;
 }
 
+.single-dish-fluid .main-img{
+    max-width: 70%;
+}
 .single-dish-fluid img{
     object-fit: cover;
 }

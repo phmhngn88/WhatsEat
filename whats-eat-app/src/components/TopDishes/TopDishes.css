@@ -6,7 +6,30 @@
 
 .top-dishes{
     width: 70%;
+    position: relative;
     margin-top: 4rem;
+}
+
+.top-dishes .icon-pagination{
+    position: absolute;
+    font-size: 2rem;
+    bottom: 14rem;
+    opacity: 0.3;
+    z-index: 1;
+}
+.top-dishes .icon-pagination:hover{
+    cursor: pointer;
+    opacity: 1;
+    color: brown;
+}
+.top-dishes .hidden{
+    display: none;
+}
+.top-dishes .left-icon{
+    left: -2rem;
+}
+.top-dishes .right-icon{
+    right: -2rem;
 }
 
 .top-dishes .title{

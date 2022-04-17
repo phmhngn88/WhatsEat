@@ -4,16 +4,19 @@ import axios from "axios";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
+import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 import Product from "../Product/Product";
 
 const TopItems = () => {
   const [topProduct, setTopProduct] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
 
   useEffect(() => {
     axios({
       method: "get",
-      url: "https://localhost:7029/api/Product/top-8",
+      url: `https://localhost:7029/api/Product/top-8&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         setTopProduct(res.data);
@@ -24,25 +27,41 @@ const TopItems = () => {
   }, []);
   const navigate = useNavigate();
   console.log("Top product:", topProduct);
+  console.log("page number:", pageNumber);
 
   if (!topProduct) {
     return <h1 className="loading">Loading...</h1>;
   }
   return (
     <div className="top-items-container">
-      <div className="top-items">
-        <h1 className="title">Top thực phẩm yêu thích</h1>
-        <Row gutter={[16, 16]}>
-          {topProduct.map((item) => {
-            const { productId, name, basePrice, weightServing, images } = item;
-            return (
-              <Col span={6} className="item-col" key={productId}>
-                <Product {...item} />
-              </Col>
-            );
-          })}
-        </Row>
-      </div>
+      {topProduct.length > 0 && (
+        <div className="top-items">
+          <h1 className="title">Top thực phẩm yêu thích</h1>
+          <FaChevronCircleLeft
+            className={`${
+              pageNumber === 1 ? "hidden " : ""
+            }icon-pagination left-icon`}
+            onClick={() => setPageNumber(pageNumber - 1)}
+          />
+          <FaChevronCircleRight
+            className={`${
+              pageNumber === 10 ? "hidden " : ""
+            }icon-pagination right-icon`}
+            onClick={() => setPageNumber(pageNumber + 1)}
+          />
+          <Row gutter={[16, 16]}>
+            {topProduct.map((item) => {
+              const { productId, name, basePrice, weightServing, images } =
+                item;
+              return (
+                <Col span={6} className="item-col" key={productId}>
+                  <Product {...item} />
+                </Col>
+              );
+            })}
+          </Row>
+        </div>
+      )}
     </div>
   );
 };

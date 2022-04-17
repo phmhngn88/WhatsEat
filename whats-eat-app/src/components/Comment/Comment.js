@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Comment.css";
 
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { message, Rate } from "antd";
 import "antd/dist/antd.css";
 import { AiOutlineCamera, AiFillFileImage } from "react-icons/ai";
@@ -11,12 +12,14 @@ const Comment = ({ recipeId }) => {
   const [isCommented, setIsCommented] = useState(false);
   const [rateValue, setRateValue] = useState(5);
   const [comment, setComment] = useState("");
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   const handleSubmitRating = (recipeId) => {
+    console.log(recipeId, rateValue, comment);
     axios({
       method: "POST",
       url: "https://localhost:7029/api/Recipe/reviews",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
       data: {
         recipeId: recipeId,
         rating: rateValue,

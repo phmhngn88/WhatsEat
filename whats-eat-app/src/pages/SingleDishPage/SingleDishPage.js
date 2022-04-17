@@ -73,7 +73,7 @@ const SingleDishPage = () => {
         <div className="single-dish-container">
           <h1 className="title">Chi tiết món ăn</h1>
           <div className="dish-block">
-            <img src={images[0].url} alt={name} className="whatseat" />
+            <img src={images[0].url} alt={name} className="main-img" />
             <h1 className="dish-name">{name}</h1>
             <p
               className="desc"
@@ -123,9 +123,11 @@ const SingleDishPage = () => {
             <img src={images[1].url} alt="combo" className="combo-img" />
             <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
-              {`${ingredients[0].name}, ${ingredients[1].name}, ${
-                ingredients[2].name
-              } và ${ingredients.length - 3} thực phẩm khác`}
+              {`${ingredients[0].name}${
+                ingredients[1]?.name ? `, ${ingredients[1]?.name}` : ""
+              }${ingredients[2]?.name ? `, ${ingredients[2]?.name}` : ""} và ${
+                ingredients.length >= 3 ? ingredients.length - 3 : 0
+              } thực phẩm khác`}
             </p>
             <p className="combo-price">
               {price.toLocaleString("vi-VN", {

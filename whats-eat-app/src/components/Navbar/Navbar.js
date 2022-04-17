@@ -69,7 +69,9 @@ const Navbar = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const handleSearch = () => {
-    navigate(`/search?searchTerm=${searchTerm}`);
+    if (searchTerm) {
+      navigate(`/search?searchTerm=${searchTerm}`);
+    } else return;
   };
   console.log(props);
   return (

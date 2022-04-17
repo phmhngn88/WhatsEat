@@ -6,12 +6,35 @@
 
 .top-items{
     width: 70%;
+    position: relative;
     margin-top: 4rem;
 }
 
 .top-items .title{
     font-weight: 600;
     margin-bottom: 1rem;
+}
+
+.top-items .icon-pagination{
+    position: absolute;
+    font-size: 2rem;
+    bottom: 21rem;
+    opacity: 0.3;
+    z-index: 1;
+}
+.top-items .icon-pagination:hover{
+    cursor: pointer;
+    opacity: 1;
+    color: brown;
+}
+.top-items .hidden{
+    display: none;
+}
+.top-items .left-icon{
+    left: -2rem;
+}
+.top-items .right-icon{
+    right: -2rem;
 }
 
 .top-items-container .top-items .item-col{
