@@ -11,8 +11,8 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    [Migration("20220413142547_initial")]
-    partial class initial
+    [Migration("20220417100027_InitialMigrations")]
+    partial class InitialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

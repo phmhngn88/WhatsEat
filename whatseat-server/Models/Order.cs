@@ -15,4 +15,6 @@ public class Order
     public ICollection<OrderDetail> OrderDetails { get; set; }
     public Customer Customer { get; set; }
     public ShippingInfo ShippingInfo { get; set; }
+    [JsonIgnore]
+    public Store Store { get; set; }
 }

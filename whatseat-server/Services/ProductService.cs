@@ -23,7 +23,7 @@ public class ProductService
 
     public async Task<Product> FindProductById(int productId)
     {
-        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Store).FirstOrDefaultAsync(p => p.ProductId == productId);
+        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Store).Include(p => p.Store).FirstOrDefaultAsync(p => p.ProductId == productId);
     }
 
     public async Task<PagedList<Product>> FullTextSearchProduct(ProductFilter productFilter)
@@ -92,7 +92,7 @@ public class ProductService
             products = products.Where(p => p.InStock > 0);
         }
 
-        var res = await PagedList<Product>.ToPagedList(products.Include(p => p.ProductCategory), productFilter.PageNumber, productFilter.PageSize);
+        var res = await PagedList<Product>.ToPagedList(products.Include(p => p.ProductCategory).Include(p => p.Store), productFilter.PageNumber, productFilter.PageSize);
 
         return res;
     }
