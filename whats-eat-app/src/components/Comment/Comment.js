@@ -31,35 +31,16 @@ const Comment = ({ recipeId }) => {
       });
   };
 
-  if (isCommented) {
+  if (!isCommented) {
     return (
       <div className="comment-container">
         <h1 className="title">Bình luận</h1>
-        <div className="rating-area">
-          <Rate
-            className="stars"
-            onChange={(value) => setRateValue(value)}
-            value={rateValue}
-          />
-        </div>
-        <div className="comment-area">
-          <textarea
-            cols="30"
-            rows="10"
-            placeholder="Mô tả"
-            onChange={(e) => setComment(e.target.value)}
-          ></textarea>
-        </div>
-        <div className="submit-area">
-          <button className="btn img-load-btn">
-            <AiFillFileImage className="img-icon" /> TẢI THÊM ẢNH
-          </button>
-          <button
-            className="btn submit-btn"
-            onClick={handleSubmitRating(recipeId)}
-          >
-            GỬI BÌNH LUẬN
-          </button>
+        <div className="comment-box" onClick={() => setIsCommented(true)}>
+          <div className="comment-fluid">
+            <AiOutlineCamera className="camera-icon" />
+            <p>Đăng bình luận...</p>
+          </div>
+          <FiSend className="send-icon" />
         </div>
       </div>
     );
@@ -68,12 +49,31 @@ const Comment = ({ recipeId }) => {
   return (
     <div className="comment-container">
       <h1 className="title">Bình luận</h1>
-      <div className="comment-box" onClick={() => setIsCommented(true)}>
-        <div className="comment-fluid">
-          <AiOutlineCamera className="camera-icon" />
-          <p>Đăng bình luận...</p>
-        </div>
-        <FiSend className="send-icon" />
+      <div className="rating-area">
+        <Rate
+          className="stars"
+          onChange={(value) => setRateValue(value)}
+          value={rateValue}
+        />
+      </div>
+      <div className="comment-area">
+        <textarea
+          cols="30"
+          rows="10"
+          placeholder="Mô tả"
+          onChange={(e) => setComment(e.target.value)}
+        ></textarea>
+      </div>
+      <div className="submit-area">
+        <button className="btn img-load-btn">
+          <AiFillFileImage className="img-icon" /> TẢI THÊM ẢNH
+        </button>
+        <button
+          className="btn submit-btn"
+          onClick={() => handleSubmitRating(recipeId)}
+        >
+          GỬI BÌNH LUẬN
+        </button>
       </div>
     </div>
   );

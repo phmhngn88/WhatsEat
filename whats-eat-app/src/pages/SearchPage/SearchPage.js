@@ -66,7 +66,6 @@ const SearchPage = () => {
       url: `https://localhost:7029/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
-        // console.log("Data recipe search:", res.data);
         setSearchRecipeResult(res.data);
       })
       .catch((err) => {
@@ -121,8 +120,6 @@ const SearchPage = () => {
           </div>
           <Row gutter={[16, 16]}>
             {searchRecipeResult.map((item, idx) => {
-              const { recipeId, name, totalTime, totalView, level, images } =
-                item;
               return (
                 <Col span={6} key={idx} className="dish-col">
                   <Dish {...item} />
@@ -140,8 +137,6 @@ const SearchPage = () => {
           )}
           <Row gutter={[16, 16]}>
             {searchProductResult.map((item, idx) => {
-              const { productId, name, basePrice, weightServing, images } =
-                item;
               return (
                 <Col span={6} key={idx} className="dish-col">
                   <Product {...item} />

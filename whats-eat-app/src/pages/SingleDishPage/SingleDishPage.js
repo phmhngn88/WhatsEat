@@ -136,7 +136,7 @@ const SingleDishPage = () => {
           </div>
           <div className="ingredients">
             <h2>Thành Phần</h2>
-            {ingredients.map((item, idx) => {
+            {ingredients?.map((item, idx) => {
               const { name, quantity, unit } = item;
               return (
                 <div className="ingredient-box" key={idx}>
@@ -148,7 +148,7 @@ const SingleDishPage = () => {
                         fontWeight: "lighter",
                         textTransform: "toLowerCase",
                       }}
-                    >{`(${quantity} ${unit.unit})`}</span>
+                    >{`(${quantity} ${unit?.unit})`}</span>
                   </h3>
 
                   <FaAngleDown className="icon" />
