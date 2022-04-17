@@ -17,7 +17,13 @@ const Product = ({ productId, name, basePrice, weightServing, images }) => {
         })
       }
     >
-      {images && <img src={images[1][1].url} alt={name} className="item-img" />}
+      {images.length !== 0 && images[0].length !== 0 && (
+        <img
+          src={images[0][0].url ? images[0][0].url : ""}
+          alt={name}
+          className="item-img"
+        />
+      )}
       <h3 className="item-name">{name}</h3>
       <p className="item-quantity">{weightServing}</p>
       <p className="item-price">
