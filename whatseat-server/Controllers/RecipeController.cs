@@ -40,9 +40,18 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Route("{recipeId}", Name = "recipeId")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetRecipeDetails(int recipeId)
     {
+        Customer customer = null;
+        if (User.FindFirst("Id") is not null)
+        {
+            Guid userId = new Guid(User.FindFirst("Id")?.Value);
+            customer = await _customerService.FindCustomerByIdAsync(userId);
+        }
         var item = await _recipeService.FindRecipeById(recipeId);
+        await _recipeService.AddRecipeHistory(customer, item);
         return item is not null ? Ok(new RecipeDetailResponse
         {
             RecipeId = item.RecipeId,
@@ -68,6 +77,8 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Route("search")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public async Task<IActionResult> SearchRecipes([FromQuery] RecipeFilter recipeFilter)
     {
         var recipes = await _recipeService.SearchRecipeFullText(recipeFilter);
@@ -113,6 +124,8 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Route("top-eight")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetTopEight()
     {
         RecipeFilter recipeFilter = new RecipeFilter
@@ -191,6 +204,29 @@ public class RecipeController : ControllerBase
         var changRes = await _context.SaveChangesAsync();
 
         return Ok(new { message = "Success" });
+    }
+
+    [HttpPost]
+    [Route("love/{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> LoveRecipe(int recipeId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipe = await _recipeService.FindRecipeById(recipeId);
+        await _recipeService.AddLoveHistory(customer, recipe);
+        return Ok();
+    }
+
+    [HttpDelete]
+    [Route("love/{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> UnLoveRecipe(int recipeId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipe = await _recipeService.FindRecipeById(recipeId);
+        return Ok(await _recipeService.RemoveLoveHistory(customer, recipe));
     }
 
 }

@@ -11,8 +11,8 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    [Migration("20220413142547_initial")]
-    partial class initial
+    [Migration("20220417170022_add love recipe product")]
+    partial class addloverecipeproduct
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -308,6 +308,42 @@ namespace whatseat_server.Migrations
                     b.ToTable("Ingredients");
                 });
 
+            modelBuilder.Entity("whatseat_server.Models.LovedProduct", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("ProductId", "CustomerId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("LovedProducts");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.LovedRecipe", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("RecipeId", "CustomerId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("LovedRecipes");
+                });
+
             modelBuilder.Entity("whatseat_server.Models.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -333,6 +369,9 @@ namespace whatseat_server.Migrations
                     b.Property<int?>("ShippingInfoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StoreId")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderId");
 
                     b.HasIndex("CustomerId");
@@ -342,6 +381,8 @@ namespace whatseat_server.Migrations
                     b.HasIndex("ShipperId");
 
                     b.HasIndex("ShippingInfoId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Orders");
                 });
@@ -1062,6 +1103,44 @@ namespace whatseat_server.Migrations
                     b.Navigation("Unit");
                 });
 
+            modelBuilder.Entity("whatseat_server.Models.LovedProduct", b =>
+                {
+                    b.HasOne("whatseat_server.Models.Customer", "Customer")
+                        .WithMany("LovedProducts")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("whatseat_server.Models.Product", "Product")
+                        .WithMany("LovedProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.LovedRecipe", b =>
+                {
+                    b.HasOne("whatseat_server.Models.Customer", "Customer")
+                        .WithMany("LovedRecipes")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("whatseat_server.Models.Recipe", "Recipe")
+                        .WithMany("LovedRecipes")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("whatseat_server.Models.Order", b =>
                 {
                     b.HasOne("whatseat_server.Models.Customer", "Customer")
@@ -1080,6 +1159,10 @@ namespace whatseat_server.Migrations
                         .WithMany()
                         .HasForeignKey("ShippingInfoId");
 
+                    b.HasOne("whatseat_server.Models.Store", "Store")
+                        .WithMany("Order")
+                        .HasForeignKey("StoreId");
+
                     b.Navigation("Customer");
 
                     b.Navigation("PaymentMethod");
@@ -1087,6 +1170,8 @@ namespace whatseat_server.Migrations
                     b.Navigation("Shipper");
 
                     b.Navigation("ShippingInfo");
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.OrderDetail", b =>
@@ -1293,6 +1378,10 @@ namespace whatseat_server.Migrations
                 {
                     b.Navigation("CartDetails");
 
+                    b.Navigation("LovedProducts");
+
+                    b.Navigation("LovedRecipes");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Recipes");
@@ -1309,6 +1398,8 @@ namespace whatseat_server.Migrations
                 {
                     b.Navigation("CartDetails");
 
+                    b.Navigation("LovedProducts");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductImages");
@@ -1316,6 +1407,8 @@ namespace whatseat_server.Migrations
 
             modelBuilder.Entity("whatseat_server.Models.Recipe", b =>
                 {
+                    b.Navigation("LovedRecipes");
+
                     b.Navigation("RecipeRecipeTypes");
                 });
 
@@ -1327,6 +1420,11 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.RecipeType", b =>
                 {
                     b.Navigation("RecipeRecipeTypes");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.Store", b =>
+                {
+                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

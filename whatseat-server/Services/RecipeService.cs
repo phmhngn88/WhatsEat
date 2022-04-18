@@ -126,4 +126,40 @@ public class RecipeService
     {
         return JsonConvert.DeserializeObject<List<Step>>(jsonSteps);
     }
+
+    public async Task<int> AddRecipeHistory(Customer customer, Recipe recipe)
+    {
+        var res = await _context.RecipeViewHistories.AddAsync(new RecipeViewHistory
+        {
+            CreatedOn = DateTime.UtcNow,
+            Customer = customer,
+            Recipe = recipe
+        });
+
+        recipe.TotalView += 1;
+
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<int> AddLoveHistory(Customer customer, Recipe recipe)
+    {
+        var res = await _context.LovedRecipes.AddAsync(new LovedRecipe
+        {
+            CreatedOn = DateTime.UtcNow,
+            Customer = customer,
+            Recipe = recipe
+        });
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<LovedRecipe> GetLovedRecipe(Customer customer, Recipe recipe)
+    {
+        return await _context.LovedRecipes.FirstOrDefaultAsync(r => r.Recipe == recipe && r.Customer == customer);
+    }
+
+    public async Task<LovedRecipe> RemoveLoveHistory(Customer customer, Recipe recipe)
+    {
+        var lovedRecipe = await this.GetLovedRecipe(customer, recipe);
+        return _context.LovedRecipes.Remove(lovedRecipe).Entity;
+    }
 }

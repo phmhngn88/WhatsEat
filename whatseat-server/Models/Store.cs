@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace whatseat_server.Models;
 
@@ -24,5 +25,7 @@ public class Store
     public string ShopName { get; set; }
     [ForeignKey(nameof(UserId))]
     public IdentityUser User { get; set; }
+    [JsonIgnore]
+    public ICollection<Order> Order { get; set; }
 
 }

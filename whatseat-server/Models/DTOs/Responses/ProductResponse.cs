@@ -12,6 +12,7 @@ public class ProductResponse
     public int ProductCategoryId { get; set; }
     public Store Store { get; set; }
     public DateTime CreatedOn { get; set; }
+    public int TotalView { get; set; }
     public List<List<Photo>> Images { get; set; }
 
 }

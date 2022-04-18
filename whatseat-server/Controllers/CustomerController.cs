@@ -90,57 +90,73 @@ public class CustomerController : ControllerBase
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
 
-        Dictionary<int, List<CartDetailRequest>> classifiedCarts = new Dictionary<int, List<CartDetailRequest>>();
+        Dictionary<int, Order> classifiedOrders = new Dictionary<int, Order>();
 
         foreach (var productReq in request.ProductList)
         {
             var product = await _productService.FindProductById(productReq.ProductId);
+            if (product.InStock < productReq.Quantity)
+            {
+                return BadRequest(new
+                {
+                    productId = product.ProductId,
+                    message = $"Insufficient quantity of in store {product.Name}"
+                });
+            }
             try
             {
                 int storeId = product.Store.StoreId;
-
-                if (product.InStock < productReq.Quantity)
+                Order currentOrder;
+                if (classifiedOrders.ContainsKey(storeId))
                 {
-                    continue;
+                    currentOrder = classifiedOrders[storeId];
+                }
+                else
+                {
+                    currentOrder = new Order
+                    {
+                        Store = product.Store,
+                        OrderDetails = new List<OrderDetail>(),
+                        CreatedOn = DateTime.UtcNow,
+                        ShippingInfo = _context.ShippingInfos.FirstOrDefault(si => si.ShippingInfoId == request.ShippingInfoId),
+                        PaymentMethod = _context.PaymentMethods.FirstOrDefault(pm => pm.PaymentMethodId == request.PaymentMethodId)
+                    };
+                    classifiedOrders.Add(storeId, currentOrder);
                 }
 
-                classifiedCarts[storeId].Add(productReq);
+                product.InStock -= productReq.Quantity;
+
+                currentOrder.OrderDetails.Add(new OrderDetail
+                {
+                    ProductId = productReq.ProductId,
+                    Quantity = productReq.Quantity,
+                    Price = product.BasePrice
+                });
+
             }
             catch (NullReferenceException ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
 
-        Order order = new Order
+        foreach (var order in classifiedOrders)
         {
-            CreatedOn = DateTime.UtcNow,
-            ShippingInfo = _context.ShippingInfos.FirstOrDefault(si => si.ShippingInfoId == request.ShippingInfoId),
-            PaymentMethod = _context.PaymentMethods.FirstOrDefault(pm => pm.PaymentMethodId == request.PaymentMethodId),
-            OrderDetails = new List<OrderDetail>()
-        };
-
-
-        foreach (var productReq in request.ProductList)
-        {
-            order.OrderDetails.Add(new OrderDetail
-            {
-                ProductId = productReq.ProductId,
-                Quantity = productReq.Quantity,
-                Price = productReq.Price
-            });
+            _logger.LogInformation($"{order.Key}");
         }
-        var newOrder = await _context.Orders.AddAsync(order);
+
+        List<Order> orders = new List<Order>();
+        Dictionary<int, Order>.ValueCollection values = classifiedOrders.Values;
+        foreach (var val in values)
+        {
+            orders.Add(val);
+        }
+
+        await _context.Orders.AddRangeAsync(orders);
         await _context.SaveChangesAsync();
 
-        if (newOrder is not null)
-        {
-            return Ok(order);
-        }
-        else
-        {
-            return BadRequest();
-        }
+
+        return Ok(orders);
     }
 
     [HttpPost]

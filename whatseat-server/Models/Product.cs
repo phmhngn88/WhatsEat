@@ -26,5 +26,7 @@ public class Product
     public ICollection<ProductImage> ProductImages { get; set; }
     [JsonIgnore]
     public ICollection<CartDetail> CartDetails { get; set; }
+    [JsonIgnore]
+    public ICollection<LovedProduct> LovedProducts { get; set; }
 
 }

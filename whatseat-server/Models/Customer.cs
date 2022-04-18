@@ -21,4 +21,8 @@ public class Customer
     public ICollection<Recipe> Recipes { get; set; }
     [JsonIgnore]
     public ICollection<Order> Orders { get; set; }
+    [JsonIgnore]
+    public ICollection<LovedProduct> LovedProducts { get; set; }
+    [JsonIgnore]
+    public ICollection<LovedRecipe> LovedRecipes { get; set; }
 }

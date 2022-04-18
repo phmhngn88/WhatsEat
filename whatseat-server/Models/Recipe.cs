@@ -28,4 +28,6 @@ public class Recipe
     [JsonIgnore]
     public List<RecipeRecipeType> RecipeRecipeTypes { get; set; }
     public string RecipeTypeId { get; set; }
+    [JsonIgnore]
+    public ICollection<LovedRecipe> LovedRecipes { get; set; }
 }

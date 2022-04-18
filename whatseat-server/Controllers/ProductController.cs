@@ -51,7 +51,8 @@ public class ProductController : ControllerBase
                 TotalSell = item.TotalSell,
                 ProductCategoryId = item.ProductCategory.ProductCategoryId,
                 Store = item.Store,
-                CreatedOn = item.CreatedOn
+                CreatedOn = item.CreatedOn,
+                TotalView = await _productService.GetProductViews(item)
             });
         }
         var metadata = new
@@ -89,7 +90,8 @@ public class ProductController : ControllerBase
                 TotalSell = item.TotalSell,
                 ProductCategoryId = item.ProductCategory.ProductCategoryId,
                 Store = item.Store,
-                CreatedOn = item.CreatedOn
+                CreatedOn = item.CreatedOn,
+                TotalView = await _productService.GetProductViews(item)
             });
         }
         var metadata = new
@@ -108,9 +110,18 @@ public class ProductController : ControllerBase
 
     [HttpGet]
     [Route("{productId}", Name = "productId")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductDetails(int productId)
     {
+        Customer customer = null;
+        if (User.FindFirst("Id") is not null)
+        {
+            Guid userId = new Guid(User.FindFirst("Id")?.Value);
+            customer = await _customerService.FindCustomerByIdAsync(userId);
+        }
         var item = await _productService.FindProductById(productId);
+        await _productService.AddProductHistory(customer, item);
         return item is not null ? Ok(new ProductResponse
         {
             Images = _productService.ConvertJsonToPhotos(item.PhotoJson),
@@ -123,7 +134,8 @@ public class ProductController : ControllerBase
             TotalSell = item.TotalSell,
             ProductCategoryId = item.ProductCategory is not null ? item.ProductCategory.ProductCategoryId : -1,
             Store = item.Store,
-            CreatedOn = item.CreatedOn
+            CreatedOn = item.CreatedOn,
+            TotalView = await _productService.GetProductViews(item)
         }) : NotFound(new { message = "product not found" });
     }
 
