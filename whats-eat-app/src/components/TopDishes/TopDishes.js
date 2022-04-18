@@ -26,9 +26,6 @@ const TopDishes = () => {
   }, [pageNumber]);
   const navigate = useNavigate();
 
-  console.log("top recipe:", topRecipe);
-  console.log("page number recipe:", pageNumber);
-
   if (!topRecipe) {
     return <h1 className="loading...">Loading</h1>;
   }
