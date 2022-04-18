@@ -10,6 +10,7 @@ import {
   AiOutlineHeart,
 } from "react-icons/ai";
 import { FaAngleDown } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { useSearchParams, useLocation } from "react-router-dom";
 import Comment from "../../components/Comment/Comment";
 import RecipeReview from "../../components/RecipeReview/RecipeReview";
@@ -30,10 +31,10 @@ const combo = {
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   let [searchParams, setSearchParams] = useSearchParams();
+  const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
   const recipeId = location.state.recipeId;
   console.log("Recipe id:", recipeId);
-  // const recipeId = searchParams.get("recipeId");
   const {
     description,
     avgRating,
@@ -52,6 +53,7 @@ const SingleDishPage = () => {
     axios({
       method: "get",
       url: `https://localhost:7029/api/Recipe/${recipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         const result = res.data;

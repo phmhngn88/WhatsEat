@@ -15,7 +15,7 @@ const TopDishes = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/top-eight&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `https://localhost:7029/api/Recipe/search?sortAvgRating=desc&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         setTopRecipe(res.data);
@@ -27,6 +27,7 @@ const TopDishes = () => {
   const navigate = useNavigate();
 
   console.log("top recipe:", topRecipe);
+  console.log("page number recipe:", pageNumber);
 
   if (!topRecipe) {
     return <h1 className="loading...">Loading</h1>;
@@ -41,13 +42,13 @@ const TopDishes = () => {
             className={`${
               pageNumber === 1 ? "hidden " : ""
             }icon-pagination left-icon`}
-            onClick={(pageNumber) => setPageNumber(pageNumber - 1)}
+            onClick={() => setPageNumber(pageNumber - 1)}
           />
           <FaChevronCircleRight
             className={`${
               pageNumber === 10 ? "hidden " : ""
             }icon-pagination right-icon`}
-            onClick={(pageNumber) => setPageNumber(pageNumber + 1)}
+            onClick={() => setPageNumber(pageNumber + 1)}
           />
           <Row gutter={[16, 16]}>
             {topRecipe.map((dish) => {

@@ -13,7 +13,7 @@
 .top-dishes .icon-pagination{
     position: absolute;
     font-size: 2rem;
-    bottom: 14rem;
+    bottom: 50%;
     opacity: 0.3;
     z-index: 1;
 }
