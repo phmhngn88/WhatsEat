@@ -32,7 +32,7 @@ vector = cv.fit_transform(new['tags']).toarray()
 similarity = cosine_similarity(vector)
 df = pd.DataFrame(similarity)
 print(df)
-object_list = utils.convertDataframeToList(df,new['id'])
+object_list = utils.convertDataframeToList(df,new['RecipeId'])
 fields = ("id1", "id2", "similarity")
 utils.upsert(conn, "cb_similarity", fields, object_list)
 

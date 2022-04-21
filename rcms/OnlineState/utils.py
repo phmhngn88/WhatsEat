@@ -29,5 +29,6 @@ def display_results(mysql,list_item_id):
 # check_new_user: set threshold to determine wether the user is newuser or not
 def check_new_user(cur, id_user):
     # get movies that had watched by input user from database
-    mov_ids = fetch_data.movie_watched_by_user(cur, id_user)
-    return mov_ids, len(mov_ids) < 20
+    recipeIds = fetch_data.recipe_love_by_user(cur, id_user)
+    return recipeIds, len(recipeIds) < 20
+

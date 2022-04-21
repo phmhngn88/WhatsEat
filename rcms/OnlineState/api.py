@@ -21,7 +21,8 @@ app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_PORT'] = None
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '11111111'
-app.config['MYSQL_DB'] = 'testdb'
+app.config['MYSQL_DB'] = 'whatseat'
+app.config['JSON_AS_ASCII'] = False
 
 mysql = MySQL(app)
 
@@ -31,13 +32,12 @@ def home():
               <p>This site is APIs for getting list of recommend products.</p>"""
 
 
-def individual_recommend_list_state1(id_user):
+def individual_recommend_list_product(id_user):
     #connect to db
     cur = mysql.connection.cursor()
     rating_data = fetch_data.product_recommendation(cur)
     rating_data.dropna()
     cur.close()
-
     #get matrix data 
     data = rating_data.pivot_table(index='id_movie',columns='id_user',values='rating')
 
@@ -46,21 +46,27 @@ def individual_recommend_list_state1(id_user):
     clean_dict = {k: {j: sdd[k][j] for j in sdd[k] if not isnan(sdd[k][j])} for k in sdd}
 
     #get list recommend
-    tp = int(id_user)
+    tp = id_user
     list_item = []
     if tp in clean_dict.keys():
         a=sim.recommendation_phase(clean_dict,tp)
         if a != -1:
             print("Recommendation Using Item based Collaborative Filtering:  ")
             for w,m in a:
-                print(m)
                 list_item.append(m)
     else:
         print("Person not found in the dataset..please try again")
-        
-    return list_item
+     
+    cur = mysql.connection.cursor()
+    list_product = fetch_data.list_product(cur, list_item)
+    list_product.dropna()
+    cur.close()
+
+    return list_product
 
 def individual_recommend_list_food(id_user,id_category):
+    types = ['Món chính', 'Món khai vị','Đồ uống']
+
     #connect to db
     cur = mysql.connection.cursor()
     rating_data = fetch_data.interactive_food(cur,id_category)
@@ -75,45 +81,72 @@ def individual_recommend_list_food(id_user,id_category):
     clean_dict = {k: {j: sdd[k][j] for j in sdd[k] if not isnan(sdd[k][j])} for k in sdd}
 
     #get list recommend
-    tp = int(id_user)
+    tp = id_user
+    print(clean_dict.keys())
+
     list_item = []
     if tp in clean_dict.keys():
         a=sim.recommendation_phase(clean_dict,tp)
         if a != -1:
             print("Recommendation Using Item based Collaborative Filtering:  ")
             for w,m in a:
-                print(m)
                 list_item.append(m)
     else:
         print("Person not found in the dataset..please try again")
-        
-    return list_item
 
-@app.route('/individual/state1/', methods=['GET'])
+    cur = mysql.connection.cursor()
+    list_product = fetch_data.list_recipents(cur, list_item)
+    list_product.dropna()
+    cur.close()
+    
+    return list_product
+
+def individual_recommend_list_recipes(id_user, n_recipe):
+    cur = mysql.connection.cursor()
+    rec_ids, is_newuser = utils.check_new_user(cur, id_user)
+    if is_newuser:
+        print("New user detected!")
+        rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list(rec_ids,n_recipe,cur)
+        rec_df = pd.DataFrame({'Item':rec_list})
+        rec_df['Rating'] = 0
+        cur.close()
+    else:
+        print("Old user detected!")
+        click_df = fetch_data.rating_click_df(cur)
+        sim_df = fetch_data.similarity_df(cur,id_user)
+        cur.close()
+
+        rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_recipe, click_df, sim_df)
+    cur = mysql.connection.cursor()
+    rec_list2 = fetch_data.get_list_recipents_by_index(cur,rec_list)
+    cur.close()
+    return rec_df, rec_list2
+
+@app.route('/individual/product/', methods=['GET'])
 def individual_state1_api():
     if 'id_user' in request.args:
-        id_user = int(request.args['id_user'])
+        id_user = request.args['id_user']
     else:
         return """Error: No id field provided. Please specify an id.
-                (URL: /individual/state1?id_user= ...)
+                (URL: /individual/product?id_user= ...)
                 """
     
-    rec_list = individual_recommend_list_state1(id_user)
-    
-    return jsonify(rec_list)
+    rec_list = individual_recommend_list_product(id_user)
+    return jsonify(rec_list.to_dict('records'))
 
-@app.route('/individual/food/', methods=['GET'])
-def individual_food_api():
+#Recommend recipe 
+@app.route('/individual/recipe/', methods=['GET'])
+def individual_recipe_api():
     if 'id_user' in request.args:
-        id_user = int(request.args['id_user'])
+        id_user = request.args['id_user']
+        n_recipe = int(request.args['n_recipe'])
     else:
         return """Error: No id field provided. Please specify an id.
-                (URL: /individual/food?id_user= ...)
+                (URL: /individual/recipe?id_user=...&n_recipe=...)
                 """
     
-    rec_list = individual_recommend_list_food(id_user,1)
-    
-    return jsonify(rec_list)
+    results_with_sim, rec_list = individual_recommend_list_recipes(id_user,n_recipe)
+    return jsonify(rec_list.to_dict('records'))
 
 def individual_recommend_list_state2(id_user, n_movie):
     # cur = mysql.connection.cursor()
