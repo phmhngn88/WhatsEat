@@ -30,12 +30,32 @@ const LoginPage = ({ login }) => {
     setEmail(event.target.value);
   };
   const handleSubmit = () => {
+    axios({
+    method: "post",
+    url: "https://localhost:7029/api/auth/login",
+    data: {
+        email: email,
+        password: password,
+    },})
+
+    .then((res) =>
+    {    
     login({ email, password });
-    setTimeout(() => {
-      if (startPath) {
+    setTimeout(() =>
+    {
+      if (startPath) 
+      {
         navigate("/");
-      } else navigate(-1);
-    }, 1000);
+      } 
+      else navigate(-1);
+    }, 1000);})
+
+    .catch((err) =>
+    {
+      console.log(err);
+      message.error("Tên đăng nhập hoặc mật khẩu chưa chính xác!");
+    })
+
   };
 
   useEffect(() => {
@@ -71,8 +91,11 @@ const LoginPage = ({ login }) => {
           rules={[
             {
               required: true,
+              pattern: new RegExp(
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+              ),
               message:
-                "Mật khẩu phải bao gồm ít nhất 8 ký tự, chứa cả chữ thường, in hoa, số và lý tự đặc biệt!",
+                "Mật khẩu phải bao gồm ít nhất 8 ký tự, chứa cả chữ thường, in hoa, số và ký tự đặc biệt!",
             },
           ]}
         >
