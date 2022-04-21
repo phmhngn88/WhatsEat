@@ -50,6 +50,9 @@ const SingleDishPage = () => {
 
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
+  };
+
+  useEffect(() => {
     if (isLikeRecipe) {
       axios({
         method: "POST",
@@ -79,7 +82,7 @@ const SingleDishPage = () => {
           console.log(err);
         });
     }
-  };
+  }, [isLikeRecipe]);
 
   useEffect(() => {
     axios({
