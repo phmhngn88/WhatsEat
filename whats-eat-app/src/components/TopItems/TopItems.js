@@ -16,18 +16,19 @@ const TopItems = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/top-8&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `https://localhost:7029/api/Product?sortTotalSell=desc&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         setTopProduct(res.data);
+        if (!res.data) {
+          setPageNumber(pageNumber - 1);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [pageNumber]);
   const navigate = useNavigate();
-  console.log("Top product:", topProduct);
-  console.log("page number:", pageNumber);
 
   if (!topProduct) {
     return <h1 className="loading">Loading...</h1>;
@@ -45,7 +46,7 @@ const TopItems = () => {
           />
           <FaChevronCircleRight
             className={`${
-              pageNumber === 10 ? "hidden " : ""
+              pageNumber === 10 || topProduct.length < 8 ? "hidden " : ""
             }icon-pagination right-icon`}
             onClick={() => setPageNumber(pageNumber + 1)}
           />
