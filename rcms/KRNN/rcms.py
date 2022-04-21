@@ -3,7 +3,7 @@ import fetch_data
 import MySQLdb
 
 def main():
-    conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="testdb")
+    conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
     cur = conn.cursor()
 
     click_data = fetch_data.rating_click_df(cur)

@@ -6,17 +6,22 @@ import numpy as np
 # Input: mysql cursor
 # Output: pandas dataframe of clicks data with three columns: id_user, id_movie, rating
 def rating_click_df(cur):
-    cur.execute("""SELECT id_user, id_movie, is_clicked FROM testdb.interactive""")
+    cur.execute("""SELECT id_user, id_movie, is_clicked FROM whatseat.interactive""")
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id_user', 'id_movie', 'rating'])
     return click_df
 
 def rating_love_df(cur):
-    cur.execute("""SELECT id_user, id_food, is_love FROM testdb.interactive_food""")
+    cur.execute("""SELECT id_user, id_food, is_love FROM whatseat.interactive_food""")
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id_user', 'id_food', 'rating'])
     return click_df
 
+def get_fav_food(cur, user_id):
+    cur.execute("""SELECT CustomerId, RecipeId FROM whatseat.recipereviews where rating >= 4 and CustomerId = %s """,(user_id,))
+    res = cur.fetchall()
+    click_df = pd.DataFrame(res, columns=['CustomerId', 'RecipeId'])
+    return click_df
 # similarity_df function: fetch user-user similarity data from database
 # Input: 
 # + cur: mysql cursor
@@ -25,6 +30,13 @@ def rating_love_df(cur):
 # + dataframe of similarity score with two columns: 
 #       - id_user_2: ids of users that are similarity calculated with input user_id
 #       - similarity: similarity score
+def fetch_sim(cur):
+    cur.execute("""SELECT id1,id2, similarity FROM whatseat.cb_similarity""")
+    res = cur.fetchall()
+    similarity_df = pd.DataFrame(res, columns=['id1','id2', 'similarity'])
+    print("similarity_df: ", similarity_df)
+    return similarity_df
+
 def similarity_df(cur, user_id):
     cur.execute("""SELECT id_user_2, similarity FROM moviedb.jaccard_similarity WHERE id_user_1 = %s""", (user_id,))
     res = cur.fetchall()
@@ -119,7 +131,21 @@ def movie_director_actor(cur, list_item_id):
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id','director','actor'])
 
+def list_product(cur, list_product_id):
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice, Description FROM whatseat.products WHERE ProductId IN %s""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    print(res)
+    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','description'])
 
+def list_recipents(cur, list_recipents_id):
+    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl FROM whatseat.recipes WHERE RecipeId IN %s""",(tuple(list_recipents_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
+
+def get_list_recipents_by_index(cur, list_recipents_id):
+    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl FROM whatseat.recipes WHERE FAKE IN %s""",(tuple(list_recipents_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
 def product_recommendation(cur):
     cur.execute("""SELECT id_user, id_movie, (is_clicked + shop_rating)/2 FROM testdb.interactive""")
@@ -128,16 +154,18 @@ def product_recommendation(cur):
     return click_df
 
 def interactive_food(cur,recipeTypeId):
-    cur.execute("""SELECT id_user, id_food, is_love 
-                        FROM testdb.interactive_food iFood
-                        JOIN whatseat.recipes re ON iFood.id_food = re.RecipeId
-                        where re.RecipeTypeId = %s""",(recipeTypeId,))
+    cur.execute("""SELECT review.CustomerId, review.RecipeId, review.Rating 
+                        FROM whatseat.recipereviews review
+                        JOIN whatseat.reciperecipetypes re ON review.RecipeId = re.RecipeId
+                        Where re.RecipeTypeId = %s""",(recipeTypeId,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id_user', 'id_food', 'rating'])
     return click_df
 
-def movie_watched_by_user(cur, id_user):
-    cur.execute("""SELECT id_user ,GROUP_CONCAT(id_food) FROM testdb.interactive_food WHERE id_user = %s AND is_love <> 0""",(id_user,))
+#get list recipe id love by user
+def recipe_love_by_user(cur, id_user):
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.interactiverecipe IR
+    JOIN whatseat.recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
 
     res = res[0][1]
@@ -154,3 +182,13 @@ def genre(cur):
     res = cur.fetchall()
     movies = pd.DataFrame(res, columns=['movieId','genres'])
     return movies
+
+#Get genre of recipe
+def genre_recipe(cur):
+    cur.execute("""SELECT reType.RecipeId, group_concat( type.Name)
+                    FROM whatseat.reciperecipetypes reType
+                    JOIN whatseat.recipetypes type ON reType.RecipeTypeId = type.RecipeTypeId
+                    group by reType.RecipeId LIMIT 300""")
+    res = cur.fetchall()
+    recipes = pd.DataFrame(res, columns=['id','genres'])
+    return recipes

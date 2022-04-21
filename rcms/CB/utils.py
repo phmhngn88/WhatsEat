@@ -10,7 +10,7 @@ def convertDataframeToList(dataframe, productArray):
         for idx in dataframe.index:
             value = dataframe.loc[idx, col]
             column, row = col, idx
-            L.append([productArray[col],productArray[col],value])
+            L.append([productArray[column],productArray[row],value])
     return L
 
 def upsert(conn, table, fields, object_list):
