@@ -127,16 +127,4 @@
     font-weight: bold;
 }
 
-.single-dish-fluid .single-dish-container .ingredients .ingredient-box{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.single-dish-fluid .single-dish-container .ingredients .ingredient-box .ingredient-name{
-    font-weight: bold;
-}
-
-.single-dish-fluid .single-dish-container .ingredients .ingredient-box .icon{
-    font-weight: bold;
-}

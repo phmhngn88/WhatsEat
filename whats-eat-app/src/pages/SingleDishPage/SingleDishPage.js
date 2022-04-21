@@ -2,21 +2,20 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import {
-  AiFillStar,
   AiFillThunderbolt,
   AiOutlineBarChart,
   AiOutlineClockCircle,
   AiOutlineEye,
   AiOutlineHeart,
 } from "react-icons/ai";
-import { FaAngleDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Comment from "../../components/Comment/Comment";
 import RecipeReview from "../../components/RecipeReview/RecipeReview";
 import Footer from "../../components/Footer/Footer";
 import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
+import IngredientBox from "../../components/IngredientBox/IngredientBox";
 
 const combo = {
   img_url:
@@ -30,7 +29,8 @@ const combo = {
 
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [topProduct, setTopProduct] = useState([]);
+  const [isShow, setIsShow] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
   const recipeId = location.state.recipeId;
@@ -143,20 +143,27 @@ const SingleDishPage = () => {
             {ingredients?.map((item, idx) => {
               const { name, quantity, unit } = item;
               return (
-                <div className="ingredient-box" key={idx}>
-                  <h3 className="ingredient-name">
-                    {name}{" "}
-                    <span
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: "lighter",
-                        textTransform: "toLowerCase",
-                      }}
-                    >{`(${quantity} ${unit?.unit})`}</span>
-                  </h3>
+                <IngredientBox key={idx} {...item} />
+                // <>
+                //   <div className="ingredient-box" key={idx}>
+                //     <h3 className="ingredient-name">
+                //       {name}{" "}
+                //       <span
+                //         style={{
+                //           fontSize: "1rem",
+                //           fontWeight: "lighter",
+                //           textTransform: "toLowerCase",
+                //         }}
+                //       >{`(${quantity} ${unit?.unit})`}</span>
+                //     </h3>
 
-                  <FaAngleDown className="icon" />
-                </div>
+                //     <FaAngleDown
+                //       className="icon"
+                //       onClick={() => handleShowProduct(name)}
+                //     />
+                //   </div>
+                //   {isShow && <div>product</div>}
+                // </>
               );
             })}
           </div>
