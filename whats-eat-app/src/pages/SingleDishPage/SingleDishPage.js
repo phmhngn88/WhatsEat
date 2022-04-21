@@ -6,7 +6,7 @@ import {
   AiOutlineBarChart,
   AiOutlineClockCircle,
   AiOutlineEye,
-  AiOutlineHeart,
+  AiFillHeart,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -29,8 +29,7 @@ const combo = {
 
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
-  const [topProduct, setTopProduct] = useState([]);
-  const [isShow, setIsShow] = useState(false);
+  const [isLikeRecipe, setIsLikeRecipe] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
   const recipeId = location.state.recipeId;
@@ -48,6 +47,39 @@ const SingleDishPage = () => {
     totalView,
   } = dishDetail;
   const price = 230000;
+
+  const handleLikeRecipe = () => {
+    setIsLikeRecipe(!isLikeRecipe);
+    if (isLikeRecipe) {
+      axios({
+        method: "POST",
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
+          recipeId: recipeId,
+          // userName: userName,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios({
+        method: "DELETE",
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
+          recipeId: recipeId,
+          // userName: userName,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   useEffect(() => {
     axios({
@@ -92,8 +124,13 @@ const SingleDishPage = () => {
                   starSpacing="3px"
                 />
               </div>
-              <div className="love">
-                <AiOutlineHeart className="icon" /> <span>{totalLike}</span>
+              <div
+                className={`${
+                  isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
+                } love`}
+                onClick={handleLikeRecipe}
+              >
+                <AiFillHeart className="icon" /> <span>{totalLike}</span>
               </div>
               <div className="view">
                 <AiOutlineEye className="icon" /> <span>{totalView}</span>

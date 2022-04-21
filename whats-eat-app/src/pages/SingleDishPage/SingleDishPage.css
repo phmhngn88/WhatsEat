@@ -49,6 +49,14 @@
     font-size: 1.5rem;
 }
 
+.rating-block .recipe-liked .icon{
+    color: red;
+    cursor: pointer;
+}
+.rating-block .recipe-not-liked .icon{
+    color: #000;
+}
+
 .single-dish-container .dish-block .rating-block .stars,
 .single-dish-container .dish-block .rating-block .love,
 .single-dish-container .dish-block .rating-block .view{
