@@ -16,6 +16,7 @@ import Footer from "../../components/Footer/Footer";
 import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
 import IngredientBox from "../../components/IngredientBox/IngredientBox";
+import TopItems from "../../components/TopItems/TopItems";
 
 const combo = {
   img_url:
@@ -209,6 +210,7 @@ const SingleDishPage = () => {
           <RecipeReview recipeId={recipeId} />
         </div>
       </div>
+      <TopItems />
       <Footer />
     </div>
   );
