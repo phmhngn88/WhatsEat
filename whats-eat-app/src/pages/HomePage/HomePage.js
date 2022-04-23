@@ -16,8 +16,8 @@ const HomePage = () => {
     <main>
       <Banner />
       <Categories />
-      <TopDishes />
       <TopItems />
+      <TopDishes />
       <Footer />
     </main>
   );

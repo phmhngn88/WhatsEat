@@ -102,7 +102,8 @@ const ShopRegisterPage = () => {
                 label="Địa chỉ lấy hàng"
                 rules={[{ required: true }]}
               >
-                <button className="btn add-address-btn" onClick={showModal}>
+                <Input onChange={(e) => setAddress(e.target.value)} />
+                {/* <button className="btn add-address-btn" onClick={showModal}>
                   <BsPlus className="plus-icon" /> Thêm
                 </button>
                 <Modal
@@ -134,7 +135,7 @@ const ShopRegisterPage = () => {
                       </Form.Item>
                     </Form>
                   </div>
-                </Modal>
+                </Modal> */}
               </Form.Item>
               <Form.Item className="input" name="description" label="Mô tả">
                 <Input.TextArea

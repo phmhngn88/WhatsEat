@@ -5,7 +5,7 @@ import Shop from "../../components/Shop/Shop";
 import "./ShopPage.css";
 
 const ShopPage = () => {
-  const [isRegistered, setIsRegistered] = useState(true);
+  const [isRegistered, setIsRegistered] = useState(false);
   return (
     <div className="shop">
       <div className="shop-fluid">
