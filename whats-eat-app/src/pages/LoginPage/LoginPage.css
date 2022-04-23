@@ -39,3 +39,7 @@
     background-color: red;
     border: none;
 }
+
+.error-message {
+    color: red;
+}

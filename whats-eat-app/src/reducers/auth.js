@@ -4,7 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userInfo: {
     userName: null,
-    token: null
+    token: null,
+    userId: null
   },
 };
 
@@ -15,6 +16,7 @@ const auth = createSlice({
     loginSuccess(state, action) {
       state.userInfo.userName = action.payload.userName;
       state.userInfo.token = action.payload.token;
+      state.userInfo.userId = action.payload.userId;
     },
   },
 });
@@ -28,7 +30,6 @@ export const login =
       email,
       password,
     });
-    console.log(res.data)
     dispatch(loginSuccess(res.data));
   };
 
