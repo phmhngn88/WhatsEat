@@ -34,3 +34,28 @@
     align-items: center;
 }
 
+.favor-shop .icon-pagination{
+    position: absolute;
+    font-size: 2rem;
+    bottom: 50%;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.favor-shop .icon-pagination:hover{
+    cursor: pointer;
+    opacity: 1;
+    color: brown;
+}
+
+.favor-shop .hidden{
+    display: none;
+}
+
+.favor-shop .left-icon{
+    left: -2rem;
+}
+
+.favor-shop .right-icon{
+    right: -2rem;
+}

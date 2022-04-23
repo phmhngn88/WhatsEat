@@ -1,8 +1,10 @@
 import { Space, Table } from "antd";
 import "antd/dist/antd.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import "./FavorShop.css";
+import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 const columns = [
   {
@@ -60,6 +62,21 @@ const data = [
 ];
 
 const FavorShop = () => {
+  const [favShop, setFavShop] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Store/PageNumber=${pageNumber}&PageSize=${pageSize}`,
+    })
+      .then((res) => {
+        setFavShop(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [pageNumber]);
   return (
     <div className="favor-shop">
       <div className="favor-shop-fluid">
@@ -68,8 +85,22 @@ const FavorShop = () => {
             <div className="favor-shop-nav">
               <h1 className="title">Shop yêu thích</h1>
             </div>
+            <FaChevronCircleLeft
+            className={`${
+              pageNumber === 1 ? "hidden " : ""
+            }icon-pagination left-icon`}
+            onClick={() => setPageNumber(pageNumber - 1)}
+          />
+          <FaChevronCircleRight
+            className={`${
+              pageNumber === 10 ? "hidden " : ""
+            }icon-pagination right-icon`}
+            onClick={() => setPageNumber(pageNumber + 1)}
+          />
+
             <div className="favor-shop-table">
-              <Table columns={columns} dataSource={data} />
+              
+              <Table columns={columns} dataSource={favShop} />
             </div>
           </div>
         </div>
