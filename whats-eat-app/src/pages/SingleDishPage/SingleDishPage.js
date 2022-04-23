@@ -183,29 +183,7 @@ const SingleDishPage = () => {
             <h2>Thành Phần</h2>
             {ingredients?.map((item, idx) => {
               const { name, quantity, unit } = item;
-              return (
-                <IngredientBox key={idx} {...item} />
-                // <>
-                //   <div className="ingredient-box" key={idx}>
-                //     <h3 className="ingredient-name">
-                //       {name}{" "}
-                //       <span
-                //         style={{
-                //           fontSize: "1rem",
-                //           fontWeight: "lighter",
-                //           textTransform: "toLowerCase",
-                //         }}
-                //       >{`(${quantity} ${unit?.unit})`}</span>
-                //     </h3>
-
-                //     <FaAngleDown
-                //       className="icon"
-                //       onClick={() => handleShowProduct(name)}
-                //     />
-                //   </div>
-                //   {isShow && <div>product</div>}
-                // </>
-              );
+              return <IngredientBox key={idx} {...item} />;
             })}
           </div>
           <Guide steps={steps} />
