@@ -1,6 +1,7 @@
 import { Space, Table } from "antd";
 import "antd/dist/antd.css";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./FavorShop.css";
@@ -78,7 +79,7 @@ const FavorShop = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [pageSize]);
+  }, [pageNumber]);
 
   return (
     <div className="favor-shop">
