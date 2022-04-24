@@ -1,25 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./CategoryPage.css";
 
 const CategoryPage = () => {
+  const [products, setProducts] = useState([]);
+  const location = useLocation();
+  const categoryId = location.state.categoryId;
+  const categoryName = location.state.categoryName;
+  console.log("Category id:", categoryId);
+  console.log("Category name:", categoryName);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Product?productTypes=${categoryId}`,
+    })
+      .then((res) => {
+        const result = res.data;
+        console.log("products by category:", result);
+
+        setProducts(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="category">
       <div className="category-fluid">
         <div className="category-container">
           <div className="option-btn-group">
             <button className="btn active-btn">Tất cả</button>
-            {mock_type.map((type, idx) => {
-              return <button className="btn">{type.type_name}</button>;
-            })}
+            {/* {products.map((type, idx) => {
+              return <button className="btn">type_name</button>;
+            })} */}
           </div>
           <div className="content">
             <h3 className="title">
-              Thịt heo <span>{`(5 sản phẩm)`}</span>
+              {categoryName} <span>{`(${products.length} sản phẩm)`}</span>
             </h3>
             <div className="product-list">
-              {mock_products.map((product, idx) => {
+              {products.map((product, idx) => {
                 return <ProductCard key={idx} {...product} />;
               })}
             </div>

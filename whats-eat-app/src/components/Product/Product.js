@@ -1,6 +1,6 @@
 import React from "react";
 import "./Product.css";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BsCartPlus } from "react-icons/bs";
 
 const Product = ({ productId, name, basePrice, weightServing, images }) => {

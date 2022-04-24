@@ -112,7 +112,14 @@ const Categories = () => {
                 span={4}
                 key={category.productCategoryId}
                 className="category-col"
-                onClick={() => navigate("/category")}
+                onClick={() =>
+                  navigate(`/category/${category.productCategoryId}`, {
+                    state: {
+                      categoryId: category.productCategoryId,
+                      categoryName: category.name,
+                    },
+                  })
+                }
               >
                 {/* <img src={img_url} alt={title} className="category-img" /> */}
                 <h3 className="category-title">{category.name}</h3>

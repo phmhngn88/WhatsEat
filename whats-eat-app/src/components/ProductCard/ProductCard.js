@@ -1,27 +1,39 @@
 import React from "react";
 import "./ProductCard.css";
+import { useNavigate } from "react-router-dom";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 const ProductCard = ({
-  id,
-  product_name,
-  img_url,
-  quantity,
+  productId,
+  name,
+  images,
+  weightServing,
   provider,
-  sales_count,
-  price,
+  totalSell,
+  basePrice,
 }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="product-card">
-      <img src={img_url} alt={product_name} />
+    <div
+      className="product-card"
+      onClick={() =>
+        navigate(`/singleproduct/${productId}`, {
+          state: {
+            productId: productId,
+          },
+        })
+      }
+    >
+      <img src={images[0][1].url} alt={name} />
       <div className="info">
-        <p className="product-name">{product_name}</p>
+        <p className="product-name">{name}</p>
         <p className="quantity">
-          {quantity} | {provider}
+          {weightServing} | {provider || "WhatseatFARM"}
         </p>
-        <p className="sales-count">{sales_count} mua</p>
+        <p className="sales-count">{totalSell} mua</p>
         <p className="price">
-          {price.toLocaleString("vi-VN", {
+          {basePrice.toLocaleString("vi-VN", {
             style: "currency",
             currency: "VND",
           })}
