@@ -1,6 +1,7 @@
 import { Space, Table } from "antd";
 import "antd/dist/antd.css";
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./FavorShop.css";
 
@@ -63,6 +64,7 @@ const FavorShop = () => {
   const [shopList, setShopList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(100);
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   useEffect(() => {
     axios({
