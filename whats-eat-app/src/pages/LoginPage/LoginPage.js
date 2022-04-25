@@ -17,6 +17,7 @@ import { signin } from "../../actions/userActions";
 const LoginPage = ({ login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isFailed, setIsFailed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const startPath = location?.state?.startPath;
@@ -30,12 +31,18 @@ const LoginPage = ({ login }) => {
     setEmail(event.target.value);
   };
   const handleSubmit = () => {
-    login({ email, password });
-    setTimeout(() => {
-      if (startPath) {
-        navigate("/");
-      } else navigate(-1);
-    }, 1000);
+    login({ email, password })
+    .then(() => {
+      setIsFailed(false);
+      setTimeout(() => {
+        if (startPath) {
+          navigate("/");
+        } else navigate(-1);
+      }, 1000);
+    })
+    .catch(() =>{
+      setIsFailed(true);
+    });
   };
 
   useEffect(() => {
@@ -102,6 +109,7 @@ const LoginPage = ({ login }) => {
             Đăng nhập
           </Button>
         </Form.Item>
+        {isFailed && <p className="error-message">* Email hoặc mật khẩu của bạn không hợp lệ</p>}
         <p>
           Bạn chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>.
         </p>

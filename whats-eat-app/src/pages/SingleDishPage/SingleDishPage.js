@@ -2,20 +2,21 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
 import {
-  AiFillStar,
   AiFillThunderbolt,
   AiOutlineBarChart,
   AiOutlineClockCircle,
   AiOutlineEye,
-  AiOutlineHeart,
+  AiFillHeart,
 } from "react-icons/ai";
-import { FaAngleDown } from "react-icons/fa";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Comment from "../../components/Comment/Comment";
 import RecipeReview from "../../components/RecipeReview/RecipeReview";
 import Footer from "../../components/Footer/Footer";
 import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
+import IngredientBox from "../../components/IngredientBox/IngredientBox";
+import TopItems from "../../components/TopItems/TopItems";
 
 const combo = {
   img_url:
@@ -29,11 +30,11 @@ const combo = {
 
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [isLikeRecipe, setIsLikeRecipe] = useState(false);
+  const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
   const recipeId = location.state.recipeId;
   console.log("Recipe id:", recipeId);
-  // const recipeId = searchParams.get("recipeId");
   const {
     description,
     avgRating,
@@ -48,10 +49,44 @@ const SingleDishPage = () => {
   } = dishDetail;
   const price = 230000;
 
+  const handleLikeRecipe = () => {
+    setIsLikeRecipe(!isLikeRecipe);
+    if (isLikeRecipe) {
+      axios({
+        method: "POST",
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
+          recipeId: recipeId,
+          // userName: userName,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios({
+        method: "DELETE",
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
+          recipeId: recipeId,
+          // userName: userName,
+        },
+      })
+        .then((res) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   useEffect(() => {
     axios({
       method: "get",
       url: `https://localhost:7029/api/Recipe/${recipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         const result = res.data;
@@ -90,8 +125,13 @@ const SingleDishPage = () => {
                   starSpacing="3px"
                 />
               </div>
-              <div className="love">
-                <AiOutlineHeart className="icon" /> <span>{totalLike}</span>
+              <div
+                className={`${
+                  isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
+                } love`}
+                onClick={handleLikeRecipe}
+              >
+                <AiFillHeart className="icon" /> <span>{totalLike}</span>
               </div>
               <div className="view">
                 <AiOutlineEye className="icon" /> <span>{totalView}</span>
@@ -140,22 +180,7 @@ const SingleDishPage = () => {
             <h2>Thành Phần</h2>
             {ingredients?.map((item, idx) => {
               const { name, quantity, unit } = item;
-              return (
-                <div className="ingredient-box" key={idx}>
-                  <h3 className="ingredient-name">
-                    {name}{" "}
-                    <span
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: "lighter",
-                        textTransform: "toLowerCase",
-                      }}
-                    >{`(${quantity} ${unit?.unit})`}</span>
-                  </h3>
-
-                  <FaAngleDown className="icon" />
-                </div>
-              );
+              return <IngredientBox key={idx} {...item} />;
             })}
           </div>
           <Guide steps={steps} />
@@ -163,6 +188,7 @@ const SingleDishPage = () => {
           <RecipeReview recipeId={recipeId} />
         </div>
       </div>
+      <TopItems />
       <Footer />
     </div>
   );

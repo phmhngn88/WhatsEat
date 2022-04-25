@@ -1,6 +1,8 @@
 import { Space, Table } from "antd";
 import "antd/dist/antd.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./FavorShop.css";
 
@@ -60,6 +62,25 @@ const data = [
 ];
 
 const FavorShop = () => {
+  const [shopList, setShopList] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(100);
+  const token = useSelector((state) => state.auth.userInfo.token);
+
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: `https://localhost:7029/api/Store/followings?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        setShopList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [pageNumber]);
+
   return (
     <div className="favor-shop">
       <div className="favor-shop-fluid">

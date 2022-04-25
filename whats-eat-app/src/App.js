@@ -48,7 +48,7 @@ function App({ auth, cartItems }) {
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/login" element={<LoginPage />}></Route>
             <Route path="/register" element={<RegisterPage />}></Route>
-            <Route path="/category" element={<CategoryPage />}></Route>
+            <Route path="/category/:id" element={<CategoryPage />}></Route>
             <Route path="/cart" element={<Cart />}></Route>
             <Route path="/payment" element={<PaymentPage />}></Route>
             <Route path="/recommender" element={<RecommendPage />}></Route>

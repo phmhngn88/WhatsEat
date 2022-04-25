@@ -2,9 +2,10 @@
     width: 31%;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     margin-right: 1.5rem;
     margin-bottom: 0.5rem;
+    cursor: pointer;
 }
 
 .product-card img{

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Dish.css";
 
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import {
 
 const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
-  // const userName = useSelector((state) => state.userInfo.userName);
+  const token = useSelector((state) => state.auth.userInfo.token);
   const navigate = useNavigate();
 
   const handleLikeRecipe = () => {
@@ -21,8 +21,8 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
     if (isLikeRecipe) {
       axios({
         method: "POST",
-        url: `https://localhost:7029/api/Recipe/like/${recipeId}`,
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
         data: {
           recipeId: recipeId,
           // userName: userName,
@@ -35,8 +35,8 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
     } else {
       axios({
         method: "DELETE",
-        url: `https://localhost:7029/api/Recipe/dislike/${recipeId}`,
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
         data: {
           recipeId: recipeId,
           // userName: userName,
