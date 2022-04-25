@@ -44,7 +44,7 @@ public class StoreService
     public async Task<List<CustomerStore>> GetStoreList(PagedRequest pagedRequest, Guid userId)
     {
         var stores = _context.CustomerStores.AsNoTracking().Where(cs => cs.CustomerId == userId).AsQueryable();
-        var res = await PagedList<CustomerStore>.ToPagedList(stores, pagedRequest.PageNumber, pagedRequest.PageSize);
+        var res = await PagedList<CustomerStore>.ToPagedList(stores.Include(cs => cs.Store), pagedRequest.PageNumber, pagedRequest.PageSize);
 
         return res;
     }

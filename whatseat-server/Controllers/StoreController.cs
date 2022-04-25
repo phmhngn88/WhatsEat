@@ -101,9 +101,10 @@ public class StoreController : ControllerBase
             simpleStoreResponses.Add(
                 new SimpleStoreResponse
                 {
-                    ShopName = item.Store.ShopName,
-                    StoreId = item.Store.StoreId,
-                    AvatarUrl = item.Store.AvatarUrl
+                    ShopName = item.Store is not null ? item.Store.ShopName : null,
+                    StoreId = item.StoreId,
+                    AvatarUrl = item.Store is not null ? item.Store.AvatarUrl : null,
+                    CreatedOn = item.CreatedOn
                 }
             );
         }

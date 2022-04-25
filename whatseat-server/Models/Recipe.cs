@@ -25,9 +25,14 @@ public class Recipe
     public string ThumbnailUrl { get; set; }
     public string Ingredients { get; set; }
     public string Steps { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int RecipeNo { get; set; }
+
     [JsonIgnore]
     public List<RecipeRecipeType> RecipeRecipeTypes { get; set; }
     public string RecipeTypeId { get; set; }
     [JsonIgnore]
     public ICollection<LovedRecipe> LovedRecipes { get; set; }
+    [JsonIgnore]
+    public ICollection<MenuDetail> MenuDetails { get; set; }
 }

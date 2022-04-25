@@ -86,6 +86,13 @@ public class ProductService
         {
             products = products.Where(p => productFilter.productTypes.Contains(p.ProductCategory.ProductCategoryId));
         }
+        if (productFilter.productStores != null && productFilter.productStores.Length > 0)
+        {
+            var listStore = await _context.Stores.Where(p => productFilter.productStores.Contains(p.StoreId)).ToListAsync();
+            products = products.Where(p => (p.Store != null && listStore.Contains(p.Store)));
+        }
+
+
 
         if (productFilter.inStockOnly)
         {

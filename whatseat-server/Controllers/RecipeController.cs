@@ -206,6 +206,46 @@ public class RecipeController : ControllerBase
         return Ok(new { message = "Success" });
     }
 
+    [HttpGet]
+    [Route("love")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> GetLovedRecipes([FromQuery] PagedRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        PagedList<LovedRecipe> lovedRecipes = await _recipeService.GetLovedRecipes(request, customer);
+
+        List<LovedRecipeResponse> recipeResponses = new List<LovedRecipeResponse>();
+        foreach (var lovedRecipe in lovedRecipes)
+        {
+            Recipe recipe = lovedRecipe.Recipe;
+            if (recipe is not null)
+            {
+                recipeResponses.Add(new LovedRecipeResponse
+                {
+                    RecipeId = recipe.RecipeId,
+                    Name = recipe.Name,
+                    Description = recipe.Description,
+                    Serving = recipe.Serving,
+                    CreatedOn = recipe.CreatedOn,
+                    Creator = recipe.Creator,
+                    TotalTime = recipe.TotalTime,
+                    AvgRating = recipe.AvgRating,
+                    TotalRating = recipe.TotalRating,
+                    TotalView = recipe.TotalView,
+                    totalLike = recipe.totalLike,
+                    videoUrl = recipe.videoUrl,
+                    RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == recipe.RecipeId).ToListAsync(),
+                    Level = recipe.Level,
+                    Images = _recipeService.ConvertJsonToPhotos(recipe.ThumbnailUrl),
+                    LovedOn = lovedRecipe.CreatedOn
+                });
+            }
+        }
+        return Ok(recipeResponses);
+    }
+
     [HttpPost]
     [Route("love/{recipeId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
@@ -229,4 +269,35 @@ public class RecipeController : ControllerBase
         return Ok(await _recipeService.RemoveLoveHistory(customer, recipe));
     }
 
+    [HttpGet]
+    [Route("love/total/{recipeId}")]
+    public async Task<IActionResult> GetTotalLove(int recipeId)
+    {
+        return Ok(await _recipeService.GetTotalLove(recipeId));
+    }
+
+    [HttpGet]
+    [Route("love/isLoved/{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CheckLove(int recipeId)
+    {
+        if (User.FindFirst("Id") is null)
+        {
+            return Ok(false);
+        }
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        return Ok(await _recipeService.CheckLove(recipeId, userId));
+    }
+
+    [HttpPost]
+    [Route("menu")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> PostMenu([FromBody] MenuRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        Menu menu = await _recipeService.AddMenu(customer, request);
+        return Ok();
+    }
 }

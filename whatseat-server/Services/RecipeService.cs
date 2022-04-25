@@ -160,6 +160,52 @@ public class RecipeService
     public async Task<LovedRecipe> RemoveLoveHistory(Customer customer, Recipe recipe)
     {
         var lovedRecipe = await this.GetLovedRecipe(customer, recipe);
-        return _context.LovedRecipes.Remove(lovedRecipe).Entity;
+        var res = _context.LovedRecipes.Remove(lovedRecipe).Entity;
+        await _context.SaveChangesAsync();
+        return res;
+    }
+
+    public async Task<PagedList<LovedRecipe>> GetLovedRecipes(PagedRequest request, Customer customer)
+    {
+        var recipes = _context.LovedRecipes.Where(l => l.Customer == customer).OrderByDescending(l => l.CreatedOn).AsQueryable();
+        var res = await PagedList<LovedRecipe>.ToPagedList(recipes.Include(s => s.Recipe), request.PageNumber, request.PageSize);
+        return res;
+    }
+
+    public async Task<int> GetTotalLove(int recipeId)
+    {
+        var totalLike = await _context.Recipes.AsNoTracking().FirstOrDefaultAsync();
+        int totalLove = await _context.LovedRecipes.AsNoTracking().CountAsync(l => l.RecipeId == recipeId);
+        return totalLike.totalLike + totalLove;
+    }
+
+    public async Task<Boolean> CheckLove(int recipeId, Guid userId)
+    {
+        return await _context.LovedRecipes.AsNoTracking().AnyAsync(s => s.RecipeId == recipeId && s.CustomerId == s.CustomerId);
+    }
+
+    public async Task<Menu> AddMenu(Customer customer, MenuRequest request)
+    {
+        Menu menu = new Menu
+        {
+            ModifiedOn = DateTime.UtcNow,
+            MenuName = request.MenuName,
+            MenuDetails = new List<MenuDetail>(),
+            Customer = customer
+        };
+
+        foreach (var recipeId in request.RecipeIds)
+        {
+            Recipe recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.RecipeId == recipeId);
+            if (recipe is not null)
+            {
+                menu.MenuDetails.Add(new MenuDetail
+                {
+                    Recipe = recipe
+                });
+            }
+        }
+        var menuRes = await _context.Menus.AddAsync(menu);
+        return menuRes.Entity;
     }
 }

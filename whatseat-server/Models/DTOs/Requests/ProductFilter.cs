@@ -8,5 +8,6 @@ public class ProductFilter : PagedRequest
     public string sortPrice { get; set; }
     public bool inStockOnly { get; set; }
     public int[] productTypes { get; set; }
+    public int[] productStores { get; set; }
 
 }
