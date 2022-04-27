@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Recommender.css";
 import { Button } from "antd";
 import "antd/dist/antd.css";
+import axios from "axios";
 import { useSelector } from "react-redux";
 import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
