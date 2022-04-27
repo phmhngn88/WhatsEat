@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Recommender.css";
 import { Button } from "antd";
 import "antd/dist/antd.css";
+import { useSelector } from "react-redux";
 import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
@@ -56,6 +57,23 @@ const categories = [
 
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
+  const token = useSelector((state) => state.auth.userInfo.token);
+
+  const handleSaveMenu = () => {
+    axios({
+      method: "post",
+      url: "https://localhost:7029/api/Recipe/menu",
+      data: {
+        menuName: `Menu ngày ${getCurrentDate()}`,
+        recipeIds: menu, //TODO: Get array of id in menu
+      },
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     setMenu(recommendedMenu);
@@ -87,7 +105,7 @@ const Recommender = () => {
             </h3>
           </div>
         </div>
-        <Button className="save-btn">
+        <Button className="save-btn" onClick={handleSaveMenu}>
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">

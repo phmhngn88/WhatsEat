@@ -2,6 +2,7 @@ import { Input, Tabs } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import Order from "../../components/Order/Order";
 import "./OrderPage.css";
@@ -40,16 +41,21 @@ const items = [
 ];
 
 const OrderPage = () => {
-  const onSearch = () => {};
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [allOrders, setAllOrders] = useState([]);
+  const token = useSelector((state) => state.auth.userInfo.token);
+
+  const onSearch = () => {};
   const getCustomerOrders = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Customer/orders-list?PageNumber=${1}&PageSize=${8}`,
+      url: `https://localhost:7029/api/Customer/orders-list?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         const result = res.data;
-        // setAllOrders(result)
+        setAllOrders(result);
       })
       .catch((error) => {
         console.log(error);
