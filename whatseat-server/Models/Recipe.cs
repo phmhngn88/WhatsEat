@@ -26,7 +26,7 @@ public class Recipe
     public string Ingredients { get; set; }
     public string Steps { get; set; }
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int RecipeNo { get; set; }
+    // public int RecipeNo { get; set; }
 
     [JsonIgnore]
     public List<RecipeRecipeType> RecipeRecipeTypes { get; set; }
