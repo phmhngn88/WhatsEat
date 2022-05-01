@@ -51,36 +51,64 @@ const SingleDishPage = () => {
 
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
-    if (isLikeRecipe) {
-      axios({
-        method: "POST",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-        headers: { Authorization: `Bearer ${token}` },
-        data: {
-          recipeId: recipeId,
-          // userName: userName,
-        },
+    console.log(isLikeRecipe);
+    // if (isLikeRecipe) {
+    console.log("like recipe");
+    axios({
+      method: "POST",
+      url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        recipeId: recipeId,
+        // userName: userName,
+      },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+    // } else {
+    //   console.log("unlike recipe");
+    //   axios({
+    //     method: "DELETE",
+    //     url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+    //     headers: { Authorization: `Bearer ${token}` },
+    //     data: {
+    //       recipeId: recipeId,
+    //       // userName: userName,
+    //     },
+    //   })
+    //     .then((res) => {})
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
+    axios({
+      method: "GET",
+      url: `https://localhost:7029/api/Recipe/love/total/${recipeId}`,
+    })
+      .then((res) => {
+        //TODO: handle logic set total like
+        console.log("total like:", res.data);
       })
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      axios({
-        method: "DELETE",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-        headers: { Authorization: `Bearer ${token}` },
-        data: {
-          recipeId: recipeId,
-          // userName: userName,
-        },
-      })
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `https://localhost:7029/api/Recipe/love/isLoved/${recipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        setIsLikeRecipe(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
     axios({

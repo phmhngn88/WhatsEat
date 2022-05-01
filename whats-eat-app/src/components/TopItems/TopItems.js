@@ -37,7 +37,7 @@ const TopItems = () => {
     <div className="top-items-container">
       {topProduct.length > 0 && (
         <div className="top-items">
-          <h1 className="title">Top thực phẩm yêu thích</h1>
+          <h1 className="title">Trending trong tuần qua</h1>
           <FaChevronCircleLeft
             className={`${
               pageNumber === 1 ? "hidden " : ""
