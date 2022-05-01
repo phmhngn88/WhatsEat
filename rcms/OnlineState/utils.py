@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 import fetch_data
-
+import json
 # find_candidate_items: find list of items that can be recommended.
 # These should not have been watched by any member of group.
 def find_candidate_items(ratings, members):
@@ -30,5 +30,7 @@ def display_results(mysql,list_item_id):
 def check_new_user(cur, id_user):
     # get movies that had watched by input user from database
     recipeIds = fetch_data.recipe_love_by_user(cur, id_user)
-    return recipeIds, len(recipeIds) < 20
+    return recipeIds, len(recipeIds) < 20, len(recipeIds)
 
+def to_json(text):
+    return json.loads(text)[0]
