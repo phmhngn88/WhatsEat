@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 using whatseat_server.Services;
 
 namespace whatseat_server.Controllers;
@@ -37,15 +39,36 @@ public class CustomerController : ControllerBase
     [HttpGet]
     [Route("cart")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
-    public async Task<IActionResult> GetCartDetails()
+    public async Task<IActionResult> GetCartDetails([FromQuery] PagedRequest request)
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
-        var cartList = await _context.CartDetails.AsNoTracking().OrderByDescending(cd => cd.CreatedOn).ToListAsync();
-        return Ok(cartList);
+        PagedList<CartDetail> carts = await _cartService.GetPagedCartDetails(request, userId);
+        var metadata = new
+        {
+            carts.TotalCount,
+            carts.PageSize,
+            carts.CurrentPage,
+            carts.TotalPages,
+            carts.HasNext,
+            carts.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        return Ok(carts);
     }
 
 
     [HttpPut]
+    [Route("cart")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> UpdateProductCart([FromBody] CartDetailRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var addResult = await _cartService.AddProductToCart(request.ProductId, userId, request.Quantity);
+        return addResult.Success ? Ok(addResult) : BadRequest(addResult);
+    }
+
+    [HttpPost]
     [Route("cart")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
     public async Task<IActionResult> AddProductToCart([FromBody] CartDetailRequest request)
