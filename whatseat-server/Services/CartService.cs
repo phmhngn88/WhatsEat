@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using whatseat_server.Data;
 using whatseat_server.Models;
+using whatseat_server.Models.DTOs.Requests;
 using whatseat_server.Models.DTOs.Responses;
 
 namespace whatseat_server.Services;
@@ -76,6 +77,13 @@ public class CartService
             Success = true,
             Message = "Success"
         };
+    }
+
+    public async Task<PagedList<CartDetail>> GetPagedCartDetails(PagedRequest request, Guid userId)
+    {
+        var cartList = _context.CartDetails.Include(cd => cd.Product).Where(cd => cd.CustomerId == userId).AsNoTracking().OrderByDescending(cd => cd.CreatedOn).AsQueryable();
+        var res = await PagedList<CartDetail>.ToPagedList(cartList, request.PageNumber, request.PageSize);
+        return res;
     }
 
     public async Task<bool> RemoveById(Guid customerId, int productId)
