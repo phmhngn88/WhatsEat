@@ -51,29 +51,29 @@ const SingleDishPage = () => {
 
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
-    if (isLikeRecipe) {
-      console.log("like recipe");
-      axios({
-        method: "POST",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      console.log("unlike recipe");
-      axios({
-        method: "DELETE",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    // if (isLikeRecipe) {
+    console.log("like recipe");
+    axios({
+      method: "POST",
+      url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+    // } else {
+    //   console.log("unlike recipe");
+    //   axios({
+    //     method: "DELETE",
+    //     url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+    //     headers: { Authorization: `Bearer ${token}` },
+    //   })
+    //     .then((res) => {})
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // }
     axios({
       method: "GET",
       url: `https://localhost:7029/api/Recipe/love/total/${recipeId}`,
