@@ -57,12 +57,15 @@ const categories = [
   { id: 8, category_name: "Bánh - Bánh ngọt" },
   { id: 9, category_name: "Món ăn cho trẻ" },
   { id: 10, category_name: "Món nhậu" },
-
 ];
 
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
+  const recipes = [];
+  menu.map((item) => {
+    recipes.push(item.id);
+  });
 
   const handleSaveMenu = () => {
     axios({
@@ -70,7 +73,7 @@ const Recommender = () => {
       url: "https://localhost:7029/api/Recipe/menu",
       data: {
         menuName: `Menu ngày ${getCurrentDate()}`,
-        recipeIds: menu, //TODO: Get array of id in menu
+        recipeIds: recipes, //TODO: Get array of id in menu
       },
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -126,7 +129,7 @@ const Recommender = () => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-           <DishBox menu ={menu} />
+          <DishBox menu={menu} />
         </div>
         {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>

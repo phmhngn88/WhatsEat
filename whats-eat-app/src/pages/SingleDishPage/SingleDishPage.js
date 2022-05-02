@@ -51,17 +51,12 @@ const SingleDishPage = () => {
 
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
-    console.log(isLikeRecipe);
     // if (isLikeRecipe) {
     console.log("like recipe");
     axios({
       method: "POST",
       url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
       headers: { Authorization: `Bearer ${token}` },
-      data: {
-        recipeId: recipeId,
-        // userName: userName,
-      },
     })
       .then((res) => {})
       .catch((err) => {
@@ -73,10 +68,6 @@ const SingleDishPage = () => {
     //     method: "DELETE",
     //     url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
     //     headers: { Authorization: `Bearer ${token}` },
-    //     data: {
-    //       recipeId: recipeId,
-    //       // userName: userName,
-    //     },
     //   })
     //     .then((res) => {})
     //     .catch((err) => {
