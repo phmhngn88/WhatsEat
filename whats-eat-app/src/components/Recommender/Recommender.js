@@ -59,6 +59,10 @@ const categories = [
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
+  const recipes = [];
+  menu.map((item) => {
+    recipes.push(item.id);
+  });
 
   const handleSaveMenu = () => {
     axios({
@@ -66,7 +70,7 @@ const Recommender = () => {
       url: "https://localhost:7029/api/Recipe/menu",
       data: {
         menuName: `Menu ngày ${getCurrentDate()}`,
-        recipeIds: menu, //TODO: Get array of id in menu
+        recipeIds: recipes, //TODO: Get array of id in menu
       },
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -112,7 +116,7 @@ const Recommender = () => {
         <div className="menu-items">
           {menu.map((dish) => {
             const { id, dish_name, img_url, dish_label } = dish;
-            return <DishBox {...dish} />;
+            return <DishBox key={id} {...dish} />;
           })}
         </div>
         <div className="expand-container">
