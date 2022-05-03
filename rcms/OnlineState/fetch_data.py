@@ -143,10 +143,10 @@ def list_recipents(cur, list_recipents_id):
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, reType.RecipeTypeId FROM whatseat.recipes re
-    JOIN whatseat.reciperecipetypes reType ON re.RecipeId = reType.RecipeId WHERE FAKE IN %s""",(tuple(list_recipents_id),))
+    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl FROM whatseat.recipes re
+     WHERE FAKE IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
-    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
 def product_recommendation(cur):
     cur.execute("""SELECT id_user, id_movie, (is_clicked + shop_rating)/2 FROM testdb.interactive""")
@@ -164,16 +164,17 @@ def interactive_food(cur,recipeTypeId):
     return click_df
 #get list top recipe by 
 def get_top_recipe(cur):
-    cur.execute("""SELECT re.Fake, re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, reType.RecipeTypeId FROM whatseat.recipes re
-    JOIN whatseat.reciperecipetypes reType ON re.RecipeId = reType.RecipeId Order By totalLike desc LIMIT 20""")
+    cur.execute("""SELECT Fake, RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, RecipeTypeId FROM whatseat.recipes 
+     Order By totalLike desc LIMIT 20""")
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
     return click_df
 #get list recipe id love by user
 def recipe_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.interactiverecipe IR
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.lovedrecipes IR
     JOIN whatseat.recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
+    print('res',res)
     res = res[0][1]
     ids = []
     if(res != None):
@@ -196,7 +197,26 @@ def genre_recipe(cur):
     cur.execute("""SELECT reType.RecipeId, group_concat( type.Name)
                     FROM whatseat.reciperecipetypes reType
                     JOIN whatseat.recipetypes type ON reType.RecipeTypeId = type.RecipeTypeId
-                    group by reType.RecipeId LIMIT 10000""")
+                    group by reType.RecipeId LIMIT 30282""")
     res = cur.fetchall()
     recipes = pd.DataFrame(res, columns=['id','genres'])
     return recipes
+
+def get_top_product_low_price(cur,list_product_id):
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
+    whatseat.products where Fake IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+
+
+def get_product_priori(cur,list_product_id):
+    cur.execute("""SELECT consequents FROM whatseat.apriori
+    WHERE confidence >= 0.5 AND antecedents IN %s""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['consequents'])
+
+def get_product_by_list_id(cur,list_product_id):
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
+    whatseat.products where ProductId IN %s""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])

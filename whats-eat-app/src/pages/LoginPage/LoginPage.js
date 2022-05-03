@@ -105,6 +105,10 @@ const LoginPage = ({ login }) => {
             htmlType="submit"
             className="login-form-button"
             onClick={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                return handleSubmit();
+            }}}
           >
             Đăng nhập
           </Button>

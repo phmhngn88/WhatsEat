@@ -34,7 +34,6 @@ def home():
 def individual_recommend_list_recipes(id_user, n_recipe):
     cur = mysql.connection.cursor()
     rec_ids, is_newuser, is_notlove = utils.check_new_user(cur, id_user)
-
     if is_newuser:
         if is_notlove == 0:
             print("New user with filter!")
@@ -60,6 +59,7 @@ def individual_recommend_list_recipes(id_user, n_recipe):
     rec_list2 = fetch_data.get_list_recipents_by_index(cur,rec_list)
     cur.close()
     rec_list2['images'] = rec_list2['images'].apply(utils.to_json)
+    print(rec_list2)
     return rec_df, rec_list2
 
 def individual_recommend_list_products(id_user, n_recipe):
@@ -159,5 +159,22 @@ def individual_state2_api():
     
     return jsonify(result)
 
+@app.route('/individual/product/apriori', methods=['GET'])
+def individual_product_apriori():
+    if 'id_product' in request.args:
+        list_product = request.args.getlist('id_product')
+    else:
+        return """Error: No id field provided. Please specify an id.
+                (URL: /individual/product/apriori?id_product= ... &id_product= ...)
+                """
+    list_product = list(map(int, list_product))
+    cur = mysql.connection.cursor()
+    
+    result = fetch_data.get_product_priori(cur, list_product)
+    result = result.drop_duplicates()
+    result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
+    cur.close()
+
+    return jsonify(result.to_dict('record'))
 
 app.run(debug=True)
