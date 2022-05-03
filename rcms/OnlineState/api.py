@@ -162,16 +162,19 @@ def individual_state2_api():
 @app.route('/individual/product/apriori', methods=['GET'])
 def individual_product_apriori():
     if 'id_product' in request.args:
-        list_product = request.args.get_list('id_product')
+        list_product = request.args.getlist('id_product')
     else:
         return """Error: No id field provided. Please specify an id.
                 (URL: /individual/product/apriori?id_product= ... &id_product= ...)
                 """
     list_product = list(map(int, list_product))
+    cur = mysql.connection.cursor()
     
-    result = fetch_data.get_product_priori(mysql, list_product)
+    result = fetch_data.get_product_priori(cur, list_product)
     result = result.drop_duplicates()
-    result = fetch_data.get_product_by_list_id(mysql,result['consequents'].to_list())
+    result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
+    cur.close()
+
     return jsonify(result.to_dict('record'))
 
 app.run(debug=True)
