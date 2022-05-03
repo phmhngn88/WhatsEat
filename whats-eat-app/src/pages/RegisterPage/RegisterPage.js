@@ -140,6 +140,10 @@ const RegisterPage = () => {
             htmlType="submit"
             className="register-form-button"
             onClick={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                return handleSubmit();
+            }}}
           >
             Đăng ký
           </Button>
