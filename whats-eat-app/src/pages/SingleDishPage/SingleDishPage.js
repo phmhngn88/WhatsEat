@@ -31,6 +31,7 @@ const combo = {
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
+  const [totalLove, setTotalLove] = useState(0);
   const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
   const recipeId = location.state.recipeId;
@@ -49,42 +50,50 @@ const SingleDishPage = () => {
   } = dishDetail;
   const price = 230000;
 
-  const handleLikeRecipe = () => {
-    setIsLikeRecipe(!isLikeRecipe);
-    // if (isLikeRecipe) {
-    console.log("like recipe");
-    axios({
-      method: "POST",
-      url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-    // } else {
-    //   console.log("unlike recipe");
-    //   axios({
-    //     method: "DELETE",
-    //     url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-    //     headers: { Authorization: `Bearer ${token}` },
-    //   })
-    //     .then((res) => {})
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // }
+  const getTotalLove = () => {
     axios({
       method: "GET",
       url: `https://localhost:7029/api/Recipe/love/total/${recipeId}`,
     })
       .then((res) => {
         //TODO: handle logic set total like
+        setTotalLove(res.data);
         console.log("total like:", res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  }
+  const handleLikeRecipe = () => {
+    setIsLikeRecipe(!isLikeRecipe);
+    const isLike = !isLikeRecipe
+    if (isLike) {
+      console.log("like recipe");
+      axios({
+        method: "POST",
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          getTotalLove();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("unlike recipe");
+      axios({
+        method: "DELETE",
+        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          getTotalLove();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -112,6 +121,7 @@ const SingleDishPage = () => {
         console.log("Single dish info:", result);
 
         setDishDetail(result);
+        setTotalLove(result.totalLike);
       })
       .catch((error) => {
         console.log(error);
@@ -145,12 +155,11 @@ const SingleDishPage = () => {
                 />
               </div>
               <div
-                className={`${
-                  isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
-                } love`}
+                className={`${isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
+                  } love`}
                 onClick={handleLikeRecipe}
               >
-                <AiFillHeart className="icon" /> <span>{totalLike}</span>
+                <AiFillHeart className="icon" /> <span>{totalLove}</span>
               </div>
               <div className="view">
                 <AiOutlineEye className="icon" /> <span>{totalView}</span>
@@ -182,11 +191,9 @@ const SingleDishPage = () => {
             <img src={images[1].url} alt="combo" className="combo-img" />
             <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
-              {`${ingredients[0].name}${
-                ingredients[1]?.name ? `, ${ingredients[1]?.name}` : ""
-              }${ingredients[2]?.name ? `, ${ingredients[2]?.name}` : ""} và ${
-                ingredients.length >= 3 ? ingredients.length - 3 : 0
-              } thực phẩm khác`}
+              {`${ingredients[0].name}${ingredients[1]?.name ? `, ${ingredients[1]?.name}` : ""
+                }${ingredients[2]?.name ? `, ${ingredients[2]?.name}` : ""} và ${ingredients.length >= 3 ? ingredients.length - 3 : 0
+                } thực phẩm khác`}
             </p>
             <p className="combo-price">
               {price.toLocaleString("vi-VN", {

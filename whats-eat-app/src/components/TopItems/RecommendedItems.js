@@ -10,7 +10,9 @@ import Product from "../Product/Product";
 
 const RecommendedItems = ({ productIds }) => {
   const [topProduct, setTopProduct] = useState([]);
-
+  const [pageNumber,setPageNumber] = useState(1);
+  const [pageSize,setPageSize] = useState(1);
+  
   useEffect(() => {
     axios({
       method: "get",
