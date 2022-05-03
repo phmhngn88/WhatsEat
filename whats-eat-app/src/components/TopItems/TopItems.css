@@ -46,6 +46,7 @@
 
 .top-items-container .top-items .item-col .item-container .item-img{
     width: 100%;
+    height: 10rem;
     border-radius: 5px;
 }
 

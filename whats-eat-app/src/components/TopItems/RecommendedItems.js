@@ -8,17 +8,14 @@ import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 import Product from "../Product/Product";
 
-const TopItems = () => {
+const RecommendedItems = ({ productIds }) => {
   const [topProduct, setTopProduct] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?sortTotalSell=desc&PageNumber=${pageNumber}&PageSize=${
-        pageSize + 4
-      }`,
+      url: `http://127.0.0.1:5000/individual/product/apriori?${1}`,
+      //   url: `http://127.0.0.1:5000/individual/product/apriori?id_product=13554&id_product=3976&id_product=17344`,
     })
       .then((res) => {
         setTopProduct(res.data);
@@ -39,25 +36,14 @@ const TopItems = () => {
     <div className="top-items-container">
       {topProduct.length > 0 && (
         <div className="top-items">
-          <h1 className="title">Trending trong tuần qua</h1>
-          <FaChevronCircleLeft
-            className={`${
-              pageNumber === 1 ? "hidden " : ""
-            }icon-pagination left-icon`}
-            onClick={() => setPageNumber(pageNumber - 1)}
-          />
-          <FaChevronCircleRight
-            className={`${
-              pageNumber === 10 || topProduct.length < 12 ? "hidden " : ""
-            }icon-pagination right-icon`}
-            onClick={() => setPageNumber(pageNumber + 1)}
-          />
+          <h1 className="title">Sản phẩm có liên quan</h1>
+
           <Row gutter={[16, 16]}>
             {topProduct.map((item) => {
               const { productId, name, basePrice, weightServing, images } =
                 item;
               return (
-                <Col span={4} className="item-col" key={productId}>
+                <Col span={6} className="item-col" key={productId}>
                   <Product {...item} />
                 </Col>
               );
@@ -69,7 +55,7 @@ const TopItems = () => {
   );
 };
 
-export default TopItems;
+export default RecommendedItems;
 
 const items = [
   {

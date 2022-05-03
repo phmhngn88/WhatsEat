@@ -7,6 +7,7 @@ import Counter from "../../components/Counter/Counter";
 import Footer from "../../components/Footer/Footer";
 import TopItems from "../../components/TopItems/TopItems";
 import CartItem from "../CartItem/CartItem";
+import RecommendedItems from "../TopItems/RecommendedItems";
 import "./Cart.css";
 
 const Cart = ({
@@ -16,6 +17,10 @@ const Cart = ({
   removeItem,
   clearCart,
 }) => {
+  const productIds = [];
+  cartItems.map((item) => {
+    productIds.push(item.productId);
+  });
   return (
     <div className="cart">
       {cartItems.length === 0 ? (
@@ -57,7 +62,7 @@ const Cart = ({
           </div>
         </div>
       )}
-      <TopItems />
+      {/* <RecommendedItems listProduct={productIds} /> */}
       <Footer />
     </div>
   );
