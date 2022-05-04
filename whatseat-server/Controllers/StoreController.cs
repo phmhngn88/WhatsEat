@@ -1,11 +1,14 @@
 using backend_dotnet_r06_mall.Contants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 using whatseat_server.Services;
 
 namespace whatseat_server.Controllers;
@@ -15,13 +18,20 @@ public class StoreController : ControllerBase
 {
     private readonly WhatsEatContext _context;
     private readonly StoreService _storeService;
+    private readonly ProductService _productService;
+    private readonly UserManager<IdentityUser> _userManager;
+
     public StoreController(
         WhatsEatContext context,
-        StoreService storeService
+        StoreService storeService,
+        UserManager<IdentityUser> userManager,
+        ProductService productService
     )
     {
         _context = context;
         _storeService = storeService;
+        _userManager = userManager;
+        _productService = productService;
     }
 
     [HttpGet]
@@ -137,6 +147,34 @@ public class StoreController : ControllerBase
         return Ok(new { message = "Success" });
     }
 
+    [HttpPut]
+    [Route("info")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
+    public async Task<IActionResult> changeInfoStore([FromBody] StoreChangeInfoRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        Store store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreId == request.StoreId && s.UserId == userId.ToString());
+        if (store is null)
+        {
+            return Forbid();
+        }
+
+        store.StoreId = request.StoreId;
+        store.Email = request.Email;
+        store.ShopName = request.ShopName;
+        store.PhoneNumber = request.PhoneNumber;
+        store.Address = request.Address;
+        store.ProvinceCode = request.ProvinceCode;
+        store.DistrictCode = request.DistrictCode;
+        store.WardCode = request.WardCode;
+        store.Description = request.Description;
+
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Success" });
+    }
+
     [HttpPost]
     [Route("add-product")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
@@ -178,5 +216,51 @@ public class StoreController : ControllerBase
 
         return Ok(orderList);
 
+    }
+
+    [HttpGet]
+    [Route("{storeId}/products")]
+    public async Task<IActionResult> GetProductList(int storeId, [FromQuery] PagedRequest query)
+    {
+        ProductFilter filter = new ProductFilter
+        {
+            productStores = new int[] { storeId },
+            PageNumber = query.PageNumber,
+            PageSize = query.PageSize
+        };
+
+        var products = await _productService.FullTextSearchProduct(filter);
+
+        var productRes = new List<ProductResponse>();
+        foreach (var item in products)
+        {
+            productRes.Add(new ProductResponse
+            {
+                Images = _productService.ConvertJsonToPhotos(item.PhotoJson),
+                ProductId = item.ProductId,
+                Name = item.Name,
+                InStock = item.InStock,
+                BasePrice = item.BasePrice,
+                Description = item.Description,
+                WeightServing = item.WeightServing,
+                TotalSell = item.TotalSell,
+                ProductCategoryId = item.ProductCategory.ProductCategoryId,
+                Store = item.Store,
+                CreatedOn = item.CreatedOn,
+                TotalView = await _productService.GetProductViews(item)
+            });
+        }
+        var metadata = new
+        {
+            products.TotalCount,
+            products.PageSize,
+            products.CurrentPage,
+            products.TotalPages,
+            products.HasNext,
+            products.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        return Ok(productRes);
     }
 }
