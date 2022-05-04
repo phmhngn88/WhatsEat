@@ -1,0 +1,16 @@
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (1, 'Trái Cây');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (2, 'Rau củ');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (3, 'Hải sản');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (4, 'Thịt heo');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (5, 'Gà vịt');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (6, 'Bò dê');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (7, 'Món canh');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (8, 'Combo');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (9, 'Trứng');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (10, 'Lương thực');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (11, 'Món chay');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (12, 'Lẩu');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (13, 'Sữa');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (14, 'Gia vị');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (15, 'Đồ uống');
+INSERT INTO whatseat.ProductCategories (ProductCategoryId, Name) VALUES (16, 'Bánh kẹo');
