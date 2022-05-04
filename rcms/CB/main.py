@@ -14,25 +14,15 @@ conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="wha
 cur = conn.cursor()
 
 #lấy dataframe món ăn
-recipes_df = fetch.recipes_df(cur)
+genre_df = utils.genre_df(cur)
 #xóa những phần tử null
-recipes_df = recipes_df.dropna()
+genre_df = genre_df.dropna()
 cur.close()
 
-# remove html tag trong description
-recipes_df['Description'] = recipes_df['Description'].apply(utils.remove)
-
-recipes_df = recipes_df.head(100)
-
-recipes_df['tags'] = recipes_df['Description'].apply(lambda x:x.split())
-new = recipes_df.drop(columns=['Description'])
-new['tags'] = new['tags'].apply(lambda x: " ".join(x))
-
-vector = cv.fit_transform(new['tags']).toarray()
-similarity = cosine_similarity(vector)
+similarity = cosine_similarity(genre_df)
 df = pd.DataFrame(similarity)
 print(df)
-object_list = utils.convertDataframeToList(df,new['RecipeId'])
+object_list = utils.convertDataframeToList(df)
 fields = ("id1", "id2", "similarity")
 utils.upsert(conn, "cb_similarity", fields, object_list)
 

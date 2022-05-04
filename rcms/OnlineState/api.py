@@ -64,7 +64,7 @@ def individual_recommend_list_recipes(id_user, n_recipe):
 
 def individual_recommend_list_products(id_user, n_recipe):
     cur = mysql.connection.cursor()
-    rec_ids, is_newuser, is_notlove = utils.check_new_user(cur, id_user)
+    rec_ids, is_newuser, is_notlove = utils.check_new_user_product(cur, id_user)
 
     if is_newuser:
         if is_notlove == 0:
@@ -103,7 +103,7 @@ def individual_state1_api():
                 (URL: /individual/product?id_user= ...)
                 """
     
-    rec_list = individual_recommend_list_product(id_user)
+    rec_list = individual_recommend_list_products(id_user)
     return jsonify(rec_list.to_dict('records'))
 
 #Recommend recipe 

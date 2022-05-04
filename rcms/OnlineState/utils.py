@@ -32,5 +32,9 @@ def check_new_user(cur, id_user):
     recipeIds = fetch_data.recipe_love_by_user(cur, id_user)
     return recipeIds, len(recipeIds) < 20, len(recipeIds)
 
+def check_new_user_product(cur,id_user):
+    productIds = fetch_data.product_love_by_user(cur, id_user)
+    return productIds, len(productIds) < 20, len(productIds)
+    
 def to_json(text):
     return json.loads(text)[0]
