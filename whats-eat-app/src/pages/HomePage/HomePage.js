@@ -5,6 +5,7 @@ import Categories from "../../components/Categories/Categories";
 import Footer from "../../components/Footer/Footer";
 import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
+import TopShops from "../../components/TopShops/TopShops";
 
 const HomePage = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -18,6 +19,7 @@ const HomePage = () => {
       <Categories />
       <TopItems />
       <TopDishes />
+      <TopShops />
       <Footer />
     </main>
   );
