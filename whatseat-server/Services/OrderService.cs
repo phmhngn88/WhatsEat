@@ -41,7 +41,8 @@ public class OrderService
             OrderStatus = canceledStatus,
             Order = order,
             Message = message,
-            CreatedOn = DateTime.UtcNow
+            CreatedOn = DateTime.UtcNow,
+            ByUser = true
         };
 
         await _context.SaveChangesAsync();
