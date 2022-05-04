@@ -1,16 +1,17 @@
 from bs4 import BeautifulSoup
 import MySQLdb
-
+import fetch
+from collections import Counter
 def remove(html):
     return BeautifulSoup(html,features="html.parser").get_text()
 
-def convertDataframeToList(dataframe, productArray):
+def convertDataframeToList(dataframe):
     L = []
     for col in dataframe.columns:
         for idx in dataframe.index:
             value = dataframe.loc[idx, col]
             column, row = col, idx
-            L.append([productArray[column],productArray[row],value])
+            L.append([column,row,value])
     return L
 
 def upsert(conn, table, fields, object_list):
@@ -37,3 +38,16 @@ def upsert(conn, table, fields, object_list):
     cursor.executemany(query_string, object_list)
     conn.commit()
     print(table + ' upserts successfully')
+
+def genre_df(cur):
+    # fetch genre data from the database
+    genre_df = fetch.genre_recipe(cur) # genre_df: 2 columns(id, genres)
+    # split genres column to make each genre one column
+    genre_df['genres'] = genre_df['genres'].apply(lambda x: x.split(","))
+    genres_counts = Counter(g for genres in genre_df['genres'] for g in genres)
+    genres = list(genres_counts.keys())
+
+    for g in genres:
+        genre_df[g] = genre_df['genres'].transform(lambda x: int(g in x))
+    print(genre_df[genres])
+    return genre_df[genres]
