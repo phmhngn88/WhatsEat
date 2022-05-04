@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dish.css";
 
 import { useSelector } from "react-redux";
@@ -49,6 +49,19 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
     }
   };
   console.log(isLikeRecipe);
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `https://localhost:7029/api/Recipe/love/isLoved/${recipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        setIsLikeRecipe(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div

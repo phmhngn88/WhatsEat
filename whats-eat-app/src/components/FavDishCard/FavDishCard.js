@@ -6,6 +6,7 @@ import {
   AiFillThunderbolt,
   AiOutlineBarChart,
 } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const FavDishCard = ({
   recipeId,
@@ -16,11 +17,22 @@ const FavDishCard = ({
   level,
   totalView,
 }) => {
+  const navigate = useNavigate();
+
   if (!images) {
     return <img src="../../assets/Banner/preloader.gif" alt="" />;
   }
   return (
-    <div className="fav-dish-card">
+    <div
+      className="fav-dish-card"
+      onClick={() =>
+        navigate(`/singledish/${recipeId}`, {
+          state: {
+            recipeId: recipeId,
+          },
+        })
+      }
+    >
       <img src={images[0].url} alt={name} className="dish-img" />
       <div className="heart-icon">
         <AiFillHeart className="icon" style={{ color: "red" }} />

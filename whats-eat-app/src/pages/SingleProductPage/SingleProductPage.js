@@ -2,11 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
 import { useSearchParams, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux'
-import { Modal } from 'antd'
+import { useDispatch, useSelector } from "react-redux";
+import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import { addItemToCart } from '../../reducers/cart'
+import { addItemToCart } from "../../reducers/cart";
 
 import Footer from "../../components/Footer/Footer";
 import Counter from "../../components/Counter/Counter";
@@ -49,21 +49,24 @@ const SingleProductPage = () => {
   };
 
   const buyNow = () => {
-    if(auth.userName){
-      dispatch(addItemToCart({ productId , productDetail, count }))
+    if (auth.userName) {
+      dispatch(addItemToCart({ productId, productDetail, count }));
       navigate(`/cart`);
-    }else{
+    } else {
       navigate(`/login`);
     }
-  }
+  };
 
   const addToCart = () => {
-    if(auth.userName){
-      dispatch(addItemToCart({ productId , productDetail, count }))
+    if (auth.userName) {
+      dispatch(addItemToCart({ productId, productDetail, count }));
       let secondsToGo = 5;
       const modal = Modal.success({
         title: "Sản phẩm đã được thêm vào giỏ hàng",
-        okButtonProps: { disabled: true, className: "modal-footer-hiden-button" }
+        okButtonProps: {
+          disabled: true,
+          className: "modal-footer-hiden-button",
+        },
       });
       const timer = setInterval(() => {
         secondsToGo -= 1;
@@ -72,10 +75,10 @@ const SingleProductPage = () => {
         clearInterval(timer);
         modal.destroy();
       }, secondsToGo * 1000);
-    }else{
+    } else {
       navigate(`/login`);
     }
-  }
+  };
   useEffect(() => {
     getProductDetail();
   }, []);
@@ -131,7 +134,9 @@ const SingleProductPage = () => {
                   <BsCartPlus className="icon" />
                   <span>Thêm vào giỏ</span>
                 </button>
-                <button onClick={buyNow} className="btn buy-btn">Mua ngay</button>
+                <button onClick={buyNow} className="btn buy-btn">
+                  Mua ngay
+                </button>
               </div>
               <div className="brand-info-block">
                 <div>
@@ -180,8 +185,8 @@ const SingleProductPage = () => {
           </div>
         </div>
       </div>
+      <TopItems />
       <TopDishes />
-      {/* <TopItems /> */}
       <Footer />
     </div>
   );
