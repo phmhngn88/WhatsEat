@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220430132233_restore")]
+    partial class restore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -533,9 +535,6 @@ namespace whatseat_server.Migrations
                     b.Property<int?>("ProductCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductNo")
-                        .HasColumnType("int");
-
                     b.Property<int?>("StoreId")
                         .HasColumnType("int");
 
@@ -673,9 +672,6 @@ namespace whatseat_server.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
-
-                    b.Property<int>("RecipeNo")
-                        .HasColumnType("int");
 
                     b.Property<string>("RecipeTypeId")
                         .HasColumnType("longtext");

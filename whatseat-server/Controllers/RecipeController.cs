@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using whatseat_server.Data;
 using whatseat_server.Models;
@@ -290,14 +288,5 @@ public class RecipeController : ControllerBase
         return Ok(await _recipeService.CheckLove(recipeId, userId));
     }
 
-    [HttpPost]
-    [Route("menu")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
-    public async Task<IActionResult> PostMenu([FromBody] MenuRequest request)
-    {
-        Guid userId = new Guid(User.FindFirst("Id")?.Value);
-        var customer = await _customerService.FindCustomerByIdAsync(userId);
-        Menu menu = await _recipeService.AddMenu(customer, request);
-        return Ok();
-    }
+
 }

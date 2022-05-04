@@ -118,15 +118,6 @@ const SearchPage = () => {
               );
             })}
           </div>
-          <Row gutter={[16, 16]}>
-            {searchRecipeResult.map((item, idx) => {
-              return (
-                <Col span={6} key={idx} className="dish-col">
-                  <Dish {...item} />
-                </Col>
-              );
-            })}
-          </Row>
           {searchProductResult.length > 0 && (
             <h1
               className="title"
@@ -144,6 +135,24 @@ const SearchPage = () => {
               );
             })}
           </Row>
+          {searchRecipeResult.length > 0 && (
+            <h1
+              className="title"
+              style={{ marginTop: "3rem", fontSize: "1.5rem" }}
+            >
+              Công thức có liên quan
+            </h1>
+          )}
+          <Row gutter={[16, 16]}>
+            {searchRecipeResult.map((item, idx) => {
+              return (
+                <Col span={6} key={idx} className="dish-col">
+                  <Dish {...item} />
+                </Col>
+              );
+            })}
+          </Row>
+
           {searchResults.length !== 0 && (
             <Pagination
               onClickNext={handleClickNext}

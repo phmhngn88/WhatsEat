@@ -20,7 +20,6 @@ public class Product
     public int TotalSell { get; set; }
     public ProductCategory ProductCategory { get; set; }
     public Store Store { get; set; }
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ProductNo { get; set; }
     public DateTime CreatedOn { get; set; }
     [JsonIgnore]

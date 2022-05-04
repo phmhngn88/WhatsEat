@@ -25,7 +25,6 @@ public class Recipe
     public string ThumbnailUrl { get; set; }
     public string Ingredients { get; set; }
     public string Steps { get; set; }
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int RecipeNo { get; set; }
 
     [JsonIgnore]

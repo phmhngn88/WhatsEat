@@ -31,85 +31,23 @@ def home():
     return """<h1>What's eat recommend engine</h1>
               <p>This site is APIs for getting list of recommend products.</p>"""
 
-
-def individual_recommend_list_product(id_user):
-    #connect to db
-    cur = mysql.connection.cursor()
-    rating_data = fetch_data.product_recommendation(cur)
-    rating_data.dropna()
-    cur.close()
-    #get matrix data 
-    data = rating_data.pivot_table(index='id_movie',columns='id_user',values='rating')
-
-    #convert to dictionary
-    sdd = data.dropna(how = 'all').to_dict()
-    clean_dict = {k: {j: sdd[k][j] for j in sdd[k] if not isnan(sdd[k][j])} for k in sdd}
-
-    #get list recommend
-    tp = id_user
-    list_item = []
-    if tp in clean_dict.keys():
-        a=sim.recommendation_phase(clean_dict,tp)
-        if a != -1:
-            print("Recommendation Using Item based Collaborative Filtering:  ")
-            for w,m in a:
-                list_item.append(m)
-    else:
-        print("Person not found in the dataset..please try again")
-     
-    cur = mysql.connection.cursor()
-    list_product = fetch_data.list_product(cur, list_item)
-    list_product.dropna()
-    cur.close()
-
-    return list_product
-
-def individual_recommend_list_food(id_user,id_category):
-    types = ['Món chính', 'Món khai vị','Đồ uống']
-
-    #connect to db
-    cur = mysql.connection.cursor()
-    rating_data = fetch_data.interactive_food(cur,id_category)
-    rating_data.dropna()
-    cur.close()
-
-    #get matrix data 
-    data = rating_data.pivot_table(index='id_food',columns='id_user',values='rating')
-
-    #convert to dictionary
-    sdd = data.dropna(how = 'all').to_dict()
-    clean_dict = {k: {j: sdd[k][j] for j in sdd[k] if not isnan(sdd[k][j])} for k in sdd}
-
-    #get list recommend
-    tp = id_user
-    print(clean_dict.keys())
-
-    list_item = []
-    if tp in clean_dict.keys():
-        a=sim.recommendation_phase(clean_dict,tp)
-        if a != -1:
-            print("Recommendation Using Item based Collaborative Filtering:  ")
-            for w,m in a:
-                list_item.append(m)
-    else:
-        print("Person not found in the dataset..please try again")
-
-    cur = mysql.connection.cursor()
-    list_product = fetch_data.list_recipents(cur, list_item)
-    list_product.dropna()
-    cur.close()
-    
-    return list_product
-
 def individual_recommend_list_recipes(id_user, n_recipe):
     cur = mysql.connection.cursor()
-    rec_ids, is_newuser = utils.check_new_user(cur, id_user)
+    rec_ids, is_newuser, is_notlove = utils.check_new_user(cur, id_user)
     if is_newuser:
-        print("New user detected!")
-        rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list(rec_ids,n_recipe,cur)
-        rec_df = pd.DataFrame({'Item':rec_list})
-        rec_df['Rating'] = 0
-        cur.close()
+        if is_notlove == 0:
+            print("New user with filter!")
+            rec_list = []
+            rec_list = fetch_data.get_top_recipe(cur)['id'].to_list()
+            rec_df = pd.DataFrame({'Item':rec_list})
+            rec_df['Rating'] = 0
+            cur.close()
+        else:    
+            print("New user detected!")
+            rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list(rec_ids,n_recipe,cur)
+            rec_df = pd.DataFrame({'Item':rec_list})
+            rec_df['Rating'] = 0
+            cur.close()
     else:
         print("Old user detected!")
         click_df = fetch_data.rating_click_df(cur)
@@ -120,6 +58,40 @@ def individual_recommend_list_recipes(id_user, n_recipe):
     cur = mysql.connection.cursor()
     rec_list2 = fetch_data.get_list_recipents_by_index(cur,rec_list)
     cur.close()
+    rec_list2['images'] = rec_list2['images'].apply(utils.to_json)
+    print(rec_list2)
+    return rec_df, rec_list2
+
+def individual_recommend_list_products(id_user, n_recipe):
+    cur = mysql.connection.cursor()
+    rec_ids, is_newuser, is_notlove = utils.check_new_user_product(cur, id_user)
+
+    if is_newuser:
+        if is_notlove == 0:
+            print("New user with filter!")
+            rec_list = []
+            for i in range(1, 10):
+                rec_list = rec_list + fetch_data.get_top_products(cur)['id'].to_list()
+                rec_df = pd.DataFrame({'Item':rec_list})
+                rec_df['Rating'] = 0
+            cur.close()
+        else:    
+            print("New user detected!")
+            rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list(rec_ids,n_recipe,cur)
+            rec_df = pd.DataFrame({'Item':rec_list})
+            rec_df['Rating'] = 0
+            cur.close()
+    else:
+        print("Old user detected!")
+        click_df = fetch_data.rating_click_df(cur)
+        sim_df = fetch_data.similarity_df(cur,id_user)
+        cur.close()
+
+        rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_recipe, click_df, sim_df)
+    cur = mysql.connection.cursor()
+    rec_list2 = fetch_data.get_list_recipents_by_index(cur,rec_list)
+    cur.close()
+    rec_list2['images'] = rec_list2['images'].apply(utils.to_json)
     return rec_df, rec_list2
 
 @app.route('/individual/product/', methods=['GET'])
@@ -131,7 +103,7 @@ def individual_state1_api():
                 (URL: /individual/product?id_user= ...)
                 """
     
-    rec_list = individual_recommend_list_product(id_user)
+    rec_list = individual_recommend_list_products(id_user)
     return jsonify(rec_list.to_dict('records'))
 
 #Recommend recipe 
@@ -187,5 +159,22 @@ def individual_state2_api():
     
     return jsonify(result)
 
+@app.route('/individual/product/apriori', methods=['GET'])
+def individual_product_apriori():
+    if 'id_product' in request.args:
+        list_product = request.args.getlist('id_product')
+    else:
+        return """Error: No id field provided. Please specify an id.
+                (URL: /individual/product/apriori?id_product= ... &id_product= ...)
+                """
+    list_product = list(map(int, list_product))
+    cur = mysql.connection.cursor()
+    
+    result = fetch_data.get_product_priori(cur, list_product)
+    result = result.drop_duplicates()
+    result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
+    cur.close()
+
+    return jsonify(result.to_dict('record'))
 
 app.run(debug=True)

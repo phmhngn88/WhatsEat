@@ -1,29 +1,37 @@
 import React, { useState } from "react";
 import "./DishBox.css";
-
+import Dish from "../Dish/Dish";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
-
-const DishBox = ({ id, dish_name, img_url, dish_label }) => {
+import { Row, Col } from 'antd';
+const DishBox = ({ menu, category }) => {
   const [isShowRecipe, setIsShowRecipe] = useState(true);
-
   const handleShow = () => setIsShowRecipe(true);
   const handleHidden = () => setIsShowRecipe(false);
   return (
-    <div className="dish-box" key={id}>
-      <div className="dish-box-nav">
-        <h2 className="dish-label">{dish_label}</h2>
-        <div className="icons">
-          <AiOutlinePlusCircle onClick={handleShow} className="icon" />
-          <AiOutlineMinusCircle onClick={handleHidden} className="icon" />
-        </div>
+    // <div className="dish-box" key={recipeId}>
+    //   <div className="dish-box-nav">
+    //     <h2 className="dish-label">{name}</h2>
+    //     <div className="icons">
+    //       <AiOutlinePlusCircle onClick={handleShow} className="icon" />
+    //       <AiOutlineMinusCircle onClick={handleHidden} className="icon" />
+    //     </div>
+    //   </div>
+    // </div>
+    <div >
+      <h2>Món ăn cho bạn</h2>
+      <div className="list-dish">
+        <Row gutter={[16, 24]}>
+          {
+            menu.map((dish) => {
+              const { recipeId, name, images, totalLike, totalTime, totalView, recipeTypeId } = dish;
+              return (<Col className="gutter-row" span={6}>
+                <Dish {...dish} className="single-dish" />;
+              </Col>)
+            })}
+        </Row>
       </div>
-      {isShowRecipe && (
-        <div className="list-dish">
-          hehe
-          {/* <Dish {...dish} className="single-dish" /> */}
-        </div>
-      )}
     </div>
+
   );
 };
 

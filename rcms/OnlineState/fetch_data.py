@@ -143,7 +143,8 @@ def list_recipents(cur, list_recipents_id):
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl FROM whatseat.recipes WHERE FAKE IN %s""",(tuple(list_recipents_id),))
+    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl FROM whatseat.recipes re
+     WHERE FAKE IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
@@ -161,16 +162,43 @@ def interactive_food(cur,recipeTypeId):
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id_user', 'id_food', 'rating'])
     return click_df
-
+#get list top recipe by 
+def get_top_recipe(cur):
+    cur.execute("""SELECT RecipeNo, RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, RecipeTypeId FROM whatseat.recipes 
+     Order By totalLike desc LIMIT 20""")
+    res = cur.fetchall()
+    click_df = pd.DataFrame(res, columns=['id','recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+    return click_df
+#get list top product by 
+def get_top_products(cur):
+    cur.execute("""SELECT ProductNo, ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell FROM whatseat.products 
+     Order By TotalSell desc LIMIT 20""")
+    res = cur.fetchall()
+    click_df = pd.DataFrame(res, columns=['id','productId','name','inStock','basePrice','images','weightServing','totalSell'])
+    return click_df
 #get list recipe id love by user
 def recipe_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.interactiverecipe IR
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.lovedrecipes IR
     JOIN whatseat.recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
-
+    print('res',res)
     res = res[0][1]
-    ids = res.split(',')
-    ids = [int(s) for s in ids]
+    ids = []
+    if(res != None):
+        ids = res.split(',')
+        ids = [int(s) for s in ids]
+    return ids
+#get list product id love by user
+def product_love_by_user(cur, id_user):
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.lovedproducts IP
+    JOIN whatseat.products P ON IP.ProductId = P.ProductId WHERE CustomerId = %s """,(id_user,))
+    res = cur.fetchall()
+    print('res',res)
+    res = res[0][1]
+    ids = []
+    if(res != None):
+        ids = res.split(',')
+        ids = [int(s) for s in ids]
     return ids
 
 def genre(cur):
@@ -188,7 +216,31 @@ def genre_recipe(cur):
     cur.execute("""SELECT reType.RecipeId, group_concat( type.Name)
                     FROM whatseat.reciperecipetypes reType
                     JOIN whatseat.recipetypes type ON reType.RecipeTypeId = type.RecipeTypeId
-                    group by reType.RecipeId LIMIT 300""")
+                    group by reType.RecipeId LIMIT 1000""")
     res = cur.fetchall()
     recipes = pd.DataFrame(res, columns=['id','genres'])
     return recipes
+
+def get_top_product_low_price(cur,list_product_id):
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
+    whatseat.products where Fake IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+
+
+def get_product_priori(cur,list_product_id):
+    cur.execute("""SELECT consequents FROM whatseat.apriori
+    WHERE confidence >= 0.5 AND antecedents IN %s""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['consequents'])
+
+def get_product_by_list_id(cur,list_product_id):
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
+    whatseat.products where ProductId IN %s""",(tuple(list_product_id),))
+    res = cur.fetchall()
+    return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
+
+def get_cosine_sim_matrix(cur):
+    cur.execute("""SELECT id1 , id2, similarity from whatseat.cb_similarity""")
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['id1','id2','similarity'])

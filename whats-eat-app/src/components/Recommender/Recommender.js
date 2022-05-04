@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Recommender.css";
 import { Button } from "antd";
+import { useSelector } from "react-redux";
 import "antd/dist/antd.css";
+import axios from "axios";
 import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
@@ -45,20 +47,56 @@ const recommendedMenu = [
 ];
 
 const categories = [
-  { id: 1, category_name: "Món nhậu" },
-  { id: 2, category_name: "Món ăn cho trẻ" },
-  { id: 3, category_name: "Bánh - Bánh ngọt" },
-  { id: 4, category_name: "Nhanh và dễ" },
-  { id: 5, category_name: "Món chay" },
-  { id: 6, category_name: "Món ăn sáng" },
-  { id: 7, category_name: "Món tráng miệng" },
+  { id: 1, category_name: "Món khai vị" },
+  { id: 2, category_name: "Món tráng miệng" },
+  { id: 3, category_name: "Món chay" },
+  { id: 4, category_name: "Món chính" },
+  { id: 5, category_name: "Món ăn sáng" },
+  { id: 6, category_name: "Món nhanh và dễ" },
+  { id: 7, category_name: "Thức uống" },
+  { id: 8, category_name: "Bánh - Bánh ngọt" },
+  { id: 9, category_name: "Món ăn cho trẻ" },
+  { id: 10, category_name: "Món nhậu" },
 ];
 
 const Recommender = () => {
   const [menu, setMenu] = useState([]);
+  const token = useSelector((state) => state.auth.userInfo.token);
+  const recipes = [];
+  menu.map((item) => {
+    recipes.push(item.id);
+  });
+
+  const handleSaveMenu = () => {
+    axios({
+      method: "post",
+      url: "https://localhost:7029/api/Recipe/menu",
+      data: {
+        menuName: `Menu ngày ${getCurrentDate()}`,
+        recipeIds: recipes, //TODO: Get array of id in menu
+      },
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const userId = useSelector((state) => state.auth.userInfo.userId);
 
   useEffect(() => {
-    setMenu(recommendedMenu);
+    axios({
+      method: "get",
+      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${userId}&n_recipe=16`,
+    })
+      .then((res) => {
+        const result = res.data;
+        console.log("Single dish info:", result);
+        setMenu(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -87,16 +125,13 @@ const Recommender = () => {
             </h3>
           </div>
         </div>
-        <Button className="save-btn">
+        <Button className="save-btn" onClick={handleSaveMenu}>
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-          {menu.map((dish) => {
-            const { id, dish_name, img_url, dish_label } = dish;
-            return <DishBox {...dish} />;
-          })}
+          <DishBox menu={menu} />
         </div>
-        <div className="expand-container">
+        {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>
           <p>Thêm món vào menu của bạn</p>
           {categories.map((category) => {
@@ -107,7 +142,7 @@ const Recommender = () => {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
     </div>
   );
