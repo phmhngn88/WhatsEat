@@ -1,0 +1,15 @@
+.top-shop-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.top-shop{
+    width: 70%;
+}
+
+.top-shop .shop-card-container{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
