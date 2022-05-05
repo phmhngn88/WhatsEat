@@ -13,4 +13,5 @@ public class OrderStatusHistory
     public Order Order { get; set; }
     public string Message { get; set; }
     public DateTime CreatedOn { get; set; }
+    public bool ByUser { get; set; }
 }
