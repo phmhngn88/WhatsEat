@@ -148,7 +148,7 @@ const SingleProductPage = () => {
                 <div>
                   <p>Thương hiệu</p>
                   <p className="content brand">
-                    {productDetail.store || "DONA FARM"}
+                    {productDetail.store?.shopName || "DONA FARM"}
                   </p>
                 </div>
                 <div>
