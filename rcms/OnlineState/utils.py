@@ -38,3 +38,6 @@ def check_new_user_product(cur,id_user):
     
 def to_json(text):
     return json.loads(text)[0]
+
+def to_json_product(text):
+    return json.loads(text)

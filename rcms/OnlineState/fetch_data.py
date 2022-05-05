@@ -101,6 +101,7 @@ def list_recipents(cur, list_recipents_id):
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
+#get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
     cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl FROM whatseat.recipes re
      WHERE RecipeNo IN %s""",(tuple(list_recipents_id),))
@@ -113,6 +114,7 @@ def product_recommendation(cur):
     click_df = pd.DataFrame(res, columns=['id_user', 'id_movie', 'rating'])
     return click_df
 
+#get interactive recipe
 def interactive_food(cur,recipeTypeId):
     cur.execute("""SELECT review.CustomerId, review.RecipeId, review.Rating 
                         FROM whatseat.recipereviews review
@@ -131,16 +133,16 @@ def get_top_recipe(cur):
     return click_df
 
 #get list top product by total sell
-def get_top_products(cur):
+def get_top_products(cur, n_product):
     cur.execute("""SELECT ProductNo, ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell FROM whatseat.products 
-     Order By TotalSell desc LIMIT 20""")
+     Order By TotalSell desc LIMIT %s""",(n_product,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','productId','name','inStock','basePrice','images','weightServing','totalSell'])
     return click_df
 
 #get list recipe id love by user
 def recipe_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.lovedrecipes IR
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(RecipeNo) FROM whatseat.lovedrecipes IR
     JOIN whatseat.recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
     print('res',res)
@@ -169,7 +171,7 @@ def get_top_product_low_price(cur,list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
     whatseat.products where ProductNo IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
     res = cur.fetchall()
-    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
 
 #get product with apriori
 def get_product_priori(cur,list_product_id):

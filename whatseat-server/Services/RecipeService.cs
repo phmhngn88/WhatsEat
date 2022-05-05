@@ -174,7 +174,7 @@ public class RecipeService
 
     public async Task<int> GetTotalLove(int recipeId)
     {
-        var totalLike = await _context.Recipes.AsNoTracking().FirstOrDefaultAsync();
+        var totalLike = await _context.Recipes.AsNoTracking().FirstOrDefaultAsync(r => r.RecipeId == recipeId);
         int totalLove = await _context.LovedRecipes.AsNoTracking().CountAsync(l => l.RecipeId == recipeId);
         return totalLike.totalLike + totalLove;
     }
