@@ -17,3 +17,13 @@ def genre_recipe(cur):
     res = cur.fetchall()
     recipes = pd.DataFrame(res, columns=['id','genres'])
     return recipes
+
+#Get genre of product
+def genre_product(cur):
+    cur.execute("""SELECT P.ProductId, group_concat(PC.Name)
+                    FROM whatseat.products P
+                    JOIN whatseat.productcategories PC ON P.ProductCategoryId = PC.ProductCategoryId
+                    group by P.ProductId LIMIT 1000""")
+    res = cur.fetchall()
+    recipes = pd.DataFrame(res, columns=['id','genres'])
+    return recipes

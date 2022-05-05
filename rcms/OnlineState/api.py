@@ -62,7 +62,7 @@ def individual_recommend_list_recipes(id_user, n_recipe):
     print(rec_list2)
     return rec_df, rec_list2
 
-def individual_recommend_list_products(id_user, n_recipe):
+def individual_recommend_list_products(id_user, n_product):
     cur = mysql.connection.cursor()
     rec_ids, is_newuser, is_notlove = utils.check_new_user_product(cur, id_user)
 
@@ -77,7 +77,7 @@ def individual_recommend_list_products(id_user, n_recipe):
             cur.close()
         else:    
             print("New user detected!")
-            rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list(rec_ids,n_recipe,cur)
+            rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list_product(rec_ids,n_product,cur)
             rec_df = pd.DataFrame({'Item':rec_list})
             rec_df['Rating'] = 0
             cur.close()
@@ -87,9 +87,9 @@ def individual_recommend_list_products(id_user, n_recipe):
         sim_df = fetch_data.similarity_df(cur,id_user)
         cur.close()
 
-        rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_recipe, click_df, sim_df)
+        rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_product, click_df, sim_df)
     cur = mysql.connection.cursor()
-    rec_list2 = fetch_data.get_list_recipents_by_index(cur,rec_list)
+    rec_list2 = fetch_data.get_top_product_low_price(cur,rec_list)
     cur.close()
     rec_list2['images'] = rec_list2['images'].apply(utils.to_json)
     return rec_df, rec_list2
@@ -98,12 +98,15 @@ def individual_recommend_list_products(id_user, n_recipe):
 def individual_state1_api():
     if 'id_user' in request.args:
         id_user = request.args['id_user']
+        n_product = int(request.args['n_product'])
+
     else:
         return """Error: No id field provided. Please specify an id.
-                (URL: /individual/product?id_user= ...)
+                (URL: /individual/product?id_user= ...&n_product=...)
                 """
     
-    rec_list = individual_recommend_list_products(id_user)
+    rec_list = individual_recommend_list_products(id_user,n_product)
+    print(rec_list)
     return jsonify(rec_list.to_dict('records'))
 
 #Recommend recipe 
