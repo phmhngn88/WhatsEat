@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+
 import Footer from "../../components/Footer/Footer";
 import Recommender from "../../components/Recommender/Recommender";
 import "./RecommendPage.css";
@@ -8,6 +10,16 @@ const RecommendPage = () => {
 
   const handleOk = (year, gender, pal) => {
     console.log(year,gender,pal);
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Customer/get-calo-per-day?YearOfBirth=${year}&gender=${gender}&pAL=${pal}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+      })
+      .catch((err) => {
+        message.error("Đánh giá không thành công!");
+      });
     setIsModalVisible(false);
   };
 

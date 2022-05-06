@@ -5,6 +5,7 @@ import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 import Product from "../Product/Product";
 
@@ -12,11 +13,12 @@ const TopItemsForYou = () => {
   const [topProduct, setTopProduct] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
+  const userId = useSelector((state) => state.auth.userInfo.userId)
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/product?id_user=&n_product=${12}`,
+      url: `http://127.0.0.1:5000/individual/product?id_user=${userId}&n_product=${12}`,
     })
       .then((res) => {
         setTopProduct(res.data);
