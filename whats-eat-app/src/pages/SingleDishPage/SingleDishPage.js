@@ -17,6 +17,7 @@ import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
 import IngredientBox from "../../components/IngredientBox/IngredientBox";
 import TopItems from "../../components/TopItems/TopItems";
+import { Input, Checkbox } from "antd";
 
 const combo = {
   img_url:
@@ -32,9 +33,13 @@ const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
   const [totalLove, setTotalLove] = useState(0);
+  const [servingNumber, setServingNumber] = useState(0);
+  const [isCalculated, setIsCalculated] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
   const recipeId = location.state.recipeId;
+  const calculatedArray = [];
+  const [newIngreadients, setNewIngreadients] = useState([]);
   console.log("Recipe id:", recipeId);
   const {
     description,
@@ -43,6 +48,7 @@ const SingleDishPage = () => {
     ingredients,
     steps,
     name,
+    serving,
     totalLike,
     totalTime,
     level,
@@ -63,10 +69,10 @@ const SingleDishPage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
-    const isLike = !isLikeRecipe
+    const isLike = !isLikeRecipe;
     if (isLike) {
       console.log("like recipe");
       axios({
@@ -94,6 +100,22 @@ const SingleDishPage = () => {
           console.log(err);
         });
     }
+  };
+
+  const handleCalculateIngredients = () => {
+    const list = [];
+
+    calculatedArray.map((item) => {
+      const ingreQuantity = (+item.quantity * servingNumber) / serving;
+      list.push({
+        name: item.name,
+        unit: item.unit.unit,
+        quantity: ingreQuantity,
+      });
+    });
+
+    setNewIngreadients(list);
+    console.log(servingNumber, calculatedArray, newIngreadients);
   };
 
   useEffect(() => {
@@ -137,53 +159,109 @@ const SingleDishPage = () => {
         <div className="single-dish-container">
           <h1 className="title">Chi tiết món ăn</h1>
           <div className="dish-block">
-            <img src={images[0].url} alt={name} className="main-img" />
-            <h1 className="dish-name">{name}</h1>
-            <p
-              className="desc"
-              dangerouslySetInnerHTML={{ __html: description }}
-            />
-            <div className="rating-block">
-              <div className="stars">
-                <StarRatings
-                  rating={avgRating}
-                  starRatedColor="brown"
-                  numberOfStars={5}
-                  name="rating"
-                  starDimension="25px"
-                  starSpacing="3px"
-                />
-              </div>
-              <div
-                className={`${isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
+            <div style={{ width: "60%" }}>
+              <img src={images[0].url} alt={name} className="main-img" />
+              <h1 className="dish-name">
+                {name} (Cho {serving} người ăn)
+              </h1>
+              <p
+                className="desc"
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+              <div className="rating-block">
+                <div className="stars">
+                  <StarRatings
+                    rating={avgRating}
+                    starRatedColor="brown"
+                    numberOfStars={5}
+                    name="rating"
+                    starDimension="25px"
+                    starSpacing="3px"
+                  />
+                </div>
+                <div
+                  className={`${
+                    isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
                   } love`}
-                onClick={handleLikeRecipe}
-              >
-                <AiFillHeart className="icon" /> <span>{totalLove}</span>
+                  onClick={handleLikeRecipe}
+                >
+                  <AiFillHeart className="icon" /> <span>{totalLove}</span>
+                </div>
+                <div className="view">
+                  <AiOutlineEye className="icon" /> <span>{totalView}</span>
+                </div>
               </div>
-              <div className="view">
-                <AiOutlineEye className="icon" /> <span>{totalView}</span>
+              <div className="dish-info">
+                <div className="info-detail">
+                  <div>
+                    <AiOutlineClockCircle className="icon" />{" "}
+                    <span>{totalTime}</span>
+                  </div>
+                </div>
+                <div className="info-detail">
+                  <div>
+                    <AiFillThunderbolt className="icon" />{" "}
+                    <span>{level || "Dễ"}</span>
+                  </div>
+                </div>
+                <div className="info-detail">
+                  <div>
+                    <AiOutlineBarChart className="icon" />{" "}
+                    <span>{totalView}</span> xem
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="dish-info">
-              <div className="info-detail">
-                <div>
-                  <AiOutlineClockCircle className="icon" />{" "}
-                  <span>{totalTime}</span>
+            <div className="form-calc">
+              <>
+                <h1 className="form-title">
+                  Bạn muốn thay đổi số người ăn? Tính toán lượng nguyên liệu tại
+                  đây.
+                </h1>
+                <p className="label">Nhập số người ăn:</p>
+                <Input
+                  type="number"
+                  placeholder="Nhập số người..."
+                  onChange={(e) => setServingNumber(+e.target.value)}
+                />
+                <div className="checkbox-area">
+                  <p className="label">Chọn loại nguyên liệu muốn tính:</p>
+                  <div>
+                    {ingredients?.map((item, idx) => {
+                      return (
+                        <Checkbox
+                          key={idx}
+                          onChange={(e) => {
+                            if (e.target.checked === true) {
+                              calculatedArray.push(item);
+                            } else calculatedArray.splice(idx, 1);
+                          }}
+                        >
+                          {item.name}
+                        </Checkbox>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-              <div className="info-detail">
-                <div>
-                  <AiFillThunderbolt className="icon" />{" "}
-                  <span>{level || "Dễ"}</span>
-                </div>
-              </div>
-              <div className="info-detail">
-                <div>
-                  <AiOutlineBarChart className="icon" />{" "}
-                  <span>{totalView}</span> xem
-                </div>
-              </div>
+                <button
+                  className="result"
+                  onClick={() => handleCalculateIngredients()}
+                >
+                  Xem kết quả
+                </button>
+              </>
+              {newIngreadients.length > 0 && (
+                <>
+                  <h1 className="form-title">
+                    Nguyên liệu để nấu cho {servingNumber} người ăn
+                  </h1>
+                  {newIngreadients.map((item) => (
+                    <p>
+                      {item.name}: {item.quantity} {item.unit}
+                    </p>
+                  ))}
+                </>
+              )}
             </div>
           </div>
           <div className="combo-box">
@@ -191,9 +269,11 @@ const SingleDishPage = () => {
             <img src={images[1].url} alt="combo" className="combo-img" />
             <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
-              {`${ingredients[0].name}${ingredients[1]?.name ? `, ${ingredients[1]?.name}` : ""
-                }${ingredients[2]?.name ? `, ${ingredients[2]?.name}` : ""} và ${ingredients.length >= 3 ? ingredients.length - 3 : 0
-                } thực phẩm khác`}
+              {`${ingredients[0].name}${
+                ingredients[1]?.name ? `, ${ingredients[1]?.name}` : ""
+              }${ingredients[2]?.name ? `, ${ingredients[2]?.name}` : ""} và ${
+                ingredients.length >= 3 ? ingredients.length - 3 : 0
+              } thực phẩm khác`}
             </p>
             <p className="combo-price">
               {price.toLocaleString("vi-VN", {

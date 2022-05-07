@@ -1,28 +1,38 @@
-from re import T
-import numpy as np
 import pandas as pd
-import fetch
 import MySQLdb
-from math import isnan
 import utils
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-cv = CountVectorizer(max_features=5000,stop_words='english')
 
 conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
 cur = conn.cursor()
 
-#lấy dataframe món ăn
-genre_df = utils.genre_df(cur)
+################## RECIPE ###############################
+#lấy dataframe món ăn theo thể loại
+genre_df = utils.genre_df(cur,type = "recipe")
 #xóa những phần tử null
 genre_df = genre_df.dropna()
 cur.close()
-
+#tính similarity theo dataframe món ăn theo thể loại
 similarity = cosine_similarity(genre_df)
 df = pd.DataFrame(similarity)
-print(df)
-object_list = utils.convertDataframeToList(df)
+#convert dataframe sang list
+object_list_recipe = utils.convertDataframeToList(df)
+#insert similiraty vào db
 fields = ("id1", "id2", "similarity")
-utils.upsert(conn, "cb_similarity", fields, object_list)
+utils.upsert(conn, "cb_similarity", fields, object_list_recipe)
 
+################## PRODUCT ###############################
+#lấy dataframe món ăn theo thể loại
+cur = conn.cursor()
+genre_product_df = utils.genre_df(cur,type = "product")
+#xóa những phần tử null
+genre_product_df = genre_product_df.dropna()
+cur.close()
+#tính similarity theo dataframe món ăn theo thể loại
+similarity = cosine_similarity(genre_product_df)
+df = pd.DataFrame(similarity)
+#convert dataframe sang list
+object_list_product = utils.convertDataframeToList(df)
+#insert similiraty vào db
+fields = ("id1", "id2", "similarity")
+utils.upsert(conn, "cb_product_similarity", fields, object_list_product)

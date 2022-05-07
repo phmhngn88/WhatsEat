@@ -39,9 +39,13 @@ def upsert(conn, table, fields, object_list):
     conn.commit()
     print(table + ' upserts successfully')
 
-def genre_df(cur):
+def genre_df(cur,type):
     # fetch genre data from the database
-    genre_df = fetch.genre_recipe(cur) # genre_df: 2 columns(id, genres)
+    
+    if(type == "recipe"):
+        genre_df = fetch.genre_recipe(cur) # genre_df: 2 columns(id, genres)
+    else:
+        genre_df = fetch.genre_product(cur)
     # split genres column to make each genre one column
     genre_df['genres'] = genre_df['genres'].apply(lambda x: x.split(","))
     genres_counts = Counter(g for genres in genre_df['genres'] for g in genres)

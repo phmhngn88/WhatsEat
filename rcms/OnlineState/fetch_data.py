@@ -30,26 +30,6 @@ def get_fav_food(cur, user_id):
 # + dataframe of similarity score with two columns: 
 #       - id_user_2: ids of users that are similarity calculated with input user_id
 #       - similarity: similarity score
-def fetch_sim(cur):
-    cur.execute("""SELECT id1,id2, similarity FROM whatseat.cb_similarity""")
-    res = cur.fetchall()
-    similarity_df = pd.DataFrame(res, columns=['id1','id2', 'similarity'])
-    print("similarity_df: ", similarity_df)
-    return similarity_df
-
-def similarity_df(cur, user_id):
-    cur.execute("""SELECT id_user_2, similarity FROM moviedb.jaccard_similarity WHERE id_user_1 = %s""", (user_id,))
-    res = cur.fetchall()
-    similarity_df = pd.DataFrame(res, columns=['id_user_2', 'similarity'])
-    print("similarity_df: ", similarity_df)
-    return similarity_df
-
-def similarity_df2(cur, user_id):
-    cur.execute("""SELECT id_user_2, similarity FROM testdb.jaccard_similarity_food WHERE id_user_1 = %s""", (user_id,))
-    res = cur.fetchall()
-    similarity_df = pd.DataFrame(res, columns=['id_user_2', 'similarity'])
-    print("similarity_df: ", similarity_df)
-    return similarity_df
 
 # user_factor fuction: fetch user's factors data from the database
 # Input: 
@@ -110,27 +90,6 @@ def global_rating_mean(cur ):
     global_mean_rating = np.asarray(res, dtype= float).flatten()[0]
     return global_mean_rating
 
-# rating_watchtime_df function: fetch data of user - item view time from the database
-# Input: mysql cursor
-# Output: dataframe of watching time data
-def rating_watchtime_df(cur):
-    cur.execute("""SELECT id_user, id_movie, rating FROM moviedb.interactive""")
-    res = cur.fetchall()
-    training_df = pd.DataFrame(res, columns=['id_user', 'id_movie', 'rating'])
-    training_df = training_df.dropna()
-    return training_df
-
-# movie_direction_actor function: fetch data of movies' director, actor from the database
-# Input: 
-# + cur: mysql cursor
-# + list_item_id: List of item ids
-# Output:
-# + dataframe contain id of movies and information of their directors and actors
-def movie_director_actor(cur, list_item_id):
-    cur.execute("""SELECT id, director, actor FROM moviedb.movie WHERE id IN %s""",(tuple(list_item_id),))
-    res = cur.fetchall()
-    return pd.DataFrame(res, columns=['id','director','actor'])
-
 def list_product(cur, list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice, Description FROM whatseat.products WHERE ProductId IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
@@ -142,9 +101,10 @@ def list_recipents(cur, list_recipents_id):
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
+#get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
     cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl FROM whatseat.recipes re
-     WHERE FAKE IN %s""",(tuple(list_recipents_id),))
+     WHERE RecipeNo IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
@@ -154,6 +114,7 @@ def product_recommendation(cur):
     click_df = pd.DataFrame(res, columns=['id_user', 'id_movie', 'rating'])
     return click_df
 
+#get interactive recipe
 def interactive_food(cur,recipeTypeId):
     cur.execute("""SELECT review.CustomerId, review.RecipeId, review.Rating 
                         FROM whatseat.recipereviews review
@@ -162,23 +123,26 @@ def interactive_food(cur,recipeTypeId):
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id_user', 'id_food', 'rating'])
     return click_df
-#get list top recipe by 
+
+#get list top recipe by total like
 def get_top_recipe(cur):
     cur.execute("""SELECT RecipeNo, RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, RecipeTypeId FROM whatseat.recipes 
      Order By totalLike desc LIMIT 20""")
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
     return click_df
-#get list top product by 
-def get_top_products(cur):
+
+#get list top product by total sell
+def get_top_products(cur, n_product):
     cur.execute("""SELECT ProductNo, ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell FROM whatseat.products 
-     Order By TotalSell desc LIMIT 20""")
+     Order By TotalSell desc LIMIT %s""",(n_product,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','productId','name','inStock','basePrice','images','weightServing','totalSell'])
     return click_df
+
 #get list recipe id love by user
 def recipe_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.lovedrecipes IR
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(RecipeNo) FROM whatseat.lovedrecipes IR
     JOIN whatseat.recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
     print('res',res)
@@ -188,9 +152,10 @@ def recipe_love_by_user(cur, id_user):
         ids = res.split(',')
         ids = [int(s) for s in ids]
     return ids
+
 #get list product id love by user
 def product_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(Fake) FROM whatseat.lovedproducts IP
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(ProductNo) FROM whatseat.lovedproducts IP
     JOIN whatseat.products P ON IP.ProductId = P.ProductId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
     print('res',res)
@@ -201,46 +166,35 @@ def product_love_by_user(cur, id_user):
         ids = [int(s) for s in ids]
     return ids
 
-def genre(cur):
-    cur.execute("""SELECT mList.id_movie, group_concat( li.name)
-                    FROM moviedb.movie_list mList
-                    JOIN moviedb.list li ON mList.id_list = li.id
-                    where li.type = 0
-                    group by mList.id_movie""")
-    res = cur.fetchall()
-    movies = pd.DataFrame(res, columns=['movieId','genres'])
-    return movies
-
-#Get genre of recipe
-def genre_recipe(cur):
-    cur.execute("""SELECT reType.RecipeId, group_concat( type.Name)
-                    FROM whatseat.reciperecipetypes reType
-                    JOIN whatseat.recipetypes type ON reType.RecipeTypeId = type.RecipeTypeId
-                    group by reType.RecipeId LIMIT 1000""")
-    res = cur.fetchall()
-    recipes = pd.DataFrame(res, columns=['id','genres'])
-    return recipes
-
+#filter by low price
 def get_top_product_low_price(cur,list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
-    whatseat.products where Fake IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
+    whatseat.products where ProductNo IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
     res = cur.fetchall()
-    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
 
-
+#get product with apriori
 def get_product_priori(cur,list_product_id):
     cur.execute("""SELECT consequents FROM whatseat.apriori
     WHERE confidence >= 0.5 AND antecedents IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['consequents'])
 
+#get product by list id
 def get_product_by_list_id(cur,list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
     whatseat.products where ProductId IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
     return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
 
+# get recipe cosine matrix
 def get_cosine_sim_matrix(cur):
     cur.execute("""SELECT id1 , id2, similarity from whatseat.cb_similarity""")
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['id1','id2','similarity'])
+
+# get product cosine matrix
+def get_cosine_sim_matrix_product(cur):
+    cur.execute("""SELECT id1 , id2, similarity from whatseat.cb_product_similarity""")
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id1','id2','similarity'])

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Footer from "../../components/Footer/Footer";
+import Categories from "../../components/Categories/Categories";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./CategoryPage.css";
 
@@ -33,12 +34,10 @@ const CategoryPage = () => {
     <div className="category">
       <div className="category-fluid">
         <div className="category-container">
-          <div className="option-btn-group">
-            <button className="btn active-btn">Tất cả</button>
-            {/* {products.map((type, idx) => {
-              return <button className="btn">type_name</button>;
-            })} */}
-          </div>
+          <h1 style={{ fontWeight: "900", fontSize: "1.5rem" }}>
+            Danh mục sản phẩm
+          </h1>
+          <Categories />
           <div className="content">
             <h3 className="title">
               {categoryName} <span>{`(${products.length} sản phẩm)`}</span>

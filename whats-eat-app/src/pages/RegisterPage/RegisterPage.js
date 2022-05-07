@@ -143,7 +143,8 @@ const RegisterPage = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 return handleSubmit();
-            }}}
+              }
+            }}
           >
             Đăng ký
           </Button>

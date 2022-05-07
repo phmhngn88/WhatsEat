@@ -6,6 +6,7 @@
 
 .category-container{
     width: 70%;
+    margin-top: 3rem;
 }
 
 .category-container .option-btn-group{
@@ -33,6 +34,16 @@
 .category-container .content .title{
     font-size: 1.2rem;
     font-weight: 650;
+}
+
+.category-container .categories .categories-container{
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.category-container .categories .categories-container .ant-row .ant-col{
+    text-align: left;
+    padding-left: 0;
 }
 .content span{
     font-weight: 500;

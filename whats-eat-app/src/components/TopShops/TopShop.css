@@ -8,6 +8,10 @@
     width: 70%;
 }
 
+.top-shop .title{
+    font-weight: 900;
+}
+
 .top-shop .shop-card-container{
     display: flex;
     justify-content: space-between;
