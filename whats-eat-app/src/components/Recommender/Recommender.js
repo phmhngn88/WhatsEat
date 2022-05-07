@@ -59,7 +59,7 @@ const categories = [
   { id: 10, category_name: "Món nhậu" },
 ];
 
-const Recommender = () => {
+const Recommender = (props) => {
   const [menu, setMenu] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
@@ -105,6 +105,7 @@ const Recommender = () => {
         <div className="menu-mix">
           <div className="menu-detail">
             <h1 className="menu-title">Thực đơn cho bạn</h1>
+            {props.kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {props.kcal}</p>}
             {menu.map((dish, index) => {
               const { id, dish_name } = dish;
               return (

@@ -39,21 +39,10 @@ public class CustomerController : ControllerBase
     [HttpGet]
     [Route("cart")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
-    public async Task<IActionResult> GetCartDetails([FromQuery] PagedRequest request)
+    public async Task<IActionResult> GetCartDetails()
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
-        PagedList<CartDetail> carts = await _cartService.GetPagedCartDetails(request, userId);
-        var metadata = new
-        {
-            carts.TotalCount,
-            carts.PageSize,
-            carts.CurrentPage,
-            carts.TotalPages,
-            carts.HasNext,
-            carts.HasPrevious
-        };
-
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        var carts = await _cartService.GetPagedCartDetails(userId);
         return Ok(carts);
     }
 
