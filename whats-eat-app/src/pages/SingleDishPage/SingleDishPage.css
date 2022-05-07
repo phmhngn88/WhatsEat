@@ -23,6 +23,12 @@
     margin-bottom: 2rem;
 }
 
+.single-dish-container .dish-block{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .single-dish-container .dish-block .dish-img{
     width: 60%;
     height: 60vh;
@@ -41,7 +47,7 @@
 }
 
 .single-dish-container .dish-block .rating-block{
-    width: 35%;
+    width: 45%;
     display: flex;
     justify-content: space-between;
 }
@@ -67,6 +73,46 @@
 .single-dish-container .dish-block .rating-block span{
     padding-left: 0.2rem;
     font-size: 1.2rem;
+}
+
+.single-dish-container .dish-block .form-calc{
+    width: 40%;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 1px #C4C4C4;
+}
+
+.form-calc .form-title{
+    color: brown;
+    font-weight: bold;
+}
+
+.form-calc .label{
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-calc .checkbox-area{
+    margin-bottom: 1rem;
+}
+
+.form-calc .checkbox-area .ant-checkbox-wrapper{
+    margin: 0;
+}
+
+.form-calc .result{
+    color: #fff;
+    background-color: brown;
+    padding: 0.5rem 2rem;
+    margin-bottom: 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.form-calc .result:hover{
+    background-color: red;
 }
 
 .single-dish-container .dish-info{

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./IngredientBox.css";
 import axios from "axios";
-import { Col } from "antd";
+import { Row, Col } from "antd";
 import "antd/dist/antd.css";
 import Product from "../Product/Product";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
@@ -54,13 +54,13 @@ const IngredientBox = ({ name, quantity, unit }) => {
       </div>
       {isShow &&
         (products.length !== 0 ? (
-          <div className="products-box">
+          <Row gutter={[16, 16]} className="products-box">
             {products.map((item, idx) => (
-              <Col span={6} className="item-col" key={idx}>
+              <Col span={4} className="item-col" key={idx}>
                 <Product {...item} />
               </Col>
             ))}
-          </div>
+          </Row>
         ) : (
           <p>Không có sản phẩm nào</p>
         ))}
