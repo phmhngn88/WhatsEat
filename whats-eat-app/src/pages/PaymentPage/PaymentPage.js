@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./PaymentPage.css";
 import axios from "axios";
 import { Select, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "../../reducers/cart";
 
 const { Option } = Select;
 
 const PaymentPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [deliver, setDeliver] = useState("Giao hàng tiết kiệm");
   const [paymentMethod, setPaymentMethod] = useState(
     "Thanh toán khi nhận hàng"
@@ -43,7 +47,8 @@ const PaymentPage = () => {
       },
     })
       .then((res) => {
-        message.success("Cảm ơn đánh giá của bạn!");
+        dispatch(clearCart());
+        navigate(`/payment/success`);
       })
       .catch((err) => {
         message.error("Đánh giá không thành công!");

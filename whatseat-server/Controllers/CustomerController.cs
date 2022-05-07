@@ -338,4 +338,14 @@ public class CustomerController : ControllerBase
             return Forbid();
         }
     }
+
+    [HttpGet]
+    [Route("get-calo-per-day")]
+    public async Task<IActionResult> AddCaloPerDay([FromQuery] AddCaloRequest request)
+    {
+        var now = DateTime.Now.Year;
+        var old = now - Int32.Parse(request.YearOfBirth);
+        var kcal = await  _context.KcalReferences.Where(x => x.PAL.Equals(request.PAL) && x.MinYearsOld <= old && x.MaxYearsOld > old && x.Gender.Equals(request.Gender)).FirstOrDefaultAsync();
+        return Ok(kcal.Kcal);
+    }
 }

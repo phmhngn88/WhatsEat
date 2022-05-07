@@ -60,7 +60,7 @@ const SingleProductPage = () => {
   const addToCart = () => {
     if (auth.userName) {
       dispatch(addItemToCart({ productId, productDetail, count }));
-      let secondsToGo = 5;
+      let secondsToGo = 3;
       const modal = Modal.success({
         title: "Sản phẩm đã được thêm vào giỏ hàng",
         okButtonProps: {

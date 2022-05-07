@@ -51,8 +51,8 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel}) => {
                             }}
                             onChange={onGenderChange}
                         >
-                            <Option value="0">Nam</Option>
-                            <Option value="1">Nữ</Option>
+                            <Option value="male">Nam</Option>
+                            <Option value="female">Nữ</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -66,9 +66,9 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel}) => {
                             }}
                             onChange={onPALChange}
                         >
-                            <Option value="0">Ít</Option>
-                            <Option value="1">Vừa</Option>
-                            <Option value="2">Nhiều</Option>
+                            <Option value="1.4">Ít</Option>
+                            <Option value="1.6">Vừa</Option>
+                            <Option value="1.8">Nhiều</Option>
                         </Select>
                     </Form.Item>
                 </Form>
