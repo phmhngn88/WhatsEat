@@ -1,11 +1,9 @@
-import { Button, Checkbox } from "antd";
+import { Button } from "antd";
 import "antd/dist/antd.css";
-import React, { useEffect, useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import React from "react";
+import { BsShop } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import Counter from "../../components/Counter/Counter";
 import Footer from "../../components/Footer/Footer";
-import TopItems from "../../components/TopItems/TopItems";
 import CartItem from "../CartItem/CartItem";
 import RecommendedItems from "../TopItems/RecommendedItems";
 import "./Cart.css";
@@ -17,10 +15,13 @@ const Cart = ({
   removeItem,
   clearCart,
 }) => {
-  const productIds = [];
-  cartItems.map((item) => {
-    productIds.push(item.productId);
-  });
+  const productIds = cartItems.map((item) => item.productId);
+  const listShop = cartItems.map((item) => item.store);
+  const noDuplicateListShop = [
+    ...new Map(listShop.map((obj) => [JSON.stringify(obj), obj])).values(),
+  ];
+
+  console.log(noDuplicateListShop);
   return (
     <div className="cart">
       {cartItems.length === 0 ? (
@@ -44,15 +45,27 @@ const Cart = ({
               </h1>
             </div>
             <div className="items-container">
-              {cartItems.map((item, index) => {
+              {noDuplicateListShop.map((shop, idx) => {
                 return (
-                  <CartItem
-                    key={index}
-                    {...item}
-                    decreaseQuantity={decreaseQuantity}
-                    increaseQuantity={increaseQuantity}
-                    onDelete={() => removeItem(item.productId)}
-                  />
+                  <div key={idx}>
+                    <h2 className="shop-name">
+                      <BsShop style={{ marginRight: "0.5rem" }} />
+                      {shop.shopName || "WhatseatFARM"}
+                    </h2>
+                    {cartItems.map((item, index) => {
+                      if (item.store.storeId === shop.storeId)
+                        return (
+                          <CartItem
+                            key={index}
+                            {...item}
+                            decreaseQuantity={decreaseQuantity}
+                            increaseQuantity={increaseQuantity}
+                            onDelete={() => removeItem(item.productId)}
+                          />
+                        );
+                      else return <></>;
+                    })}
+                  </div>
                 );
               })}
               <Link to="/payment" className="pay-btn">
@@ -62,7 +75,7 @@ const Cart = ({
           </div>
         </div>
       )}
-      {/* <RecommendedItems listProduct={productIds} /> */}
+      <RecommendedItems listProduct={productIds} />
       <Footer />
     </div>
   );

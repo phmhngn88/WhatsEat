@@ -103,15 +103,14 @@ const SingleDishPage = () => {
   };
 
   const handleCalculateIngredients = () => {
-    const list = [];
-
-    calculatedArray.map((item) => {
-      const ingreQuantity = (+item.quantity * servingNumber) / serving;
-      list.push({
+    const list = calculatedArray.map((item) => {
+      const ingreQuantity =
+        Math.round(((+item.quantity * servingNumber) / serving) * 2) / 2;
+      return {
         name: item.name,
         unit: item.unit.unit,
         quantity: ingreQuantity,
-      });
+      };
     });
 
     setNewIngreadients(list);
