@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useSelector } from 'react-redux'
 import Footer from "../../components/Footer/Footer";
 import Recommender from "../../components/Recommender/Recommender";
 import "./RecommendPage.css";
 import ModalCalo from "../../components/ModalCalCalo/ModalCalo"
 const RecommendPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(true);
-
+  const [kcal, setKcal] = useState(0);
+  const token = useSelector((state) => state.auth.userInfo.token)
   const handleOk = (year, gender, pal) => {
+
     console.log(year,gender,pal);
     axios({
       method: "get",
@@ -16,9 +18,9 @@ const RecommendPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
+        setKcal(res.data)
       })
       .catch((err) => {
-        message.error("Đánh giá không thành công!");
       });
     setIsModalVisible(false);
   };
@@ -29,7 +31,7 @@ const RecommendPage = () => {
 
   return (
     <div className="recommend">
-      <Recommender />
+      <Recommender kcal={kcal} />
       <Footer />
       <ModalCalo isModalVisible={isModalVisible} handleOk={handleOk} handleCancel={handleCancel} />
     </div>
