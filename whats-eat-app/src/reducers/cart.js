@@ -23,6 +23,7 @@ const cart = createSlice({
                     price: action.payload.productDetail.basePrice,
                     image: action.payload.productDetail.images[0][1].url,
                     weightServing: action.payload.productDetail.weightServing,
+                    storeName: action.payload.productDetail.store.shopName,
                     totalPrice: action.payload.count * action.payload.productDetail.basePrice
                 }) 
             }
