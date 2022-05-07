@@ -79,11 +79,26 @@ public class CartService
         };
     }
 
-    public async Task<PagedList<CartDetail>> GetPagedCartDetails(PagedRequest request, Guid userId)
+    public async Task<List<CartDetailResponse>> GetPagedCartDetails(Guid userId)
     {
-        var cartList = _context.CartDetails.Include(cd => cd.Product).Where(cd => cd.CustomerId == userId).AsNoTracking().OrderByDescending(cd => cd.CreatedOn).AsQueryable();
-        var res = await PagedList<CartDetail>.ToPagedList(cartList, request.PageNumber, request.PageSize);
-        return res;
+        var cartList = await _context.CartDetails.Include(c => c.Product)
+            .Include(cd => cd.Product!.Store).Where(cd => cd.CustomerId == userId)
+            .AsNoTracking().OrderByDescending(cd => cd.CreatedOn).ToListAsync();
+        List<CartDetailResponse> cartDetailResponses = new List<CartDetailResponse>();
+        foreach (var item in cartList)
+        {
+            cartDetailResponses.Add(
+                new CartDetailResponse
+                {
+                    ProductId = item.ProductId,
+                    ProductName = item.Product!.Name,
+                    Quantity = item.Quantity,
+                    CreatedOn = item.CreatedOn,
+                    Store = item.Product!.Store
+                }
+            );
+        }
+        return cartDetailResponses;
     }
 
     public async Task<bool> RemoveById(Guid customerId, int productId)
