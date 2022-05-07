@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220507160332_storeReview 1")]
+    partial class storeReview1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1013,9 +1015,6 @@ namespace whatseat_server.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("longtext");
 
-                    b.Property<float>("AvgRating")
-                        .HasColumnType("float");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
@@ -1511,11 +1510,11 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.StoreReview", b =>
                 {
                     b.HasOne("whatseat_server.Models.Customer", "Customer")
-                        .WithMany("storeReviews")
+                        .WithMany()
                         .HasForeignKey("CustomerId");
 
                     b.HasOne("whatseat_server.Models.Store", "Store")
-                        .WithMany("storeReviews")
+                        .WithMany()
                         .HasForeignKey("StoreId");
 
                     b.Navigation("Customer");
@@ -1538,8 +1537,6 @@ namespace whatseat_server.Migrations
                     b.Navigation("Recipes");
 
                     b.Navigation("ShippingInfos");
-
-                    b.Navigation("storeReviews");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.Menu", b =>
@@ -1585,8 +1582,6 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.Store", b =>
                 {
                     b.Navigation("Order");
-
-                    b.Navigation("storeReviews");
                 });
 #pragma warning restore 612, 618
         }

@@ -20,18 +20,21 @@ public class StoreController : ControllerBase
     private readonly StoreService _storeService;
     private readonly ProductService _productService;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly CustomerService _customerService;
 
     public StoreController(
         WhatsEatContext context,
         StoreService storeService,
         UserManager<IdentityUser> userManager,
-        ProductService productService
+        ProductService productService,
+        CustomerService customerService
     )
     {
         _context = context;
         _storeService = storeService;
         _userManager = userManager;
         _productService = productService;
+        _customerService = customerService;
     }
 
     [HttpGet]
@@ -207,7 +210,6 @@ public class StoreController : ControllerBase
     [HttpGet]
     [Route("orders")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
-
     public async Task<IActionResult> TrackOrders()
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
@@ -262,5 +264,54 @@ public class StoreController : ControllerBase
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
         return Ok(productRes);
+    }
+
+    [HttpPost]
+    [Route("review")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Customer)]
+    public async Task<IActionResult> ReviewStore([FromBody] StoreReviewRequest reviewRequest)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        if (reviewRequest.Rating > 5 || reviewRequest.Rating < 0)
+        {
+            return BadRequest(new { message = "Rating must be between 0 and 5" });
+        }
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        StoreReview res = await _storeService.storeReview(reviewRequest, customer);
+
+        return Ok(res);
+    }
+
+    [HttpGet]
+    [Route("review")]
+    public async Task<IActionResult> GetStoreReviews([FromQuery] PagedStoreReviewRequest reviewRequest)
+    {
+        PagedList<StoreReview> storeReviews = await _storeService.GetPagedStoreReview(reviewRequest);
+        var metadata = new
+        {
+            storeReviews.TotalCount,
+            storeReviews.PageSize,
+            storeReviews.CurrentPage,
+            storeReviews.TotalPages,
+            storeReviews.HasNext,
+            storeReviews.HasPrevious
+        };
+
+        List<StoreReviewResponse> reviewResponses = new List<StoreReviewResponse>();
+        foreach (var item in storeReviews)
+        {
+            reviewResponses.Add(new StoreReviewResponse
+            {
+                Comment = item.Comment,
+                CreatedOn = item.CreatedOn,
+                Rating = item.Rating,
+                StoreReviewId = item.StoreReviewId,
+                CustomerId = item.Customer!.CustomerId,
+                CustomerName = item.Customer!.Name
+            });
+        }
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        return Ok(reviewResponses);
     }
 }

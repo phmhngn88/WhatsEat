@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace whatseat_server.Models;
 
@@ -11,6 +12,8 @@ public class StoreReview
     public int Rating { get; set; }
     public string Comment { get; set; }
     public DateTime CreatedOn { get; set; }
+    [JsonIgnore]
     public Store Store { get; set; }
+    [JsonIgnore]
     public Customer Customer { get; set; }
 }
