@@ -63,9 +63,19 @@
     flex-direction: column;
 }
 
+.cart-container .cart-fluid .items-container .shop-name{
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+}
+
 .cart-container .cart-fluid .items-container .single-item{
     display: flex;
     margin-top: 2rem;
+    margin-left: 2rem;
 }
 
 .cart-container .cart-fluid .items-container .single-item .item-img{
