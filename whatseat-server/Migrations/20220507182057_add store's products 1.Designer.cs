@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220507182057_add store's products 1")]
+    partial class addstoresproducts1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -555,6 +557,9 @@ namespace whatseat_server.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("PhotoJson")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PriceJson")
                         .HasColumnType("longtext");
 
                     b.Property<int?>("ProductCategoryId")

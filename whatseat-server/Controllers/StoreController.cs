@@ -314,4 +314,33 @@ public class StoreController : ControllerBase
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
         return Ok(reviewResponses);
     }
+
+    [HttpDelete]
+    [Route("product")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
+    public async Task<IActionResult> DeleteProduct([FromBody] ProductManagerRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
+
+        Store store = await _storeService.FindStoreByStoreIdAsync(request.StoreId);
+
+        if (!_storeService.UserIsStore(user, store))
+        {
+            return Forbid();
+        }
+
+        Product product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == request.ProductId);
+
+        if (!_storeService.StoreContainsProduct(product, store))
+        {
+            return Forbid();
+        }
+
+        product.Status = false;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

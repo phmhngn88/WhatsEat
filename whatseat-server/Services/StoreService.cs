@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using whatseat_server.Data;
@@ -58,7 +59,7 @@ public class StoreService
 
     public async Task<Store> FindStoreByStoreIdAsync(int storeId)
     {
-        return await _context.Stores.FirstOrDefaultAsync(s => s.StoreId == storeId);
+        return await _context.Stores.Include(s => s.User).FirstOrDefaultAsync(s => s.StoreId == storeId);
     }
 
     internal async Task<StoreReview> storeReview(StoreReviewRequest reviewRequest, Customer customer)
@@ -96,4 +97,15 @@ public class StoreService
 
         return await PagedList<StoreReview>.ToPagedList(storeReviews, reviewRequest.PageNumber, reviewRequest.PageSize);
     }
+
+    public bool UserIsStore(IdentityUser user, Store store)
+    {
+        return store.User == user;
+    }
+
+    public bool StoreContainsProduct(Product product, Store store)
+    {
+        return store.Products.Contains(product);
+    }
+
 }

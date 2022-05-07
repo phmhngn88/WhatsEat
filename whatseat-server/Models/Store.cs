@@ -30,5 +30,8 @@ public class Store
     public ICollection<Order> Order { get; set; }
     [JsonIgnore]
     public ICollection<StoreReview> storeReviews { get; set; }
+    [JsonIgnore]
+    public ICollection<Product> Products { get; set; }
+
 
 }
