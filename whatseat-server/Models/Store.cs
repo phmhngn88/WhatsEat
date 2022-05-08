@@ -19,6 +19,7 @@ public class Store
     public string Description { get; set; }
     public bool IsActive { get; set; } = false;
     public string AvatarUrl { get; set; }
+    public float AvgRating { get; set; }
     public String UserId { get; set; }
     [EmailAddress]
     public string Email { get; set; }
@@ -27,5 +28,10 @@ public class Store
     public IdentityUser User { get; set; }
     [JsonIgnore]
     public ICollection<Order> Order { get; set; }
+    [JsonIgnore]
+    public ICollection<StoreReview> storeReviews { get; set; }
+    [JsonIgnore]
+    public ICollection<Product> Products { get; set; }
+
 
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using whatseat_server.Data;
@@ -55,4 +56,56 @@ public class StoreService
         List<Photo> result = JsonConvert.DeserializeObject<List<Photo>>(jsonPhotos);
         return result;
     }
+
+    public async Task<Store> FindStoreByStoreIdAsync(int storeId)
+    {
+        return await _context.Stores.Include(s => s.User).FirstOrDefaultAsync(s => s.StoreId == storeId);
+    }
+
+    internal async Task<StoreReview> storeReview(StoreReviewRequest reviewRequest, Customer customer)
+    {
+        Store store = await FindStoreByStoreIdAsync(reviewRequest.StoreId);
+        StoreReview review = new StoreReview
+        {
+            Rating = reviewRequest.Rating,
+            CreatedOn = DateTime.UtcNow,
+            Customer = customer,
+            Store = store,
+            Comment = reviewRequest.Comment
+        };
+
+        var addRes = await _context.StoreReviews.AddAsync(review);
+
+        int reviewNum = await _context.StoreReviews
+            .CountAsync(sr => reviewRequest.StoreId == sr.Store!.StoreId);
+        int reviewSum = await _context.StoreReviews.Where(sr => reviewRequest.StoreId == sr.Store!.StoreId).SumAsync(sr => sr.Rating);
+
+        store.AvgRating = (1f * reviewSum) / reviewNum;
+
+        var changRes = await _context.SaveChangesAsync();
+
+
+        return review;
+    }
+
+    public async Task<PagedList<StoreReview>> GetPagedStoreReview(PagedStoreReviewRequest reviewRequest)
+    {
+        Store store = await this.FindStoreByStoreIdAsync(reviewRequest.StoreId);
+
+        var storeReviews = _context.StoreReviews.AsNoTracking().Include(sr => sr.Customer)
+            .Where(sr => sr.Store!.StoreId == reviewRequest.StoreId).AsQueryable();
+
+        return await PagedList<StoreReview>.ToPagedList(storeReviews, reviewRequest.PageNumber, reviewRequest.PageSize);
+    }
+
+    public bool UserIsStore(IdentityUser user, Store store)
+    {
+        return store.User == user;
+    }
+
+    public bool StoreContainsProduct(Product product, Store store)
+    {
+        return store.Products.Contains(product);
+    }
+
 }

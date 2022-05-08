@@ -94,7 +94,8 @@ public class CartService
                     ProductName = item.Product!.Name,
                     Quantity = item.Quantity,
                     CreatedOn = item.CreatedOn,
-                    Store = item.Product!.Store
+                    Store = item.Product!.Store,
+                    Images = _productService.ConvertJsonToPhotos(item.Product!.PhotoJson)
                 }
             );
         }

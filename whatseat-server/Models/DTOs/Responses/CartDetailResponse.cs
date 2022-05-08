@@ -7,4 +7,6 @@ public class CartDetailResponse
     public DateTime CreatedOn { get; set; }
     public Store Store { get; internal set; }
     public string ProductName { get; internal set; }
+    public List<List<Photo>> Images { get; set; }
+
 }

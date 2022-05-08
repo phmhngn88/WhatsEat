@@ -21,7 +21,6 @@ public class WhatsEatContext : IdentityDbContext
         modelBuilder.Entity<LovedRecipe>().HasKey(rrt => new { rrt.RecipeId, rrt.CustomerId });
         modelBuilder.Entity<LovedRecipe>().HasKey(rrt => new { rrt.RecipeId, rrt.CustomerId });
         modelBuilder.Entity<MenuDetail>().HasKey(mt => new { mt.RecipeId, mt.MenuId });
-
         // modelBuilder.Entity<Product>().Property(p => p.ProductNo).ValueGeneratedOnAdd();
         modelBuilder.Entity<RecipeRecipeType>()
             .HasOne<Recipe>(rrt => rrt.Recipe)
@@ -67,4 +66,6 @@ public class WhatsEatContext : IdentityDbContext
     public DbSet<Menu> Menus => Set<Menu>();
     public DbSet<MenuDetail> MenuDetails => Set<MenuDetail>();
     public DbSet<KcalReference> KcalReferences => Set<KcalReference>();
+    public DbSet<StoreReview> StoreReviews => Set<StoreReview>();
+
 }

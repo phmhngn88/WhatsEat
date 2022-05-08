@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using whatseat_server.Data;
 
@@ -10,9 +11,10 @@ using whatseat_server.Data;
 namespace whatseat_server.Migrations
 {
     [DbContext(typeof(WhatsEatContext))]
-    partial class WhatsEatContextModelSnapshot : ModelSnapshot
+    [Migration("20220507152528_storeReview")]
+    partial class storeReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -557,14 +559,14 @@ namespace whatseat_server.Migrations
                     b.Property<string>("PhotoJson")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PriceJson")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("ProductCategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductNo")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<int?>("StoreId")
                         .HasColumnType("int");
@@ -1013,9 +1015,6 @@ namespace whatseat_server.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("longtext");
 
-                    b.Property<float>("AvgRating")
-                        .HasColumnType("float");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
@@ -1048,37 +1047,6 @@ namespace whatseat_server.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Stores");
-                });
-
-            modelBuilder.Entity("whatseat_server.Models.StoreReview", b =>
-                {
-                    b.Property<int>("StoreReviewId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime");
-
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StoreId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StoreReviewId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("StoreReviews");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.Unit", b =>
@@ -1349,7 +1317,7 @@ namespace whatseat_server.Migrations
                         .HasForeignKey("ProductCategoryId");
 
                     b.HasOne("whatseat_server.Models.Store", "Store")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("StoreId");
 
                     b.Navigation("ProductCategory");
@@ -1508,21 +1476,6 @@ namespace whatseat_server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("whatseat_server.Models.StoreReview", b =>
-                {
-                    b.HasOne("whatseat_server.Models.Customer", "Customer")
-                        .WithMany("storeReviews")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("whatseat_server.Models.Store", "Store")
-                        .WithMany("storeReviews")
-                        .HasForeignKey("StoreId");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Store");
-                });
-
             modelBuilder.Entity("whatseat_server.Models.Customer", b =>
                 {
                     b.Navigation("CartDetails");
@@ -1538,8 +1491,6 @@ namespace whatseat_server.Migrations
                     b.Navigation("Recipes");
 
                     b.Navigation("ShippingInfos");
-
-                    b.Navigation("storeReviews");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.Menu", b =>
@@ -1585,10 +1536,6 @@ namespace whatseat_server.Migrations
             modelBuilder.Entity("whatseat_server.Models.Store", b =>
                 {
                     b.Navigation("Order");
-
-                    b.Navigation("Products");
-
-                    b.Navigation("storeReviews");
                 });
 #pragma warning restore 612, 618
         }
