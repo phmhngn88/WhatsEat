@@ -1,5 +1,4 @@
-.search{
-}
+
 
 .search .search-container{
     display: flex;
@@ -11,6 +10,10 @@
     width: 70%;
     margin-top: 2rem;
     margin-bottom: 2rem;
+}
+.search .search-container .search-fluid .item-col .item-container .item-img{
+    height: 10rem;
+    object-fit: cover;
 }
 
 .search .search-container .search-fluid .search-nav{
@@ -25,6 +28,17 @@
     align-items: center;
     font-size: 1.5rem;
     color: brown;
+}
+
+.search .search-container .search-fluid .search-nav .drop-down button{
+    font-size: 1rem;
+    padding: 0.15rem 1rem;
+    margin-left: 0.5rem;
+    color: #fff;
+    background-color: brown;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .search .search-container .search-fluid .search-nav .ant-select{

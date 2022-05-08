@@ -8,7 +8,7 @@
 
 .item-container .item-img{
     width: 100%;
-    max-height: 250px;
+    max-height: 10rem;
     border-radius: 5px;
     object-fit: cover;
 }

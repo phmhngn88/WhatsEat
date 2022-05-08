@@ -68,7 +68,7 @@ function App({ auth, cartItems }) {
             <Route path="/shop/account" element={<ShopAccount />}></Route>
             <Route path="/shop/categories" element={<ShopCategories />}></Route>
             <Route path="/shop/register" element={<ShopRegisterPage />}></Route>
-            <Route path="/viewshop" element={<ViewShopPage />}></Route>
+            <Route path="/viewshop/:id" element={<ViewShopPage />}></Route>
             <Route path="/orders" element={<OrderPage />}></Route>
             <Route path="/orders/:id" element={<OrderDetail />}></Route>
             <Route path="/shop/items" element={<ShopItems />}></Route>

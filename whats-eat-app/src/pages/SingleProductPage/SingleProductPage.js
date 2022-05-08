@@ -14,6 +14,7 @@ import RatingCard from "../../components/RatingCard/RatingCard";
 import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
 import "./SingleProductPage.css";
+import ProductsByShop from "../../components/TopItems/ProductsByShop";
 
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
@@ -38,6 +39,7 @@ const SingleProductPage = () => {
         console.log(error);
       });
   };
+
   const handleIncrease = () => {
     setCount(count + 1);
   };
@@ -185,6 +187,7 @@ const SingleProductPage = () => {
           </div>
         </div>
       </div>
+      <ProductsByShop storeId={productDetail.store.storeId} />
       <TopItems />
       <TopDishes />
       <Footer />

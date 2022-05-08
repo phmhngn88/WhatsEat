@@ -8,20 +8,18 @@ import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 import Product from "../Product/Product";
 
-const TopItems = () => {
-  const [topProduct, setTopProduct] = useState([]);
+const ProductsByShop = ({ storeId }) => {
+  const [productByShop, setProductByShop] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
+  console.log(storeId);
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?sortTotalSell=desc&PageNumber=${pageNumber}&PageSize=${
-        pageSize + 4
-      }`,
+      url: `https://localhost:7029/api/Store/${storeId}/products?PageNumber=1&PageSize=12`,
     })
       .then((res) => {
-        setTopProduct(res.data);
+        setProductByShop(res.data);
         if (!res.data) {
           setPageNumber(pageNumber - 1);
         }
@@ -32,14 +30,14 @@ const TopItems = () => {
   }, [pageNumber]);
   const navigate = useNavigate();
 
-  if (!topProduct) {
+  if (!productByShop) {
     return <h1 className="loading">Loading...</h1>;
   }
   return (
     <div className="top-items-container">
-      {topProduct.length > 0 && (
+      {productByShop.length > 0 && (
         <div className="top-items">
-          <h1 className="title">Trending trong tuần qua</h1>
+          <h1 className="title">Sản phẩm cùng shop</h1>
           <FaChevronCircleLeft
             className={`${
               pageNumber === 1 ? "hidden " : ""
@@ -48,12 +46,12 @@ const TopItems = () => {
           />
           <FaChevronCircleRight
             className={`${
-              pageNumber === 10 || topProduct.length < 12 ? "hidden " : ""
+              pageNumber === 10 || productByShop.length < 12 ? "hidden " : ""
             }icon-pagination right-icon`}
             onClick={() => setPageNumber(pageNumber + 1)}
           />
           <Row gutter={[16, 16]}>
-            {topProduct.map((item) => {
+            {productByShop.map((item) => {
               const { productId, name, basePrice, weightServing, images } =
                 item;
               return (
@@ -69,4 +67,4 @@ const TopItems = () => {
   );
 };
 
-export default TopItems;
+export default ProductsByShop;

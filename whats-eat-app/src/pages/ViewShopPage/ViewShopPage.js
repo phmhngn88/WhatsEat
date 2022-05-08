@@ -1,43 +1,29 @@
 import { Col, Row, Tabs } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
+import { useSearchParams, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { BsFillPeopleFill, BsFillStarFill, BsShopWindow } from "react-icons/bs";
 import { GiStabbedNote } from "react-icons/gi";
+import Product from "../../components/Product/Product";
+import Pagination from "../../components/Pagination/Pagination";
 import Footer from "../../components/Footer/Footer";
 import "./ViewShopPage.css";
 
 const { TabPane } = Tabs;
 
-const shopInfo = {
-  id: 1,
-  shop_name: "thịt sạch nhập khẩu",
-  shop_avt: "https://cf.shopee.vn/file/569ea6d6a8d2816a10d3a258e58d9ecc_tn",
-  shop_background:
-    "https://cf.shopee.vn/file/dcfd242ff453fa010aa6196af133a944_tn",
-  products_quantity: 48,
-  rating: "4.9",
-  rating_num: 2000,
-  products_list: [],
-};
-
 const ViewShopPage = () => {
+  const [pageNumber, setPageNumber] = useState(1);
   const [shopInfo, setShopInfo] = useState({});
+  const [shopProducts, setShopProducts] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
-  const {
-    id,
-    shop_name,
-    shop_avt,
-    shop_background,
-    products_quantity,
-    rating,
-    rating_num,
-  } = shopInfo;
+  const location = useLocation();
+  const storeId = location.state.storeId;
 
   const getShopInfo = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/${id}`,
+      url: `https://localhost:7029/api/Store/${storeId}`,
     })
       .then((res) => {
         const result = res.data;
@@ -47,13 +33,26 @@ const ViewShopPage = () => {
         console.log(error);
       });
   };
+  const getShopProducts = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Store/${storeId}/products?PageNumber=${pageNumber}&PageSize=30`,
+    })
+      .then((res) => {
+        const result = res.data;
+        setShopProducts(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const postLikeShop = () => {
     axios({
       method: "POST",
-      url: `https://localhost:7029/api/Store/like/${id}`,
+      url: `https://localhost:7029/api/Store/like/${storeId}`,
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       data: {
-        storeId: id,
+        storeId: storeId,
       },
     })
       .then((res) => {})
@@ -64,10 +63,10 @@ const ViewShopPage = () => {
   const deleteLikeShop = () => {
     axios({
       method: "DELETE",
-      url: `https://localhost:7029/api/Store/dislike/${id}`,
+      url: `https://localhost:7029/api/Store/dislike/${storeId}`,
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       data: {
-        storeId: id,
+        storeId: storeId,
       },
     })
       .then((res) => {})
@@ -78,7 +77,7 @@ const ViewShopPage = () => {
   const getLikeShop = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/is-like/${id}`,
+      url: `https://localhost:7029/api/Store/is-like/${storeId}`,
     })
       .then((res) => {
         // setIsLiked(res.data)
@@ -87,9 +86,20 @@ const ViewShopPage = () => {
         console.log(err);
       });
   };
+
+  const handleClickNext = () => {
+    setPageNumber((pageNumber) => pageNumber + 1);
+  };
+  const handleClickPrev = () => {
+    setPageNumber((pageNumber) => pageNumber - 1);
+  };
   useEffect(() => {
     getShopInfo();
   }, []);
+
+  useEffect(() => {
+    getShopProducts();
+  }, [pageNumber]);
 
   useEffect(() => {
     getLikeShop();
@@ -108,8 +118,12 @@ const ViewShopPage = () => {
           <div className="shop-info-block">
             <div className="shop-img">
               <div className="img-box">
-                <img src={shop_avt} alt={shop_name} className="avt-img" />
-                <h2 className="shop-name">{shop_name}</h2>
+                <img
+                  src={shopInfo.avatarUrl || ""}
+                  alt={shopInfo.shopName}
+                  className="avt-img"
+                />
+                <h2 className="shop-name">{shopInfo.shopName}</h2>
               </div>
               <div className="btn-box">
                 <button className="btn" onClick={() => setIsLiked(true)}>
@@ -142,7 +156,22 @@ const ViewShopPage = () => {
           <div className="shop-products">
             <Tabs defaultActiveKey="1">
               <TabPane tab="TẤT CẢ SẢN PHẨM" key="1">
-                Tất cả sản phẩm của shop
+                <Row gutter={[16, 16]}>
+                  {shopProducts.map((item) => {
+                    const {
+                      productId,
+                      name,
+                      basePrice,
+                      weightServing,
+                      images,
+                    } = item;
+                    return (
+                      <Col span={4} className="item-col" key={productId}>
+                        <Product {...item} />
+                      </Col>
+                    );
+                  })}
+                </Row>
               </TabPane>
               <TabPane tab="Category 1" key="2">
                 Danh mục hàng 1
@@ -161,6 +190,12 @@ const ViewShopPage = () => {
               </TabPane>
             </Tabs>
           </div>
+          {shopProducts.length !== 0 && (
+            <Pagination
+              onClickNext={handleClickNext}
+              onClickPrev={handleClickPrev}
+            />
+          )}
         </div>
       </div>
       <Footer />

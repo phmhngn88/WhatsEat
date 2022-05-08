@@ -1,4 +1,4 @@
-import { Checkbox, Col, Row, Select } from "antd";
+import { Checkbox, Col, Input, Row, Select } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -28,9 +28,10 @@ const menuList = [
 const SearchPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
+  const [priceRange, setPriceRange] = useState("");
+  const [filterCondition, setFilterCondition] = useState("asc");
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);
-  const [filterCondition, setFilterCondition] = useState("");
 
   let [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm");
@@ -41,15 +42,25 @@ const SearchPage = () => {
   const handleClickPrev = () => {
     setPageNumber((pageNumber) => pageNumber - 1);
   };
-  const handleChange = (value) => {
-    setFilterCondition(value);
+
+  const handleFilter = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&PageNumber=${pageNumber}&PageSize=12`,
+    })
+      .then((res) => {
+        console.log("Data product filter:", res.data);
+        setSearchProductResult(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
-    // setSearchRecipeResult(searchResults);
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&PageNumber=${pageNumber}&PageSize=12`,
     })
       .then((res) => {
         console.log("Data product search:", res.data);
@@ -58,7 +69,7 @@ const SearchPage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [searchTerm, pageNumber]);
+  }, [filterCondition, searchTerm, pageNumber]);
 
   useEffect(() => {
     axios({
@@ -73,17 +84,6 @@ const SearchPage = () => {
       });
   }, [searchTerm, pageNumber]);
 
-  // useEffect(() => {
-  //   if (filterCondition.value === "all") {
-  //     searchResults = searchRecipeResult;
-  //   }
-  //   if (filterCondition.value === "justRecipe") {
-  //     searchResults = searchRecipeResult;
-  //   }
-  //   if (filterCondition.value === "justItem") {
-  //     searchResults = searchProductResult;
-  //   }
-  // }, [filterCondition, searchTerm, pageNumber]);
   const searchResults = [...searchRecipeResult, ...searchProductResult];
   console.log("search result:", searchResults);
 
@@ -97,27 +97,26 @@ const SearchPage = () => {
               <AiTwotoneFilter />
               <Select
                 labelInValue
-                defaultValue={{ value: "difficulty" }}
-                onChange={handleChange}
+                defaultValue={{ value: "asc" }}
+                onChange={(value) => {
+                  console.log(value);
+                  setFilterCondition(value.value);
+                }}
                 bordered={false}
               >
-                <Option value="difficulty">Độ khó công thức</Option>
-                <Option value="timeTaken">Thời gian nấu</Option>
-                <Option value="view">Lượt xem</Option>
+                <Option value="asc">Giá tăng dần</Option>
+                <Option value="desc">Giá giảm dần</Option>
               </Select>
+              <Input
+                type="number"
+                placeholder="Khoảng giá"
+                onChange={(e) => setPriceRange(e.target.value)}
+              />
+              <button onClick={handleFilter}>Lọc</button>
             </div>
           </div>
           <p className="notice">Kết quả tìm kiếm cho "{searchTerm || "..."}"</p>
-          <div className="menu">
-            {menuList.map((item, idx) => {
-              return (
-                <div key={idx} className="single-item">
-                  <Checkbox />
-                  <p className="item-name">{item.name}</p>
-                </div>
-              );
-            })}
-          </div>
+
           {searchProductResult.length > 0 && (
             <h1
               className="title"
@@ -129,7 +128,7 @@ const SearchPage = () => {
           <Row gutter={[16, 16]}>
             {searchProductResult.map((item, idx) => {
               return (
-                <Col span={6} key={idx} className="dish-col">
+                <Col span={4} key={idx} className="item-col">
                   <Product {...item} />
                 </Col>
               );
@@ -143,6 +142,16 @@ const SearchPage = () => {
               Công thức có liên quan
             </h1>
           )}
+          <div className="menu">
+            {menuList.map((item, idx) => {
+              return (
+                <div key={idx} className="single-item">
+                  <Checkbox />
+                  <p className="item-name">{item.name}</p>
+                </div>
+              );
+            })}
+          </div>
           <Row gutter={[16, 16]}>
             {searchRecipeResult.map((item, idx) => {
               return (
