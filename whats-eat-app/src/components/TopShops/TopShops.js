@@ -21,7 +21,7 @@ export default TopShops;
 
 const mock_data = [
   {
-    id: 1,
+    storeId: 1,
     shopName: "TOPMEAL",
     avtUrl:
       "https://salt.tikicdn.com/cache/200x200/ts/seller/b6/a2/73/128c9ce382796619e360d14814d649c6.jpg.webp",
@@ -70,7 +70,7 @@ const mock_data = [
     ],
   },
   {
-    id: 2,
+    storeId: 2,
     shopName: "Đảo Hải Sản",
     avtUrl:
       "	https://salt.tikicdn.com/cache/200x200/ts/seller/9c/7c/b8/1cdfebaa1ee1ed7f861dcbd407e30a78.jpg.webp",
@@ -119,7 +119,7 @@ const mock_data = [
     ],
   },
   {
-    id: 3,
+    storeId: 3,
     shopName: "Hải Sản Đại Dương Xanh",
     avtUrl:
       "https://salt.tikicdn.com/cache/200x200/ts/seller/d8/d5/cc/4f04fa2a292b7d2e1145e7d2258e3112.png.webp",
@@ -168,7 +168,7 @@ const mock_data = [
     ],
   },
   {
-    id: 4,
+    storeId: 4,
     shopName: "Grove Fresh",
     avtUrl:
       "https://salt.tikicdn.com/cache/200x200/ts/seller/3f/96/d5/e81c134abc998bb05c88bacc89945151.jpg.webp",
@@ -217,7 +217,7 @@ const mock_data = [
     ],
   },
   {
-    id: 5,
+    storeId: 5,
     shopName: "Tiệm bánh Mr Bee",
     avtUrl:
       "https://salt.tikicdn.com/cache/200x200/ts/seller/d4/a1/78/1bac4b074e1feb52ffd7ec70cd2def47.jpg.webp",
@@ -266,7 +266,7 @@ const mock_data = [
     ],
   },
   {
-    id: 6,
+    storeId: 6,
     shopName: "NÔNG TRẠI NGỌT NGÀO",
     avtUrl:
       "https://salt.tikicdn.com/cache/200x200/ts/seller/4b/54/1a/f385a79a716cb3505f152e7af8c769aa.png.webp",
