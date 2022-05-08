@@ -21,13 +21,15 @@ public class StoreController : ControllerBase
     private readonly ProductService _productService;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly CustomerService _customerService;
+    private readonly OrderService _orderService;
 
     public StoreController(
         WhatsEatContext context,
         StoreService storeService,
         UserManager<IdentityUser> userManager,
         ProductService productService,
-        CustomerService customerService
+        CustomerService customerService,
+        OrderService orderService
     )
     {
         _context = context;
@@ -35,6 +37,7 @@ public class StoreController : ControllerBase
         _userManager = userManager;
         _productService = productService;
         _customerService = customerService;
+        _orderService = orderService;
     }
 
     [HttpGet]
@@ -208,17 +211,78 @@ public class StoreController : ControllerBase
     }
 
     [HttpGet]
-    [Route("orders")]
+    [Route("{storeId}/orders")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
-    public async Task<IActionResult> TrackOrders()
+    public async Task<IActionResult> TrackOrders(int storeId)
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
-        var orderList = await _context.OrderDetails.AsNoTracking().
-            Where(od => od.Product.Store.UserId == userId.ToString()).ToListAsync();
+        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
+
+        Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
+
+        if (!_storeService.UserIsStore(user, store))
+        {
+            return Forbid();
+        }
+        var orderList = await _context.Orders.AsNoTracking().
+            Where(od => od.Store == od.Store).OrderByDescending(od => od.CreatedOn).ToListAsync();
 
         return Ok(orderList);
 
     }
+
+    [HttpPost]
+    [Route("{storeId}/orders/accept")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
+    public async Task<IActionResult> AcceptOrder(int storeId, [FromBody] OrderStatusRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
+
+        Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
+
+        if (!_storeService.UserIsStore(user, store))
+        {
+            return Forbid();
+        }
+        var order = await _orderService.getOrderOrderId(request.OrderId);
+
+        if (store != order.Store)
+        {
+            return Forbid();
+        }
+
+        var status = await _orderService.StoreAcceptOrder(order, request.Message);
+
+        return Ok(status);
+    }
+
+    [HttpPost]
+    [Route("{storeId}/orders/cancel")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
+    public async Task<IActionResult> CancelOrder(int storeId, [FromBody] OrderStatusRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
+
+        Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
+
+        if (!_storeService.UserIsStore(user, store))
+        {
+            return Forbid();
+        }
+        var order = await _orderService.getOrderOrderId(request.OrderId);
+
+        if (store != order.Store)
+        {
+            return Forbid();
+        }
+
+        OrderStatusHistory status = await _orderService.StoreCancelOrder(order, request.Message);
+
+        return Ok(status);
+    }
+
 
     [HttpGet]
     [Route("{storeId}/products")]
@@ -316,21 +380,21 @@ public class StoreController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("product")]
+    [Route("{storeId}/product/{productId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
-    public async Task<IActionResult> DeleteProduct([FromBody] ProductManagerRequest request)
+    public async Task<IActionResult> DeleteProduct(int storeId, int productId)
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
         IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
 
-        Store store = await _storeService.FindStoreByStoreIdAsync(request.StoreId);
+        Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
 
         if (!_storeService.UserIsStore(user, store))
         {
             return Forbid();
         }
 
-        Product product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == request.ProductId);
+        Product product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
 
         if (!_storeService.StoreContainsProduct(product, store))
         {
@@ -342,5 +406,104 @@ public class StoreController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    [HttpPost]
+    [Route("{storeId}/product")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
+    public async Task<IActionResult> CreateProduct(int storeId, [FromBody] ProductRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
+
+        Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
+
+        if (!_storeService.UserIsStore(user, store))
+        {
+            return Forbid();
+        }
+
+        Product newProduct = new Product
+        {
+            PhotoJson = request.PhotoJson,
+            Name = request.Name,
+            Description = request.Description,
+            BasePrice = request.BasePrice,
+            InStock = request.InStock,
+            WeightServing = request.WeightServing,
+            Store = store,
+            Status = true,
+            ProductCategory = await _productService.FindProductCategoryByProductCategoryId(request.ProductCategoryId),
+            CreatedOn = DateTime.UtcNow
+        };
+
+        await _context.Products.AddAsync(newProduct);
+        await _context.SaveChangesAsync();
+
+        return Ok(new ProductResponse
+        {
+            Images = _productService.ConvertJsonToPhotos(newProduct.PhotoJson),
+            ProductId = newProduct.ProductId,
+            Name = newProduct.Name,
+            InStock = newProduct.InStock,
+            BasePrice = newProduct.BasePrice,
+            Description = newProduct.Description,
+            WeightServing = newProduct.WeightServing,
+            TotalSell = newProduct.TotalSell,
+            ProductCategoryId = newProduct.ProductCategory.ProductCategoryId,
+            Store = newProduct.Store,
+            CreatedOn = newProduct.CreatedOn,
+            TotalView = await _productService.GetProductViews(newProduct)
+        });
+    }
+
+    [HttpPut]
+    [Route("{storeId}/product/{productId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
+    public async Task<IActionResult> UpdatePRoduct(int storeId, int productId, [FromBody] ProductRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
+
+        Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
+
+        if (!_storeService.UserIsStore(user, store))
+        {
+            return Forbid();
+        }
+
+        Product product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+
+        if (!_storeService.StoreContainsProduct(product, store))
+        {
+            return Forbid();
+        }
+
+        product.PhotoJson = request.PhotoJson;
+        product.Name = request.Name;
+        product.Description = request.Description;
+        product.BasePrice = request.BasePrice;
+        product.InStock = request.InStock;
+        product.WeightServing = request.WeightServing;
+        product.Store = store;
+        product.ProductCategory = await _productService.FindProductCategoryByProductCategoryId(request.ProductCategoryId);
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new ProductResponse
+        {
+            Images = _productService.ConvertJsonToPhotos(product.PhotoJson),
+            ProductId = product.ProductId,
+            Name = product.Name,
+            InStock = product.InStock,
+            BasePrice = product.BasePrice,
+            Description = product.Description,
+            WeightServing = product.WeightServing,
+            TotalSell = product.TotalSell,
+            ProductCategoryId = product.ProductCategory.ProductCategoryId,
+            Store = product.Store,
+            CreatedOn = product.CreatedOn,
+            TotalView = await _productService.GetProductViews(product)
+        });
     }
 }

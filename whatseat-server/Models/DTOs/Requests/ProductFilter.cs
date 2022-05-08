@@ -7,7 +7,9 @@ public class ProductFilter : PagedRequest
     public string sortTotalSell { get; set; }
     public string sortPrice { get; set; }
     public bool inStockOnly { get; set; }
-    public int[] productTypes { get; set; }
+    public int MinPrice { get; set; }
+    public int MaxPrice { get; set; }
+    public int[] productCategories { get; set; }
     public int[] productStores { get; set; }
 
 }

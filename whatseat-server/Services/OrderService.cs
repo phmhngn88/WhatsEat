@@ -50,10 +50,39 @@ public class OrderService
         return res;
     }
 
+
+    public async Task<OrderStatusHistory> StoreAcceptOrder(Order order, string message)
+    {
+        OrderStatus acceptStatus = await GetOrderStatusByName(OrderStatusConstant.Accepted);
+        OrderStatusHistory orderStatusHistory = new OrderStatusHistory
+        {
+            OrderStatus = acceptStatus,
+            Order = order,
+            Message = message,
+            CreatedOn = DateTime.UtcNow,
+            ByUser = false
+        };
+
+        await _context.SaveChangesAsync();
+        return orderStatusHistory;
+    }
+
     public async Task<OrderStatus> GetOrderStatusByName(string status)
     {
         OrderStatus orderStatus = await _context.OrderStatuses
             .FirstOrDefaultAsync(os => os.Value.Equals(status));
+        if (orderStatus is null)
+        {
+            OrderStatus orderStatusNew = new OrderStatus
+            {
+                Value = status
+            };
+
+            await _context.OrderStatuses.AddAsync(orderStatusNew);
+            await _context.SaveChangesAsync();
+
+            return orderStatusNew;
+        }
         return orderStatus;
     }
 
@@ -78,4 +107,24 @@ public class OrderService
         }
     }
 
+    public async Task<Order> getOrderOrderId(int orderId)
+    {
+        return await _context.Orders.Include(o => o.Store).FirstOrDefaultAsync(o => o.OrderId == orderId);
+    }
+
+    public async Task<OrderStatusHistory> StoreCancelOrder(Order order, string message)
+    {
+        OrderStatus acceptStatus = await GetOrderStatusByName(OrderStatusConstant.Canceled);
+        OrderStatusHistory orderStatusHistory = new OrderStatusHistory
+        {
+            OrderStatus = acceptStatus,
+            Order = order,
+            Message = message,
+            CreatedOn = DateTime.UtcNow,
+            ByUser = false
+        };
+
+        await _context.SaveChangesAsync();
+        return orderStatusHistory;
+    }
 }

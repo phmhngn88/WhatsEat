@@ -82,15 +82,17 @@ public class ProductService
                 break;
         }
 
-        if (productFilter.productTypes != null && productFilter.productTypes.Length > 0)
+        if (productFilter.productCategories != null && productFilter.productCategories.Length > 0)
         {
-            products = products.Where(p => productFilter.productTypes.Contains(p.ProductCategory.ProductCategoryId));
+            products = products.Where(p => productFilter.productCategories.Contains(p.ProductCategory.ProductCategoryId));
         }
         if (productFilter.productStores != null && productFilter.productStores.Length > 0)
         {
             var listStore = await _context.Stores.Where(p => productFilter.productStores.Contains(p.StoreId)).ToListAsync();
             products = products.Where(p => (p.Store != null && listStore.Contains(p.Store)));
         }
+        products = productFilter.MinPrice > 0 ? products.Where(p => p.BasePrice >= productFilter.MinPrice) : products;
+        products = productFilter.MaxPrice > 0 ? products.Where(p => p.BasePrice <= productFilter.MaxPrice) : products;
 
 
 
@@ -152,4 +154,8 @@ public class ProductService
         return await _context.ProductViewHistories.AsNoTracking().CountAsync(p => p.Product == product);
     }
 
+    public async Task<ProductCategory> FindProductCategoryByProductCategoryId(int productCategoryId)
+    {
+        return await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.ProductCategoryId == productCategoryId);
+    }
 }
