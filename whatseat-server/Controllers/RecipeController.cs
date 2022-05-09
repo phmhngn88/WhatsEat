@@ -288,5 +288,58 @@ public class RecipeController : ControllerBase
         return Ok(await _recipeService.CheckLove(recipeId, userId));
     }
 
+    [HttpPost]
+    [Route("recipe")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> AddRecipe([FromBody] AddRecipeRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        List<RecipeRecipeType> recipeTypes = new List<RecipeRecipeType>();
+
+        Recipe recipe = new Recipe
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Serving = request.Serving,
+            TotalTime = request.TotalTime,
+            ThumbnailUrl = request.ThumbnailUrl,
+            AvgRating = 0,
+            TotalRating = 0,
+            TotalView = 0,
+            totalLike = 0,
+            videoUrl = request.videoUrl,
+            Creator = customer,
+            Ingredients = request.Ingredients,
+            Steps = request.Steps,
+            Level = request.Level
+        };
+
+        foreach (var item in request.RecipeTypeIds)
+        {
+            var recipeType = await _context.RecipeTypes
+            .FirstOrDefaultAsync(pc => pc.RecipeTypeId == item);
+
+            RecipeRecipeType recipeRecipeType = new RecipeRecipeType
+            {
+                RecipeType = recipeType,
+                Recipe = recipe
+            };
+
+            if (recipeType is not null)
+            {
+                recipeTypes.Add(recipeRecipeType);
+            }
+        }
+
+        await _context.RecipeRecipeTypes.AddRangeAsync(recipeTypes);
+        await _context.Recipes.AddAsync(recipe);
+        await _context.SaveChangesAsync();
+        return Ok(new
+        {
+            message = "Success"
+        });
+    }
 
 }

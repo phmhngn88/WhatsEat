@@ -11,8 +11,7 @@ public class Menu
     public int MenuId { get; set; }
     public string MenuName { get; set; }
     public DateTime ModifiedOn { get; set; }
-    public Customer Customer { get; set; }
     [JsonIgnore]
     public ICollection<MenuDetail> MenuDetails { get; set; }
-
+    public Customer Customer { get; set; }
 }

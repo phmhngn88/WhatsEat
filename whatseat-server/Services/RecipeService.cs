@@ -183,29 +183,4 @@ public class RecipeService
     {
         return await _context.LovedRecipes.AsNoTracking().AnyAsync(s => s.RecipeId == recipeId && s.CustomerId == s.CustomerId);
     }
-
-    public async Task<Menu> AddMenu(Customer customer, MenuRequest request)
-    {
-        Menu menu = new Menu
-        {
-            ModifiedOn = DateTime.UtcNow,
-            MenuName = request.MenuName,
-            MenuDetails = new List<MenuDetail>(),
-            Customer = customer
-        };
-
-        foreach (var recipeId in request.RecipeIds)
-        {
-            Recipe recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.RecipeId == recipeId);
-            if (recipe is not null)
-            {
-                menu.MenuDetails.Add(new MenuDetail
-                {
-                    Recipe = recipe
-                });
-            }
-        }
-        var menuRes = await _context.Menus.AddAsync(menu);
-        return menuRes.Entity;
-    }
 }

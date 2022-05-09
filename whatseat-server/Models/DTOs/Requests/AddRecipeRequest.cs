@@ -13,6 +13,9 @@ namespace whatseat_server.Models.DTOs.Requests
         public int totalLike { get; set; }
         public string videoUrl { get; set; }
         public List<int> RecipeTypeIds { get; set; }
-        public ICollection<RecipeStep> RecipeSteps { get; set; }
+        public string RecipeSteps { get; set; }
+        public string Ingredients { get; internal set; }
+        public string Steps { get; internal set; }
+        public string Level { get; internal set; }
     }
 }
