@@ -10,9 +10,9 @@ public class ProductResponse
     public string WeightServing { get; set; }
     public int TotalSell { get; set; }
     public int ProductCategoryId { get; set; }
-    public Store Store { get; set; }
     public DateTime CreatedOn { get; set; }
     public int TotalView { get; set; }
     public List<List<Photo>> Images { get; set; }
-
+    public int StoreId { get; internal set; }
+    public string StoreName { get; internal set; }
 }

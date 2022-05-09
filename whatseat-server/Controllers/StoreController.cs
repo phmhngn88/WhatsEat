@@ -311,7 +311,8 @@ public class StoreController : ControllerBase
                 WeightServing = item.WeightServing,
                 TotalSell = item.TotalSell,
                 ProductCategoryId = item.ProductCategory.ProductCategoryId,
-                Store = item.Store,
+                StoreName = item.Store.ShopName,
+                StoreId = item.Store.StoreId,
                 CreatedOn = item.CreatedOn,
                 TotalView = await _productService.GetProductViews(item)
             });
@@ -451,7 +452,8 @@ public class StoreController : ControllerBase
             WeightServing = newProduct.WeightServing,
             TotalSell = newProduct.TotalSell,
             ProductCategoryId = newProduct.ProductCategory.ProductCategoryId,
-            Store = newProduct.Store,
+            StoreName = newProduct.Store.ShopName,
+            StoreId = newProduct.Store.StoreId,
             CreatedOn = newProduct.CreatedOn,
             TotalView = await _productService.GetProductViews(newProduct)
         });
@@ -501,7 +503,8 @@ public class StoreController : ControllerBase
             WeightServing = product.WeightServing,
             TotalSell = product.TotalSell,
             ProductCategoryId = product.ProductCategory.ProductCategoryId,
-            Store = product.Store,
+            StoreName = product.Store.ShopName,
+            StoreId = product.Store.StoreId,
             CreatedOn = product.CreatedOn,
             TotalView = await _productService.GetProductViews(product)
         });

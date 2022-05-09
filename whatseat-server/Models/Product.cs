@@ -19,11 +19,13 @@ public class Product
     public int TotalSell { get; set; }
     public bool Status { get; set; } = true;
     public ProductCategory ProductCategory { get; set; }
+    [JsonIgnore]
     public Store Store { get; set; }
     public int ProductNo { get; set; }
     public DateTime CreatedOn { get; set; }
     [JsonIgnore]
     public ICollection<OrderDetail> OrderDetails { get; set; }
+    [JsonIgnore]
     public ICollection<ProductImage> ProductImages { get; set; }
     [JsonIgnore]
     public ICollection<CartDetail> CartDetails { get; set; }

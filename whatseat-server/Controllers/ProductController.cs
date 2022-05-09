@@ -50,7 +50,8 @@ public class ProductController : ControllerBase
                 WeightServing = item.WeightServing,
                 TotalSell = item.TotalSell,
                 ProductCategoryId = item.ProductCategory.ProductCategoryId,
-                Store = item.Store,
+                StoreName = item.Store.ShopName,
+                StoreId = item.Store.StoreId,
                 CreatedOn = item.CreatedOn,
                 TotalView = await _productService.GetProductViews(item)
             });
@@ -89,7 +90,8 @@ public class ProductController : ControllerBase
                 WeightServing = item.WeightServing,
                 TotalSell = item.TotalSell,
                 ProductCategoryId = item.ProductCategory.ProductCategoryId,
-                Store = item.Store,
+                StoreName = item.Store.ShopName,
+                StoreId = item.Store.StoreId,
                 CreatedOn = item.CreatedOn,
                 TotalView = await _productService.GetProductViews(item)
             });
@@ -133,7 +135,8 @@ public class ProductController : ControllerBase
             WeightServing = item.WeightServing,
             TotalSell = item.TotalSell,
             ProductCategoryId = item.ProductCategory is not null ? item.ProductCategory.ProductCategoryId : -1,
-            Store = item.Store,
+            StoreName = item.Store.ShopName,
+            StoreId = item.Store.StoreId,
             CreatedOn = item.CreatedOn,
             TotalView = await _productService.GetProductViews(item)
         }) : NotFound(new { message = "product not found" });
