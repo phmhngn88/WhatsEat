@@ -509,4 +509,25 @@ public class StoreController : ControllerBase
             TotalView = await _productService.GetProductViews(product)
         });
     }
+
+    [HttpGet]
+    [Route("myStores")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetMyStores()
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        List<Store> stores = await _context.Stores.AsNoTracking().ToListAsync();
+        var StoreRes = new List<MyStoresResponse>();
+        foreach (var item in stores)
+        {
+            StoreRes.Add(new MyStoresResponse
+            {
+                StoreId = item.StoreId,
+                IsActive = item.IsActive,
+                ShopName = item.ShopName,
+                AvatarUrl = item.AvatarUrl
+            });
+        }
+        return Ok(StoreRes);
+    }
 }
