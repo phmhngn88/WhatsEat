@@ -1,6 +1,8 @@
 import { Form, Input, message, Modal } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import Footer from "../../components/Footer/Footer";
@@ -26,7 +28,9 @@ const ShopRegisterPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
+  const token = useSelector((state) => state.auth.userInfo.token);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const navigate = useNavigate();
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -43,6 +47,7 @@ const ShopRegisterPage = () => {
     axios({
       method: "POST",
       url: "https://localhost:7029/api/Store/register",
+      headers: { Authorization: `Bearer ${token}` },
       data: {
         shopName: shopName,
         email: email,
@@ -53,6 +58,7 @@ const ShopRegisterPage = () => {
     })
       .then((res) => {
         message.success("Thông tin đăng ký của hàng của bạn đã được ghi nhận!");
+        navigate("/shop");
       })
       .catch((err) => {
         console.log(err);

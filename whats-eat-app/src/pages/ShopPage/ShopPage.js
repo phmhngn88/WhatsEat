@@ -1,11 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import Footer from "../../components/Footer/Footer";
+import { useSelector } from "react-redux";
 import Shop from "../../components/Shop/Shop";
 import "./ShopPage.css";
 
 const ShopPage = () => {
   const [isRegistered, setIsRegistered] = useState(false);
+  const token = useSelector((state) => state.auth.userInfo.token);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/store/mystores",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.length > 0) {
+          setIsRegistered(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="shop">
       <div className="shop-fluid">
