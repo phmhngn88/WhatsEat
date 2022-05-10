@@ -1,10 +1,9 @@
-import { Form, Input, message, Modal } from "antd";
+import { Form, Input, message } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
-import { BsPlus } from "react-icons/bs";
 import Footer from "../../components/Footer/Footer";
 import "./ShopRegisterPage.css";
 
@@ -29,7 +28,6 @@ const ShopRegisterPage = () => {
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
   const token = useSelector((state) => state.auth.userInfo.token);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const handleSubmitShopRegister = () => {
     axios({
@@ -97,39 +95,6 @@ const ShopRegisterPage = () => {
                 rules={[{ required: true }]}
               >
                 <Input onChange={(e) => setAddress(e.target.value)} />
-                {/* <button className="btn add-address-btn" onClick={showModal}>
-                  <BsPlus className="plus-icon" /> Thêm
-                </button>
-                <Modal
-                  title="Thêm địa chỉ mới"
-                  visible={isModalVisible}
-                  onOk={handleOk}
-                  onCancel={handleCancel}
-                  cancelText="Hủy"
-                  okText="Lưu"
-                >
-                  <div className="address-container">
-                    <Form layout="vertical">
-                      <Form.Item
-                        label="Họ và Tên"
-                        required
-                        tooltip="Đây là thông tin bắt buộc"
-                      >
-                        <Input placeholder="Nhập vào" />
-                      </Form.Item>
-                      <Form.Item
-                        label="Địa chỉ"
-                        required
-                        tooltip="Đây là thông tin bắt buộc"
-                      >
-                        <Input
-                          placeholder="Nhập vào"
-                          onChange={(e) => setAddress(e.target.value)}
-                        />
-                      </Form.Item>
-                    </Form>
-                  </div>
-                </Modal> */}
               </Form.Item>
               <Form.Item className="input" name="description" label="Mô tả">
                 <Input.TextArea
