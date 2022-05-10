@@ -31,18 +31,6 @@ const ShopRegisterPage = () => {
   const token = useSelector((state) => state.auth.userInfo.token);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   const handleSubmitShopRegister = () => {
     axios({
       method: "POST",
