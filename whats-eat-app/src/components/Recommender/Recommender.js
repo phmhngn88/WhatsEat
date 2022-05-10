@@ -75,7 +75,7 @@ const Recommender = (props) => {
       url: "https://localhost:7029/api/Recipe/menu",
       data: {
         menuName: `Menu ngày ${getCurrentDate()}`,
-        recipeIds: recipes, //TODO: Get array of id in menu
+        recipeIds: listRecipes.map(a => a.recipeId), //TODO: Get array of id in menu
       },
       headers: { Authorization: `Bearer ${token}` },
     })
