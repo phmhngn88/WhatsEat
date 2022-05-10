@@ -26,6 +26,7 @@ public class Recipe
     public string Ingredients { get; set; }
     public string Steps { get; set; }
     public int RecipeNo { get; set; }
+    public float Calories { get; set; }
 
     [JsonIgnore]
     public List<RecipeRecipeType> RecipeRecipeTypes { get; set; }

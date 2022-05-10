@@ -12,7 +12,7 @@ import {
 } from "react-icons/ai";
 import { Checkbox } from 'antd';
 
-const Dish = ({ recipeId, name, totalTime, totalView, level, images, isShowRecipe, addRecipe, removeRecipe }) => {
+const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, isShowRecipe, addRecipe, removeRecipe }) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images, isShowRecip
   const addRecipeToMenu = (e) => {
     e.stopPropagation()
     if(e.target.checked){
-      addRecipe({ recipeId, name, totalTime, totalView, level, images })
+      addRecipe({ recipeId, name, totalTime, totalView, level, images, calories })
     }
     else {
       removeRecipe(recipeId)

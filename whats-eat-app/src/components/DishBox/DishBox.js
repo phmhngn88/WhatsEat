@@ -23,7 +23,7 @@ const DishBox = ({ menu, category, addRecipe, removeRecipe }) => {
         <Row gutter={[16, 24]}>
           {
             menu.map((dish) => {
-              const { recipeId, name, images, totalLike, totalTime, totalView, recipeTypeId } = dish;
+              const { recipeId, name, images, totalLike, totalTime, totalView, recipeTypeId, calories } = dish;
               return (<Col className="gutter-row" span={6}>
                 <Dish {...dish} className="single-dish" isShowRecipe={isShowRecipe} addRecipe={addRecipe} removeRecipe={removeRecipe} />;
               </Col>)

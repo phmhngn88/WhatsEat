@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
-
+import { Progress } from 'antd';
 const recommendedMenu = [
   {
     id: 1,
@@ -61,7 +61,9 @@ const categories = [
 
 const Recommender = (props) => {
   const [menu, setMenu] = useState([]);
-  const [listRecipes, setListRecipes] = useState([])
+  const [listRecipes, setListRecipes] = useState([]);
+  const [status,setStatus] = useState("");
+  const [percent, setPercent] = useState(0);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
   let listRecipe = [];
@@ -109,6 +111,15 @@ const Recommender = (props) => {
     setListRecipes(listRecipes.filter(item => item.recipeId !== recipeId))
   }
 
+  useEffect(()=>{
+    let totalKcal = listRecipes.reduce((sum,a) => sum + a.calories,0);
+    let per = totalKcal/props.kcal * 100
+    if(per > 100){
+      setStatus("exception")
+    }
+    setPercent(per.toFixed(2))
+  },[listRecipes])
+
   console.log(listRecipes)
   return (
     <div className="recommender-body">
@@ -118,13 +129,14 @@ const Recommender = (props) => {
             <h1 className="menu-title">Thực đơn cho bạn</h1>
             {props.kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {props.kcal}</p>}
             {listRecipes.map((dish, index) => {
-              const { id, name } = dish;
+              const { id, name, calories } = dish;
               return (
                 <p className="dish" key={index}>
-                  {name}
+                  {name} <span>{calories}</span>
                 </p>
               );
             })}
+            <Progress percent={percent} status={status} />
           </div>
           <div className="menu-info">
             <h1>MENU MIX</h1>

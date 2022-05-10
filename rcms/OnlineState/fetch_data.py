@@ -103,10 +103,10 @@ def list_recipents(cur, list_recipents_id):
 
 #get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl FROM whatseat.recipes re
+    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, re.Calories FROM whatseat.recipes re
      WHERE RecipeNo IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
-    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
+    return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','calories'])
 
 def product_recommendation(cur):
     cur.execute("""SELECT id_user, id_movie, (is_clicked + shop_rating)/2 FROM testdb.interactive""")
