@@ -530,4 +530,12 @@ public class StoreController : ControllerBase
         }
         return Ok(StoreRes);
     }
+
+    [HttpGet]
+    [Route("storeCategories/{storeId}")]
+    public async Task<IActionResult> GetStoreProductCategories(int storeId)
+    {
+        List<ProductCategory> productCategories = await _storeService.GetStoreProductCategories(storeId);
+        return Ok(productCategories);
+    }
 }

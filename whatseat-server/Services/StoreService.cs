@@ -108,4 +108,11 @@ public class StoreService
         return store.Products.Contains(product);
     }
 
+    public async Task<List<ProductCategory>> GetStoreProductCategories(int storeId)
+    {
+        List<ProductCategory> categories = await _context.ProductCategories
+            .FromSqlInterpolated($"select distinct pc.* from productcategories pc left join products p on pc.ProductCategoryId = p.ProductCategoryId join stores s on p.StoreId = s.StoreId where p.StoreId = {storeId}")
+            .ToListAsync();
+        return categories;
+    }
 }
