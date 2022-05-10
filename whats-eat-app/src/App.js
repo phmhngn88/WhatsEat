@@ -34,7 +34,9 @@ import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import AddRecipe from "./pages/AddRecipe/AddRecipe";
 import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
-const { Header, Content, Footer } = Layout;
+import AdminBrowseRequest from "./pages/AdminBrowseRequest/AdminBrowseRequest";
+
+const { Header, Content, Footer, AdminNavbar } = Layout;
 
 function App({ auth, cartItems }) {
   return (
@@ -81,6 +83,7 @@ function App({ auth, cartItems }) {
             <Route path="/favorshop" element={<FavorShop />}></Route>
             <Route path="/favoritem" element={<FavorItem />}></Route>
             <Route path="/payment/success" element={<PaymentSuccess />}></Route>
+            <Route path="/admin/browserequest" element={<AdminBrowseRequest />}></Route>
           </Routes>
         </Content>
       </Router>

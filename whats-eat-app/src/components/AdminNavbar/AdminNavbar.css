@@ -1,0 +1,52 @@
+.admin-navbar{
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    height: 4rem;
+    border-bottom: 2px solid #C4C4C4;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.admin-navbar h1{
+    margin-right: 16rem;
+    margin-top: 1rem;
+    color: brown;
+    font-size: 1.6rem;
+}
+
+.logout-btn{
+    height: 2.5rem;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.3rem;
+    margin-right: 2rem;
+    background-color: #fff;
+    color: black;
+    font-weight: bold;
+    border: 2px solid #C4C4C4;
+    border-radius: 5px;
+}
+
+.logout-btn:hover,
+.logout-btn:active{
+    cursor: pointer;
+    background-color: #C4C4C4;
+    transition: 0.5s;
+    color: brown;
+}
+
+.logout-btn span{
+    vertical-align: middle;
+}
+
+.logout-btn .logout-icon{
+    padding-right: 0.2rem;
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
