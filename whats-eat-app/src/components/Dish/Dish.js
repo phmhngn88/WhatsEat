@@ -10,11 +10,22 @@ import {
   AiFillThunderbolt,
   AiOutlineBarChart,
 } from "react-icons/ai";
+import { Checkbox } from 'antd';
 
-const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
+const Dish = ({ recipeId, name, totalTime, totalView, level, images, isShowRecipe, addRecipe, removeRecipe }) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const navigate = useNavigate();
+
+  const addRecipeToMenu = (e) => {
+    e.stopPropagation()
+    if(e.target.checked){
+      addRecipe({ recipeId, name, totalTime, totalView, level, images })
+    }
+    else {
+      removeRecipe(recipeId)
+    }
+  }
 
   const handleLikeRecipe = () => {
     setIsLikeRecipe(!isLikeRecipe);
@@ -75,14 +86,14 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images }) => {
       }
     >
       <img src={images[0].url || ""} alt={name} className="dish-img" />
-      <div
+      {isShowRecipe ? <Checkbox className="heart-icon" onClick={addRecipeToMenu}></Checkbox> : <div
         className={`${
           isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
         } heart-icon`}
         onClick={handleLikeRecipe}
       >
         <AiFillHeart className="icon" />
-      </div>
+      </div>}
       <h3 className="dish-name">{name}</h3>
       <div className="dish-info">
         <div className="info-detail">

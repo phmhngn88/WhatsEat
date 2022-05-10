@@ -61,8 +61,10 @@ const categories = [
 
 const Recommender = (props) => {
   const [menu, setMenu] = useState([]);
+  const [listRecipes, setListRecipes] = useState([])
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
+  let listRecipe = [];
   menu.map((item) => {
     recipes.push(item.id);
   });
@@ -99,6 +101,15 @@ const Recommender = (props) => {
       });
   }, []);
 
+  const addRecipe = (recipe) => {
+    setListRecipes([...listRecipes, recipe])
+  }
+
+  const removeRecipe = (recipeId) => {
+    setListRecipes(listRecipes.filter(item => item.recipeId !== recipeId))
+  }
+
+  console.log(listRecipes)
   return (
     <div className="recommender-body">
       <div className="recommender-container">
@@ -106,11 +117,11 @@ const Recommender = (props) => {
           <div className="menu-detail">
             <h1 className="menu-title">Thực đơn cho bạn</h1>
             {props.kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {props.kcal}</p>}
-            {menu.map((dish, index) => {
-              const { id, dish_name } = dish;
+            {listRecipes.map((dish, index) => {
+              const { id, name } = dish;
               return (
                 <p className="dish" key={index}>
-                  {dish_name}
+                  {name}
                 </p>
               );
             })}
@@ -130,7 +141,7 @@ const Recommender = (props) => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-          <DishBox menu={menu} />
+          <DishBox menu={menu} addRecipe={addRecipe} removeRecipe={removeRecipe} />
         </div>
         {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>

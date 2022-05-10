@@ -1,9 +1,9 @@
 import { Form, Input, message, Modal } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { BsPlus } from "react-icons/bs";
 import Footer from "../../components/Footer/Footer";
 import "./ShopRegisterPage.css";
