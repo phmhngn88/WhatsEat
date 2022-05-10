@@ -150,7 +150,7 @@ const SingleProductPage = () => {
                 <div>
                   <p>Thương hiệu</p>
                   <p className="content brand">
-                    {productDetail.store?.shopName || "DONA FARM"}
+                    {productDetail.storeName || "DONA FARM"}
                   </p>
                 </div>
                 <div>
@@ -187,7 +187,7 @@ const SingleProductPage = () => {
           </div>
         </div>
       </div>
-      <ProductsByShop storeId={productDetail.store.storeId} />
+      <ProductsByShop storeId={productDetail.storeId} />
       <TopItems />
       <TopDishes />
       <Footer />
