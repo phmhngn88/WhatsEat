@@ -26,7 +26,7 @@ const items = [
     id: 3,
     img_url:
       "https://image.cooky.vn/posproduct/g0/12447/s400x400/177e2cd7-1885-4e3d-a617-0a410a7884cd.jpeg",
-   item_name : "Xương Ống Heo",
+    item_name: "Xương Ống Heo",
     weight: "500-550g",
     price: 33000,
   },
@@ -72,15 +72,16 @@ const items = [
   },
 ];
 
-const Items = () => {
+const Items = ({ products }) => {
+  console.log(products);
   return (
     <div className="items-container">
       <div className="items">
         <Row gutter={[16, 16]}>
-          {items.map((item) => {
-            const { id, img_url, item_name, weight, price } = item;
+          {products.map((item) => {
+            const { productId, name, basePrice, weightServing, images } = item;
             return (
-              <Col span={6} className="item-col" key={id}>
+              <Col span={4} className="item-col" key={productId}>
                 <Product {...item} />
                 <button className="btn">Xóa</button>
                 <button className="btn">Sửa</button>

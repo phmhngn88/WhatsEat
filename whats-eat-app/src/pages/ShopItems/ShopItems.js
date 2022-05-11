@@ -8,15 +8,16 @@ import "./ShopItems.css";
 const ShopItems = () => {
   const [listProducts, setListProducts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const storeId = 2;
+  const storeId = 1;
 
   const getShopProducts = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/${storeId}/products?PageNumber=${pageNumber}&PageSize=30`,
+      url: `https://localhost:7029/api/Store/2/products?`,
     })
       .then((res) => {
         const result = res.data;
+        console.log(result);
         setListProducts(result);
       })
       .catch((error) => {
@@ -34,7 +35,7 @@ const ShopItems = () => {
           <ShopSidebar />
           <div className="content-container">
             <h1 className="title">Tất cả sản phẩm</h1>
-            {/* <Items /> */}
+            <Items products={listProducts} />
           </div>
         </div>
       </div>
