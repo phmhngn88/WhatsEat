@@ -260,7 +260,7 @@ const SingleDishPage = () => {
                     </p>
                   ))}
                 </>
-              )}
+              )} 
             </div>
           </div>
           <div className="combo-box">
