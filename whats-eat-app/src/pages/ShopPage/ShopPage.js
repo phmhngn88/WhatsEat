@@ -7,7 +7,7 @@ import Shop from "../../components/Shop/Shop";
 import "./ShopPage.css";
 
 const ShopPage = () => {
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(true);
   const token = useSelector((state) => state.auth.userInfo.token);
 
   useEffect(() => {
