@@ -67,5 +67,6 @@ public class WhatsEatContext : IdentityDbContext
     public DbSet<MenuDetail> MenuDetails => Set<MenuDetail>();
     public DbSet<KcalReference> KcalReferences => Set<KcalReference>();
     public DbSet<StoreReview> StoreReviews => Set<StoreReview>();
+    public DbSet<PaymentSession> PaymentSessions => Set<PaymentSession>();
 
 }

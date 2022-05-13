@@ -127,6 +127,7 @@ public class CustomerController : ControllerBase
                 {
                     currentOrder = new Order
                     {
+                        Customer = await _customerService.FindCustomerByIdAsync(userId),
                         Store = product.Store,
                         OrderDetails = new List<OrderDetail>(),
                         CreatedOn = DateTime.UtcNow,
@@ -254,6 +255,7 @@ public class CustomerController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
     public async Task<IActionResult> GetOrders([FromQuery] OrderPagedRequest request)
     {
+        System.Diagnostics.Debug.WriteLine("HIGI");
         try
         {
             Guid userId = new Guid(User.FindFirst("Id")?.Value);

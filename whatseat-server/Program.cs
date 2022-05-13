@@ -5,9 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using whatseat_server.Configuration;
 using whatseat_server.Data;
 using whatseat_server.Services;
+using CustomerService = whatseat_server.Services.CustomerService;
+using OrderService = whatseat_server.Services.OrderService;
+using ProductService = whatseat_server.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -83,7 +87,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeAPIKey");
+
+// app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
@@ -94,3 +100,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
