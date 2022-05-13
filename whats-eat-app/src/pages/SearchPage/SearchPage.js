@@ -99,7 +99,6 @@ const SearchPage = () => {
                 labelInValue
                 defaultValue={{ value: "asc" }}
                 onChange={(value) => {
-                  console.log(value);
                   setFilterCondition(value.value);
                 }}
                 bordered={false}
