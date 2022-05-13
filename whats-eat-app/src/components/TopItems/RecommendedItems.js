@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./TopItems.css";
 import axios from "axios";
+import { useSelector } from 'react-redux'
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -8,15 +9,21 @@ import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 import Product from "../Product/Product";
 
-const RecommendedItems = ({ productIds }) => {
+const RecommendedItems = () => {
   const [topProduct, setTopProduct] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(12);
-
+  const cart = useSelector((state) => state.cart.cartItems);
+  const productIds = cart.map(x => x.productId)
+  let params = ''
+  productIds.forEach(element => {
+    params += `id_product=${element}&`
+  });
+  const url = params.substring(0, params.length - 1)
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/product/apriori?${1}`,
+      url: `http://127.0.0.1:5000/individual/product/apriori?${url}`,
       //   url: `http://127.0.0.1:5000/individual/product/apriori?id_product=13554&id_product=3976&id_product=17344`,
     })
       .then((res) => {
