@@ -2,7 +2,7 @@ from operator import is_
 from numpy import rec
 import pandas as pd
 import flask
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from flask_mysqldb import MySQL
 import time
 from flask_cors import CORS
@@ -163,16 +163,17 @@ def individual_state2_api():
 
 @app.route('/individual/product/apriori', methods=['GET'])
 def individual_product_apriori():
+    print('id_product' in request.args)
     if 'id_product' in request.args:
         list_product = request.args.getlist('id_product')
     else:
-        return """Error: No id field provided. Please specify an id.
-                (URL: /individual/product/apriori?id_product= ... &id_product= ...)
-                """
+        abort(500,'{"message":"Error: No id field provided. Please specify an id.(URL: /individual/product/apriori?id_product= ... &id_product= ...)"}')
+        
     list_product = list(map(int, list_product))
     cur = mysql.connection.cursor()
     
     result = fetch_data.get_product_priori(cur, list_product)
+
     result = result.drop_duplicates()
     result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
     cur.close()
