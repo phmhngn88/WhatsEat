@@ -34,3 +34,38 @@
     align-items: center;
 }
 
+.content-container .favor-shop-table{
+    margin-top: 2rem;
+}
+
+.content-container .favor-shop-table .shop-followed-card{
+    display: flex;
+    align-items: center;
+}
+
+.content-container .favor-shop-table .shop-followed-card .shop-info{
+    width: 60%;
+    display: flex;
+    align-items: center;
+}
+
+.shop-info img{
+    width: 7rem;
+    object-fit: cover;
+}
+
+.shop-info p{
+    font-size: 1rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.content-container .favor-shop-table .shop-followed-card button{
+    height: fit-content;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    background-color: brown;
+    border: none;
+    cursor: pointer;
+}
+

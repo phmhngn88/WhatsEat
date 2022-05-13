@@ -1,7 +1,8 @@
 import { Col, Row, Tabs } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { BsFillPeopleFill, BsFillStarFill, BsShopWindow } from "react-icons/bs";
 import { GiStabbedNote } from "react-icons/gi";
@@ -21,6 +22,7 @@ const ViewShopPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const location = useLocation();
   const storeId = location.state.storeId;
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   const getShopInfo = () => {
     axios({
@@ -66,10 +68,7 @@ const ViewShopPage = () => {
     axios({
       method: "POST",
       url: `https://localhost:7029/api/Store/like/${storeId}`,
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data: {
-        storeId: storeId,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})
       .catch((err) => {
@@ -80,10 +79,7 @@ const ViewShopPage = () => {
     axios({
       method: "DELETE",
       url: `https://localhost:7029/api/Store/dislike/${storeId}`,
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data: {
-        storeId: storeId,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})
       .catch((err) => {
@@ -94,9 +90,11 @@ const ViewShopPage = () => {
     axios({
       method: "get",
       url: `https://localhost:7029/api/Store/is-like/${storeId}`,
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        // setIsLiked(res.data)
+        console.log("is like:", res.data);
+        setIsLiked(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -160,7 +158,7 @@ const ViewShopPage = () => {
                 <h2 className="shop-name">{shopInfo.shopName}</h2>
               </div>
               <div className="btn-box">
-                <button className="btn" onClick={() => setIsLiked(true)}>
+                <button className="btn" onClick={() => setIsLiked(!isLiked)}>
                   {isLiked ? "Hủy theo dõi" : "Theo dõi"}
                 </button>
                 <button className="btn">chat</button>
