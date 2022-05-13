@@ -51,7 +51,7 @@ def individual_recommend_list_recipes(id_user, n_recipe):
     else:
         print("Old user detected!")
         click_df = fetch_data.rating_click_df(cur)
-        sim_df = fetch_data.similarity_df(cur,id_user)
+        sim_df = fetch_data.similarity_item_df(cur)
         cur.close()
 
         rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_recipe, click_df, sim_df)
@@ -176,7 +176,7 @@ def individual_product_apriori():
     result = result.drop_duplicates()
     result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
     cur.close()
-
+    result['images'] = result['images'].apply(utils.to_json_product)
     return jsonify(result.to_dict('record'))
 
 app.run(debug=True)
