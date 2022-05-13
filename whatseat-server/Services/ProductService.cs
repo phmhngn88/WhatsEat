@@ -26,6 +26,19 @@ public class ProductService
         return await _context.Products.Include(p => p.ProductImages).Include(p => p.Store).Include(p => p.Store).FirstOrDefaultAsync(p => p.ProductId == productId);
     }
 
+    public async Task<List<SimpleProductResponse>> FindProductByCategoryId(int categoryId)
+    {
+        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Store).Include(p => p.Store).Include(p=> p.ProductCategory).Where(p => p.ProductCategory.ProductCategoryId == categoryId).Select(x => new SimpleProductResponse
+        {
+            ProductId = x.ProductId,
+            Name = x.Name,
+            BasePrice = x.BasePrice,
+            TotalSell = x.TotalSell,
+            WeightServing = x.WeightServing,
+            Images = ConvertJsonStaticToPhotos(x.PhotoJson)
+        }).ToListAsync();
+    }
+
     public async Task<PagedList<Product>> FullTextSearchProduct(ProductFilter productFilter)
     {
         IQueryable<Product> products = _context.Products.AsQueryable();
@@ -120,6 +133,12 @@ public class ProductService
     }
 
     public List<List<Photo>> ConvertJsonToPhotos(string jsonPhotos)
+    {
+        List<List<Photo>> result = JsonConvert.DeserializeObject<List<List<Photo>>>(jsonPhotos);
+        return result;
+    }
+
+    public static List<List<Photo>> ConvertJsonStaticToPhotos(string jsonPhotos)
     {
         List<List<Photo>> result = JsonConvert.DeserializeObject<List<List<Photo>>>(jsonPhotos);
         return result;

@@ -17,7 +17,7 @@ const CategoryPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?productTypes=${categoryId}`,
+      url: `https://localhost:7029/api/Product/categories/${categoryId}`,
     })
       .then((res) => {
         const result = res.data;
@@ -28,7 +28,7 @@ const CategoryPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [categoryId]);
 
   return (
     <div className="category">

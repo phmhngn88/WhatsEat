@@ -43,10 +43,9 @@ const RecommendedItems = () => {
   }
   return (
     <div className="top-items-container">
-      {topProduct.length > 0 && (
+      {(topProduct.length > 0) && (
         <div className="top-items">
           <h1 className="title">Sản phẩm có liên quan</h1>
-
           <Row gutter={[16, 16]}>
             {topProduct.map((item) => {
               const { productId, name, basePrice, weightServing, images } =
