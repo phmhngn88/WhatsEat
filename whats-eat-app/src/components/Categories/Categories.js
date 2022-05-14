@@ -104,12 +104,12 @@ const Categories = () => {
   return (
     <div className="categories">
       <div className="categories-container">
-        <Row gutter={[8, 16]}>
+        <Row justify="space-evenly">
           {categories?.map((category) => {
             // const { id, img_url, title } = category;
             return (
               <Col
-                span={4}
+                span={3}
                 key={category.productCategoryId}
                 className="category-col"
                 onClick={() =>
@@ -121,7 +121,7 @@ const Categories = () => {
                   })
                 }
               >
-                {/* <img src={img_url} alt={title} className="category-img" /> */}
+                <img src={category.images} alt={category.name} className="category-img" />
                 <h3 className="category-title">{category.name}</h3>
               </Col>
             );
