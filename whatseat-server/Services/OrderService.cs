@@ -19,7 +19,8 @@ public class OrderService
 
     public async Task<PagedList<Order>> GetUserPagedOrders(Customer customer, OrderPagedRequest request)
     {
-        var orders = _context.Orders.AsNoTracking().Where(o => (o.Customer == customer));
+        var orders = _context.Orders.AsNoTracking().Include(o => o.Customer).Include(o => o.PaymentMethod).Include(o => o.ShippingInfo)
+        .Include(o => o.Store).Where(o => (o.Customer == customer));
 
         var orderList = await PagedList<Order>.ToPagedList(orders, request.PageNumber, request.PageSize);
 

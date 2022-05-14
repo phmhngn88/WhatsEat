@@ -16,11 +16,16 @@ namespace whatseat_server.Controllers;
 public class PaymentController : ControllerBase {
     private readonly CustomerService _customerService;
     private readonly OrderService _orderService;
+    private readonly IConfiguration _configuration;
 
-    public PaymentController(CustomerService customerService, OrderService orderService)
+    public PaymentController(
+        CustomerService customerService, 
+        OrderService orderService,
+        IConfiguration configuration)
     {
         _customerService = customerService;
         _orderService = orderService;
+        _configuration = configuration;
     }
 
     [HttpPost("{orderId}")]
@@ -49,13 +54,15 @@ public class PaymentController : ControllerBase {
                     },
                     Quantity = item.Quantity,
                 });
-        }     
+        }
+
+        string appHost = _configuration["AppHost"];  
 
         var options = new SessionCreateOptions{
             LineItems = LineItems,
             Mode = "payment",
-            SuccessUrl = "http://localhost:3000",
-            CancelUrl = "http://localhost:3000"
+            SuccessUrl = $"{appHost}",
+            CancelUrl = $"{appHost}"
         };
 
         var service = new SessionService();
