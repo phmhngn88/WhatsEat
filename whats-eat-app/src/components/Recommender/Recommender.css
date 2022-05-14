@@ -113,3 +113,8 @@
     cursor: pointer;
     color: brown;
 }
+
+.remove-recipe:hover{
+    cursor: pointer;
+    fill: red;
+}

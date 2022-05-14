@@ -193,6 +193,13 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+    [Route("categories/{categoryId}", Name = "categoryId")]
+    public async Task<IActionResult> GetProductByCategories(int categoryId)
+    {
+        return Ok(await _productService.FindProductByCategoryId(categoryId));
+    }
+
+    [HttpGet]
     [Route("payment-method")]
     public async Task<IActionResult> GetPaymentMethods()
     {

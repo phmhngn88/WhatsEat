@@ -1,80 +1,28 @@
 import { Space, Table } from "antd";
 import "antd/dist/antd.css";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./FavorShop.css";
 
-const columns = [
-  {
-    title: "Tên shop",
-    dataIndex: "shop",
-    key: "shop",
-  },
-  {
-    title: "",
-    dataIndex: "view",
-    key: "view",
-    render: (text) => (
-      <Space size="middle">
-        <a>Xem shop</a>
-      </Space>
-    ),
-  },
-  {
-    title: "",
-    dataIndex: "unfl",
-    key: "unfl",
-    render: (text) => (
-      <Space size="middle">
-        <a>Bỏ theo dõi</a>
-      </Space>
-    ),
-  },
-];
-
-const data = [
-  {
-    key: 1,
-    shop: "lyquynhtram",
-  },
-  {
-    key: 2,
-    shop: "trannhathiep",
-  },
-  {
-    key: 3,
-    shop: "tranthivi",
-  },
-  {
-    key: 4,
-    shop: "dinhthiminhhieu",
-  },
-  {
-    key: 5,
-    shop: "nguyenvanhao",
-  },
-  {
-    key: 6,
-    shop: "phamhoangan",
-  },
-];
-
 const FavorShop = () => {
   const [shopList, setShopList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(100);
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.userInfo.token);
 
   useEffect(() => {
     axios({
-      method: "post",
-      url: `https://localhost:7029/api/Store/followings?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      method: "get",
+      url: `https://localhost:7029/api/Store/followings`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         setShopList(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -90,7 +38,33 @@ const FavorShop = () => {
               <h1 className="title">Shop yêu thích</h1>
             </div>
             <div className="favor-shop-table">
-              <Table columns={columns} dataSource={data} />
+              {shopList.map((shop, idx) => {
+                return (
+                  <div className="shop-followed-card" key={idx}>
+                    <div className="shop-info">
+                      <img
+                        src={
+                          shop.avatarUrl ||
+                          "https://cf.shopee.vn/file/569ea6d6a8d2816a10d3a258e58d9ecc_tn"
+                        }
+                        alt="whatseat"
+                      />
+                      <p>{shop.shopName}</p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        navigate(`/viewshop/${shop.storeId}`, {
+                          state: {
+                            storeId: shop.storeId,
+                          },
+                        })
+                      }
+                    >
+                      Xem shop
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

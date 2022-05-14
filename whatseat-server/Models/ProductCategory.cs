@@ -10,4 +10,5 @@ public class ProductCategory
     public int ProductCategoryId { get; set; }
     [Required]
     public string Name { get; set; }
+    public string Images { get; set; }
 }

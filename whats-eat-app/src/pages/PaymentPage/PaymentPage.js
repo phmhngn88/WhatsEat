@@ -12,37 +12,31 @@ const { Option } = Select;
 const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deliver, setDeliver] = useState("Giao hàng tiết kiệm");
-  const [paymentMethod, setPaymentMethod] = useState(
-    "Thanh toán khi nhận hàng"
-  );
-  const cartItems = useSelector((state) => state.cart.cartItems)
-  const token = useSelector((state) => state.auth.userInfo.token)
+  const [deliver, setDeliver] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState(1);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const token = useSelector((state) => state.auth.userInfo.token);
   const getTotalPrice = (cartItems) => {
-    return cartItems.reduce((total,cartItem) => {
-          return cartItem.totalPrice + total
-      },0);
-    }
-  const handleChange = (value) => {
-    setPaymentMethod(value);
+    return cartItems.reduce((total, cartItem) => {
+      return cartItem.totalPrice + total;
+    }, 0);
   };
 
   const carts = cartItems.map((item) => {
     const container = {};
     container.productId = item.productId;
-    container.price = item.price;
     container.quantity = item.quantity;
     return container;
-  })
+  });
 
-  const handleSubmitPayment = () => {
+  const handleConfirm = () => {
     axios({
       method: "POST",
       url: "https://localhost:7029/api/Customer/order",
       headers: { Authorization: `Bearer ${token}` },
       data: {
-        paymentMethodId: 1,
-        shippingInfoId: 1,
+        paymentMethodId: paymentMethod,
+        shippingInfoId: deliver,
         productList: carts,
       },
     })
@@ -82,12 +76,22 @@ const PaymentPage = () => {
               </div>
               <div className="product-detail">
                 {cartItems.map((item) => {
-                  const { productId, image, productName, quantity, totalPrice, price, weightServing } = item;
+                  const {
+                    productId,
+                    image,
+                    productName,
+                    quantity,
+                    totalPrice,
+                    price,
+                    weightServing,
+                  } = item;
                   return (
                     <div className="single-item" key={productId}>
                       <div className="info">
                         <img src={image} alt={productName} />
-                        <p style={{ fontSize: "1.2rem" }}>{productName} ({weightServing})</p>
+                        <p style={{ fontSize: "1.2rem" }}>
+                          {productName} ({weightServing})
+                        </p>
                       </div>
                       <h3>
                         {price.toLocaleString("vi-VN", {
@@ -96,10 +100,12 @@ const PaymentPage = () => {
                         })}
                       </h3>
                       <h3>{quantity}</h3>
-                      <h3>{totalPrice.toLocaleString("vi-VN", {
+                      <h3>
+                        {totalPrice.toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
-                        })}</h3>
+                        })}
+                      </h3>
                     </div>
                   );
                 })}
@@ -111,27 +117,36 @@ const PaymentPage = () => {
                 <input type="text" placeholder="Nhập lời nhắn..." />
               </div>
               <div className="deliver">
-                <p className="title">Đơn vị vận chuyển:</p>
-                <p className="deli-unit">Giao hàng tiết kiệm</p>
+                <div className="title">
+                  Đơn vị vận chuyển:
+                  <Select
+                    labelInValue
+                    defaultValue={{ value: 1 }}
+                    onChange={(value) => setDeliver(value.value)}
+                    bordered={false}
+                  >
+                    <Option value={1}>Giao hàng nhanh</Option>
+                    <Option value={2}>Giao hàng tiết kiệm</Option>
+                  </Select>
+                </div>
               </div>
             </div>
             <div className="payment-method-box">
-              <p className="title">
+              <div className="title">
                 Hình thức thanh toán:{" "}
                 <Select
                   labelInValue
-                  defaultValue={{ value: "Thanh toán khi nhận hàng" }}
-                  onChange={handleChange}
+                  defaultValue={{ value: 1 }}
+                  onChange={(value) => {
+                    console.log(value);
+                    setPaymentMethod(value.value);
+                  }}
                   bordered={false}
                 >
-                  <Option value="Thanh toán khi nhận hàng">
-                    Thanh toán khi nhận hàng
-                  </Option>
-                  <Option value="Thanh toán trả trước">
-                    Thanh toán trả trước
-                  </Option>
+                  <Option value={1}>Thanh toán khi nhận hàng</Option>
+                  <Option value={2}>Thanh toán trả trước</Option>
                 </Select>
-              </p>
+              </div>
             </div>
             <div className="total-box">
               <p className="total-payment">
@@ -145,7 +160,9 @@ const PaymentPage = () => {
               </p>
             </div>
           </div>
-          <button className="btn confirm-btn" onClick={handleSubmitPayment}>xác nhận</button>
+          <button className="btn confirm-btn" onClick={handleConfirm}>
+            xác nhận
+          </button>
         </div>
       </div>
       <Footer />
