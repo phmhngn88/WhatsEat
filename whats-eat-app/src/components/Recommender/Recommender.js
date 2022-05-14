@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Recommender.css";
-import { Button } from "antd";
+import { Button,Row, Col } from "antd";
 import { useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle, AiFillDelete } from "react-icons/ai";
 import { Progress } from 'antd';
 const recommendedMenu = [
   {
@@ -70,18 +70,19 @@ const Recommender = (props) => {
   menu.map((item) => {
     recipes.push(item.id);
   });
-
   const handleSaveMenu = () => {
     axios({
       method: "post",
-      url: "https://localhost:7029/api/Recipe/menu",
+      url: "https://localhost:7029/api/Menu",
       data: {
         menuName: `Menu ngày ${getCurrentDate()}`,
         recipeIds: listRecipes.map(a => a.recipeId), //TODO: Get array of id in menu
       },
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => {})
+      .then((res) => {
+        setListRecipes([]);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -95,7 +96,6 @@ const Recommender = (props) => {
     })
       .then((res) => {
         const result = res.data;
-        console.log("Single dish info:", result);
         setMenu(result);
       })
       .catch((error) => {
@@ -120,7 +120,7 @@ const Recommender = (props) => {
     setPercent(per.toFixed(2))
   },[listRecipes])
 
-  console.log(listRecipes)
+  console.log('list',listRecipes)
   return (
     <div className="recommender-body">
       <div className="recommender-container">
@@ -129,10 +129,14 @@ const Recommender = (props) => {
             <h1 className="menu-title">Thực đơn cho bạn</h1>
             {props.kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {props.kcal}</p>}
             {listRecipes.map((dish, index) => {
-              const { id, name, calories } = dish;
+              const { recipeId, name, calories } = dish;
               return (
                 <p className="dish" key={index}>
-                  {name} <span>{calories}</span>
+                  <Row>
+                    <Col span={18}>{name}</Col>
+                    <Col span={4}>{calories}</Col>
+                    <Col span={2}><AiFillDelete className="remove-recipe" onClick={() => removeRecipe(recipeId)} /></Col>
+                  </Row>
                 </p>
               );
             })}
@@ -153,7 +157,7 @@ const Recommender = (props) => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-          <DishBox menu={menu} addRecipe={addRecipe} removeRecipe={removeRecipe} />
+          <DishBox menu={menu} addRecipe={addRecipe} />
         </div>
         {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>

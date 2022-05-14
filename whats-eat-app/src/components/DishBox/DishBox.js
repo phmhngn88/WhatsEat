@@ -3,7 +3,7 @@ import "./DishBox.css";
 import Dish from "../Dish/Dish";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { Row, Col } from 'antd';
-const DishBox = ({ menu, category, addRecipe, removeRecipe }) => {
+const DishBox = ({ menu, category, addRecipe }) => {
   const [isShowRecipe, setIsShowRecipe] = useState(true);
   const handleShow = () => setIsShowRecipe(true);
   const handleHidden = () => setIsShowRecipe(false);
@@ -25,7 +25,7 @@ const DishBox = ({ menu, category, addRecipe, removeRecipe }) => {
             menu.map((dish) => {
               const { recipeId, name, images, totalLike, totalTime, totalView, recipeTypeId, calories } = dish;
               return (<Col className="gutter-row" span={6}>
-                <Dish {...dish} className="single-dish" isShowRecipe={isShowRecipe} addRecipe={addRecipe} removeRecipe={removeRecipe} />;
+                <Dish {...dish} className="single-dish" isShowRecipe={isShowRecipe} addRecipe={addRecipe} />;
               </Col>)
             })}
         </Row>
