@@ -24,7 +24,7 @@ const ProductReview = ({ productId }) => {
 
   return (
     <div className="product-reviews-container">
-      <h1>Khám phá bình luận của người khác</h1>
+      <h1>Khám phá đánh giá của người khác</h1>
       {reviews.length > 0 ? (
         reviews.map((review, idx) => {
           const { rating, comment, customer } = review;
@@ -51,7 +51,7 @@ const ProductReview = ({ productId }) => {
           );
         })
       ) : (
-        <p>Chưa có bình luận nào cho sản phẩm này</p>
+        <p>Chưa có đánh giá nào cho sản phẩm này</p>
       )}
     </div>
   );

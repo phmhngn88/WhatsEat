@@ -168,10 +168,7 @@ const SingleProductPage = () => {
             </div>
           </div>
           <div>
-            <h2> Đánh giá sản phẩm</h2>
-            <div>
             <ProductReview productId={productId} />
-            </div>
           </div>
         </div>
       </div>
