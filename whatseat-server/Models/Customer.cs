@@ -12,6 +12,7 @@ public class Customer
     public string Email { get; set; }
     public string IDCard { get; set; }
     public string AvatarUrl { get; set; }
+    public float KcalPerDay { get; set; }
     [JsonIgnore]
     public ShippingInfo DefaultShippingInfo { get; set; }
     [JsonIgnore]
