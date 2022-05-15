@@ -6,6 +6,8 @@ import axios from "axios";
 import { Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../reducers/cart";
+import FormItem from "antd/lib/form/FormItem";
+import {Modal, Form, Input } from "antd";
 
 const { Option } = Select;
 
@@ -48,6 +50,19 @@ const PaymentPage = () => {
         message.error("Đánh giá không thành công!");
       });
   };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   return (
     <div className="payment">
       <div className="payment-fluid">
@@ -57,15 +72,52 @@ const PaymentPage = () => {
           </h1>
           <div className="address-block">
             <p className="title">Địa chỉ giao hàng</p>
-            <div className="info-block">
+            {/*<div className="info-block">
               <div>
                 <p className="username">Trần Nhật Hiệp</p>
                 <p className="phone">0984523175</p>
                 <p className="address">113/4 đường số 8, Linh Trung, Thủ Đức</p>
               </div>
               <a href="#">thay đổi</a>
-            </div>
-          </div>
+            </div>*/}
+            <button className="btn btn-add-address" onClick={showModal}>
+                Thêm địa chỉ
+            </button>
+            <Modal
+            title="Thêm địa chỉ mới"
+            visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            cancelText="Hủy"
+            okText="Lưu"
+            >
+            <Form
+            labelCol={{
+              span: 7,
+              }}
+              wrapperCol={{
+                  span: 16,
+              }}
+              layout="horizontal"
+              size="default">
+            <Form.Item
+             name="name"
+             label="Họ và tên">
+             <Input placeholder="Nhập họ và tên..." />
+            </Form.Item>
+            <Form.Item
+             name="phone"
+             label="Số điện thoại">
+             <Input placeholder="Nhập số điện thoại..." />
+            </Form.Item>
+            <Form.Item
+             name="address"
+             label="Địa chỉ nhận hàng">
+             <Input placeholder="Nhập địa chỉ..." />
+            </Form.Item>
+            </Form>
+            </Modal>
+          </div> 
           <div className="products-block">
             <div className="products-box">
               <div className="title">
