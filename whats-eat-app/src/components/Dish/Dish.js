@@ -9,25 +9,22 @@ import {
   AiOutlineClockCircle,
   AiFillThunderbolt,
   AiOutlineBarChart,
+  AiFillPlusCircle
 } from "react-icons/ai";
 import { Checkbox } from 'antd';
 
-const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, isShowRecipe, addRecipe, removeRecipe }) => {
+const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, isShowRecipe, addRecipe }) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const navigate = useNavigate();
 
   const addRecipeToMenu = (e) => {
     e.stopPropagation()
-    if(e.target.checked){
-      addRecipe({ recipeId, name, totalTime, totalView, level, images, calories })
-    }
-    else {
-      removeRecipe(recipeId)
-    }
+    addRecipe({ recipeId, name, totalTime, totalView, level, images, calories })
   }
 
-  const handleLikeRecipe = () => {
+  const handleLikeRecipe = (e) => {
+    e.stopPropagation()
     setIsLikeRecipe(!isLikeRecipe);
     if (isLikeRecipe) {
       axios({
@@ -86,7 +83,11 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, i
       }
     >
       <img src={images[0].url || ""} alt={name} className="dish-img" />
-      {isShowRecipe ? <Checkbox className="heart-icon" onClick={addRecipeToMenu}></Checkbox> : <div
+      {isShowRecipe ? 
+      <div className="add-icon" onClick={addRecipeToMenu}>
+        <AiFillPlusCircle className="icon"  />
+      </div>
+       : <div
         className={`${
           isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
         } heart-icon`}

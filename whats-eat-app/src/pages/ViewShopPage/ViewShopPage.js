@@ -1,7 +1,8 @@
 import { Col, Row, Tabs } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { BsFillPeopleFill, BsFillStarFill, BsShopWindow } from "react-icons/bs";
 import { GiStabbedNote } from "react-icons/gi";
@@ -15,10 +16,13 @@ const { TabPane } = Tabs;
 const ViewShopPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [shopInfo, setShopInfo] = useState({});
+  const [shopCate, setShopCate] = useState([]);
   const [shopProducts, setShopProducts] = useState([]);
+  const [productsByCate, setProductsByCate] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
   const location = useLocation();
   const storeId = location.state.storeId;
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   const getShopInfo = () => {
     axios({
@@ -28,6 +32,20 @@ const ViewShopPage = () => {
       .then((res) => {
         const result = res.data;
         setShopInfo(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const getShopCategories = () => {
+    axios({
+      method: "get",
+      url: `https://localhost:7029/api/Store/storeCategories/${storeId}`,
+    })
+      .then((res) => {
+        const result = res.data;
+        console.log({ result });
+        setShopCate(result);
       })
       .catch((error) => {
         console.log(error);
@@ -50,10 +68,7 @@ const ViewShopPage = () => {
     axios({
       method: "POST",
       url: `https://localhost:7029/api/Store/like/${storeId}`,
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data: {
-        storeId: storeId,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})
       .catch((err) => {
@@ -64,10 +79,7 @@ const ViewShopPage = () => {
     axios({
       method: "DELETE",
       url: `https://localhost:7029/api/Store/dislike/${storeId}`,
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data: {
-        storeId: storeId,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})
       .catch((err) => {
@@ -78,13 +90,32 @@ const ViewShopPage = () => {
     axios({
       method: "get",
       url: `https://localhost:7029/api/Store/is-like/${storeId}`,
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        // setIsLiked(res.data)
+        console.log("is like:", res.data);
+        setIsLiked(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleTabClick = (key) => {
+    if (key === 1) {
+      return;
+    } else {
+      axios({
+        method: "get",
+        url: `https://localhost:7029/api/Product?productCategories=${key}&PageNumber=${pageNumber}&PageSize=30`,
+      })
+        .then((res) => {
+          setProductsByCate(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const handleClickNext = () => {
@@ -95,6 +126,7 @@ const ViewShopPage = () => {
   };
   useEffect(() => {
     getShopInfo();
+    getShopCategories();
   }, []);
 
   useEffect(() => {
@@ -126,7 +158,7 @@ const ViewShopPage = () => {
                 <h2 className="shop-name">{shopInfo.shopName}</h2>
               </div>
               <div className="btn-box">
-                <button className="btn" onClick={() => setIsLiked(true)}>
+                <button className="btn" onClick={() => setIsLiked(!isLiked)}>
                   {isLiked ? "Hủy theo dõi" : "Theo dõi"}
                 </button>
                 <button className="btn">chat</button>
@@ -154,7 +186,7 @@ const ViewShopPage = () => {
             </div>
           </div>
           <div className="shop-products">
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey="1" onTabClick={handleTabClick}>
               <TabPane tab="TẤT CẢ SẢN PHẨM" key="1">
                 <Row gutter={[16, 16]}>
                   {shopProducts.map((item) => {
@@ -173,24 +205,31 @@ const ViewShopPage = () => {
                   })}
                 </Row>
               </TabPane>
-              <TabPane tab="Category 1" key="2">
-                Danh mục hàng 1
-              </TabPane>
-              <TabPane tab="Category 2" key="3">
-                Danh mục hàng 2
-              </TabPane>
-              <TabPane tab="Category 3" key="4">
-                Danh mục hàng 3
-              </TabPane>
-              <TabPane tab="Category 4" key="5">
-                Danh mục hàng 4
-              </TabPane>
-              <TabPane tab="Category 5" key="6">
-                Danh mục hàng 5
-              </TabPane>
+              {shopCate.map((cate, idx) => {
+                return (
+                  <TabPane tab={cate.name} key={idx + 2}>
+                    <Row gutter={[16, 16]}>
+                      {productsByCate.map((item) => {
+                        const {
+                          productId,
+                          name,
+                          basePrice,
+                          weightServing,
+                          images,
+                        } = item;
+                        return (
+                          <Col span={4} className="item-col" key={productId}>
+                            <Product {...item} />
+                          </Col>
+                        );
+                      })}
+                    </Row>
+                  </TabPane>
+                );
+              })}
             </Tabs>
           </div>
-          {shopProducts.length !== 0 && (
+          {shopProducts.length === 30 && productsByCate.length === 30 && (
             <Pagination
               onClickNext={handleClickNext}
               onClickPrev={handleClickPrev}

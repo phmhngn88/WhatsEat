@@ -1,11 +1,43 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import { Modal, Button, Form, DatePicker, Select } from 'antd';
+import { Modal, Input, Form, DatePicker, Select, Steps, Button, message } from 'antd';
+import './ModalCalo.css'
+import TopDishesForYou from '../TopDishOnKcalModal/TopDishesForYou'
+import locale from 'antd/es/date-picker/locale/vi_VN';
 const { Option } = Select;
-const ModalCalo = ({ isModalVisible, handleOk, handleCancel}) => {
+const { Step } = Steps;
+
+const steps = [
+    {
+        title: 'Nhập thông tin',
+    },
+    {
+        title: 'Lựa món yêu thích',
+    }
+];
+
+const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
+    const [form] = Form.useForm();
+
     const [gender, setGender] = useState(1)
     const [pal, setPal] = useState(0)
+    const [weight,setWeight] = useState(0)
+    const [height,setHeight] = useState(0)
     const [year, setYear] = useState('')
+    const [current, setCurrent] = React.useState(0);
+
+    const next = () => {
+        setCurrent(current + 1);
+    };
+
+    const prev = () => {
+        setCurrent(current - 1);
+    };
+
+    const onFinish = () => {
+        console.log(gender,pal,weight,height,year)
+        handleOk(gender,pal,weight,height,year)
+    }
 
     const onGenderChange = (e) => {
         setGender(e)
@@ -15,7 +47,7 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel}) => {
         setPal(e)
     }
 
-    function onChange(date, dateString) {
+    function onBirthChange(date, dateString) {
         setYear(dateString)
         console.log(date, dateString);
     }
@@ -26,52 +58,78 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel}) => {
 
     return (
         <>
-            <Modal title="Bảng tính calo hằng ngày" visible={isModalVisible} onOk={onClick} onCancel={handleCancel}>
-                <Form labelCol={{
-                    span: 10,
-                }}
-                    wrapperCol={{
-                        span: 8,
+            <Modal width={1000} footer={null} title="Bảng tính calo hằng ngày" visible={isModalVisible}>
+                <Steps current={current}>
+                    {steps.map(item => (
+                        <Step key={item.title} title={item.title} />
+                    ))}
+                </Steps>
+                <div className="steps-content">{
+                    current === 0 ? <Form form={form} labelCol={{
+                        span: 10,
                     }}
-                    layout="horizontal"
-                    size="default">
-                    <Form.Item
-                        name="year"
-                        label="Năm sinh">
-                        <DatePicker onChange={onChange} picker="year" />
-                    </Form.Item>
-                    <Form.Item
-                        name="gender"
-                        label="Giới tính">
-                        <Select
-                            value={gender}
-                            style={{
-                                width: 150,
-                                margin: '0 8px',
-                            }}
+                        wrapperCol={{
+                            span: 8,
+                        }}
+                        layout="horizontal"
+                        size="default">
+                        <Form.Item
+                            name="year"
+                            label="Năm sinh">
+                            <DatePicker locale={locale} style={{width: "100%"}} onChange={onBirthChange} />
+                        </Form.Item>
+                        <Form.Item
+                            name="gender"
+                            label="Giới tính">
+                            <Select style={{alignItems:'flex-start',display: "flex"}}
                             onChange={onGenderChange}
-                        >
-                            <Option value="male">Nam</Option>
-                            <Option value="female">Nữ</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name="PAL"
-                        label="Mức độ hoạt động ">
-                        <Select
-                            value={pal}
-                            style={{
-                                width: 150,
-                                margin: '0 8px',
-                            }}
+                            >
+                                <Option value="male">Nam</Option>
+                                <Option value="female">Nữ</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="weight"
+                            label="Cân nặng (kg)">
+                            <Input onChange={e => setWeight(e.target.value)}></Input>
+                        </Form.Item>
+                        <Form.Item
+                            name="height"
+                            label="Chiều cao (cm)">
+                            <Input onChange={e => setHeight(e.target.value)}></Input>
+                        </Form.Item>
+                        <Form.Item
+                            name="PAL"
+                            label="Mức độ hoạt động ">
+                            <Select
                             onChange={onPALChange}
-                        >
-                            <Option value="1.4">Ít</Option>
-                            <Option value="1.6">Vừa</Option>
-                            <Option value="1.8">Nhiều</Option>
-                        </Select>
-                    </Form.Item>
-                </Form>
+                            >
+                                <Option value="1.2">Không hoạt động thể chất</Option>
+                                <Option value="1.375">Mức độ ít</Option>
+                                <Option value="1.55">Mức độ trung bình</Option>
+                                <Option value="1.725">Mức độ nhiều</Option>
+                                <Option value="1.9">Mức độ rất nhiều</Option>
+                            </Select>
+                        </Form.Item>
+                    </Form> : <TopDishesForYou />
+                }</div>
+                <div className="steps-action">
+                    {current < steps.length - 1 && (
+                        <Button type="primary" onClick={() => next()}>
+                            Next
+                        </Button>
+                    )}
+                    {current === steps.length - 1 && (
+                        <Button type="primary" onClick={onFinish}>
+                            Done
+                        </Button>
+                    )}
+                    {current > 0 && (
+                        <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                            Previous
+                        </Button>
+                    )}
+                </div>
             </Modal>
         </>
     );

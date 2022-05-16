@@ -18,3 +18,15 @@
 .slide-container .slide .react-slideshow-container .default-nav{
     z-index: 1;
 }
+
+.carousel{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 824px;
+    height: 274px;
+}
+
+.img-carousel{
+    width: 824px;
+    height: 274px;
+}

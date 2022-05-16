@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Recommender.css";
-import { Button } from "antd";
+import { Button, Row, Col } from "antd";
 import { useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle, AiFillDelete } from "react-icons/ai";
 import { Progress } from 'antd';
 const recommendedMenu = [
   {
@@ -59,10 +59,9 @@ const categories = [
   { id: 10, category_name: "Món nhậu" },
 ];
 
-const Recommender = (props) => {
-  const [menu, setMenu] = useState([]);
+const Recommender = ({ kcal, menu }) => {
   const [listRecipes, setListRecipes] = useState([]);
-  const [status,setStatus] = useState("");
+  const [status, setStatus] = useState("");
   const [percent, setPercent] = useState(0);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
@@ -70,38 +69,23 @@ const Recommender = (props) => {
   menu.map((item) => {
     recipes.push(item.id);
   });
-
   const handleSaveMenu = () => {
     axios({
       method: "post",
-      url: "https://localhost:7029/api/Recipe/menu",
+      url: "https://localhost:7029/api/Menu",
       data: {
         menuName: `Menu ngày ${getCurrentDate()}`,
         recipeIds: listRecipes.map(a => a.recipeId), //TODO: Get array of id in menu
       },
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => {})
+      .then((res) => {
+        setListRecipes([]);
+      })
       .catch((err) => {
         console.log(err);
       });
   };
-  const userId = useSelector((state) => state.auth.userInfo.userId);
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${userId}&n_recipe=16`,
-    })
-      .then((res) => {
-        const result = res.data;
-        console.log("Single dish info:", result);
-        setMenu(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const addRecipe = (recipe) => {
     setListRecipes([...listRecipes, recipe])
@@ -111,28 +95,35 @@ const Recommender = (props) => {
     setListRecipes(listRecipes.filter(item => item.recipeId !== recipeId))
   }
 
-  useEffect(()=>{
-    let totalKcal = listRecipes.reduce((sum,a) => sum + a.calories,0);
-    let per = totalKcal/props.kcal * 100
-    if(per > 100){
+  useEffect(() => {
+    let totalKcal = listRecipes.reduce((sum, a) => sum + a.calories, 0);
+    let per = totalKcal / kcal * 100
+    if (per > 100) {
       setStatus("exception")
     }
+    else {
+      setStatus("active")
+    }
     setPercent(per.toFixed(2))
-  },[listRecipes])
+  }, [listRecipes])
 
-  console.log(listRecipes)
+  console.log('list', listRecipes)
   return (
     <div className="recommender-body">
       <div className="recommender-container">
         <div className="menu-mix">
           <div className="menu-detail">
             <h1 className="menu-title">Thực đơn cho bạn</h1>
-            {props.kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {props.kcal}</p>}
+            {kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {kcal}</p>}
             {listRecipes.map((dish, index) => {
-              const { id, name, calories } = dish;
+              const { recipeId, name, calories } = dish;
               return (
                 <p className="dish" key={index}>
-                  {name} <span>{calories}</span>
+                  <Row>
+                    <Col span={18}>{name}</Col>
+                    <Col span={4}>{calories.toFixed(2)}</Col>
+                    <Col span={2}><AiFillDelete className="remove-recipe" onClick={() => removeRecipe(recipeId)} /></Col>
+                  </Row>
                 </p>
               );
             })}
@@ -153,7 +144,7 @@ const Recommender = (props) => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-          <DishBox menu={menu} addRecipe={addRecipe} removeRecipe={removeRecipe} />
+          <DishBox menu={menu} addRecipe={addRecipe} />
         </div>
         {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>

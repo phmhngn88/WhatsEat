@@ -250,6 +250,9 @@ namespace whatseat_server.Migrations
                     b.Property<string>("IDCard")
                         .HasColumnType("longtext");
 
+                    b.Property<float>("KcalPerDay")
+                        .HasColumnType("float");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -532,6 +535,25 @@ namespace whatseat_server.Migrations
                     b.ToTable("PaymentMethods");
                 });
 
+            modelBuilder.Entity("whatseat_server.Models.PaymentSession", b =>
+                {
+                    b.Property<int>("PaymentSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SessionId")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("PaymentSessionId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("PaymentSessions");
+                });
+
             modelBuilder.Entity("whatseat_server.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -590,6 +612,9 @@ namespace whatseat_server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnOrder(0);
+
+                    b.Property<string>("Images")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1343,6 +1368,17 @@ namespace whatseat_server.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("OrderStatus");
+                });
+
+            modelBuilder.Entity("whatseat_server.Models.PaymentSession", b =>
+                {
+                    b.HasOne("whatseat_server.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("whatseat_server.Models.Product", b =>
