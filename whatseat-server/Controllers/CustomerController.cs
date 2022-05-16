@@ -1,3 +1,4 @@
+using backend_dotnet_r06_mall.Contants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -173,7 +174,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    [Route("add-shipping-info")]
+    [Route("shippingInfos")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
     public async Task<IActionResult> AddShippingInfo([FromBody] ShippingInfoRequest request)
     {
@@ -191,13 +192,67 @@ public class CustomerController : ControllerBase
             PhoneNumber = request.PhoneNumber,
             DistrictCode = request.DistrictCode,
             Address = request.Address,
-            ProvinceCode = request.ProvinceCode
+            ProvinceCode = request.ProvinceCode,
+            Status = true
         });
         await _context.SaveChangesAsync();
         return Ok(new
         {
             message = "Success"
         });
+    }
+
+    [HttpGet]
+    [Route("shippingInfos")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> GetShippingInfo()
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        List<ShippingInfo> shippingInfos = await _customerService.GetCustomerShippingInfos(customer);
+        return Ok(shippingInfos);
+    }
+
+    [HttpDelete]
+    [Route("shippingInfos/{shippingId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> DeleteShippingInfo(int shippingId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        ShippingInfo shippingInfo = await _customerService.GetCustomerShippingInfosById(customer, shippingId);
+
+        if (shippingInfo is null) return Forbid();
+
+        shippingInfo.Status = false;
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+    [HttpPut]
+    [Route("shippingInfos/{shippingId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> EditShippingInfo(int shippingId, [FromBody] ShippingInfoRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        ShippingInfo shippingInfo = await _customerService.GetCustomerShippingInfosById(customer, shippingId);
+
+        if (shippingInfo is null) return Forbid();
+
+        shippingInfo.WardCode = request.WardCode;
+        shippingInfo.PhoneNumber = request.PhoneNumber;
+        shippingInfo.DistrictCode = request.DistrictCode;
+        shippingInfo.Address = request.Address;
+        shippingInfo.ProvinceCode = request.ProvinceCode;
+        await _context.SaveChangesAsync();
+        return Ok(shippingInfo);
     }
 
     [HttpPost]
@@ -351,14 +406,14 @@ public class CustomerController : ControllerBase
         var age = now.Year - birthDay.Year;
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
 
-        var brm = request.Gender == "male" ? 
+        var brm = request.Gender == "male" ?
             66 + (6.3 * request.Weight * 2.20462262) + (12.9 * request.Height * 0.393700787) + (6.8 * age) :
             66.5 + (4.3 * request.Weight * 2.20462262) + (4.7 * request.Height * 0.393700787) + (4.7 * age);
-        
-        var calorie = (float)Math.Round(brm * float.Parse(request.PAL),2);
-        
+
+        var calorie = (float)Math.Round(brm * float.Parse(request.PAL), 2);
+
         var customer = await _customerService.FindCustomerByIdAsync(userId);
-        if(customer.KcalPerDay == 0)
+        if (customer.KcalPerDay == 0)
         {
             customer.KcalPerDay = calorie;
         }
@@ -367,4 +422,29 @@ public class CustomerController : ControllerBase
 
         return Ok(calorie);
     }
+
+
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Customer)]
+    public async Task<IActionResult> GetCustomerInfo()
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        return Ok(customer);
+    }
+    [HttpPut]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Customer)]
+    public async Task<IActionResult> EditCustomerInfo([FromBody] CustomerInfoRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        customer.AvatarUrl = request.AvatarUrl;
+        customer.Email = request.Email;
+        customer.IDCard = request.IdCard;
+        customer.Name = request.Name;
+
+        await _context.SaveChangesAsync();
+        return Ok(customer);
+    }
+
 }

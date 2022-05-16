@@ -13,8 +13,8 @@ public class Customer
     public string IDCard { get; set; }
     public string AvatarUrl { get; set; }
     public float KcalPerDay { get; set; }
-    [JsonIgnore]
-    public ShippingInfo DefaultShippingInfo { get; set; }
+    // [JsonIgnore]
+    // public ShippingInfo DefaultShippingInfo { get; set; }
     [JsonIgnore]
     public ICollection<CartDetail> CartDetails { get; set; }
     public ICollection<ShippingInfo> ShippingInfos { get; set; }

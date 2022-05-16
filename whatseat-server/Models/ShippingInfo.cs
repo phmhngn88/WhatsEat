@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace whatseat_server.Models;
 
@@ -13,4 +14,7 @@ public class ShippingInfo
     public int DistrictCode { get; set; }
     public int WardCode { get; set; }
     public string Address { get; set; }
+    [JsonIgnore]
+    public Customer Customer { get; set; }
+    public bool Status { get; set; }
 }
