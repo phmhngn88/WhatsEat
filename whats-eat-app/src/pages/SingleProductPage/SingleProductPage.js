@@ -15,6 +15,7 @@ import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
 import "./SingleProductPage.css";
 import ProductsByShop from "../../components/TopItems/ProductsByShop";
+import ProductReview from "../../components/ProductReview/ProductReview";
 
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
@@ -167,23 +168,7 @@ const SingleProductPage = () => {
             </div>
           </div>
           <div>
-            <h2> Đánh giá sản phẩm</h2>
-            <div>
-              {mock_rating.map((rating, idx) => {
-                const {
-                  order_ID,
-                  username,
-                  item_name,
-                  item_img,
-                  stars,
-                  rate_content,
-                  rate_time,
-                  is_reply,
-                  reply,
-                } = rating;
-                return <RatingCard key={idx} {...rating} />;
-              })}
-            </div>
+            <ProductReview productId={productId} />
           </div>
         </div>
       </div>
