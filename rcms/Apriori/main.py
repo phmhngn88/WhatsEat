@@ -32,13 +32,14 @@ te = TransactionEncoder()
 te_ary = te.fit(transaction_list).transform(transaction_list)
 df2 = pd.DataFrame(te_ary,columns = te.columns_)
 
+
 frequent_itemsets = apriori(df2, min_support=0.01,use_colnames=True)
 rules = association_rules(frequent_itemsets,metric='lift',min_threshold=1.0)
 frequent_itemsets['length'] = frequent_itemsets['itemsets'].apply(lambda x: len(x))
 
 rules.sort_values('confidence', ascending = False)
-rules['antecedents'] = rules['antecedents'].apply(lambda x: list(x)[0])
-rules['consequents'] = rules['consequents'].apply(lambda x: list(x)[0])
+rules['antecedents'] = rules['antecedents'].apply(fetch.convert_frozenset)
+rules['consequents'] = rules['consequents'].apply(fetch.convert_frozenset)
 my_conn = create_engine("mysql+mysqldb://root:11111111@localhost/whatseat")
 rules = rules.drop(columns=['conviction'])
 rules.to_sql(con=my_conn,name='apriori',if_exists='append',index=False)

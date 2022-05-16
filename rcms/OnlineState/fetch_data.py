@@ -181,7 +181,7 @@ def get_top_product_low_price(cur,list_product_id):
 #get product with apriori
 def get_product_priori(cur,list_product_id):
     cur.execute("""SELECT consequents FROM whatseat.apriori
-    WHERE confidence >= 0.5 AND antecedents IN %s""",(tuple(list_product_id),))
+    WHERE confidence >= 0.5 AND antecedents LIKE %s""",(list_product_id,))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['consequents'])
 
