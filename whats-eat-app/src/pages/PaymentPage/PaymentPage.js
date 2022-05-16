@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./PaymentPage.css";
@@ -7,7 +7,7 @@ import { Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../reducers/cart";
 import FormItem from "antd/lib/form/FormItem";
-import {Modal, Form, Input } from "antd";
+import { Modal, Form, Input } from "antd";
 
 const { Option } = Select;
 
@@ -15,6 +15,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [deliver, setDeliver] = useState(1);
+  const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState(1);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const token = useSelector((state) => state.auth.userInfo.token);
@@ -30,6 +31,8 @@ const PaymentPage = () => {
     container.quantity = item.quantity;
     return container;
   });
+
+  const [form] = Form.useForm();
 
   const handleConfirm = () => {
     axios({
@@ -56,13 +59,52 @@ const PaymentPage = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleSubmit = (values) => {
     setIsModalVisible(false);
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Customer/add-shipping-info",
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        phoneNumber: values.phone,
+        address: values.address,
+        provinceCode: 0,
+        districtCode: 0,
+        wardCode: 0,
+      },
+    })
+      .then((res) => {
+        message.success("Thêm địa chỉ thành công!");
+        setAddress(values.address);
+      })
+      .catch((err) => {
+        message.error("Thêm địa chỉ không thành công!");
+      });
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  // useEffect(()=>{
+  //   axios({
+  //     method: "GET",
+  //     url: "https://localhost:7029/api/Customer/order",
+  //     headers: { Authorization: `Bearer ${token}` },
+  //     data: {
+  //       paymentMethodId: paymentMethod,
+  //       shippingInfoId: deliver,
+  //       productList: carts,
+  //     },
+  //   })
+  //     .then((res) => {
+  //       dispatch(clearCart());
+  //       navigate(`/payment/success`);
+  //     })
+  //     .catch((err) => {
+  //       message.error("Đánh giá không thành công!");
+  //     });
+  // }, [])
   return (
     <div className="payment">
       <div className="payment-fluid">
@@ -72,52 +114,52 @@ const PaymentPage = () => {
           </h1>
           <div className="address-block">
             <p className="title">Địa chỉ giao hàng</p>
-            {/*<div className="info-block">
-              <div>
-                <p className="username">Trần Nhật Hiệp</p>
-                <p className="phone">0984523175</p>
-                <p className="address">113/4 đường số 8, Linh Trung, Thủ Đức</p>
+            {address && (
+              <div className="info-block">
+                <div>
+                  <p className="username">Trần Nhật Hiệp</p>
+                  <p className="phone">0984523175</p>
+                  <p className="address">
+                    113/4 đường số 8, Linh Trung, Thủ Đức
+                  </p>
+                </div>
               </div>
-              <a href="#">thay đổi</a>
-            </div>*/}
+            )}
             <button className="btn btn-add-address" onClick={showModal}>
-                Thêm địa chỉ
+              Thêm địa chỉ
             </button>
             <Modal
-            title="Thêm địa chỉ mới"
-            visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            cancelText="Hủy"
-            okText="Lưu"
+              title="Thêm địa chỉ mới"
+              visible={isModalVisible}
+              onOk={form.submit}
+              onCancel={handleCancel}
+              cancelText="Hủy"
+              okText="Lưu"
             >
-            <Form
-            labelCol={{
-              span: 7,
-              }}
-              wrapperCol={{
+              <Form
+                labelCol={{
+                  span: 7,
+                }}
+                wrapperCol={{
                   span: 16,
-              }}
-              layout="horizontal"
-              size="default">
-            <Form.Item
-             name="name"
-             label="Họ và tên">
-             <Input placeholder="Nhập họ và tên..." />
-            </Form.Item>
-            <Form.Item
-             name="phone"
-             label="Số điện thoại">
-             <Input placeholder="Nhập số điện thoại..." />
-            </Form.Item>
-            <Form.Item
-             name="address"
-             label="Địa chỉ nhận hàng">
-             <Input placeholder="Nhập địa chỉ..." />
-            </Form.Item>
-            </Form>
+                }}
+                layout="horizontal"
+                size="default"
+                form={form}
+                onFinish={handleSubmit}
+              >
+                <Form.Item name="name" label="Họ và tên">
+                  <Input placeholder="Nhập họ và tên..." />
+                </Form.Item>
+                <Form.Item name="phone" label="Số điện thoại">
+                  <Input placeholder="Nhập số điện thoại..." />
+                </Form.Item>
+                <Form.Item name="address" label="Địa chỉ nhận hàng">
+                  <Input placeholder="Nhập địa chỉ..." />
+                </Form.Item>
+              </Form>
             </Modal>
-          </div> 
+          </div>
           <div className="products-block">
             <div className="products-box">
               <div className="title">

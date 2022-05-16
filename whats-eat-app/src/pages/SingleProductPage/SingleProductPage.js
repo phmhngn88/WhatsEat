@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCartCheck, BsCartPlus, BsHeart } from "react-icons/bs";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,6 @@ import { addItemToCart } from "../../reducers/cart";
 
 import Footer from "../../components/Footer/Footer";
 import Counter from "../../components/Counter/Counter";
-import RatingCard from "../../components/RatingCard/RatingCard";
 import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
 import "./SingleProductPage.css";
