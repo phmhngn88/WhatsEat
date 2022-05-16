@@ -61,3 +61,16 @@
 .dish-container .dish-info .info-detail span{
     font-weight: bold;
 }
+
+.dish-container .add-icon{
+    position: absolute;
+    top: 115px;
+    right: 15px;
+    font-size: 2rem;
+    z-index: 10;
+}
+
+.dish-container .add-icon .icon:hover{
+    cursor: pointer;
+    color: green;
+}

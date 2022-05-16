@@ -332,11 +332,39 @@ public class CustomerController : ControllerBase
 
     [HttpGet]
     [Route("get-calo-per-day")]
-    public async Task<IActionResult> AddCaloPerDay([FromQuery] AddCaloRequest request)
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> AddCaloPerDay()
     {
-        var now = DateTime.Now.Year;
-        var old = now - Int32.Parse(request.YearOfBirth);
-        var kcal = await  _context.KcalReferences.Where(x => x.PAL.Equals(request.PAL) && x.MinYearsOld <= old && x.MaxYearsOld > old && x.Gender.Equals(request.Gender)).FirstOrDefaultAsync();
-        return Ok(kcal.Kcal);
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+        return Ok(customer.KcalPerDay);
+    }
+
+    [HttpPut]
+    [Route("update-calo-per-day")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> UpdateCaloPerDay([FromBody] AddCaloRequest request)
+    {
+        var now = DateTime.Now;
+        var birthDay = DateTime.Parse(request.Year);
+        var age = now.Year - birthDay.Year;
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+
+        var brm = request.Gender == "male" ? 
+            66 + (6.3 * request.Weight * 2.20462262) + (12.9 * request.Height * 0.393700787) + (6.8 * age) :
+            66.5 + (4.3 * request.Weight * 2.20462262) + (4.7 * request.Height * 0.393700787) + (4.7 * age);
+        
+        var calorie = (float)Math.Round(brm * float.Parse(request.PAL),2);
+        
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        if(customer.KcalPerDay == 0)
+        {
+            customer.KcalPerDay = calorie;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return Ok(calorie);
     }
 }
