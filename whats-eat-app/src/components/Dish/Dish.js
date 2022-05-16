@@ -23,7 +23,8 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, i
     addRecipe({ recipeId, name, totalTime, totalView, level, images, calories })
   }
 
-  const handleLikeRecipe = () => {
+  const handleLikeRecipe = (e) => {
+    e.stopPropagation()
     setIsLikeRecipe(!isLikeRecipe);
     if (isLikeRecipe) {
       axios({
