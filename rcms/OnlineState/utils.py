@@ -41,3 +41,9 @@ def to_json(text):
 
 def to_json_product(text):
     return json.loads(text)
+
+def list_to_string(items):
+    if len(items) > 1:
+        return (' '.join(str(e) for e in items))
+    
+    return str(items[0])

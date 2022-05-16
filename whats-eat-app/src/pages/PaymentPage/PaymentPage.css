@@ -189,3 +189,18 @@
     border: none;
     border-radius: 5px;
 }
+
+
+.address-block .btn-add-address{
+    margin-top: 1rem;
+    padding: 0.5rem 3rem;
+    text-transform: uppercase;
+    background-color: brown;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+.address-block .btn-add-address:hover{    
+    background-color: red;
+}

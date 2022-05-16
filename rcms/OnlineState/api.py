@@ -165,10 +165,12 @@ def individual_product_apriori():
         abort(500,'{"message":"Error: No id field provided. Please specify an id.(URL: /individual/product/apriori?id_product= ... &id_product= ...)"}')
         
     list_product = list(map(int, list_product))
+    list_product = utils.list_to_string(sorted(list_product))
     cur = mysql.connection.cursor()
     
     result = fetch_data.get_product_priori(cur, list_product)
-
+    if result.index.stop <=0 :
+        abort(500,'{"message":"Error: No products is recommneded ')
     result = result.drop_duplicates()
     result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
     cur.close()
