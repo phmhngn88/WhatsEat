@@ -32,7 +32,7 @@ const TopDishesForYou = () => {
   return (
     <div className="top-dishes-container">
       {topRecipe.length > 0 && (
-        <div className="top-dishes">
+        <div className="top-dishes-recomnedation">
           <BsChevronCompactLeft
             className={`${
               pageNumber === 1 ? "hidden " : ""

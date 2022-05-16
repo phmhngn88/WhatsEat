@@ -5,11 +5,17 @@ import numpy as np
 # rarting_click_df fuction: fetch user's click data from database
 # Input: mysql cursor
 # Output: pandas dataframe of clicks data with three columns: id_user, id_movie, rating
-def rating_click_df(cur):
-    cur.execute("""SELECT id_user, id_movie, is_clicked FROM whatseat.interactive""")
+def rating_recipe_df(cur):
+    cur.execute("""SELECT CustomerId, RecipeId, Rating FROM whatseat.recipereviews""")
     res = cur.fetchall()
-    click_df = pd.DataFrame(res, columns=['id_user', 'id_movie', 'rating'])
+    click_df = pd.DataFrame(res, columns=['CustomerId', 'RecipeId', 'Rating'])
     return click_df
+
+def similarity_item_df(cur):
+    cur.execute("""SELECT id1, id2, similarity FROM whatseat.item_base_similarity""")
+    res = cur.fetchall()
+    item_sim_df = pd.DataFrame(res, columns=['id1', 'id2', 'similarity'])
+    return item_sim_df
 
 def rating_love_df(cur):
     cur.execute("""SELECT id_user, id_food, is_love FROM whatseat.interactive_food""")
@@ -93,7 +99,6 @@ def global_rating_mean(cur ):
 def list_product(cur, list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice, Description FROM whatseat.products WHERE ProductId IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
-    print(res)
     return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','description'])
 
 def list_recipents(cur, list_recipents_id):
@@ -103,7 +108,7 @@ def list_recipents(cur, list_recipents_id):
 
 #get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, re.Calories FROM whatseat.recipes re
+    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, re.Calories/re.Serving as Calo FROM whatseat.recipes re
      WHERE RecipeNo IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','calories'])
@@ -125,11 +130,11 @@ def interactive_food(cur,recipeTypeId):
     return click_df
 
 #get list top recipe by total like
-def get_top_recipe(cur):
-    cur.execute("""SELECT RecipeNo, RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, RecipeTypeId FROM whatseat.recipes 
-     Order By totalLike desc LIMIT 20""")
+def get_top_recipe(cur, user_kcal):
+    cur.execute("""SELECT RecipeNo, RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, RecipeTypeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
+     Order By totalLike desc LIMIT 20""",(user_kcal,))
     res = cur.fetchall()
-    click_df = pd.DataFrame(res, columns=['id','recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId'])
+    click_df = pd.DataFrame(res, columns=['id','recipeId','name','totalTime','totalView','totalLike','images','recipeTypeId', 'calories'])
     return click_df
 
 #get list top product by total sell
@@ -198,3 +203,10 @@ def get_cosine_sim_matrix_product(cur):
     cur.execute("""SELECT id1 , id2, similarity from whatseat.cb_product_similarity""")
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id1','id2','similarity'])
+
+
+def get_recommend_list_cb(id_user,user_kcal,n_recipe,cur):
+    cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo from whatseat.cb_similarity CB
+    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId Where CB.CustomerId LIKE %s AND Calo <= %s ORDER BY CB.Similarity DESC LIMIT %s""",(id_user,user_kcal,n_recipe),)
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['id1','id2','similarity','calo'])

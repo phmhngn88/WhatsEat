@@ -1,31 +1,31 @@
-.top-dishes{
+.top-dishes-recomnedation{
     width: 100%;
     margin-top: 0%;
 }
 
-.top-dishes .icon-pagination{
+.top-dishes-recomnedation .icon-pagination{
     position: absolute;
     font-size: 2rem;
     bottom: 50%;
     opacity: 0.3;
     z-index: 1;
 }
-.top-dishes .icon-pagination:hover{
+.top-dishes-recomnedation .icon-pagination:hover{
     cursor: pointer;
     opacity: 1;
     color: brown;
 }
-.top-dishes .hidden{
+.top-dishes-recomnedation .hidden{
     display: none;
 }
-.top-dishes .left-icon{
+.top-dishes-recomnedation .left-icon{
     left: -2rem;
 }
-.top-dishes .right-icon{
+.top-dishes-recomnedation .right-icon{
     right: -2rem;
 }
 
-.top-dishes .title{
+.top-dishes-recomnedation .title{
     font-weight: 600;
     margin-bottom: 1rem;
 }

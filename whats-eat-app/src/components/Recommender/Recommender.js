@@ -118,7 +118,7 @@ const Recommender = ({ kcal, menu }) => {
                 <p className="dish" key={index}>
                   <Row>
                     <Col span={18}>{name}</Col>
-                    <Col span={4}>{calories}</Col>
+                    <Col span={4}>{calories.toFixed(2)}</Col>
                     <Col span={2}><AiFillDelete className="remove-recipe" onClick={() => removeRecipe(recipeId)} /></Col>
                   </Row>
                 </p>

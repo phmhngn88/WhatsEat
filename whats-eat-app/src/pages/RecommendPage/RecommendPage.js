@@ -28,7 +28,7 @@ const RecommendPage = () => {
       .then((res) => {
         setKcal(res.data);
         if(res.data > 0){
-          getRecommendedRecipe();
+          getRecommendedRecipe(res.data);
         }
       })
       .catch((err) => { });
@@ -39,10 +39,10 @@ const RecommendPage = () => {
     setIsModalVisible(false);
   };
 
-  const getRecommendedRecipe = () => {
+  const getRecommendedRecipe = (kcal) => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&n_recipe=16`,
+      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${kcal}&n_recipe=16`,
     })
       .then((res) => {
         const result = res.data;
@@ -62,7 +62,7 @@ const RecommendPage = () => {
       .then((res) => {
         setKcal(res.data);
         if(res.data > 0){
-          getRecommendedRecipe();
+          getRecommendedRecipe(res.data);
         }
       })
       .catch((err) => { });
