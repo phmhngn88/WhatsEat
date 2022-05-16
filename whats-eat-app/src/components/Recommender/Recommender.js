@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Recommender.css";
-import { Button,Row, Col } from "antd";
+import { Button, Row, Col } from "antd";
 import { useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import axios from "axios";
@@ -59,10 +59,9 @@ const categories = [
   { id: 10, category_name: "Món nhậu" },
 ];
 
-const Recommender = (props) => {
-  const [menu, setMenu] = useState([]);
+const Recommender = ({ kcal, menu }) => {
   const [listRecipes, setListRecipes] = useState([]);
-  const [status,setStatus] = useState("");
+  const [status, setStatus] = useState("");
   const [percent, setPercent] = useState(0);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
@@ -87,21 +86,6 @@ const Recommender = (props) => {
         console.log(err);
       });
   };
-  const userId = useSelector((state) => state.auth.userInfo.userId);
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${userId}&n_recipe=16`,
-    })
-      .then((res) => {
-        const result = res.data;
-        setMenu(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const addRecipe = (recipe) => {
     setListRecipes([...listRecipes, recipe])
@@ -111,23 +95,23 @@ const Recommender = (props) => {
     setListRecipes(listRecipes.filter(item => item.recipeId !== recipeId))
   }
 
-  useEffect(()=>{
-    let totalKcal = listRecipes.reduce((sum,a) => sum + a.calories,0);
-    let per = totalKcal/props.kcal * 100
-    if(per > 100){
+  useEffect(() => {
+    let totalKcal = listRecipes.reduce((sum, a) => sum + a.calories, 0);
+    let per = totalKcal / kcal * 100
+    if (per > 100) {
       setStatus("exception")
     }
     setPercent(per.toFixed(2))
-  },[listRecipes])
+  }, [listRecipes])
 
-  console.log('list',listRecipes)
+  console.log('list', listRecipes)
   return (
     <div className="recommender-body">
       <div className="recommender-container">
         <div className="menu-mix">
           <div className="menu-detail">
             <h1 className="menu-title">Thực đơn cho bạn</h1>
-            {props.kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {props.kcal}</p>}
+            {kcal > 0 && <p>Lượng calo mỗi ngày của bạn là {kcal}</p>}
             {listRecipes.map((dish, index) => {
               const { recipeId, name, calories } = dish;
               return (

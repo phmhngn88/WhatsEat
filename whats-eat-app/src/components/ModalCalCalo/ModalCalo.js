@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Input, Form, DatePicker, Select, Steps, Button, message } from 'antd';
 import './ModalCalo.css'
+import TopDishesForYou from '../TopDishOnKcalModal/TopDishesForYou'
+import locale from 'antd/es/date-picker/locale/vi_VN';
 const { Option } = Select;
 const { Step } = Steps;
 
@@ -19,18 +21,23 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
 
     const [gender, setGender] = useState(1)
     const [pal, setPal] = useState(0)
+    const [weight,setWeight] = useState(0)
+    const [height,setHeight] = useState(0)
     const [year, setYear] = useState('')
     const [current, setCurrent] = React.useState(0);
 
     const next = () => {
         setCurrent(current + 1);
-        console.log(form);
     };
 
     const prev = () => {
         setCurrent(current - 1);
     };
 
+    const onFinish = () => {
+        console.log(gender,pal,weight,height,year)
+        handleOk(gender,pal,weight,height,year)
+    }
 
     const onGenderChange = (e) => {
         setGender(e)
@@ -40,7 +47,7 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
         setPal(e)
     }
 
-    function onChange(date, dateString) {
+    function onBirthChange(date, dateString) {
         setYear(dateString)
         console.log(date, dateString);
     }
@@ -69,12 +76,13 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
                         <Form.Item
                             name="year"
                             label="Năm sinh">
-                            <DatePicker style={{width: "100%"}} />
+                            <DatePicker locale={locale} style={{width: "100%"}} onChange={onBirthChange} />
                         </Form.Item>
                         <Form.Item
                             name="gender"
                             label="Giới tính">
                             <Select style={{alignItems:'flex-start',display: "flex"}}
+                            onChange={onGenderChange}
                             >
                                 <Option value="male">Nam</Option>
                                 <Option value="female">Nữ</Option>
@@ -83,24 +91,27 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
                         <Form.Item
                             name="weight"
                             label="Cân nặng (kg)">
-                            <Input></Input>
+                            <Input onChange={e => setWeight(e.target.value)}></Input>
                         </Form.Item>
                         <Form.Item
                             name="height"
                             label="Chiều cao (cm)">
-                            <Input></Input>
+                            <Input onChange={e => setHeight(e.target.value)}></Input>
                         </Form.Item>
                         <Form.Item
                             name="PAL"
                             label="Mức độ hoạt động ">
                             <Select
+                            onChange={onPALChange}
                             >
-                                <Option value="1.4">Ít</Option>
-                                <Option value="1.6">Vừa</Option>
-                                <Option value="1.8">Nhiều</Option>
+                                <Option value="1.2">Không hoạt động thể chất</Option>
+                                <Option value="1.375">Mức độ ít</Option>
+                                <Option value="1.55">Mức độ trung bình</Option>
+                                <Option value="1.725">Mức độ nhiều</Option>
+                                <Option value="1.9">Mức độ rất nhiều</Option>
                             </Select>
                         </Form.Item>
-                    </Form> : <></>
+                    </Form> : <TopDishesForYou />
                 }</div>
                 <div className="steps-action">
                     {current < steps.length - 1 && (
@@ -109,7 +120,7 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                        <Button type="primary" onClick={onFinish}>
                             Done
                         </Button>
                     )}
