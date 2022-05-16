@@ -38,11 +38,13 @@ def individual_recommend_list_recipes(id_user, user_kcal, n_recipe):
         if is_notlove == 0:
             print("New user with filter!")
             rec_list = []
-            rec_list = fetch_data.get_top_recipe(cur,user_kcal)['id'].to_list()
+            rec_list = fetch_data.get_top_recipe(cur,user_kcal,n_recipe)['id'].to_list()
             cur.close()
         else:    
             print("New user detected!")
             rec_list = fetch_data.get_recommend_list_cb(id_user,user_kcal,n_recipe,cur)['id1'].to_list()
+            print(rec_list)
+
             cur.close()
     else:
         print("Old user detected!")
@@ -65,16 +67,11 @@ def individual_recommend_list_products(id_user, n_product):
         if is_notlove == 0:
             print("New user with filter!")
             rec_list = []
-            for i in range(1, 10):
-                rec_list = rec_list + fetch_data.get_top_products(cur,n_product)['id'].to_list()
-                rec_df = pd.DataFrame({'Item':rec_list})
-                rec_df['Rating'] = 0
+            rec_list = fetch_data.get_top_products(cur,n_product)['id'].to_list()
             cur.close()
         else:    
             print("New user detected!")
-            rec_list, rec_list_w_score = cold_start_KNN_genre.get_recommend_list_product(rec_ids,n_product,cur)
-            rec_df = pd.DataFrame({'Item':rec_list})
-            rec_df['Rating'] = 0
+            rec_list = fetch_data.get_recommend_list_product_cb(id_user,n_product,cur)['id1'].to_list()
             cur.close()
     else:
         print("Old user detected!")
@@ -86,8 +83,9 @@ def individual_recommend_list_products(id_user, n_product):
     cur = mysql.connection.cursor()
     rec_list2 = fetch_data.get_top_product_low_price(cur,rec_list)
     cur.close()
+    print(rec_list2)
     rec_list2['images'] = rec_list2['images'].apply(utils.to_json_product)
-    return rec_df, rec_list2
+    return rec_list2
 
 @app.route('/individual/product/', methods=['GET'])
 def individual_state1_api():
@@ -100,7 +98,7 @@ def individual_state1_api():
                 (URL: /individual/product?id_user= ...&n_product=...)
                 """
     
-    results_with_sim, rec_list = individual_recommend_list_products(id_user,n_product)
+    rec_list = individual_recommend_list_products(id_user,n_product)
     print(rec_list)
     return jsonify(rec_list.to_dict('records'))
 

@@ -101,6 +101,9 @@ const Recommender = ({ kcal, menu }) => {
     if (per > 100) {
       setStatus("exception")
     }
+    else {
+      setStatus("active")
+    }
     setPercent(per.toFixed(2))
   }, [listRecipes])
 
