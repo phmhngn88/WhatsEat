@@ -13,5 +13,6 @@ public class Menu
     public DateTime ModifiedOn { get; set; }
     [JsonIgnore]
     public ICollection<MenuDetail> MenuDetails { get; set; }
+    [JsonIgnore]
     public Customer Customer { get; set; }
 }

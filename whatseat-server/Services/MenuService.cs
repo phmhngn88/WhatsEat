@@ -44,5 +44,18 @@ public class MenuService
             .Include(m => m.Customer).FirstOrDefaultAsync(m => m.MenuId == menuId);
     }
 
+    public async Task<List<Menu>> GetMenusByCustomer(Customer customer)
+    {
+        return await _context.Menus.Where(m => m.Customer == customer).ToListAsync();
+    }
 
+    public async Task<Menu> GetMenuById(Customer customer, int menuId)
+    {
+        return await _context.Menus.FirstOrDefaultAsync(m => m.Customer == customer && m.MenuId == menuId);
+    }
+
+    public async Task<List<MenuDetail>> GetMenuDetails(int menuId)
+    {
+        return await _context.MenuDetails.Include(m => m.Recipe).Where(m => m.MenuId == menuId).ToListAsync();
+    }
 }

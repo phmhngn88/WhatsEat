@@ -14,7 +14,6 @@ public class Product
     public int InStock { get; set; }
     public int BasePrice { get; set; }
     public string PhotoJson { get; set; }
-    public string PriceJson { get; set; }
     public string Description { get; set; }
     public string WeightServing { get; set; }
     public int TotalSell { get; set; }
