@@ -1,6 +1,8 @@
 import { Tabs } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import ShopOrderCard from "../../components/ShopOrderCard/ShopOrderCard";
@@ -34,11 +36,15 @@ const orders = [
 
 const ShopOrders = () => {
   const [shopOrders, setShopOrders] = useState([]);
+  const location = useLocation();
+  const storeId = location.state.storeId;
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   const getShopOrders = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/orders`,
+      url: `https://localhost:7029/api/Store/${storeId}/orders`,
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         const result = res.data;
@@ -56,7 +62,7 @@ const ShopOrders = () => {
     <div className="shop-orders">
       <div className="shop-orders-fluid">
         <div className="shop-orders-container">
-          <ShopSidebar />
+          <ShopSidebar storeId={storeId} />
           <div className="content-container">
             <h1 className="title">Tất cả đơn hàng</h1>
             <p className="total-orders">Bạn đang có tất cả {} đơn hàng</p>

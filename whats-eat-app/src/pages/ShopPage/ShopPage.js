@@ -7,6 +7,7 @@ import Shop from "../../components/Shop/Shop";
 import "./ShopPage.css";
 
 const ShopPage = () => {
+  const [listShop, setListShop] = useState();
   const [isRegistered, setIsRegistered] = useState(true);
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -17,9 +18,9 @@ const ShopPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.length > 0) {
           setIsRegistered(true);
+          setListShop(res.data);
         }
       })
       .catch((err) => {
@@ -31,7 +32,7 @@ const ShopPage = () => {
     <div className="shop">
       <div className="shop-fluid">
         {isRegistered ? (
-          <Shop />
+          <Shop storeId={listShop ? listShop[0]?.storeId : 1} />
         ) : (
           <div className="shop-container">
             <h1 className="title-container">

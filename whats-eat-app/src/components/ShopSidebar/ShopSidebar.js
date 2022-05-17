@@ -1,10 +1,12 @@
 import React from "react";
 import "./ShopSidebar.css";
 import Collapsible from "react-collapsible";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BsChevronDown } from "react-icons/bs";
 
-const ShopSidebar = () => {
+const ShopSidebar = ({ storeId }) => {
+  console.log("store:", storeId);
+  const navigate = useNavigate();
   return (
     <div className="collapse-side-bar">
       <Collapsible
@@ -13,13 +15,43 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/shop/profile">Hồ sơ Shop</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/profile", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Hồ sơ Shop
+          </a>
         </div>
         <div>
-          <Link to="/shop/categories">Danh mục của Shop</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/categories", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Danh mục của Shop
+          </a>
         </div>
         <div>
-          <Link to="/shop/rating">Đánh giá Shop</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/rating", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Đánh giá Shop
+          </a>
         </div>
       </Collapsible>
       <Collapsible
@@ -28,13 +60,23 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/shop/orders">Tất cả đơn</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/orders", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Tất cả đơn
+          </a>
         </div>
         <div>
-          <Link to="/">Đơn hủy</Link>
+          <a to="/">Đơn hủy</a>
         </div>
         <div>
-          <Link to="/">Trả hàng/hoàn tiền</Link>
+          <a to="/">Trả hàng/hoàn tiền</a>
         </div>
       </Collapsible>
       <Collapsible
@@ -43,13 +85,43 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/shop/items">tất cả sản phẩm</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/items", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            tất cả sản phẩm
+          </a>
         </div>
         <div>
-          <Link to="/shop/additem">thêm sản phẩm</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/additem", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            thêm sản phẩm
+          </a>
         </div>
         <div>
-          <Link to="/shop/infringingitems">sản phẩm vi phạm</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/infringingitems", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            sản phẩm vi phạm
+          </a>
         </div>
       </Collapsible>
       <Collapsible
@@ -58,10 +130,30 @@ const ShopSidebar = () => {
         triggerStyle={{ fontWeight: "900", fontSize: "1rem" }}
       >
         <div>
-          <Link to="/shop/address">Địa chỉ</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/address", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Địa chỉ
+          </a>
         </div>
         <div>
-          <Link to="/shop/account">Tài khoản</Link>
+          <a
+            onClick={() => {
+              navigate("/shop/account", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Tài khoản
+          </a>
         </div>
       </Collapsible>
     </div>

@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../../components/Footer/Footer";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import Items from "../../components/Items/Items";
+import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopItems.css";
 
 const ShopItems = () => {
   const [listProducts, setListProducts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const storeId = 1;
+  const location = useLocation();
+  const storeId = location.state.storeId;
 
   const getShopProducts = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/2/products?`,
+      url: `https://localhost:7029/api/Store/${storeId}/products?PageSize=30`,
     })
       .then((res) => {
         const result = res.data;
