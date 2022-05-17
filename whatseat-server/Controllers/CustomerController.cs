@@ -447,4 +447,12 @@ public class CustomerController : ControllerBase
         return Ok(customer);
     }
 
+    [HttpGet]
+    [Route("{userId}")]
+    public async Task<IActionResult> GetCustomerInfo(string userId)
+    {
+        Guid userIdNew = new Guid(userId);
+        var customer = await _customerService.FindCustomerByIdAsync(userIdNew);
+        return Ok(customer);
+    }
 }
