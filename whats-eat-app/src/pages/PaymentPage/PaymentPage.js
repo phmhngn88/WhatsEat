@@ -14,8 +14,9 @@ const { Option } = Select;
 const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deliver, setDeliver] = useState(1);
+  const [deliver, setDeliver] = useState(2);
   const [address, setAddress] = useState("");
+  const [shippingInfo, setShippingInfo] = useState();
   const [paymentMethod, setPaymentMethod] = useState(1);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const token = useSelector((state) => state.auth.userInfo.token);
@@ -34,6 +35,8 @@ const PaymentPage = () => {
 
   const [form] = Form.useForm();
 
+  console.log(carts);
+
   const handleConfirm = () => {
     axios({
       method: "POST",
@@ -50,7 +53,7 @@ const PaymentPage = () => {
         navigate(`/payment/success`);
       })
       .catch((err) => {
-        message.error("Đánh giá không thành công!");
+        message.error("Đặt hàng không thành công!");
       });
   };
 
@@ -59,11 +62,11 @@ const PaymentPage = () => {
     setIsModalVisible(true);
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmitShippingInfo = (values) => {
     setIsModalVisible(false);
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Customer/add-shipping-info",
+      url: "https://localhost:7029/api/Customer/shippingInfos",
       headers: { Authorization: `Bearer ${token}` },
       data: {
         phoneNumber: values.phone,
@@ -86,25 +89,22 @@ const PaymentPage = () => {
     setIsModalVisible(false);
   };
 
-  // useEffect(()=>{
-  //   axios({
-  //     method: "GET",
-  //     url: "https://localhost:7029/api/Customer/order",
-  //     headers: { Authorization: `Bearer ${token}` },
-  //     data: {
-  //       paymentMethodId: paymentMethod,
-  //       shippingInfoId: deliver,
-  //       productList: carts,
-  //     },
-  //   })
-  //     .then((res) => {
-  //       dispatch(clearCart());
-  //       navigate(`/payment/success`);
-  //     })
-  //     .catch((err) => {
-  //       message.error("Đánh giá không thành công!");
-  //     });
-  // }, [])
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Customer/shippingInfos",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        setShippingInfo(res.data);
+        setAddress(res.data[0].address);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="payment">
       <div className="payment-fluid">
@@ -118,10 +118,8 @@ const PaymentPage = () => {
               <div className="info-block">
                 <div>
                   <p className="username">Trần Nhật Hiệp</p>
-                  <p className="phone">0984523175</p>
-                  <p className="address">
-                    113/4 đường số 8, Linh Trung, Thủ Đức
-                  </p>
+                  <p className="phone">{shippingInfo[0].phoneNumber}</p>
+                  <p className="address">{address}</p>
                 </div>
               </div>
             )}
@@ -146,7 +144,7 @@ const PaymentPage = () => {
                 layout="horizontal"
                 size="default"
                 form={form}
-                onFinish={handleSubmit}
+                onFinish={handleSubmitShippingInfo}
               >
                 <Form.Item name="name" label="Họ và tên">
                   <Input placeholder="Nhập họ và tên..." />

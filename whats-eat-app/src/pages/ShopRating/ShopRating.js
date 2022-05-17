@@ -1,6 +1,8 @@
 import { Input, Tabs } from "antd";
 import "antd/dist/antd.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import Ratingcard from "../../components/RatingCard/RatingCard";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
@@ -41,11 +43,26 @@ const mock_rating = [
 
 const ShopRating = () => {
   const [shopRating, setShopRating] = useState(5);
+  const [reviews, setReviews] = useState();
+  const location = useLocation();
+  const storeId = location.state.storeId;
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `https://localhost:7029/api/Store/review?StoreId=${storeId}`,
+    })
+      .then((res) => {
+        setReviews(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <div className="shop-rating">
       <div className="shop-rating-fluid">
         <div className="shop-rating-container">
-          <ShopSidebar />
+          <ShopSidebar storeId={storeId} />
           <div className="content-container">
             <div className="shop-rating-nav">
               <div>
@@ -56,47 +73,47 @@ const ShopRating = () => {
                 <span>{shopRating}</span> / 5
               </p>
             </div>
-            <div className="rating-container">
-              <Tabs defaultActiveKey="1">
-                <TabPane tab="Tất cả" key="1">
-                  <div className="table-title">
-                    <p>Thông tin sản phẩm</p>
-                    <p>Đánh giá của người mua</p>
-                    <p>Trả lời đánh giá của bạn</p>
-                  </div>
-                  {mock_rating.map((rating, idx) => {
-                    const {
-                      order_ID,
-                      username,
-                      item_name,
-                      item_img,
-                      stars,
-                      rate_content,
-                      rate_time,
-                      is_reply,
-                      reply,
-                    } = rating;
-                    return <Ratingcard key={idx} {...rating} />;
-                  })}
-                </TabPane>
-                <TabPane tab="Chưa trả lời" key="2">
-                  <div className="table-title">
-                    <p>Thông tin sản phẩm</p>
-                    <p>Đánh giá của người mua</p>
-                    <p>Trả lời đánh giá của bạn</p>
-                  </div>
-                  Những đánh giá chưa trả lời
-                </TabPane>
-                <TabPane tab="Đã trả lời" key="3">
-                  <div className="table-title">
-                    <p>Thông tin sản phẩm</p>
-                    <p>Đánh giá của người mua</p>
-                    <p>Trả lời đánh giá của bạn</p>
-                  </div>
-                  Những đánh giá đã trả lời
-                </TabPane>
-              </Tabs>
-            </div>
+            {reviews.length > 0 ? (
+              <div className="rating-container">
+                <Tabs defaultActiveKey="1">
+                  <TabPane tab="Tất cả" key="1">
+                    <div className="table-title">
+                      <p>Thông tin sản phẩm</p>
+                      <p>Đánh giá của người mua</p>
+                      <p>Trả lời đánh giá của bạn</p>
+                    </div>
+                    {reviews?.map((review, idx) => {
+                      const {
+                        storeReviewId,
+                        rating,
+                        comment,
+                        storeId,
+                        customerId,
+                      } = review;
+                      return <Ratingcard key={idx} {...review} />;
+                    })}
+                  </TabPane>
+                  <TabPane tab="Chưa trả lời" key="2">
+                    <div className="table-title">
+                      <p>Thông tin sản phẩm</p>
+                      <p>Đánh giá của người mua</p>
+                      <p>Trả lời đánh giá của bạn</p>
+                    </div>
+                    Những đánh giá chưa trả lời
+                  </TabPane>
+                  <TabPane tab="Đã trả lời" key="3">
+                    <div className="table-title">
+                      <p>Thông tin sản phẩm</p>
+                      <p>Đánh giá của người mua</p>
+                      <p>Trả lời đánh giá của bạn</p>
+                    </div>
+                    Những đánh giá đã trả lời
+                  </TabPane>
+                </Tabs>
+              </div>
+            ) : (
+              <p>Cửa hàng của bạn chưa có đánh giá nào</p>
+            )}
           </div>
         </div>
       </div>
