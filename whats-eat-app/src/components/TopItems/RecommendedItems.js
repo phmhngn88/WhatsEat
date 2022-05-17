@@ -9,17 +9,16 @@ import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 import Product from "../Product/Product";
 
-const RecommendedItems = () => {
+const RecommendedItems = (props) => {
   const [topProduct, setTopProduct] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(12);
-  const cart = useSelector((state) => state.cart.cartItems);
-  const productIds = cart.map(x => x.productId)
   let params = ''
-  productIds.forEach(element => {
+  props.productIds.forEach(element => {
     params += `id_product=${element}&`
   });
   const url = params.substring(0, params.length - 1)
+  console.log('url',url)
   useEffect(() => {
     axios({
       method: "get",
@@ -45,7 +44,7 @@ const RecommendedItems = () => {
     <div className="top-items-container">
       {(topProduct.length > 0) && (
         <div className="top-items">
-          <h1 className="title">Sản phẩm có liên quan</h1>
+          <h1 className="title">Sản phẩm mua cùng</h1>
           <Row gutter={[16, 16]}>
             {topProduct.map((item) => {
               const { productId, name, basePrice, weightServing, images } =
