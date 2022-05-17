@@ -91,7 +91,7 @@ const Cart = ({
           </div>
         </div>
       )}
-      <RecommendedItems listProduct={productIds} />
+      <RecommendedItems productIds={productIds} />
       <Footer />
     </div>
   );
