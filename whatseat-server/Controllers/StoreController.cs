@@ -216,11 +216,10 @@ public class StoreController : ControllerBase
     public async Task<IActionResult> TrackOrders(int storeId)
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
-        IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
 
         Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
 
-        if (!_storeService.UserIsStore(user, store))
+        if (store.UserId != userId.ToString())
         {
             return Forbid();
         }
