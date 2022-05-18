@@ -1,8 +1,9 @@
-import { Form, Input, Modal, Select } from "antd";
+import { Form, Input, Button, Image } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useState } from "react";
-import { BsPlus } from "react-icons/bs";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopAddItem.css";
@@ -22,37 +23,45 @@ const validateMessages = {
 };
 
 const ShopAddItem = () => {
-  const [name, setName] = useState("");
-  const [inStock, setInStock] = useState(true);
-  const [basePrice, setBasePrice] = useState(0);
-  const [description, setDescription] = useState("");
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => {
-    setIsModalVisible(true);
+  const [image, setImage] = useState("");
+  const token = useSelector((state) => state.auth.userInfo.token);
+  const [form] = Form.useForm();
+  const location = useLocation();
+  const storeId = location.state.storeId;
+
+  const uploadImage = (value) => {
+    const formData = new FormData();
+    formData.append("file", value);
+    formData.append("upload_preset", "utm6qcfl");
+
+    axios
+      .post(`https://api.cloudinary.com/v1_1/dexdbltsd/image/upload`, formData)
+      .then((res) => {
+        console.log("upload thanh cong");
+        console.log(res.data.url);
+        setImage(res.data.url);
+        form.setFieldsValue({ image: res.data.url });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const options = [
-    { label: "Còn hàng", value: "Còn hàng" },
-    { label: "Hết hàng", value: "Hết hàng" },
-  ];
-
-  const handleAddItem = () => {
+  const onFormFinish = (values) => {
+    const newImage = [[{ url: image, height: 0, width: 0 }]];
+    console.log({
+      ...values,
+      image: JSON.stringify(newImage),
+    });
     axios({
       method: "POST",
       url: "https://localhost:7029/api/Store/add-product",
+      headers: { Authorization: `Bearer ${token}` },
       data: {
-        name: name,
-        inStock: inStock,
-        basePrice: basePrice,
-        description: description,
+        ...values,
+        imageUrl: `[[{ "url": "${image}", "height": "0", "width": "0" }]]`,
+        productCategoryId: 1,
+        storeId: storeId,
       },
     })
       .then((res) => {
@@ -67,7 +76,7 @@ const ShopAddItem = () => {
     <div className="shop-add-item">
       <div className="shop-add-item-fluid">
         <div className="shop-add-item-container">
-          <ShopSidebar />
+          <ShopSidebar storeId={storeId} />
           <div className="content-container">
             <h1 className="title">Thêm sản phẩm</h1>
             <p className="note">
@@ -81,6 +90,8 @@ const ShopAddItem = () => {
                     {...layout}
                     name="nest-messages"
                     validateMessages={validateMessages}
+                    onFinish={onFormFinish}
+                    form={form}
                   >
                     <Form.Item
                       className="input"
@@ -88,53 +99,49 @@ const ShopAddItem = () => {
                       label="Tên sản phẩm"
                       rules={[{ required: true }]}
                     >
-                      <Input
-                        placeholder="Nhập tên sản phẩm..."
-                        onChange={(e) => setName(e.target.value)}
-                      />
+                      <Input placeholder="Nhập tên sản phẩm..." />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
-                      name="instock"
-                      label="Tình trạng hàng"
+                      name="productCategoryId"
+                      label="Loại hàng"
                       rules={[{ required: true }]}
                     >
-                      <Select
-                        options={options}
-                        onChange={(e) => setInStock(e.target.value)}
-                        placeholder="Chọn tình trạng hàng (còn hàng, hết hàng,...)"
-                      />
+                      <Input type="number" placeholder="Nhập loại hàng" />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
-                      name="price"
+                      name="inStock"
+                      label="Hàng còn"
+                      rules={[{ required: true }]}
+                    >
+                      <Input type="number" />
+                    </Form.Item>
+
+                    <Form.Item
+                      className="input"
+                      name="basePrice"
                       label="Giá sản phẩm"
                       rules={[{ required: true }]}
                     >
-                      <Input
-                        placeholder="Nhập giá sản phẩm..."
-                        onChange={(e) => setBasePrice(e.target.value)}
-                      />
+                      <Input type="number" placeholder="Nhập giá sản phẩm..." />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
-                      name="image"
+                      name="imageUrl"
                       label="Hình minh họa"
                     >
-                      <button className="btn add-image-btn" onClick={showModal}>
-                        <BsPlus className="plus-icon" /> Thêm
-                      </button>
-                      <Modal
-                        title="Thêm hình ảnh mới"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                        cancelText="Hủy"
-                        okText="Lưu"
-                      ></Modal>
+                      <Input
+                        type="file"
+                        accept="image/png, image/gif, image/jpeg"
+                        onChange={(e) => {
+                          uploadImage(e.target.files[0]);
+                        }}
+                      />
+                      <Image width={200} src={image} />
                     </Form.Item>
 
                     <Form.Item
@@ -142,22 +149,16 @@ const ShopAddItem = () => {
                       name="description"
                       label="Mô tả sản phẩm"
                     >
-                      <Input.TextArea
-                        placeholder="Nhập mô tả..."
-                        onChange={(e) => setDescription(e.target.value)}
-                      />
+                      <Input.TextArea placeholder="Nhập mô tả..." />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
                       wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
                     >
-                      <button
-                        className="btn submit-btn"
-                        onClick={handleAddItem}
-                      >
-                        Lưu thông tin
-                      </button>
+                      <Button className="btn submit-btn" htmlType="submit">
+                        Thêm sản phẩm
+                      </Button>
                     </Form.Item>
                   </Form>
                 </div>

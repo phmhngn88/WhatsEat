@@ -114,7 +114,7 @@ const PaymentPage = () => {
           </h1>
           <div className="address-block">
             <p className="title">Địa chỉ giao hàng</p>
-            {address && (
+            {shippingInfo && (
               <div className="info-block">
                 <div>
                   <p className="username">Trần Nhật Hiệp</p>
