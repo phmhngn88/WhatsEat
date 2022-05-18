@@ -28,7 +28,8 @@ const menuList = [
 const SearchPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const [priceRange, setPriceRange] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [filterCondition, setFilterCondition] = useState("asc");
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);
@@ -46,7 +47,7 @@ const SearchPage = () => {
   const handleFilter = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&PageNumber=${pageNumber}&PageSize=12`,
+      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&MinPrice=${minPrice}&MaxPrice=${maxPrice}&PageNumber=${pageNumber}&PageSize=12`,
     })
       .then((res) => {
         console.log("Data product filter:", res.data);
@@ -108,8 +109,13 @@ const SearchPage = () => {
               </Select>
               <Input
                 type="number"
-                placeholder="Khoảng giá"
-                onChange={(e) => setPriceRange(e.target.value)}
+                placeholder="Khoảng giá từ"
+                onChange={(e) => setMinPrice(e.target.value)}
+              />
+              <Input
+                type="number"
+                placeholder="Khoảng giá đến"
+                onChange={(e) => setMaxPrice(e.target.value)}
               />
               <button onClick={handleFilter}>Lọc</button>
             </div>
