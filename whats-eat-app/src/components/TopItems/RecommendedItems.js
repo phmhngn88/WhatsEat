@@ -18,7 +18,6 @@ const RecommendedItems = (props) => {
     params += `id_product=${element}&`
   });
   const url = params.substring(0, params.length - 1)
-  console.log('url',url)
   useEffect(() => {
     axios({
       method: "get",
@@ -34,7 +33,7 @@ const RecommendedItems = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [pageNumber]);
+  }, [pageNumber,url]);
   const navigate = useNavigate();
 
   if (!topProduct) {
