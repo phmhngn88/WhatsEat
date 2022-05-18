@@ -224,8 +224,9 @@ public class StoreController : ControllerBase
         {
             return Forbid();
         }
-        var orderList = await _context.Orders.AsNoTracking().
-            Where(od => od.Store == od.Store).OrderByDescending(od => od.CreatedOn).ToListAsync();
+        var orderList = await _context.Orders.AsNoTracking().Include(o => o.Customer)
+        .Include(o => o.PaymentMethod).Include(o => o.OrderDetails).Include(o => o.ShippingInfo)
+            .Where(od => od.Store == od.Store).OrderByDescending(od => od.CreatedOn).ToListAsync();
 
         return Ok(orderList);
 
