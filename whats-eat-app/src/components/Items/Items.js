@@ -81,7 +81,7 @@ const Items = ({ products }) => {
           {products.map((item) => {
             const { productId, name, basePrice, weightServing, images } = item;
             return (
-              <Col span={4} className="item-col" key={productId}>
+              <Col span={6} className="item-col" key={productId}>
                 <Product {...item} />
                 <button className="btn">Xóa</button>
                 <button className="btn">Sửa</button>
