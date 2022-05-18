@@ -520,13 +520,16 @@ public class StoreController : ControllerBase
         var StoreRes = new List<MyStoresResponse>();
         foreach (var item in stores)
         {
-            StoreRes.Add(new MyStoresResponse
+            if (item.UserId == userId.ToString())
             {
-                StoreId = item.StoreId,
-                IsActive = item.IsActive,
-                ShopName = item.ShopName,
-                AvatarUrl = item.AvatarUrl
-            });
+                StoreRes.Add(new MyStoresResponse
+                {
+                    StoreId = item.StoreId,
+                    IsActive = item.IsActive,
+                    ShopName = item.ShopName,
+                    AvatarUrl = item.AvatarUrl
+                });
+            }
         }
         return Ok(StoreRes);
     }
