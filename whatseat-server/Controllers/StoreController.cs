@@ -201,7 +201,8 @@ public class StoreController : ControllerBase
             CreatedOn = DateTime.UtcNow,
             Store = store,
             ProductCategory = productCategory,
-            Description = request.Description
+            Description = request.Description,
+            PhotoJson = request.ImageUrl
         };
 
         await _context.Products.AddAsync(product);

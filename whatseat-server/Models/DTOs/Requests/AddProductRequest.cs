@@ -8,4 +8,5 @@ public class AddProductRequest
     public string Description { get; set; }
     public int ProductCategoryId { get; set; }
     public int StoreId { get; set; }
+    public string ImageUrl { get; set; }
 }
