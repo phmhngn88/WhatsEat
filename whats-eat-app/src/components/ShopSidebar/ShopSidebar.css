@@ -1,5 +1,6 @@
 .collapse-side-bar{
     width: 20%;
+    height: fit-content;
     padding: 1rem;
     background-color: #fff;
     border-radius: 5px;

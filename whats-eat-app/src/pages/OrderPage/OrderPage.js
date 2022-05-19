@@ -55,6 +55,7 @@ const OrderPage = () => {
     })
       .then((res) => {
         const result = res.data;
+        console.log({ result });
         setAllOrders(result);
       })
       .catch((error) => {
@@ -65,9 +66,6 @@ const OrderPage = () => {
     getCustomerOrders();
   }, []);
 
-  useEffect(() => {
-    setAllOrders(items);
-  }, []);
   return (
     <div className="orders">
       <div className="orders-fluid">
@@ -78,17 +76,17 @@ const OrderPage = () => {
           <Tabs defaultActiveKey="1">
             <TabPane tab="Tất cả đơn" key="1">
               {allOrders.map((order) => {
-                return <Order key={order.id} props={order} />;
+                return <Order key={order.orderId} {...order} />;
               })}
             </TabPane>
             <TabPane tab="Chờ thanh toán" key="2">
               {allOrders.map((order) => {
-                return <Order key={order.id} props={order} />;
+                return <Order key={order.orderId} {...order} />;
               })}
             </TabPane>
             <TabPane tab="Đang xử lý" key="3">
               {allOrders.map((order) => {
-                return <Order key={order.id} props={order} />;
+                return <Order key={order.orderId} {...order} />;
               })}
             </TabPane>
             <TabPane tab="Đang vận chuyển" key="4">
@@ -96,7 +94,7 @@ const OrderPage = () => {
             </TabPane>
             <TabPane tab="Đã giao" key="5">
               {allOrders.map((order) => {
-                return <Order key={order.id} props={order} />;
+                return <Order key={order.orderId} {...order} />;
               })}
             </TabPane>
             <TabPane tab="Đã hủy" key="6">
