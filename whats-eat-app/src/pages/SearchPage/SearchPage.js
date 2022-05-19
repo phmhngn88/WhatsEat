@@ -61,7 +61,7 @@ const SearchPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&PageNumber=${pageNumber}&PageSize=12`,
+      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&MinPrice=${minPrice}&MaxPrice=${maxPrice}&PageNumber=${pageNumber}&PageSize=12`,
     })
       .then((res) => {
         console.log("Data product search:", res.data);

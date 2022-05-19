@@ -36,6 +36,8 @@ const orders = [
 
 const ShopOrders = () => {
   const [shopOrders, setShopOrders] = useState([]);
+  const [userInfo, setUserInfo] = useState();
+  const [productInfo, setProductInfo] = useState();
   const location = useLocation();
   const storeId = location.state.storeId;
   const token = useSelector((state) => state.auth.userInfo.token);
@@ -48,12 +50,32 @@ const ShopOrders = () => {
     })
       .then((res) => {
         const result = res.data;
+        console.log(result);
         setShopOrders(result);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  // const handleGetOrderDetails = () =>{
+  //   axios({
+  //     method: "get",
+  //     url: `https://localhost:7029/api/Customer/${hh}`,
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   })
+  //     .then((res) => {
+  //       const result = res.data;
+  //       console.log(result);
+  //       setShopOrders(result);
+  //       if(result.length > 0){
+  //         handleGetOrderDetails()
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
   useEffect(() => {
     getShopOrders();
   }, []);
@@ -65,7 +87,9 @@ const ShopOrders = () => {
           <ShopSidebar storeId={storeId} />
           <div className="content-container">
             <h1 className="title">Tất cả đơn hàng</h1>
-            <p className="total-orders">Bạn đang có tất cả {} đơn hàng</p>
+            <p className="total-orders">
+              Bạn đang có tất cả {shopOrders.length} đơn hàng
+            </p>
             <div className="orders">
               <Tabs defaultActiveKey="1">
                 <TabPane tab="Tất cả" key="1">
@@ -76,9 +100,12 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  {orders.map((order, idx) => {
-                    return <ShopOrderCard key={idx} props={order} />;
-                  })}
+                  {shopOrders.length > 0 &&
+                    shopOrders?.map((order, idx) => {
+                      if (order.customer) {
+                        return <ShopOrderCard key={idx} {...order} />;
+                      }
+                    })}
                 </TabPane>
                 <TabPane tab="Chờ xác nhận" key="2">
                   <div className="table-title">

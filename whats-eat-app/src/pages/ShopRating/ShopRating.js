@@ -43,7 +43,7 @@ const mock_rating = [
 
 const ShopRating = () => {
   const [shopRating, setShopRating] = useState(5);
-  const [reviews, setReviews] = useState();
+  const [reviews, setReviews] = useState([]);
   const location = useLocation();
   const storeId = location.state.storeId;
   useEffect(() => {
@@ -58,6 +58,8 @@ const ShopRating = () => {
         console.log(err);
       });
   }, []);
+
+  console.log(reviews);
   return (
     <div className="shop-rating">
       <div className="shop-rating-fluid">
