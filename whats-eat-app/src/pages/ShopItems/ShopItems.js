@@ -27,6 +27,8 @@ const ShopItems = () => {
       });
   };
 
+  console.log(location);
+
   useEffect(() => {
     getShopProducts();
   }, [pageNumber]);
@@ -37,7 +39,7 @@ const ShopItems = () => {
           <ShopSidebar />
           <div className="content-container">
             <h1 className="title">Tất cả sản phẩm</h1>
-            <Items products={listProducts} />
+            <Items products={listProducts} storeId={storeId} />
           </div>
         </div>
       </div>
