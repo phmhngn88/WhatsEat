@@ -310,7 +310,6 @@ public class CustomerController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
     public async Task<IActionResult> GetOrders([FromQuery] OrderPagedRequest request)
     {
-        System.Diagnostics.Debug.WriteLine("HIGI");
         try
         {
             Guid userId = new Guid(User.FindFirst("Id")?.Value);
@@ -451,8 +450,15 @@ public class CustomerController : ControllerBase
     [Route("{userId}")]
     public async Task<IActionResult> GetCustomerInfo(string userId)
     {
-        Guid userIdNew = new Guid(userId);
-        var customer = await _customerService.FindCustomerByIdAsync(userIdNew);
-        return Ok(customer);
+        try
+        {
+            Guid userIdNew = new Guid(userId);
+            var customer = await _customerService.FindCustomerByIdAsync(userIdNew);
+            return Ok(customer);
+        }
+        catch (FormatException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }
