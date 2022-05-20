@@ -30,6 +30,7 @@ public class OrderService
     public async Task<Order> getOrderDetails(Customer customer, int orderId)
     {
         var order = await _context.Orders.AsNoTracking().Include(o => o.OrderDetails)
+        .Include(od => od.Customer).Include(od => od.Shipper).Include(od => od.ShippingInfo).Include(od => od.PaymentMethod)
             .FirstOrDefaultAsync(o => o.Customer == customer && o.OrderId == orderId);
         return order;
     }
