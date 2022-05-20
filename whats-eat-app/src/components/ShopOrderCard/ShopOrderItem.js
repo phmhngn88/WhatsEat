@@ -21,26 +21,28 @@ const ShopOrderItem = ({ productId, price, value }) => {
 
   if (!orderInfo) return <p>Loading</p>;
   return (
-    <div className="order-info">
-      <div className="product-info">
-        <img
-          src={orderInfo.images[0][0].url || ""}
-          alt={orderInfo.name || "default name"}
-        />
-        <span>{orderInfo.name || "default name"}</span>
+    <div className="shop-order-item">
+      <div className="order-info">
+        <div className="product-info">
+          <img
+            src={orderInfo.images[0][0].url || ""}
+            alt={orderInfo.name || "default name"}
+          />
+          <span>{orderInfo.name || "default name"}</span>
+        </div>
+        <p className="total-money">
+          {price &&
+            price.toLocaleString("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            })}
+        </p>
+        <p className="status" style={{ fontWeight: 650 }}>
+          Đã giao
+        </p>
+        <p className="delivery">{value}</p>
+        <a href="#">Xem chi tiết</a>
       </div>
-      <p className="total-money">
-        {price &&
-          price.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          })}
-      </p>
-      <p className="status" style={{ fontWeight: 650 }}>
-        Đã giao
-      </p>
-      <p className="delivery">{value}</p>
-      <a href="#">Xem chi tiết</a>
     </div>
   );
 };

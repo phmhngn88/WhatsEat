@@ -6,7 +6,6 @@ import axios from "axios";
 import { Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../reducers/cart";
-import FormItem from "antd/lib/form/FormItem";
 import { Modal, Form, Input } from "antd";
 
 const { Option } = Select;
@@ -14,7 +13,7 @@ const { Option } = Select;
 const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deliver, setDeliver] = useState(2);
+  const [deliver, setDeliver] = useState(1);
   const [address, setAddress] = useState("");
   const [shippingInfo, setShippingInfo] = useState();
   const [paymentMethod, setPaymentMethod] = useState(1);

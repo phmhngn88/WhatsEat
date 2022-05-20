@@ -2,6 +2,7 @@ import { message, Rate, Timeline } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import "./OrderDetail.css";
@@ -11,12 +12,13 @@ const OrderDetail = () => {
   const [order, setOrder] = useState(null);
   const [rateValue, setRateValue] = useState(5);
   const [comment, setComment] = useState("");
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   const getOrder = () => {
     axios({
       method: "get",
       url: `https://localhost:7029/api/Customer/order/${id}`,
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         const result = res.data;

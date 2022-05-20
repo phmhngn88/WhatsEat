@@ -39,23 +39,6 @@ const OrderItem = ({ productId, price }) => {
           })}
         </h3>
       </div>
-      <div className="total">
-        <p>
-          Tổng số tiền:{" "}
-          {price.toLocaleString("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          })}
-        </p>
-      </div>
-      {/* <div className="cancel-block">
-        <Link to={`/orders/${id}`}>Xem chi tiết...</Link>
-        {status === 0 ? (
-          <button className="btn cancel-btn">Hủy đơn hàng</button>
-        ) : (
-          <></>
-        )}
-      </div> */}
     </>
   );
 };
