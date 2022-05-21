@@ -34,6 +34,7 @@ import FavorItem from "./pages/FavorItem/FavorItem";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import AddRecipe from "./pages/AddRecipe/AddRecipe";
 import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
+import Profile from "./pages/Profile/Profile";
 const { Header, Content, Footer } = Layout;
 
 function App({ auth, cartItems }) {
@@ -78,6 +79,7 @@ function App({ auth, cartItems }) {
               path="/shop/infringingitems"
               element={<ShopInfringingItems />}
             ></Route>
+            <Route path="/profile" element={<Profile />}></Route>
             <Route path="/favorshop" element={<FavorShop />}></Route>
             <Route path="/favoritem" element={<FavorItem />}></Route>
             <Route path="/payment/success" element={<PaymentSuccess />}></Route>

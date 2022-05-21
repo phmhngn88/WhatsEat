@@ -26,10 +26,10 @@ const handleLogout = () => {
 const options = (
   <Menu>
     <Menu.Item key="0">
-      <a href="#" className="single-option">
+      <Link to="/profile" className="single-option">
         {" "}
         <BsPersonCircle /> <span>Trang cá nhân</span>
-      </a>
+      </Link>
     </Menu.Item>
     <Menu.Item key="1">
       <Link to="/fav/recipe" className="single-option">

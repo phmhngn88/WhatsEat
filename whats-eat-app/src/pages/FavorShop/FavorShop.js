@@ -38,33 +38,37 @@ const FavorShop = () => {
               <h1 className="title">Shop yêu thích</h1>
             </div>
             <div className="favor-shop-table">
-              {shopList.map((shop, idx) => {
-                return (
-                  <div className="shop-followed-card" key={idx}>
-                    <div className="shop-info">
-                      <img
-                        src={
-                          shop.avatarUrl ||
-                          "https://cf.shopee.vn/file/569ea6d6a8d2816a10d3a258e58d9ecc_tn"
+              {shopList.length > 0 ? (
+                shopList.map((shop, idx) => {
+                  return (
+                    <div className="shop-followed-card" key={idx}>
+                      <div className="shop-info">
+                        <img
+                          src={
+                            shop.avatarUrl ||
+                            "https://cf.shopee.vn/file/569ea6d6a8d2816a10d3a258e58d9ecc_tn"
+                          }
+                          alt="whatseat"
+                        />
+                        <p>{shop.shopName}</p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          navigate(`/viewshop/${shop.storeId}`, {
+                            state: {
+                              storeId: shop.storeId,
+                            },
+                          })
                         }
-                        alt="whatseat"
-                      />
-                      <p>{shop.shopName}</p>
+                      >
+                        Xem shop
+                      </button>
                     </div>
-                    <button
-                      onClick={() =>
-                        navigate(`/viewshop/${shop.storeId}`, {
-                          state: {
-                            storeId: shop.storeId,
-                          },
-                        })
-                      }
-                    >
-                      Xem shop
-                    </button>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <h2>Bạn chưa theo dõi shop nào.</h2>
+              )}
             </div>
           </div>
         </div>
