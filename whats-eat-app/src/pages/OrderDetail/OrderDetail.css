@@ -63,6 +63,10 @@ h2{
     margin-left: 0.5rem;
 }
 
+.item-info .payment-info{
+    display: flex;
+}
+
 .item-info .intro{
     display: flex;
     margin: 0.5rem 1rem 0;

@@ -4,10 +4,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import CusOrderItem from "./CusOrderItem";
 import Footer from "../../components/Footer/Footer";
 import "./OrderDetail.css";
 
-const OrderDetail = () => {
+const CusOrderDetail = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [rateValue, setRateValue] = useState(5);
@@ -48,9 +49,20 @@ const OrderDetail = () => {
         message.error("Đánh giá không thành công!");
       });
   };
+
   useEffect(() => {
     getOrder();
   }, []);
+
+  let total = 0;
+  if (!order) return <p>Loading</p>;
+  else {
+    if (order.orderDetails !== null) {
+      order.orderDetails &&
+        order.orderDetails.map((item) => (total += item.price));
+    }
+  }
+
   return (
     <div className="order-detail">
       <div className="order-detail-fluid">
@@ -63,9 +75,15 @@ const OrderDetail = () => {
               <div className="address">
                 <h2>Địa Chỉ Nhận Hàng</h2>
                 <p className="customer-name">Trần Nhật Hiệp</p>
-                <p className="phone-number">0984523175</p>
+                <p className="phone-number">
+                  {order.shippingInfo
+                    ? order.shippingInfo.phoneNumber
+                    : "0984523175"}
+                </p>
                 <p className="address">
-                  16 Nguyễn Trường Tộ, Phường 13, Quận 4, TP HCM
+                  {order.shippingInfo
+                    ? order.shippingInfo.address
+                    : "Default address"}
                 </p>
               </div>
               <div className="status">
@@ -80,18 +98,11 @@ const OrderDetail = () => {
             </div>
             <div className="detail">
               <div className="item-info">
-                <div className="shop-name">
-                  {mock_order.shop_name}{" "}
-                  <Link to="/viewshop">{`Xem shop >`}</Link>
-                </div>
-                <div className="intro">
-                  <img src={mock_order.img_url} alt="whatseat" />
-                  <div>
-                    <p className="item-name">{mock_order.item_name}</p>
-                    <p className="quantity">{mock_order.quantity}</p>
-                  </div>
-                </div>
-                <div>
+                {order.orderDetails.length > 0 &&
+                  order.orderDetails.map((item, idx) => (
+                    <CusOrderItem key={idx} {...item} />
+                  ))}
+                <div className="payment-info">
                   <div className="label">
                     <p>Tổng tiền hàng</p>
                     <p>Phí vận chuyển</p>
@@ -99,19 +110,19 @@ const OrderDetail = () => {
                   </div>
                   <div className="value">
                     <p>
-                      {mock_order.price.toLocaleString("vi-VN", {
+                      {total.toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}
                     </p>
                     <p>
-                      {mock_order.price.toLocaleString("vi-VN", {
+                      {(30000).toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}
                     </p>
                     <p>
-                      {mock_order.price.toLocaleString("vi-VN", {
+                      {(total + 30000).toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -153,7 +164,7 @@ const OrderDetail = () => {
   );
 };
 
-export default OrderDetail;
+export default CusOrderDetail;
 
 const mock_order = {
   id: 0,
