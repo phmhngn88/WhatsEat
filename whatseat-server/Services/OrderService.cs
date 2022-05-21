@@ -20,7 +20,7 @@ public class OrderService
     public async Task<PagedList<Order>> GetUserPagedOrders(Customer customer, OrderPagedRequest request)
     {
         var orders = _context.Orders.AsNoTracking().Include(o => o.Customer).Include(o => o.PaymentMethod).Include(o => o.ShippingInfo)
-        .Include(o => o.Store).Where(o => (o.Customer == customer));
+        .Include(o => o.Store).Include(o => o.OrderDetails).Where(o => (o.Customer == customer));
 
         var orderList = await PagedList<Order>.ToPagedList(orders, request.PageNumber, request.PageSize);
 
@@ -30,6 +30,7 @@ public class OrderService
     public async Task<Order> getOrderDetails(Customer customer, int orderId)
     {
         var order = await _context.Orders.AsNoTracking().Include(o => o.OrderDetails)
+        .Include(od => od.Customer).Include(od => od.Shipper).Include(od => od.ShippingInfo).Include(od => od.PaymentMethod)
             .FirstOrDefaultAsync(o => o.Customer == customer && o.OrderId == orderId);
         return order;
     }
@@ -153,8 +154,10 @@ public class OrderService
         return orderStatusHistory;
     }
 
-    public async Task<PaymentSession> SavePaymentSession(int OrderId, string sessionId) {
-        PaymentSession paymentSession = new PaymentSession {
+    public async Task<PaymentSession> SavePaymentSession(int OrderId, string sessionId)
+    {
+        PaymentSession paymentSession = new PaymentSession
+        {
             OrderId = OrderId,
             SessionId = sessionId
         };
