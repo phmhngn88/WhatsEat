@@ -26,6 +26,7 @@ import ShopCategories from "./pages/ShopCategories/ShopCategories";
 import OrderPage from "./pages/OrderPage/OrderPage";
 import ShopRegisterPage from "./pages/ShopRegisterPage/ShopRegisterPage";
 import ShopItems from "./pages/ShopItems/ShopItems";
+import ShopItemUpdate from "./pages/ShopItemsUpdate/ShopItemUpdate";
 import ShopAddItem from "./pages/ShopAddItem/ShopAddItem";
 import ShopInfringingItems from "./pages/ShopInfringingItems/ShopInfringingItems";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -73,6 +74,7 @@ function App({ auth, cartItems }) {
             <Route path="/orders" element={<OrderPage />}></Route>
             <Route path="/orders/:id" element={<OrderDetail />}></Route>
             <Route path="/shop/items" element={<ShopItems />}></Route>
+            <Route path="/shop/items/update/:id" element={<ShopItemUpdate />}></Route>
             <Route path="/shop/additem" element={<ShopAddItem />}></Route>
             <Route path="/addrecipe" element={<AddRecipe />}></Route>
             <Route

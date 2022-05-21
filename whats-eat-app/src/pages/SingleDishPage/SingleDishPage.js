@@ -17,6 +17,7 @@ import Guide from "../../components/Guide/Guide";
 import "./SingleDishPage.css";
 import IngredientBox from "../../components/IngredientBox/IngredientBox";
 import TopItems from "../../components/TopItems/TopItems";
+import RecommendedRecipes from "../../components/TopItems/RecommendedRecipes";
 import { Input, Checkbox } from "antd";
 
 const combo = {
@@ -32,6 +33,7 @@ const combo = {
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
+  const [productIds,setProductIds] = useState([])
   const [totalLove, setTotalLove] = useState(0);
   const [servingNumber, setServingNumber] = useState(0);
   const [isCalculated, setIsCalculated] = useState(false);
@@ -125,6 +127,7 @@ const SingleDishPage = () => {
     })
       .then((res) => {
         setIsLikeRecipe(res.data);
+        setProductIds([...productIds,recipeId]);
       })
       .catch((err) => {
         console.log(err);
@@ -293,6 +296,7 @@ const SingleDishPage = () => {
           <RecipeReview recipeId={recipeId} />
         </div>
       </div>
+      <RecommendedRecipes productIds={productIds} />
       <TopItems />
       <Footer />
     </div>

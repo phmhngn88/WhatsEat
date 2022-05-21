@@ -185,12 +185,20 @@ def get_product_priori(cur,list_product_id):
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['consequents'])
 
+#get recipe with apriori
+def get_recipe_priori(cur,list_recipe_id):
+    cur.execute("""SELECT consequents FROM whatseat.apriori_recipe
+    WHERE confidence >= 0.5 AND antecedents LIKE %s""",(list_recipe_id,))
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['consequents'])
+
 #get product by list id
 def get_product_by_list_id(cur,list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
     whatseat.products where ProductId IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
     return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
+    
 #get recommend list recipe cb
 def get_recommend_list_cb(id_user,user_kcal,n_recipe,cur):
     cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
