@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./RecipeReview.css";
 import StarRatings from "react-star-ratings";
+import { BsFillPersonFill } from "react-icons/bs";
 import axios from "axios";
 
 const RecipeReview = ({ recipeId }) => {
@@ -30,13 +31,19 @@ const RecipeReview = ({ recipeId }) => {
           const { rating, comment, customer } = review;
           return (
             <div key={idx} className="single-review">
-              <img
-                className="avatar-img"
-                src="https://image.cooky.vn/recipe/g6/50880/s240x240/cooky-recipe-637102378373968618.png"
-                alt="avatar"
-              />
+              {!customer.avatarUrl ? (
+                <BsFillPersonFill className="avatar-img" />
+              ) : (
+                <img
+                  className="avatar-img"
+                  src={customer.avatarUrl}
+                  alt="avatar"
+                />
+              )}
               <div className="review-detail">
-                <p className="username">{customer.customerId}</p>
+                <p className="username">
+                  {customer.name ? customer.name : customer.customerId}
+                </p>
                 <StarRatings
                   rating={rating}
                   starRatedColor="brown"

@@ -46,19 +46,19 @@ const Profile = () => {
 
   const onFormFinish = (values) => {
     console.log({ ...values, avatarUrl: image });
-    // axios({
-    //   method: "PUT",
-    //   url: "https://localhost:7029/api/Customer",
-    //   headers: { Authorization: `Bearer ${token}` },
-    //   data: { ...values, idCard: 0, avatarUrl: image },
-    // })
-    //   .then((res) => {
-    //     message.success("Cập nhật thông tin thành công!");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     message.error("Cập nhật thông tin thất bại!");
-    //   });
+    axios({
+      method: "PUT",
+      url: "https://localhost:7029/api/Customer",
+      headers: { Authorization: `Bearer ${token}` },
+      data: { ...values, avatarUrl: image },
+    })
+      .then((res) => {
+        message.success("Cập nhật thông tin thành công!");
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error("Cập nhật thông tin thất bại!");
+      });
   };
 
   return (
@@ -93,8 +93,12 @@ const Profile = () => {
                     >
                       <Input placeholder="Nhập email người dùng..." />
                     </Form.Item>
-                    <Form.Item className="input" name="idCard" label="ID Card">
-                      <Input type="number" placeholder="Nhập ID Card..." />
+                    <Form.Item
+                      className="input"
+                      name="idCard"
+                      label="CMND/CCCD"
+                    >
+                      <Input placeholder="Nhập CMND/CCCD..." />
                     </Form.Item>
                     <Form.Item
                       className="input"
