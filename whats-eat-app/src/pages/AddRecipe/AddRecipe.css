@@ -10,7 +10,6 @@
     display: flex;
     justify-content: space-between;
     width: 70%;
-    height: 100vh;
     background-color: #fff;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -53,18 +52,29 @@
     margin-right: 10rem;
 }
 
-.input .steps{
-    margin-left: 1rem;
+.register-form .single-step{
+    margin-top: 0.35rem;
+    margin-bottom: 0.15rem;
 }
 
-.input .steps .step{
-    margin: 0.5rem 0;
+.register-form .single-step .done-btn{
+    margin-top: 0.5rem;
 }
 
-.input .steps .step-des{
-    margin-top: 1rem;
+.register-form .single-step .done-btn:hover{
+    background-color: brown;
+    color: #fff;
 }
 
-.recipe-input{
-    width: 100%;
+.register-form .single-step .disable{
+    cursor: not-allowed;
+}
+.register-form .single-step .disable:hover{
+    background-color: #C4C4C4;
+    color: #adadad;
+}
+
+.register-form .add-step-btn{
+    margin-top: 0.5rem;
+    float: right;
 }

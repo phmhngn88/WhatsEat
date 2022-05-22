@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from "react";
-import "./Navbar.css";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { DownOutlined } from "@ant-design/icons";
+import { Dropdown, Menu } from "antd";
+import React, { useState } from "react";
 import {
+  AiOutlineLogout,
   AiOutlineSearch,
   AiOutlineShoppingCart,
-  AiOutlineLogout,
 } from "react-icons/ai";
-import { FaPizzaSlice } from "react-icons/fa";
 import {
+  BsFillCartFill,
   BsFillPersonFill,
-  BsPersonCircle,
   BsFillSuitHeartFill,
   BsMenuButtonWideFill,
-  BsFillCartFill,
+  BsPersonCircle,
+  BsPlusSquare,
   BsShop,
   BsShopWindow,
 } from "react-icons/bs";
-import { Menu, Dropdown, Button } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { FaPizzaSlice } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import "./Navbar.css";
 
 const handleLogout = () => {
   localStorage.removeItem("persist:root");
@@ -32,32 +33,37 @@ const options = (
       </Link>
     </Menu.Item>
     <Menu.Item key="1">
+      <Link to="/addrecipe" className="single-option">
+        <BsPlusSquare /> <span>Thêm công thức của bạn</span>
+      </Link>
+    </Menu.Item>
+    <Menu.Item key="2">
       <Link to="/fav/recipe" className="single-option">
         <BsFillSuitHeartFill /> <span>Công thức yêu thích</span>
       </Link>
     </Menu.Item>
-    <Menu.Item key="2">
+    <Menu.Item key="3">
       <Link to="/fav/menu" className="single-option">
         <BsMenuButtonWideFill />
         <span> Menu của tôi</span>
       </Link>
     </Menu.Item>
-    <Menu.Item key="3">
+    <Menu.Item key="4">
       <Link to="/orders" className="single-option">
         <BsFillCartFill /> <span>Đơn hàng</span>
       </Link>
     </Menu.Item>
-    <Menu.Item key="4">
+    <Menu.Item key="5">
       <a href="/favorshop" className="single-option">
         <BsShop /> <span>Shop yêu thích</span>
       </a>
     </Menu.Item>
-    <Menu.Item key="5">
+    <Menu.Item key="6">
       <Link to="/shop" className="single-option">
         <BsShopWindow /> <span>Kênh người bán</span>
       </Link>
     </Menu.Item>
-    <Menu.Item key="6">
+    <Menu.Item key="7">
       <a href="/" className="single-option" onClick={handleLogout}>
         <AiOutlineLogout /> <span>Đăng xuất</span>
       </a>

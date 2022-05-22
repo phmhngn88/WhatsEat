@@ -1,27 +1,13 @@
-import { Form, Input, InputNumber, Select, Tabs } from "antd";
+import { Form, Input, Image, Select, message } from "antd";
 import "antd/dist/antd.css";
 import React, { useState } from "react";
-import { Upload, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { useSelector } from "react-redux";
+import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import "./AddRecipe.css";
 
-
-const props = {
-    action: '//jsonplaceholder.typicode.com/posts/',
-    listType: 'picture',
-    previewFile(file) {
-      console.log('Your upload file:', file);
-      // Your process logic. Here we just mock to the same file
-      return fetch('https://next.json-generator.com/api/json/get/4ytyBoLK8', {
-      method: 'POST',
-        body: file,
-      })
-        .then(res => res.json())
-        .then(({ thumbnail }) => thumbnail);
-  },
-  };
-
+const { TextArea } = Input;
+const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
@@ -37,27 +23,91 @@ const validateMessages = {
   },
 };
 
-const AddRecipe = () => {
-  const [type, setType] = useState(true);
-  const { TabPane } = Tabs;
-  function onChange(value) {
-    console.log('changed', value);
-  }
+const DoneButton = ({ onDone }) => {
+  const [isDone, setIsDone] = useState(false);
+  return (
+    <button
+      className={`btn done-btn${isDone ? " disable" : ""}`}
+      onClick={() => {
+        if (!isDone) {
+          console.log("done");
+          setIsDone(true);
+          onDone();
+        } else return;
+      }}
+    >
+      {isDone ? "Đã xong bước" : "Xong bước"}
+    </button>
+  );
+};
 
-  const options = [
-    { label: "Món khai vị", value: "Món khai vị" },
-    { label: "Món tráng miệng", value: "Món tráng miệng" },
-    { label: "Món chay", value: "Món chay" },
-    { label: "Món chính", value: "Món chính" },
-    { label: "Món ăn sáng", value: "Món ăn sáng" },
-    { label: "Món nhanh và dễ", value: "Món nhanh và dễ" },
-    { label: "Thức uống", value: "Thức uống" },
-    { label: "Bánh - Bánh ngọt", value: "Bánh - Bánh ngọt" },
-    { label: "Món ăn cho trẻ", value: "Món ăn cho trẻ" },
-    { label: "Món nhậu", value: "Món nhậu" },
-  ];
-  
- 
+const AddRecipe = () => {
+  const [image, setImage] = useState("");
+  const [form] = Form.useForm();
+  const [steps, setSteps] = useState(["textarea"]);
+  const [stepsContent, setStepsContent] = useState("");
+  const [stepsRecipe, setStepsRecipe] = useState([]);
+  const [data, setData] = useState();
+  const token = useSelector((state) => state.auth.userInfo.token);
+
+  const uploadImage = (value) => {
+    const formData = new FormData();
+    formData.append("file", value);
+    formData.append("upload_preset", "utm6qcfl");
+
+    axios
+      .post(`https://api.cloudinary.com/v1_1/dexdbltsd/image/upload`, formData)
+      .then((res) => {
+        console.log("upload thanh cong");
+        console.log(res.data.url);
+        setImage(res.data.url);
+        form.setFieldsValue({ image: res.data.url });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAddStep = () => {
+    console.log("Add step");
+    setSteps((prevSteps) => [...prevSteps, "textarea"]);
+  };
+
+  const handleDoneBtn = () => {
+    setStepsRecipe((prevArr) => [
+      ...prevArr,
+      {
+        content: stepsContent,
+        photos: [[{ url: "", height: 0, width: 0 }]],
+      },
+    ]);
+  };
+
+  const onFormFinish = (values) => {
+    setData({
+      ...values,
+      serving: +values.serving,
+      totalTime: +values.totalTime,
+      thumbnailUrl: image,
+    });
+  };
+
+  const handleAddRecipe = () => {
+    console.log({ ...data, recipeSteps: stepsRecipe });
+    axios({
+      method: "POST",
+      url: `https://localhost:7029/api/Recipe/recipe`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: { ...data, recipeSteps: `${stepsRecipe}` },
+    })
+      .then((res) => {
+        message.success("Thêm công thức thành công");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // console.log(stepsRecipe);
+  };
 
   return (
     <div className="add-recipe">
@@ -76,6 +126,8 @@ const AddRecipe = () => {
                     {...layout}
                     name="nest-messages"
                     validateMessages={validateMessages}
+                    form={form}
+                    onFinish={onFormFinish}
                   >
                     <Form.Item
                       className="input"
@@ -91,37 +143,57 @@ const AddRecipe = () => {
                       label="Khẩu phần"
                       rules={[{ required: true }]}
                     >
-                      <InputNumber placeholder="Nhập khẩu phần..." className="recipe-input" min={1} max={10} onChange={onChange} />
+                      <Input
+                        placeholder="Nhập khẩu phần..."
+                        className="recipe-input"
+                        type="number"
+                      />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
-                      name="type"
+                      name="recipeTypeIds"
                       label="Loại món ăn"
                       rules={[{ required: true }]}
                     >
-                      <Select
-                        options={options}
-                        onChange={(e) => setType(e.target.value)}
-                        placeholder="Chọn loại món ăn..."
+                      <Select mode="multiple" placeholder="Chọn loại món ăn">
+                        <Option value="1">Món khai vị</Option>
+                        <Option value="2">Món tráng miệng</Option>
+                        <Option value="3">Món chay</Option>
+                        <Option value="4">Món chính</Option>
+                        <Option value="5">Món ăn sáng</Option>
+                        <Option value="6">Món nhanh và dễ</Option>
+                        <Option value="7">Thức uống</Option>
+                        <Option value="8">Bánh-Bánh ngọt</Option>
+                        <Option value="9">Món ăn cho trẻ</Option>
+                        <Option value="10">Món nhậu</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item
+                      className="input"
+                      name="totalTime"
+                      label="Thời gian nấu (phút)"
+                      rules={[{ required: true }]}
+                    >
+                      <Input
+                        placeholder="Nhập tổng thời gian (số phút) nấu..."
+                        className="recipe-input"
+                        type="number"
                       />
                     </Form.Item>
                     <Form.Item
                       className="input"
-                      name="time"
-                      label="Thời gian nấu"
-                      rules={[{ required: true }]}
-                    >   
-                      <InputNumber placeholder="Nhập tổng thời gian (số phút) nấu..." className="recipe-input" min={1} max={2400} onChange={onChange} />
-                    </Form.Item>
-                    < Form.Item
-                      className = "input"
-                      name = "image"
-                      label = "Hình minh họa"
+                      name="thumbnailUrl"
+                      label="Hình minh họa"
                     >
-                    < Upload { ...props}>
-                      < Button icon ={< UploadOutlined />}> Hình ảnh món ăn</Button>
-                     </Upload>
+                      <Input
+                        type="file"
+                        accept="image/png, image/gif, image/jpeg"
+                        onChange={(e) => {
+                          uploadImage(e.target.files[0]);
+                        }}
+                      />
+                      <Image width={200} src={image} />
                     </Form.Item>
                     <Form.Item
                       className="input"
@@ -133,198 +205,44 @@ const AddRecipe = () => {
 
                     <Form.Item
                       className="input"
-                      name="step"
+                      name="recipeSteps"
                       label="Các bước nấu ăn"
                     >
-                        <Tabs className="steps" defaultActiveKey="1" centered>
-                        <TabPane tab="Bước 1" key="1" >
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-1"
-                        label="Hướng dẫn"
+                      <>
+                        {steps.map((step, idx) => {
+                          return (
+                            <div className="single-step" key={idx}>
+                              <p style={{ fontWeight: "bold" }}>
+                                Bước {idx + 1}
+                              </p>
+                              <TextArea
+                                placeholder={`Nhập bước ${idx + 1}`}
+                                onChange={(e) =>
+                                  setStepsContent(e.target.value)
+                                }
+                              />
+                              <DoneButton onDone={handleDoneBtn} />
+                            </div>
+                          );
+                        })}
+                        <button
+                          className="btn add-step-btn"
+                          onClick={handleAddStep}
                         >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>
-                        </TabPane>
-                        <TabPane tab="Bước 2" key="2">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-2"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>
-                        </TabPane>
-                        <TabPane tab="Bước 3" key="3">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-3"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                        
-                        </TabPane>
-                        <TabPane tab="Bước 4" key="4">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-4"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                   
-                        </TabPane>
-                        <TabPane tab="Bước 5" key="5">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-5"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                   
-                        </TabPane>
-                        <TabPane tab="Bước 6" key="6">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-6"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                    
-                        </TabPane>
-                        <TabPane tab="Bước 7" key="7">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-7"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                   
-                        </TabPane>
-                        <TabPane tab="Bước 8" key="8">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-8"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                    
-                        </TabPane>
-                        <TabPane tab="Bước 9" key="9">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-9"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                   
-                        </TabPane>
-                        <TabPane tab="Bước 10" key="10">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-10"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                  
-                        </TabPane>
-                        <TabPane tab="Bước 11" key="11" >
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-11"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>
-                        </TabPane>
-                        <TabPane tab="Bước 12" key="12">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-12"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>
-                        </TabPane>
-                        <TabPane tab="Bước 13" key="13">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-13"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                        
-                        </TabPane>
-                        <TabPane tab="Bước 14" key="14">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-14"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                   
-                        </TabPane>
-                        <TabPane tab="Bước 15" key="15">
-                        < Upload { ...props}>
-                            < Button className="step" icon ={< UploadOutlined />}> Thêm hình ảnh</Button>
-                        </Upload>
-                        <Form.Item 
-                        className="step-des"
-                        name="step-15"
-                        label="Hướng dẫn"
-                        >
-                        <Input.TextArea placeholder="Nhập hướng dẫn..." />
-                        </Form.Item>                                                   
-                        </TabPane>                       
-                        </Tabs>
-
+                          Thêm bước
+                        </button>
+                      </>
                     </Form.Item>
                     <Form.Item
                       className="input"
                       wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
                     >
-                      <button className="btn submit-btn">Lưu thông tin</button>
+                      <button
+                        className="btn submit-btn"
+                        onClick={handleAddRecipe}
+                      >
+                        Lưu thông tin
+                      </button>
                     </Form.Item>
                   </Form>
                 </div>
