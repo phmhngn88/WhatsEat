@@ -158,7 +158,6 @@ def individual_state2_api():
 
 @app.route('/individual/product/apriori', methods=['GET'])
 def individual_product_apriori():
-    print('id_product' in request.args)
     if 'id_product' in request.args:
         list_product = request.args.getlist('id_product')
     else:
@@ -168,6 +167,7 @@ def individual_product_apriori():
     list_product = utils.list_to_string(sorted(list_product))
     cur = mysql.connection.cursor()
     
+    print('number',list_product)
     result = fetch_data.get_product_priori(cur, list_product)
     if result.index.stop <=0 :
         abort(500,'{"message":"Error: No products is recommneded ')
@@ -175,6 +175,27 @@ def individual_product_apriori():
     result = fetch_data.get_product_by_list_id(cur,result['consequents'].to_list())
     cur.close()
     result['images'] = result['images'].apply(utils.to_json_product)
+    return jsonify(result.to_dict('record'))
+
+@app.route('/individual/recipe/apriori', methods=['GET'])
+def individual_recipe_apriori():
+    if 'id_recipe' in request.args:
+        list_recipe = request.args.getlist('id_recipe')
+    else:
+        abort(500,'{"message":"Error: No id field provided. Please specify an id.(URL: /individual/product/apriori?id_product= ... &id_product= ...)"}')
+        
+    list_recipe = list(map(int, list_recipe))
+    list_recipe = utils.list_to_string(sorted(list_recipe))
+    cur = mysql.connection.cursor()
+    
+    result = fetch_data.get_recipe_priori(cur, list_recipe)
+    print(result)
+    if result.index.stop <=0 :
+        abort(500,'{"message":"Error: No products is recommneded ')
+    result = result.drop_duplicates()
+    result = fetch_data.get_list_recipents_by_index(cur,result['consequents'].to_list())
+    cur.close()
+    result['images'] = result['images'].apply(utils.to_json)
     return jsonify(result.to_dict('record'))
 
 app.run(debug=True)
