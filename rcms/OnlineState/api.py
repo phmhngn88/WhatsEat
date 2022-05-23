@@ -31,28 +31,22 @@ def home():
     return """<h1>What's eat recommend engine</h1>
               <p>This site is APIs for getting list of recommend products.</p>"""
 
-def individual_recommend_list_recipes(id_user, user_kcal, n_recipe):
+def individual_recommend_list_recipes(id_user, user_kcal, n_recipe,page):
     cur = mysql.connection.cursor()
     rec_ids, is_newuser, is_notlove = utils.check_new_user(cur, id_user)
     if is_newuser:
         if is_notlove == 0:
             print("New user with filter!")
             rec_list = []
-            rec_list = fetch_data.get_top_recipe(cur,user_kcal,n_recipe)['id'].to_list()
+            rec_list = fetch_data.get_top_recipe(cur,user_kcal,n_recipe,page)['id'].to_list()
             cur.close()
         else:    
             print("New user detected!")
-            rec_list = fetch_data.get_recommend_list_cb(id_user,user_kcal,n_recipe,cur)['id1'].to_list()
+            rec_list = fetch_data.get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur)['id1'].to_list()
             print(rec_list)
 
             cur.close()
-    else:
-        print("Old user detected!")
-        click_df = fetch_data.rating_click_df(cur)
-        sim_df = fetch_data.similarity_item_df(cur)
-        cur.close()
 
-        rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_recipe, click_df, sim_df)
     cur = mysql.connection.cursor()
     rec_list2 = fetch_data.get_list_recipents_by_index(cur,rec_list)
     cur.close()
@@ -109,12 +103,13 @@ def individual_recipe_api():
         id_user = request.args['id_user']
         user_kcal = float(request.args['user_kcal'])
         n_recipe = int(request.args['n_recipe'])
+        page = int(request.args['page'])
     else:
         return """Error: No id field provided. Please specify an id.
-                (URL: /individual/recipe?id_user=...&user_kcal=...&n_recipe=...)
+                (URL: /individual/recipe?id_user=...&user_kcal=...&n_recipe=...&page=...)
                 """
     
-    rec_list = individual_recommend_list_recipes(id_user,user_kcal,n_recipe)
+    rec_list = individual_recommend_list_recipes(id_user,user_kcal,n_recipe,page)
     return jsonify(rec_list.to_dict('records'))
 
 def individual_recommend_list_state2(id_user, n_movie):

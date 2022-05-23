@@ -8,7 +8,8 @@ import ModalCalo from "../../components/ModalCalCalo/ModalCalo";
 const RecommendPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [kcal, setKcal] = useState(0);
-  const [menu, setMenu] = useState([])
+  const [menu, setMenu] = useState([]);
+  const [page, setPage] = useState(0);
   const user = useSelector((state) => state.auth.userInfo);
   const handleOk = (gender, pal, weight, height, year) => {
     console.log(gender, pal, weight, height, year);
@@ -42,7 +43,7 @@ const RecommendPage = () => {
   const getRecommendedRecipe = (kcal) => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${kcal}&n_recipe=16`,
+      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${kcal}&n_recipe=16&page=${page}`,
     })
       .then((res) => {
         const result = res.data;
@@ -51,6 +52,10 @@ const RecommendPage = () => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  const onPageChange = (page) =>{
+    setPage(page)
   }
 
   useEffect(() => {
@@ -66,11 +71,11 @@ const RecommendPage = () => {
         }
       })
       .catch((err) => { });
-  }, [])
+  }, [page])
 
   return (
     <div className="recommend">
-      <Recommender kcal={kcal} menu={menu} />
+      <Recommender kcal={kcal} menu={menu} setCurrentPage={onPageChange}/>
       <Footer />
       {kcal === 0 && <ModalCalo
         isModalVisible={isModalVisible}

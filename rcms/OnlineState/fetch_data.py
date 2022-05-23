@@ -130,9 +130,9 @@ def interactive_food(cur,recipeTypeId):
     return click_df
 
 #get list top recipe by total like
-def get_top_recipe(cur, user_kcal,n_recipe):
+def get_top_recipe(cur, user_kcal,n_recipe,page):
     cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
-     Order By totalLike desc LIMIT %s""",(user_kcal,n_recipe,))
+     Order By totalLike desc LIMIT %s,%s""",(user_kcal,page*n_recipe,n_recipe,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','calories'])
     return click_df
@@ -200,12 +200,12 @@ def get_product_by_list_id(cur,list_product_id):
     return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
     
 #get recommend list recipe cb
-def get_recommend_list_cb(id_user,user_kcal,n_recipe,cur):
+def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur):
     cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
     from whatseat.cb_similarity CB
     JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
     Where CB.CustomerId LIKE %s AND Calo <= %s 
-    ORDER BY CB.Similarity DESC LIMIT %s""",(id_user,user_kcal,n_recipe),)
+    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,page*n_recipe,n_recipe,))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id1','id2','similarity','calo'])
 #get recommend list product cb

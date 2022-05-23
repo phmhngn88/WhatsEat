@@ -118,3 +118,7 @@
     cursor: pointer;
     fill: red;
 }
+
+.recommendation-panigation{
+    float: right;
+}
