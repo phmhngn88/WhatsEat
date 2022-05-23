@@ -7,15 +7,10 @@ namespace whatseat_server.Models.DTOs.Requests
         public int Serving { get; set; }
         public int TotalTime { get; set; }
         public string ThumbnailUrl { get; set; }
-        public float AvgRating { get; set; }
-        public int TotalRating { get; set; }
-        public int TotalView { get; set; }
-        public int totalLike { get; set; }
         public string videoUrl { get; set; }
         public List<int> RecipeTypeIds { get; set; }
-        public string RecipeSteps { get; set; }
-        public string Ingredients { get; internal set; }
-        public string Steps { get; internal set; }
-        public string Level { get; internal set; }
+        public string Ingredients { get; set; }
+        public string Steps { get; set; }
+        public string Level { get; set; }
     }
 }

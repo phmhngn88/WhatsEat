@@ -313,7 +313,9 @@ public class RecipeController : ControllerBase
             Creator = customer,
             Ingredients = request.Ingredients,
             Steps = request.Steps,
-            Level = request.Level
+            Level = request.Level,
+            RecipeRecipeTypes = recipeTypes,
+            CreatedOn = DateTime.UtcNow
         };
 
         foreach (var item in request.RecipeTypeIds)
@@ -332,7 +334,6 @@ public class RecipeController : ControllerBase
                 recipeTypes.Add(recipeRecipeType);
             }
         }
-
         await _context.RecipeRecipeTypes.AddRangeAsync(recipeTypes);
         await _context.Recipes.AddAsync(recipe);
         await _context.SaveChangesAsync();
