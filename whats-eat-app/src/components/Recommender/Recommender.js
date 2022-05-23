@@ -8,61 +8,14 @@ import { getCurrentDate } from "../../utils/GetDate";
 import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle, AiFillDelete } from "react-icons/ai";
-import { Progress } from 'antd';
-const recommendedMenu = [
-  {
-    id: 1,
-    dish_label: "Món chính",
-    dish_name: "Ba Chỉ Rim Tôm Khô",
-    img_url:
-      "https://image.cooky.vn/recipe/g4/35480/s360x360/cooky-recipe-cover-r35480.JPG",
-    love_count: 12,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 2,
-    dish_label: "Món khai vị",
-    dish_name: "Củ Kiệu Ngâm Chanh Dây",
-    img_url:
-      "https://image.cooky.vn/recipe/g3/28772/s360x360/recipe-cover-r28772.jpg",
-    love_count: 12,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-  {
-    id: 3,
-    dish_label: "Thức uống",
-    dish_name: "Trà Vải Tươi",
-    img_url:
-      "https://image.cooky.vn/recipe/g3/24673/s360x360/recipe-cover-r24673.jpg",
-    love_count: 12,
-    time: "30p",
-    level: "Dễ",
-    view: 20,
-  },
-];
+import { AiFillDelete } from "react-icons/ai";
+import { Progress, Pagination } from 'antd';
 
-const categories = [
-  { id: 1, category_name: "Món khai vị" },
-  { id: 2, category_name: "Món tráng miệng" },
-  { id: 3, category_name: "Món chay" },
-  { id: 4, category_name: "Món chính" },
-  { id: 5, category_name: "Món ăn sáng" },
-  { id: 6, category_name: "Món nhanh và dễ" },
-  { id: 7, category_name: "Thức uống" },
-  { id: 8, category_name: "Bánh - Bánh ngọt" },
-  { id: 9, category_name: "Món ăn cho trẻ" },
-  { id: 10, category_name: "Món nhậu" },
-];
-
-const Recommender = ({ kcal, menu }) => {
+const Recommender = ({ kcal, menu, setCurrentPage }) => {
   const [listRecipes, setListRecipes] = useState([]);
   const [status, setStatus] = useState("");
   const [percent, setPercent] = useState(0);
+  const [current, setCurrent] = useState(1);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
   let listRecipe = [];
@@ -93,6 +46,11 @@ const Recommender = ({ kcal, menu }) => {
 
   const removeRecipe = (recipeId) => {
     setListRecipes(listRecipes.filter(item => item.recipeId !== recipeId))
+  }
+
+  const onPageChage = (page) => {
+    setCurrent(page)
+    setCurrentPage(page-1)
   }
 
   useEffect(() => {
@@ -144,7 +102,23 @@ const Recommender = ({ kcal, menu }) => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
+        <Pagination 
+            className="recommendation-panigation"
+            pageSize={16} 
+            current={current}
+            total={1000}
+            showSizeChanger={false}
+            onChange={onPageChage}
+             />
           <DishBox menu={menu} addRecipe={addRecipe} />
+          <Pagination 
+            className="recommendation-panigation"
+            pageSize={16} 
+            current={current}
+            total={1000}
+            showSizeChanger={false}
+            onChange={onPageChage}
+             />
         </div>
         {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>
