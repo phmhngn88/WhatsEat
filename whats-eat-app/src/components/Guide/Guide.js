@@ -18,7 +18,12 @@ const Guide = ({ steps }) => {
                     {photos?.map((image, idx) => {
                       return (
                         <div className="img" key={idx}>
-                          <img src={image[1].url} alt="whatseat" />
+                          {image[0].url && (
+                            <img
+                              src={image[0].url ? image[0].url : ""}
+                              alt="whatseat"
+                            />
+                          )}
                         </div>
                       );
                     })}

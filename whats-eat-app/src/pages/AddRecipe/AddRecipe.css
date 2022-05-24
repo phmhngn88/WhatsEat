@@ -52,9 +52,27 @@
     margin-right: 10rem;
 }
 
+.register-form .ingredient-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.register-form .ingredient-box input{
+    width: 35%;
+}
+
+.ingredient-box button{
+    width: 20%;
+}
 .register-form .single-step{
     margin-top: 0.35rem;
     margin-bottom: 0.15rem;
+}
+
+.register-form .single-step textarea{
+    margin-bottom: 0.5rem;
 }
 
 .register-form .single-step .done-btn{

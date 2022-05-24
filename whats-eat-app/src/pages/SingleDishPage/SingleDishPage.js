@@ -33,7 +33,7 @@ const combo = {
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
-  const [productIds,setProductIds] = useState([])
+  const [productIds, setProductIds] = useState([]);
   const [totalLove, setTotalLove] = useState(0);
   const [servingNumber, setServingNumber] = useState(0);
   const [isCalculated, setIsCalculated] = useState(false);
@@ -127,7 +127,7 @@ const SingleDishPage = () => {
     })
       .then((res) => {
         setIsLikeRecipe(res.data);
-        setProductIds([...productIds,recipeId]);
+        setProductIds([...productIds, recipeId]);
       })
       .catch((err) => {
         console.log(err);
@@ -263,12 +263,16 @@ const SingleDishPage = () => {
                     </p>
                   ))}
                 </>
-              )} 
+              )}
             </div>
           </div>
           <div className="combo-box">
             <p className="noti">Mua ngay combo thực phẩm chế biến {name}</p>
-            <img src={images[1].url} alt="combo" className="combo-img" />
+            <img
+              src={images[0].url ? images[0].url : ""}
+              alt="combo"
+              className="combo-img"
+            />
             <p className="combo-name">Combo {name}</p>
             <p className="combo-detail">
               {`${ingredients[0].name}${

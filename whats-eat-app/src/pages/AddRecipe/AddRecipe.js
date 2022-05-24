@@ -23,6 +23,23 @@ const validateMessages = {
   },
 };
 
+const DoneIngreButton = ({ onDoneIngre }) => {
+  const [isDone, setIsDone] = useState(false);
+  return (
+    <button
+      className={`btn done-btn${isDone ? " disable" : ""}`}
+      onClick={() => {
+        if (!isDone) {
+          console.log("done");
+          setIsDone(true);
+          onDoneIngre();
+        } else return;
+      }}
+    >
+      {isDone ? "Đã thêm" : "Thêm"}
+    </button>
+  );
+};
 const DoneButton = ({ onDone }) => {
   const [isDone, setIsDone] = useState(false);
   return (
@@ -42,15 +59,20 @@ const DoneButton = ({ onDone }) => {
 };
 
 const AddRecipe = () => {
-  const [image, setImage] = useState("");
+  const [stepImage, setStepImage] = useState();
+  const [thumbImage, setThumbImage] = useState("");
   const [form] = Form.useForm();
   const [steps, setSteps] = useState(["textarea"]);
+  const [ingredients, setIngredients] = useState(["ingredient"]);
+  const [ingredientQuantity, setIngredientQuantity] = useState("");
+  const [ingredientName, setIngredientName] = useState("");
+  const [ingredientList, setIngredientList] = useState([]);
   const [stepsContent, setStepsContent] = useState("");
   const [stepsRecipe, setStepsRecipe] = useState([]);
   const [data, setData] = useState();
   const token = useSelector((state) => state.auth.userInfo.token);
 
-  const uploadImage = (value) => {
+  const uploadThumbImage = (value) => {
     const formData = new FormData();
     formData.append("file", value);
     formData.append("upload_preset", "utm6qcfl");
@@ -60,17 +82,51 @@ const AddRecipe = () => {
       .then((res) => {
         console.log("upload thanh cong");
         console.log(res.data.url);
-        setImage(res.data.url);
+        setThumbImage(res.data.url);
         form.setFieldsValue({ image: res.data.url });
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  const uploadStepImage = (value) => {
+    const formData = new FormData();
+    formData.append("file", value);
+    formData.append("upload_preset", "utm6qcfl");
+
+    axios
+      .post(`https://api.cloudinary.com/v1_1/dexdbltsd/image/upload`, formData)
+      .then((res) => {
+        setStepImage(res.data.url);
+        console.log("image step:", res.data.url);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAddIngredient = () => {
+    console.log("Add ingredient");
+    setIngredients((prevIngre) => [...prevIngre, "ingredient"]);
+  };
 
   const handleAddStep = () => {
     console.log("Add step");
+    setStepImage();
+
     setSteps((prevSteps) => [...prevSteps, "textarea"]);
+  };
+
+  const handleDoneIngre = () => {
+    setIngredientList((preIngre) => [
+      ...preIngre,
+      {
+        unit: { unit: "Gr", value: 0 },
+        name: ingredientName,
+        quantity: ingredientQuantity,
+      },
+    ]);
+    console.log({ ingredientList });
   };
 
   const handleDoneBtn = () => {
@@ -78,9 +134,10 @@ const AddRecipe = () => {
       ...prevArr,
       {
         content: stepsContent,
-        photos: [[{ url: "", height: 0, width: 0 }]],
+        photos: [[{ url: stepImage, height: 0, width: 0 }]],
       },
     ]);
+    console.log({ stepsRecipe });
   };
 
   const onFormFinish = (values) => {
@@ -88,17 +145,24 @@ const AddRecipe = () => {
       ...values,
       serving: +values.serving,
       totalTime: +values.totalTime,
-      thumbnailUrl: image,
+      thumbnailUrl: `[[{ "url": "${thumbImage}", "height": "0", "width": "0" }]]`,
     });
   };
 
   const handleAddRecipe = () => {
-    console.log({ ...data, recipeSteps: stepsRecipe });
+    const payloadData = {
+      ...data,
+      ingredients: JSON.stringify(ingredientList),
+      recipeTypeIds: data.recipeTypeIds.map((typeId) => +typeId),
+      steps: JSON.stringify(stepsRecipe),
+    };
+
+    console.log(payloadData);
     axios({
       method: "POST",
       url: `https://localhost:7029/api/Recipe/recipe`,
       headers: { Authorization: `Bearer ${token}` },
-      data: { ...data, recipeSteps: `${stepsRecipe}` },
+      data: payloadData,
     })
       .then((res) => {
         message.success("Thêm công thức thành công");
@@ -169,6 +233,15 @@ const AddRecipe = () => {
                         <Option value="10">Món nhậu</Option>
                       </Select>
                     </Form.Item>
+
+                    <Form.Item
+                      className="input"
+                      name="description"
+                      label="Mô tả món ăn"
+                    >
+                      <Input.TextArea placeholder="Nhập mô tả món ăn..." />
+                    </Form.Item>
+
                     <Form.Item
                       className="input"
                       name="totalTime"
@@ -181,6 +254,41 @@ const AddRecipe = () => {
                         type="number"
                       />
                     </Form.Item>
+
+                    <Form.Item
+                      className="input"
+                      name="ingredients"
+                      label="Nguyên liệu"
+                    >
+                      <>
+                        {ingredients.map((item, idx) => (
+                          <div className="ingredient-box" key={idx}>
+                            <Input
+                              placeholder="Nhập tên nguyên liệu"
+                              onChange={(e) =>
+                                setIngredientName(e.target.value)
+                              }
+                            />
+                            <Input
+                              type="number"
+                              placeholder="Nhập trọng lượng"
+                              onChange={(e) =>
+                                setIngredientQuantity(e.target.value)
+                              }
+                            />
+                            <DoneIngreButton onDoneIngre={handleDoneIngre} />
+                          </div>
+                        ))}
+                        <button
+                          className="btn"
+                          style={{ float: "right" }}
+                          onClick={handleAddIngredient}
+                        >
+                          Thêm nguyên liệu
+                        </button>
+                      </>
+                    </Form.Item>
+
                     <Form.Item
                       className="input"
                       name="thumbnailUrl"
@@ -190,22 +298,15 @@ const AddRecipe = () => {
                         type="file"
                         accept="image/png, image/gif, image/jpeg"
                         onChange={(e) => {
-                          uploadImage(e.target.files[0]);
+                          uploadThumbImage(e.target.files[0]);
                         }}
                       />
-                      <Image width={200} src={image} />
-                    </Form.Item>
-                    <Form.Item
-                      className="input"
-                      name="description"
-                      label="Mô tả món ăn"
-                    >
-                      <Input.TextArea placeholder="Nhập mô tả món ăn..." />
+                      <Image width={200} src={thumbImage} />
                     </Form.Item>
 
                     <Form.Item
                       className="input"
-                      name="recipeSteps"
+                      name="steps"
                       label="Các bước nấu ăn"
                     >
                       <>
@@ -221,6 +322,14 @@ const AddRecipe = () => {
                                   setStepsContent(e.target.value)
                                 }
                               />
+                              <Input
+                                type="file"
+                                accept="image/png, image/gif, image/jpeg"
+                                onChange={(e) => {
+                                  uploadStepImage(e.target.files[0]);
+                                }}
+                              />
+
                               <DoneButton onDone={handleDoneBtn} />
                             </div>
                           );
