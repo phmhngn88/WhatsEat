@@ -7,7 +7,7 @@ import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import { addItemToCart } from "../../reducers/cart";
-import RecommendedItems from "../../components/TopItems/RecommendedItems"
+import RecommendedItems from "../../components/TopItems/RecommendedItems";
 import Footer from "../../components/Footer/Footer";
 import Counter from "../../components/Counter/Counter";
 import TopDishes from "../../components/TopDishes/TopDishes";
@@ -19,7 +19,7 @@ import ProductReview from "../../components/ProductReview/ProductReview";
 const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
   const [count, setCount] = useState(1);
-  const [productIds,setProductIds] = useState([])
+  const [productIds, setProductIds] = useState([]);
   const location = useLocation();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth.userInfo);
@@ -35,7 +35,7 @@ const SingleProductPage = () => {
         console.log("product", res.data);
         const result = res.data;
         setProductDetail(result);
-        setProductIds([...productIds,productId]);
+        setProductIds([...productIds, productId]);
       })
       .catch((error) => {
         console.log(error);
@@ -88,7 +88,18 @@ const SingleProductPage = () => {
   }, []);
 
   if (!productDetail.images) {
-    return <img src="../../assets/Banner/preloader.gif" alt="" />;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItem: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img src="../../assets/Banner/preloader.gif" alt="" />
+      </div>
+    );
   }
 
   return (
@@ -173,7 +184,7 @@ const SingleProductPage = () => {
           </div>
         </div>
       </div>
-      <RecommendedItems productIds={productIds}/>
+      <RecommendedItems productIds={productIds} />
       <ProductsByShop storeId={productDetail.storeId} />
       <TopItems />
       <TopDishes />

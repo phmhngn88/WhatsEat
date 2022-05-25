@@ -13,9 +13,16 @@ const { Option } = Select;
 const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [deliver, setDeliver] = useState(1);
-  const [address, setAddress] = useState("");
-  const [shippingInfo, setShippingInfo] = useState();
+  const [deliver, setDeliver] = useState();
+  const [choosenAddress, setChoosenAddress] = useState();
+  const [addressList, setAddressList] = useState([]);
+  const [shippingInfoId, setShippingInfoId] = useState();
+  const [province, setProvince] = useState(0);
+  const [provinceList, setProvinceList] = useState([]);
+  const [district, setDistrict] = useState(0);
+  const [districtList, setDistrictList] = useState([]);
+  const [ward, setWard] = useState(0);
+  const [wardList, setWardList] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(1);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const token = useSelector((state) => state.auth.userInfo.token);
@@ -43,7 +50,7 @@ const PaymentPage = () => {
       headers: { Authorization: `Bearer ${token}` },
       data: {
         paymentMethodId: paymentMethod,
-        shippingInfoId: deliver,
+        shippingInfoId: shippingInfoId,
         productList: carts,
       },
     })
@@ -56,13 +63,80 @@ const PaymentPage = () => {
       });
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => {
-    setIsModalVisible(true);
+  const [isAddAddressModalVisible, setIsAddAddressModalVisible] =
+    useState(false);
+  const [isChooseAddressModalVisible, setIsChooseAddressModalVisible] =
+    useState(false);
+  const showAddAddressModal = () => {
+    setIsAddAddressModalVisible(true);
+  };
+
+  const showChooseAddressModal = () => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Customer/shippingInfos",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setAddressList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setIsChooseAddressModalVisible(true);
+  };
+
+  const handleCancelAddAddress = () => {
+    setIsAddAddressModalVisible(false);
+  };
+
+  const handleCancelChooseAddress = () => {
+    setIsChooseAddressModalVisible(false);
+  };
+
+  const handleGetDistrict = (id) => {
+    axios({
+      method: "GET",
+      url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/district",
+      headers: { token: `a11d1949-dc33-11ec-987f-ea8994b0d064` },
+      params: {
+        province_id: +id,
+      },
+    })
+      .then((res) => {
+        setDistrictList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleGetWard = (id) => {
+    axios({
+      method: "GET",
+      url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/ward",
+      headers: { token: `a11d1949-dc33-11ec-987f-ea8994b0d064` },
+      params: {
+        district_id: +id,
+      },
+    })
+      .then((res) => {
+        setWardList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleSubmitShippingInfo = (values) => {
-    setIsModalVisible(false);
+    console.log({
+      phoneNumber: values.phone,
+      address: values.address,
+      provinceCode: province,
+      districtCode: district,
+      wardCode: ward,
+    });
+    setIsAddAddressModalVisible(false);
     axios({
       method: "POST",
       url: "https://localhost:7029/api/Customer/shippingInfos",
@@ -70,22 +144,17 @@ const PaymentPage = () => {
       data: {
         phoneNumber: values.phone,
         address: values.address,
-        provinceCode: 0,
-        districtCode: 0,
-        wardCode: 0,
+        provinceCode: province,
+        districtCode: district,
+        wardCode: ward,
       },
     })
       .then((res) => {
         message.success("Thêm địa chỉ thành công!");
-        setAddress(values.address);
       })
       .catch((err) => {
         message.error("Thêm địa chỉ không thành công!");
       });
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
   };
 
   useEffect(() => {
@@ -95,9 +164,25 @@ const PaymentPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        setShippingInfo(res.data);
-        setAddress(res.data[0].address);
-        console.log(res.data);
+        setAddressList(res.data);
+
+        if (res.data.length > 0) {
+          setShippingInfoId(res.data[0].shippingInfoId);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/province",
+      headers: { token: `a11d1949-dc33-11ec-987f-ea8994b0d064` },
+    })
+      .then((res) => {
+        setProvinceList(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -113,23 +198,44 @@ const PaymentPage = () => {
           </h1>
           <div className="address-block">
             <p className="title">Địa chỉ giao hàng</p>
-            {shippingInfo && (
-              <div className="info-block">
-                <div>
-                  <p className="username">Trần Nhật Hiệp</p>
-                  <p className="phone">{shippingInfo[0].phoneNumber}</p>
-                  <p className="address">{address}</p>
+            {addressList.length > 0 ? (
+              !choosenAddress ? (
+                <div className="info-block">
+                  <div>
+                    <p className="username">Trần Nhật Hiệp</p>
+                    <p className="phone">{addressList[0].phoneNumber}</p>
+                    <p className="address">{addressList[0].address}</p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="info-block">
+                  <div>
+                    <p className="username">Trần Nhật Hiệp</p>
+                    <p className="phone">{choosenAddress.phoneNumber}</p>
+                    <p className="address">{choosenAddress.address}</p>
+                  </div>
+                </div>
+              )
+            ) : (
+              <></>
             )}
-            <button className="btn btn-add-address" onClick={showModal}>
+            <button
+              className="btn btn-add-address"
+              onClick={showChooseAddressModal}
+            >
+              Đổi địa chỉ
+            </button>
+            <button
+              className="btn btn-add-address"
+              onClick={showAddAddressModal}
+            >
               Thêm địa chỉ
             </button>
             <Modal
               title="Thêm địa chỉ mới"
-              visible={isModalVisible}
+              visible={isAddAddressModalVisible}
               onOk={form.submit}
-              onCancel={handleCancel}
+              onCancel={handleCancelAddAddress}
               cancelText="Hủy"
               okText="Lưu"
             >
@@ -151,10 +257,92 @@ const PaymentPage = () => {
                 <Form.Item name="phone" label="Số điện thoại">
                   <Input placeholder="Nhập số điện thoại..." />
                 </Form.Item>
-                <Form.Item name="address" label="Địa chỉ nhận hàng">
-                  <Input placeholder="Nhập địa chỉ..." />
+                <Form.Item name="provinceCode" label="Tỉnh">
+                  <Select
+                    placeholder="Chọn tỉnh"
+                    onChange={(value) => {
+                      const [code, id] = value.split(".");
+                      setProvince(+code);
+                      handleGetDistrict(id);
+                    }}
+                  >
+                    {provinceList.map((province) => (
+                      <Option
+                        key={province.ProvinceID}
+                        value={`${province.Code}.${province.ProvinceID}`}
+                      >
+                        {province.ProvinceName}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="districtCode" label="Huyện">
+                  <Select
+                    placeholder="Chọn huyện"
+                    onChange={(value) => {
+                      const [code, id] = value.split(".");
+                      setDistrict(+code);
+                      handleGetWard(id);
+                    }}
+                  >
+                    {districtList.map((district) => (
+                      <Option
+                        key={district.DistrictID}
+                        value={`${district.Code}.${district.DistrictID}`}
+                      >
+                        {district.DistrictName}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="wardCode" label="Xã">
+                  <Select
+                    placeholder="Chọn xã"
+                    onChange={(value) => {
+                      setWard(+value);
+                    }}
+                  >
+                    {wardList.map((ward) => (
+                      <Option key={ward.WardID} value={ward.Code}>
+                        {ward.WardName}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item name="address" label="Địa chỉ chi tiết">
+                  <Input placeholder="Nhập địa chỉ chi tiết..." />
                 </Form.Item>
               </Form>
+            </Modal>
+            <Modal
+              title="Chọn địa chỉ giao hàng"
+              visible={isChooseAddressModalVisible}
+              onCancel={handleCancelChooseAddress}
+              footer={false}
+            >
+              {addressList.length > 0 &&
+                addressList.map((address) => (
+                  <div
+                    className="info-block"
+                    style={{
+                      border: "2px solid #c4c4c4",
+                      marginBottom: "1rem",
+                      padding: "0.5rem",
+                    }}
+                    key={address.shippingInfoId}
+                    onClick={() => {
+                      console.log({ address });
+                      setShippingInfoId(address.shippingInfoId);
+                      setChoosenAddress(address);
+                    }}
+                  >
+                    <div>
+                      <p className="username">Trần Nhật Hiệp</p>
+                      <p className="phone">{address.phoneNumber}</p>
+                      <p className="address">{address.address}</p>
+                    </div>
+                  </div>
+                ))}
             </Modal>
           </div>
           <div className="products-block">

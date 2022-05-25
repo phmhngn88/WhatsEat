@@ -20,16 +20,6 @@ import TopItems from "../../components/TopItems/TopItems";
 import RecommendedRecipes from "../../components/TopItems/RecommendedRecipes";
 import { Input, Checkbox } from "antd";
 
-const combo = {
-  img_url:
-    "https://media.cooky.vn/recipe/g6/50880/s320x240/cooky-recipe-637102372207865706.png",
-  dish_name: "Combo Smoothie xoài chuối kiwi",
-  love_count: 24,
-  time: "30p",
-  level: "Dễ",
-  view: 20,
-};
-
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
@@ -152,7 +142,18 @@ const SingleDishPage = () => {
       });
   }, []);
   if (!steps || !images || !ingredients) {
-    return <img src="../../assets/Banner/preloader.gif" alt="" />;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItem: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img src="../../assets/Banner/preloader.gif" alt="" />
+      </div>
+    );
   }
 
   return (
