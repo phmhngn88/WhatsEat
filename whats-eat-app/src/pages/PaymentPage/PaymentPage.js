@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Footer from "../../components/Footer/Footer";
 import "./PaymentPage.css";
 import axios from "axios";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../../reducers/cart";
@@ -13,6 +14,7 @@ const { Option } = Select;
 const PaymentPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isProfileUpdated, setIsProfileUpdated] = useState(true);
   const [deliver, setDeliver] = useState();
   const [choosenAddress, setChoosenAddress] = useState();
   const [addressList, setAddressList] = useState([]);
@@ -47,24 +49,30 @@ const PaymentPage = () => {
   console.log(carts);
 
   const handleConfirm = () => {
-    axios({
-      method: "POST",
-      url: "https://localhost:7029/api/Customer/order",
-      headers: { Authorization: `Bearer ${token}` },
-      data: {
-        paymentMethodId: paymentMethod,
-        shippingInfoId: shippingInfoId,
-        productList: carts,
-      },
-    })
-      .then((res) => {
-        dispatch(clearCart());
-        navigate(`/payment/success`);
+    if (!isProfileUpdated) {
+      setIsUpdateProfileVisible(true);
+    } else {
+      axios({
+        method: "POST",
+        url: "https://localhost:7029/api/Customer/order",
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
+          paymentMethodId: paymentMethod,
+          shippingInfoId: shippingInfoId,
+          productList: carts,
+        },
       })
-      .catch((err) => {
-        message.error("Đặt hàng không thành công!");
-      });
+        .then((res) => {
+          dispatch(clearCart());
+          navigate(`/payment/success`);
+        })
+        .catch((err) => {
+          message.error("Đặt hàng không thành công!");
+        });
+    }
   };
+
+  const [isUpdateProfileVisible, setIsUpdateProfileVisible] = useState(false);
 
   const [isAddAddressModalVisible, setIsAddAddressModalVisible] =
     useState(false);
@@ -132,13 +140,6 @@ const PaymentPage = () => {
   };
 
   const handleSubmitShippingInfo = (values) => {
-    console.log({
-      phoneNumber: values.phone,
-      address: `${values.address}, ${wardName}, ${districtName}, ${provinceName}`,
-      provinceCode: province,
-      districtCode: district,
-      wardCode: ward,
-    });
     setIsAddAddressModalVisible(false);
     axios({
       method: "POST",
@@ -177,6 +178,23 @@ const PaymentPage = () => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Customer",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setIsProfileUpdated(res.data.name ? true : false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  console.log(isProfileUpdated);
 
   useEffect(() => {
     axios({
@@ -234,6 +252,12 @@ const PaymentPage = () => {
             >
               Thêm địa chỉ
             </button>
+            <Modal visible={isUpdateProfileVisible} footer={false}>
+              <h2>Hồ sơ cá nhân của bạn chưa được cập nhật!</h2>
+              <a href="/profile">
+                Đến cập nhật hồ sơ <AiOutlineArrowRight />
+              </a>
+            </Modal>
             <Modal
               title="Thêm địa chỉ mới"
               visible={isAddAddressModalVisible}
