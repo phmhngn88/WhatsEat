@@ -46,14 +46,7 @@ const RecommendPage = () => {
   const getRecommendedRecipe = (kcal) => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/
-      ?id_user=${user.userId}
-      &user_kcal=${kcal}
-      &n_recipe=16
-      &page=${page}
-      &level=${level}
-      &mintime=${minTime}
-      &maxtime=${maxTime}`,
+      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${kcal}&n_recipe=16&page=${page}&level=${level}&mintime=${minTime}&maxtime=${maxTime}`,
     })
       .then((res) => {
         const result = res.data;
