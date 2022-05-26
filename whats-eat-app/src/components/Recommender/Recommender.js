@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Recommender.css";
-import { Button, Row, Col } from "antd";
+import { Button, Row, Col, Select, Input } from "antd";
 import { useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import axios from "axios";
@@ -10,6 +10,7 @@ import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
 import { AiFillDelete } from "react-icons/ai";
 import { Progress, Pagination } from 'antd';
+const { Option } = Select;
 
 const Recommender = ({ kcal, menu, setCurrentPage }) => {
   const [listRecipes, setListRecipes] = useState([]);
@@ -102,14 +103,65 @@ const Recommender = ({ kcal, menu, setCurrentPage }) => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-        <Pagination 
-            className="recommendation-panigation"
-            pageSize={16} 
-            current={current}
-            total={1000}
-            showSizeChanger={false}
-            onChange={onPageChage}
-             />
+          <Pagination 
+              className="recommendation-panigation"
+              pageSize={16} 
+              current={current}
+              total={1000}
+              showSizeChanger={false}
+              onChange={onPageChage}
+              />
+          <div>
+            <p>Lọc</p>
+            <div>
+              <Row>
+                <Col>
+                  <Input.Group>
+                    <span>Mức độ: </span>
+                    <Select style={{width:110}} defaultValue="Mức độ">
+                      <Option value="Dễ">Dễ</Option>
+                      <Option value="Trung bình">Trung bình</Option>
+                      <Option value="Khó">Khó</Option>
+                    </Select>
+                  </Input.Group>
+                </Col>
+                <Col>
+                  <Row>
+                    <Input.Group compact>
+                      <span>Thời gian nấu: </span> 
+                      <Input
+                        style={{
+                          width: 100,
+                          textAlign: 'center',
+                        }}
+                        placeholder="Tối thiểu"
+                      />
+                      <Input
+                        className="site-input-split"
+                        style={{
+                          width: 30,
+                          borderLeft: 0,
+                          borderRight: 0,
+                          pointerEvents: 'none',
+                        }}
+                        placeholder="~"
+                        disabled
+                      />
+                      <Input
+                        className="site-input-right"
+                        style={{
+                          width: 100,
+                          textAlign: 'center',
+                        }}
+                        placeholder="Tối đa"
+                      />
+                    </Input.Group>
+                  </Row>
+                </Col>
+                <Button>Lọc</Button>
+              </Row>
+            </div>
+          </div>
           <DishBox menu={menu} addRecipe={addRecipe} />
           <Pagination 
             className="recommendation-panigation"
