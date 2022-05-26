@@ -10,6 +10,9 @@ const RecommendPage = () => {
   const [kcal, setKcal] = useState(0);
   const [menu, setMenu] = useState([]);
   const [page, setPage] = useState(0);
+  const [level,setLevel] = useState("Mức độ");
+  const [minTime,setMinTime] = useState(0);
+  const [maxTime,setMaxTime] = useState(0);
   const user = useSelector((state) => state.auth.userInfo);
   const handleOk = (gender, pal, weight, height, year) => {
     console.log(gender, pal, weight, height, year);
@@ -43,7 +46,14 @@ const RecommendPage = () => {
   const getRecommendedRecipe = (kcal) => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${kcal}&n_recipe=16&page=${page}`,
+      url: `http://127.0.0.1:5000/individual/recipe/
+      ?id_user=${user.userId}
+      &user_kcal=${kcal}
+      &n_recipe=16
+      &page=${page}
+      &level=${level}
+      &mintime=${minTime}
+      &maxtime=${maxTime}`,
     })
       .then((res) => {
         const result = res.data;
@@ -56,6 +66,12 @@ const RecommendPage = () => {
 
   const onPageChange = (page) =>{
     setPage(page)
+  }
+
+  const onFilter = (level,minTime,maxTime) => {
+    setLevel(level);
+    setMaxTime(maxTime);
+    setMinTime(minTime);
   }
 
   useEffect(() => {
@@ -71,11 +87,11 @@ const RecommendPage = () => {
         }
       })
       .catch((err) => { });
-  }, [page])
+  }, [page,level,minTime,maxTime])
 
   return (
     <div className="recommend">
-      <Recommender kcal={kcal} menu={menu} setCurrentPage={onPageChange}/>
+      <Recommender kcal={kcal} menu={menu} setCurrentPage={onPageChange} onFilter={onFilter}/>
       <Footer />
       {kcal === 0 && <ModalCalo
         isModalVisible={isModalVisible}
