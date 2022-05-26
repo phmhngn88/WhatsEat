@@ -18,10 +18,13 @@ const PaymentPage = () => {
   const [addressList, setAddressList] = useState([]);
   const [shippingInfoId, setShippingInfoId] = useState();
   const [province, setProvince] = useState(0);
+  const [provinceName, setProvinceName] = useState("");
   const [provinceList, setProvinceList] = useState([]);
   const [district, setDistrict] = useState(0);
+  const [districtName, setDistrictName] = useState("");
   const [districtList, setDistrictList] = useState([]);
   const [ward, setWard] = useState(0);
+  const [wardName, setWardName] = useState("");
   const [wardList, setWardList] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(1);
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -131,7 +134,7 @@ const PaymentPage = () => {
   const handleSubmitShippingInfo = (values) => {
     console.log({
       phoneNumber: values.phone,
-      address: values.address,
+      address: `${values.address}, ${wardName}, ${districtName}, ${provinceName}`,
       provinceCode: province,
       districtCode: district,
       wardCode: ward,
@@ -143,7 +146,7 @@ const PaymentPage = () => {
       headers: { Authorization: `Bearer ${token}` },
       data: {
         phoneNumber: values.phone,
-        address: values.address,
+        address: `${values.address}, ${wardName}, ${districtName}, ${provinceName}`,
         provinceCode: province,
         districtCode: district,
         wardCode: ward,
@@ -261,15 +264,16 @@ const PaymentPage = () => {
                   <Select
                     placeholder="Chọn tỉnh"
                     onChange={(value) => {
-                      const [code, id] = value.split(".");
+                      const [code, id, name] = value.split(".");
                       setProvince(+code);
+                      setProvinceName(name);
                       handleGetDistrict(id);
                     }}
                   >
                     {provinceList.map((province) => (
                       <Option
                         key={province.ProvinceID}
-                        value={`${province.Code}.${province.ProvinceID}`}
+                        value={`${province.Code}.${province.ProvinceID}.${province.ProvinceName}`}
                       >
                         {province.ProvinceName}
                       </Option>
@@ -280,15 +284,16 @@ const PaymentPage = () => {
                   <Select
                     placeholder="Chọn huyện"
                     onChange={(value) => {
-                      const [code, id] = value.split(".");
+                      const [code, id, name] = value.split(".");
                       setDistrict(+code);
+                      setDistrictName(name);
                       handleGetWard(id);
                     }}
                   >
                     {districtList.map((district) => (
                       <Option
                         key={district.DistrictID}
-                        value={`${district.Code}.${district.DistrictID}`}
+                        value={`${district.Code}.${district.DistrictID}.${district.DistrictName}`}
                       >
                         {district.DistrictName}
                       </Option>
@@ -299,11 +304,16 @@ const PaymentPage = () => {
                   <Select
                     placeholder="Chọn xã"
                     onChange={(value) => {
-                      setWard(+value);
+                      const [code, name] = value.split(".");
+                      setWard(+code);
+                      setWardName(name);
                     }}
                   >
                     {wardList.map((ward) => (
-                      <Option key={ward.WardID} value={ward.Code}>
+                      <Option
+                        key={ward.WardCode}
+                        value={`${ward.WardCode}.${ward.WardName}`}
+                      >
                         {ward.WardName}
                       </Option>
                     ))}
