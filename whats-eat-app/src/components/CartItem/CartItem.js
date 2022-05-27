@@ -28,7 +28,7 @@ const CartItem = ({
 
   return (
     <div className="single-item">
-      <Checkbox></Checkbox>
+      {/* <Checkbox></Checkbox> */}
       <img className="item-img" src={image} alt={productName} />
       <div className="item-fluid">
         <div className="item-info">

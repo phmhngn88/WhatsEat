@@ -46,8 +46,6 @@ const PaymentPage = () => {
 
   const [form] = Form.useForm();
 
-  console.log(carts);
-
   const handleConfirm = () => {
     if (!isProfileUpdated) {
       setIsUpdateProfileVisible(true);
@@ -66,7 +64,20 @@ const PaymentPage = () => {
       })
         .then((res) => {
           dispatch(clearCart());
-          navigate(`/payment/success`);
+          if (paymentMethod === 1) {
+            navigate(`/payment/success`);
+          } else {
+            axios({
+              method: "POST",
+              url: `https://localhost:7029/api/Payment/${res.data[0].orderId}`,
+              headers: { Authorization: `Bearer ${token}` },
+            })
+              .then((res) => {
+                console.log(res);
+                window.open(res.data.url, "_self");
+              })
+              .catch((err) => {});
+          }
         })
         .catch((err) => {
           message.error("Đặt hàng không thành công!");
@@ -196,8 +207,6 @@ const PaymentPage = () => {
         console.log(err);
       });
   }, []);
-
-  console.log(isProfileUpdated);
 
   useEffect(() => {
     axios({
@@ -468,7 +477,6 @@ const PaymentPage = () => {
                   labelInValue
                   defaultValue={{ value: 1 }}
                   onChange={(value) => {
-                    console.log(value);
                     setPaymentMethod(value.value);
                   }}
                   bordered={false}
