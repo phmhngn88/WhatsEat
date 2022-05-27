@@ -1,6 +1,6 @@
 import { Form, Input, message, Image } from "antd";
 import "antd/dist/antd.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../../components/Footer/Footer";
@@ -60,6 +60,24 @@ const Profile = () => {
         message.error("Cập nhật thông tin thất bại!");
       });
   };
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Customer",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        form.setFieldsValue({
+          name: res.data.name,
+          email: res.data.email,
+          idCard: res.data.idCard,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="cus-profile">

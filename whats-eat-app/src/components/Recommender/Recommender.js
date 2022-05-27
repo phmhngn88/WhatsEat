@@ -12,11 +12,14 @@ import { AiFillDelete } from "react-icons/ai";
 import { Progress, Pagination } from 'antd';
 const { Option } = Select;
 
-const Recommender = ({ kcal, menu, setCurrentPage }) => {
+const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
   const [listRecipes, setListRecipes] = useState([]);
   const [status, setStatus] = useState("");
   const [percent, setPercent] = useState(0);
   const [current, setCurrent] = useState(1);
+  const [level,setLevel] = useState("Mức độ");
+  const [minTime,setMinTime] = useState(0);
+  const [maxTime,setMaxTime] = useState(0);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
   let listRecipe = [];
@@ -65,6 +68,22 @@ const Recommender = ({ kcal, menu, setCurrentPage }) => {
     }
     setPercent(per.toFixed(2))
   }, [listRecipes])
+
+  const onSelectLevel  = (value) => {
+    setLevel(value);
+  }
+
+  const onChangeMinTime = (e) => {
+    setMinTime(e.target.value)
+  }
+
+  const onChangeMaxTime = (e) => {
+    setMaxTime(e.target.value)
+  }
+
+  const onFilterClick = () => {
+    onFilter(level,minTime,maxTime);
+  }
 
   console.log('list', listRecipes)
   return (
@@ -118,7 +137,7 @@ const Recommender = ({ kcal, menu, setCurrentPage }) => {
                 <Col>
                   <Input.Group>
                     <span>Mức độ: </span>
-                    <Select style={{width:110}} defaultValue="Mức độ">
+                    <Select style={{width:110}} defaultValue={level} onChange={onSelectLevel}>
                       <Option value="Dễ">Dễ</Option>
                       <Option value="Trung bình">Trung bình</Option>
                       <Option value="Khó">Khó</Option>
@@ -134,6 +153,7 @@ const Recommender = ({ kcal, menu, setCurrentPage }) => {
                           width: 100,
                           textAlign: 'center',
                         }}
+                        onChange={onChangeMinTime}
                         placeholder="Tối thiểu"
                       />
                       <Input
@@ -153,12 +173,13 @@ const Recommender = ({ kcal, menu, setCurrentPage }) => {
                           width: 100,
                           textAlign: 'center',
                         }}
+                        onChange={onChangeMaxTime}
                         placeholder="Tối đa"
                       />
                     </Input.Group>
                   </Row>
                 </Col>
-                <Button>Lọc</Button>
+                <Button onClick={onFilterClick}>Lọc</Button>
               </Row>
             </div>
           </div>

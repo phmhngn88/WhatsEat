@@ -130,12 +130,29 @@ def interactive_food(cur,recipeTypeId):
     return click_df
 
 #get list top recipe by total like
-def get_top_recipe(cur, user_kcal,n_recipe,page):
-    cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
-     Order By totalLike desc LIMIT %s,%s""",(user_kcal,page*n_recipe,n_recipe,))
+def get_top_recipe(cur, user_kcal,n_recipe,page,level,mintime,maxtime):
+    if level != "Mức độ":
+        if maxtime > 0:
+            #filter by time and level
+            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s
+                    Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime, level,page*n_recipe,n_recipe,))
+        else:
+        #filter by level
+            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND level = %s
+                    Order By totalLike desc LIMIT %s,%s""",(user_kcal, level,page*n_recipe,n_recipe,))
+    else:
+        if maxtime > 0:
+            #filter by total time
+            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s
+                    Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime,page*n_recipe,n_recipe,))
+        else:
+            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
+            Order By totalLike desc LIMIT %s,%s""",(user_kcal,page*n_recipe,n_recipe,))
+    
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','calories'])
     return click_df
+
 
 #get list top product by total sell
 def get_top_products(cur, n_product):
@@ -200,7 +217,41 @@ def get_product_by_list_id(cur,list_product_id):
     return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
     
 #get recommend list recipe cb
-def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur):
+def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxtime):
+    if level != "Mức độ":
+        if maxtime > 0:
+            #filter by time and level
+            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                from whatseat.cb_similarity CB
+                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.totaltime >= %s AND R.totaltime <= %s
+                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,mintime,maxtime,page*n_recipe,n_recipe,))
+        else:
+        #filter by level
+            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                from whatseat.cb_similarity CB
+                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s 
+                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,page*n_recipe,n_recipe,))
+    else:
+        if maxtime > 0:
+            #filter by total time
+            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                from whatseat.cb_similarity CB
+                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                Where CB.CustomerId LIKE %s AND Calo <= %s AND R.totaltime >= %s AND R.totaltime <= %s
+                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,mintime,maxtime,page*n_recipe,n_recipe,))
+        else:
+            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                from whatseat.cb_similarity CB
+                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                Where CB.CustomerId LIKE %s AND Calo <= %s 
+                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,page*n_recipe,n_recipe,))
+    
+    res = cur.fetchall()
+    return pd.DataFrame(res, columns=['id1','id2','similarity','calo'])
+
+def get_recommend_list_cb_by_time(id_user,user_kcal,n_recipe,page,cur):
     cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
     from whatseat.cb_similarity CB
     JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
