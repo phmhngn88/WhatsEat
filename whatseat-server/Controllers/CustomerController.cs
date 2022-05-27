@@ -1,4 +1,4 @@
-using backend_dotnet_r06_mall.Contants;
+using whatseat_server.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

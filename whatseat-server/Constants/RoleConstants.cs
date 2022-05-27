@@ -1,5 +1,4 @@
-namespace backend_dotnet_r06_mall.Contants
-{
+namespace whatseat_server.Constants;
     public static class RoleConstants
     {
         public const string Admin = "admin";
@@ -8,4 +7,4 @@ namespace backend_dotnet_r06_mall.Contants
         public const string Store = "store";
         public const string Manager = "manager";
     }
-}
+

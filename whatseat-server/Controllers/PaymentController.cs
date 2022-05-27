@@ -5,6 +5,7 @@ using Stripe;
 using Stripe.Checkout;
 using whatseat_server.Services;
 using whatseat_server.Models;
+using whatseat_server.Constants;
 using CustomerService = whatseat_server.Services.CustomerService;
 using Customer = whatseat_server.Models.Customer;
 using OrderService = whatseat_server.Services.OrderService;
@@ -61,7 +62,7 @@ public class PaymentController : ControllerBase {
         var options = new SessionCreateOptions{
             LineItems = LineItems,
             Mode = "payment",
-            SuccessUrl = $"{appHost}",
+            SuccessUrl = $"{appHost}/payment/success",
             CancelUrl = $"{appHost}"
         };
 
@@ -70,9 +71,12 @@ public class PaymentController : ControllerBase {
 
         PaymentSession paymentSession = await _orderService.SavePaymentSession(orderId, session.PaymentIntentId);
 
-        OrderStatusHistory orderStatusHistory = await _orderService.OrderWaitAccept(order);
-        // Response.Headers.Add("Location", session.Url);
-        // return new StatusCodeResult(303);
-        return Ok(session);
+        // TODO: Move this to the webhook
+        OrderStatusHistory orderStatusPaid = await _orderService.UpdateStatus(order, OrderStatusConstant.Paid);
+
+        OrderStatusHistory orderStatusWaiting = await _orderService.UpdateStatus(order, OrderStatusConstant.Waiting);
+        Response.Headers.Add("Location", session.Url);
+        return new StatusCodeResult(303);
+        // return Ok(session);
     }
 }

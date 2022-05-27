@@ -1,4 +1,4 @@
-using backend_dotnet_r06_mall.Contants;
+using whatseat_server.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -226,6 +226,7 @@ public class StoreController : ControllerBase
     }
     var orderList = await _context.Orders.AsNoTracking().Include(o => o.Customer)
     .Include(o => o.PaymentMethod).Include(o => o.OrderDetails).Include(o => o.ShippingInfo).Include(o => o.OrderStatusHistories)
+    .ThenInclude(h => h.OrderStatus)
         .Where(od => od.Store == od.Store).OrderByDescending(od => od.CreatedOn).ToListAsync();
 
     return Ok(orderList);

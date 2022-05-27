@@ -12,6 +12,7 @@ using whatseat_server.Services;
 using CustomerService = whatseat_server.Services.CustomerService;
 using OrderService = whatseat_server.Services.OrderService;
 using ProductService = whatseat_server.Services.ProductService;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -72,10 +73,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
 
 builder.Services.AddControllers();
 
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 
 var app = builder.Build();

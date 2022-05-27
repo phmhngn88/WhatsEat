@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-
 namespace whatseat_server.Models;
 public class Order
 {
@@ -17,5 +16,5 @@ public class Order
   public ShippingInfo ShippingInfo { get; set; }
   [JsonIgnore]
   public Store Store { get; set; }
-  public ICollection<OrderStatusHistory> OrderStatusHistories { get; set; }
+  public virtual ICollection<OrderStatusHistory> OrderStatusHistories { get; set; }
 }

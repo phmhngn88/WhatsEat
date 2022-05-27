@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace whatseat_server.Models;
 public class OrderStatusHistory
@@ -10,9 +11,9 @@ public class OrderStatusHistory
   public int OrderStatusHistoryId { get; set; }
   [Key]
   public OrderStatus OrderStatus { get; set; }
-  [Key]
+  // [Key]
   [JsonIgnore]
-  public Order Order { get; set; }
+  public virtual Order Order { get; set; }
   public string Message { get; set; }
   public DateTime CreatedOn { get; set; }
   public bool ByUser { get; set; }

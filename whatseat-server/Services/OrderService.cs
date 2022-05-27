@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using backend_dotnet_r06_mall.Contants;
+using whatseat_server.Constants;
 using Microsoft.EntityFrameworkCore;
 using whatseat_server.Data;
 using whatseat_server.Models;
@@ -29,7 +29,7 @@ public class OrderService
 
   public async Task<Order> getOrderDetails(Customer customer, int orderId)
   {
-    var order = await _context.Orders.AsNoTracking().Include(o => o.OrderDetails).Include(o => o.OrderStatusHistories)
+    var order = await _context.Orders.AsNoTracking().Include(o => o.OrderDetails).Include(o => o.OrderStatusHistories).ThenInclude(h => h.OrderStatus)
     .Include(od => od.Customer).Include(od => od.Shipper).Include(od => od.ShippingInfo).Include(od => od.PaymentMethod)
         .FirstOrDefaultAsync(o => o.Customer == customer && o.OrderId == orderId);
     return order;
@@ -166,6 +166,23 @@ public class OrderService
       Order = order,
       CreatedOn = DateTime.UtcNow,
       ByUser = false
+    };
+
+    await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
+
+    await _context.SaveChangesAsync();
+    return orderStatusHistory;
+  }
+
+  public async Task<OrderStatusHistory> UpdateStatus(Order order, string status, bool byUser = false)
+  {
+    OrderStatus orderStatus = await GetOrderStatusByName(status);
+    OrderStatusHistory orderStatusHistory = new OrderStatusHistory
+    {
+      OrderStatus = orderStatus,
+      Order = order,
+      CreatedOn = DateTime.UtcNow,
+      ByUser = byUser
     };
 
     await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
