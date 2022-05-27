@@ -70,6 +70,7 @@ public class PaymentController : ControllerBase {
 
         PaymentSession paymentSession = await _orderService.SavePaymentSession(orderId, session.PaymentIntentId);
 
+        OrderStatusHistory orderStatusHistory = await _orderService.OrderWaitAccept(order);
         // Response.Headers.Add("Location", session.Url);
         // return new StatusCodeResult(303);
         return Ok(session);

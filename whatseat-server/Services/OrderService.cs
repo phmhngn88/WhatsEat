@@ -89,6 +89,8 @@ public class OrderService
       ByUser = false
     };
 
+    await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
+
     await _context.SaveChangesAsync();
     return orderStatusHistory;
   }
@@ -149,6 +151,24 @@ public class OrderService
       CreatedOn = DateTime.UtcNow,
       ByUser = false
     };
+    await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
+
+    await _context.SaveChangesAsync();
+    return orderStatusHistory;
+  }
+
+  public async Task<OrderStatusHistory> OrderWaitAccept(Order order)
+  {
+    OrderStatus waitingStatus = await GetOrderStatusByName(OrderStatusConstant.Waiting);
+    OrderStatusHistory orderStatusHistory = new OrderStatusHistory
+    {
+      OrderStatus = waitingStatus,
+      Order = order,
+      CreatedOn = DateTime.UtcNow,
+      ByUser = false
+    };
+
+    await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
 
     await _context.SaveChangesAsync();
     return orderStatusHistory;
