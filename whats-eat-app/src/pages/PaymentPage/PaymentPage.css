@@ -205,3 +205,8 @@
 .address-block .btn-add-address:hover{    
     background-color: red;
 }
+
+.payment-fluid .choose-address:hover,
+.payment-fluid .choose-address:active{
+    background-color: #dbd9d9;
+}

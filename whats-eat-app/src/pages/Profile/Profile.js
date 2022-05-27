@@ -121,7 +121,7 @@ const Profile = () => {
                     <Form.Item
                       className="input"
                       name="avatarUrl"
-                      label="Hình minh họa"
+                      label="Ảnh đại diện"
                     >
                       <Input
                         type="file"
@@ -132,27 +132,6 @@ const Profile = () => {
                       />
                       <Image width={200} src={image} />
                     </Form.Item>
-                    {/* <Form.Item
-                      className="input"
-                      name="phoneNumber"
-                      label="Số điện thoại"
-                    >
-                      <Input placeholder="Nhập số điện thoại mới..." />
-                    </Form.Item>
-                    <Form.Item
-                      className="input"
-                      name="address"
-                      label="Địa chỉ lấy hàng"
-                    >
-                      <Input placeholder="Nhập địa chỉ mới..." />
-                    </Form.Item>
-                    <Form.Item
-                      className="input"
-                      name="description"
-                      label="Mô tả"
-                    >
-                      <Input.TextArea placeholder="Nhập mô tả mới..." />
-                    </Form.Item> */}
                     <Form.Item
                       className="input"
                       wrapperCol={{ ...layout.wrapperCol, offset: 8 }}

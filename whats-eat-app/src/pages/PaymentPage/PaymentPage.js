@@ -51,6 +51,8 @@ const PaymentPage = () => {
   const handleConfirm = () => {
     if (!isProfileUpdated) {
       setIsUpdateProfileVisible(true);
+    } else if (!shippingInfoId) {
+      message.error("Vui lòng chọn địa chỉ giao hàng");
     } else {
       axios({
         method: "POST",
@@ -146,6 +148,7 @@ const PaymentPage = () => {
       url: "https://localhost:7029/api/Customer/shippingInfos",
       headers: { Authorization: `Bearer ${token}` },
       data: {
+        name: values.name,
         phoneNumber: values.phone,
         address: `${values.address}, ${wardName}, ${districtName}, ${provinceName}`,
         provinceCode: province,
@@ -223,7 +226,11 @@ const PaymentPage = () => {
               !choosenAddress ? (
                 <div className="info-block">
                   <div>
-                    <p className="username">Trần Nhật Hiệp</p>
+                    <p className="username">
+                      {addressList[0].name
+                        ? addressList[0].name
+                        : "Trần Nhật Hiệp"}
+                    </p>
                     <p className="phone">{addressList[0].phoneNumber}</p>
                     <p className="address">{addressList[0].address}</p>
                   </div>
@@ -231,7 +238,11 @@ const PaymentPage = () => {
               ) : (
                 <div className="info-block">
                   <div>
-                    <p className="username">Trần Nhật Hiệp</p>
+                    <p className="username">
+                      {choosenAddress.name
+                        ? choosenAddress.name
+                        : "Trần Nhật Hiệp"}
+                    </p>
                     <p className="phone">{choosenAddress.phoneNumber}</p>
                     <p className="address">{choosenAddress.address}</p>
                   </div>
@@ -252,7 +263,11 @@ const PaymentPage = () => {
             >
               Thêm địa chỉ
             </button>
-            <Modal visible={isUpdateProfileVisible} footer={false}>
+            <Modal
+              visible={isUpdateProfileVisible}
+              onCancel={() => setIsUpdateProfileVisible(false)}
+              footer={false}
+            >
               <h2>Hồ sơ cá nhân của bạn chưa được cập nhật!</h2>
               <a href="/profile">
                 Đến cập nhật hồ sơ <AiOutlineArrowRight />
@@ -357,17 +372,19 @@ const PaymentPage = () => {
               {addressList.length > 0 &&
                 addressList.map((address) => (
                   <div
-                    className="info-block"
+                    className="info-block choose-address"
                     style={{
                       border: "2px solid #c4c4c4",
                       marginBottom: "1rem",
                       padding: "0.5rem",
+                      cursor: "pointer",
                     }}
                     key={address.shippingInfoId}
                     onClick={() => {
                       console.log({ address });
                       setShippingInfoId(address.shippingInfoId);
                       setChoosenAddress(address);
+                      setIsChooseAddressModalVisible(false);
                     }}
                   >
                     <div>
