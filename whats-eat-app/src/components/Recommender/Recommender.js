@@ -131,9 +131,8 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
               onChange={onPageChage}
               />
           <div>
-            <p>Lọc</p>
             <div>
-              <Row>
+              <Row style={{marginTop:10}}>
                 <Col>
                   <Input.Group>
                     <span>Mức độ: </span>
@@ -147,7 +146,7 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
                 <Col>
                   <Row>
                     <Input.Group compact>
-                      <span>Thời gian nấu: </span> 
+                      <span className="time-cooking">Thời gian nấu: </span> 
                       <Input
                         style={{
                           width: 100,
