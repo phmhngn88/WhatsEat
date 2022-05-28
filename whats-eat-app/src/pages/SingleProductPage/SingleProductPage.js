@@ -25,14 +25,12 @@ const SingleProductPage = () => {
   const auth = useSelector((state) => state.auth.userInfo);
   const navigate = useNavigate();
   const productId = location.state.productId;
-  console.log("Product id:", productId);
   const getProductDetail = () => {
     axios({
       method: "get",
       url: `https://localhost:7029/api/Product/${productId}`, //TODO: Changle hard code into idProduct
     })
       .then((res) => {
-        console.log("product", res.data);
         const result = res.data;
         setProductDetail(result);
         setProductIds([...productIds, productId]);

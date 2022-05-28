@@ -65,6 +65,7 @@ const ShopSidebar = ({ storeId }) => {
               navigate("/shop/orders", {
                 state: {
                   storeId: storeId,
+                  defaultKey: "1",
                 },
               });
             }}
@@ -73,10 +74,32 @@ const ShopSidebar = ({ storeId }) => {
           </a>
         </div>
         <div>
-          <a to="/">Đơn hủy</a>
+          <a
+            onClick={() => {
+              navigate("/shop/orders", {
+                state: {
+                  storeId: storeId,
+                  defaultKey: "6",
+                },
+              });
+            }}
+          >
+            Đơn hủy
+          </a>
         </div>
         <div>
-          <a to="/">Trả hàng/hoàn tiền</a>
+          <a
+            onClick={() => {
+              navigate("/shop/orders", {
+                state: {
+                  storeId: storeId,
+                  defaultKey: "7",
+                },
+              });
+            }}
+          >
+            Trả hàng/hoàn tiền
+          </a>
         </div>
       </Collapsible>
       <Collapsible

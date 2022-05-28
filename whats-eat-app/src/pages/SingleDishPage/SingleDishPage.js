@@ -32,7 +32,6 @@ const SingleDishPage = () => {
   const recipeId = location.state.recipeId;
   const calculatedArray = [];
   const [newIngreadients, setNewIngreadients] = useState([]);
-  console.log("Recipe id:", recipeId);
   const {
     description,
     avgRating,
@@ -56,7 +55,6 @@ const SingleDishPage = () => {
       .then((res) => {
         //TODO: handle logic set total like
         setTotalLove(res.data);
-        console.log("total like:", res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -132,7 +130,6 @@ const SingleDishPage = () => {
     })
       .then((res) => {
         const result = res.data;
-        console.log("Single dish info:", result);
 
         setDishDetail(result);
         setTotalLove(result.totalLike);

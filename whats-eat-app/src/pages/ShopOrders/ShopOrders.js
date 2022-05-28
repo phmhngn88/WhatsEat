@@ -11,35 +11,13 @@ import "./ShopOrders.css";
 
 const { TabPane } = Tabs;
 
-const orders = [
-  {
-    order_ID: 1,
-    username: "aot2510",
-    item_name: "Gà Ta Bình Định Thả Vườn",
-    item_img:
-      "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
-    total: 190000,
-    delivery: "Giao hàng nhanh",
-    status: "Đã giao",
-  },
-  {
-    order_ID: 2,
-    username: "hiepsimattroi",
-    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
-    item_img:
-      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
-    total: 190000,
-    delivery: "Giao hàng nhanh",
-    status: "Đã giao",
-  },
-];
-
 const ShopOrders = () => {
   const [shopOrders, setShopOrders] = useState([]);
   const [userInfo, setUserInfo] = useState();
   const [productInfo, setProductInfo] = useState();
+  const [defaultActiveKey, setDefaultActiveKey] = useState("1");
   const location = useLocation();
-  const storeId = location.state.storeId;
+  const { storeId, defaultKey } = location.state;
   const token = useSelector((state) => state.auth.userInfo.token);
 
   const getShopOrders = () => {
@@ -50,7 +28,6 @@ const ShopOrders = () => {
     })
       .then((res) => {
         const result = res.data;
-        console.log(result);
         setShopOrders(result);
       })
       .catch((error) => {
@@ -77,6 +54,9 @@ const ShopOrders = () => {
   //     });
   // }
   useEffect(() => {
+    setDefaultActiveKey(defaultKey);
+  }, [defaultKey]);
+  useEffect(() => {
     getShopOrders();
   }, []);
 
@@ -91,7 +71,7 @@ const ShopOrders = () => {
               Bạn đang có tất cả {shopOrders.length} đơn hàng
             </p>
             <div className="orders">
-              <Tabs defaultActiveKey="1">
+              <Tabs defaultActiveKey={defaultKey}>
                 <TabPane tab="Tất cả" key="1">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>

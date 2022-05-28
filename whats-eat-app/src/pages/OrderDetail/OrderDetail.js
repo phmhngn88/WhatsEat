@@ -87,12 +87,21 @@ const CusOrderDetail = () => {
                 </p>
               </div>
               <div className="status">
-                <p className="order-id">Mã đơn hàng: abcxyz</p>
+                <p className="order-id">Mã đơn hàng: {order.orderId}</p>
                 <Timeline>
-                  <Timeline.Item>Giao hàng thành công</Timeline.Item>
-                  <Timeline.Item>Đang vận chuyển</Timeline.Item>
-                  <Timeline.Item>Đang chuẩn bị hàng</Timeline.Item>
-                  <Timeline.Item>Chờ xác nhận</Timeline.Item>
+                  {order.orderStatusHistories &&
+                    order.orderStatusHistories.map((status) => {
+                      switch (status.orderStatus.orderStatusId) {
+                        case 1:
+                          return <Timeline.Item>Đã thanh toán</Timeline.Item>;
+                          break;
+                        case 2:
+                          return <Timeline.Item>Chờ xác nhận</Timeline.Item>;
+                          break;
+                        default:
+                          return <></>;
+                      }
+                    })}
                 </Timeline>
               </div>
             </div>
