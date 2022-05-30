@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ShopOrderItem.css";
 
-const ShopOrderItem = ({ productId, price, value }) => {
+const ShopOrderItem = ({ productId, price, value, status }) => {
+  console.log(status);
   const [orderInfo, setOrderInfo] = useState();
 
   useEffect(() => {
@@ -38,7 +39,17 @@ const ShopOrderItem = ({ productId, price, value }) => {
             })}
         </p>
         <p className="status" style={{ fontWeight: 650 }}>
-          Đã giao
+          {status === "Đã giao"
+            ? status
+            : status[status.length - 1].orderStatus.orderStatusId === 2
+            ? "Chờ xác nhận"
+            : status[status.length - 1].orderStatus.orderStatusId === 3
+            ? "Đang giao hàng"
+            : status[status.length - 1].orderStatus.orderStatusId === 5
+            ? "Đã hủy"
+            : status[status.length - 1].orderStatus.orderStatusId === 6
+            ? "Trả hàng/Hoàn tiền"
+            : "Đã giao hàng"}
         </p>
         <p className="delivery">{value}</p>
         <a href="#">Xem chi tiết</a>

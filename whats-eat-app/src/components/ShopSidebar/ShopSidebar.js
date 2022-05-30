@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { BsChevronDown } from "react-icons/bs";
 
 const ShopSidebar = ({ storeId }) => {
-  console.log("store:", storeId);
   const navigate = useNavigate();
   return (
     <div className="collapse-side-bar">
@@ -38,6 +37,19 @@ const ShopSidebar = ({ storeId }) => {
             }}
           >
             Danh mục của Shop
+          </a>
+        </div>
+        <div>
+          <a
+            onClick={() => {
+              navigate("/shop", {
+                state: {
+                  storeId: storeId,
+                },
+              });
+            }}
+          >
+            Thống kê
           </a>
         </div>
         <div>
@@ -79,7 +91,49 @@ const ShopSidebar = ({ storeId }) => {
               navigate("/shop/orders", {
                 state: {
                   storeId: storeId,
-                  defaultKey: "6",
+                  defaultKey: "2",
+                },
+              });
+            }}
+          >
+            Đơn chờ xác nhận
+          </a>
+        </div>
+        <div>
+          <a
+            onClick={() => {
+              navigate("/shop/orders", {
+                state: {
+                  storeId: storeId,
+                  defaultKey: "3",
+                },
+              });
+            }}
+          >
+            Đơn đang giao
+          </a>
+        </div>
+        <div>
+          <a
+            onClick={() => {
+              navigate("/shop/orders", {
+                state: {
+                  storeId: storeId,
+                  defaultKey: "4",
+                },
+              });
+            }}
+          >
+            Đơn đã giao
+          </a>
+        </div>
+        <div>
+          <a
+            onClick={() => {
+              navigate("/shop/orders", {
+                state: {
+                  storeId: storeId,
+                  defaultKey: "5",
                 },
               });
             }}
@@ -93,7 +147,7 @@ const ShopSidebar = ({ storeId }) => {
               navigate("/shop/orders", {
                 state: {
                   storeId: storeId,
-                  defaultKey: "7",
+                  defaultKey: "6",
                 },
               });
             }}

@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./ShopOrderCard.css";
 import ShopOrderItem from "./ShopOrderItem";
 
-const ShopOrderCard = ({ orderId, customer, orderDetails, paymentMethod }) => {
+const ShopOrderCard = ({
+  orderId,
+  customer,
+  orderDetails,
+  paymentMethod,
+  orderStatusHistories,
+}) => {
   return (
     <div className="order-card">
       <div className="order-card-nav">
@@ -12,7 +18,16 @@ const ShopOrderCard = ({ orderId, customer, orderDetails, paymentMethod }) => {
       {orderDetails.length > 0 &&
         orderDetails.map((order, idx) => (
           <>
-            <ShopOrderItem key={idx} {...order} {...paymentMethod} />
+            <ShopOrderItem
+              key={idx}
+              {...order}
+              {...paymentMethod}
+              status={
+                orderStatusHistories.length > 0
+                  ? orderStatusHistories
+                  : "Đã giao"
+              }
+            />
           </>
         ))}
     </div>

@@ -8,6 +8,7 @@ import Footer from "../../components/Footer/Footer";
 import ShopOrderCard from "../../components/ShopOrderCard/ShopOrderCard";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopOrders.css";
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
 const { TabPane } = Tabs;
 
@@ -20,6 +21,40 @@ const ShopOrders = () => {
   const { storeId, defaultKey } = location.state;
   const token = useSelector((state) => state.auth.userInfo.token);
 
+  const allOrders = {
+    waiting: [],
+    delivering: [],
+    delivered: [],
+    cancel: [],
+    repaid: [],
+  };
+
+  shopOrders.length > 0 &&
+    shopOrders.map((order) => {
+      if (order.orderStatusHistories.length < 1) return;
+      switch (
+        order.orderStatusHistories[order.orderStatusHistories.length - 1]
+          .orderStatus.orderStatusId
+      ) {
+        case 2:
+          allOrders.waiting.push(order);
+          break;
+        case 3:
+          allOrders.delivering.push(order);
+          break;
+        case 4:
+          allOrders.delivered.push(order);
+          break;
+        case 5:
+          allOrders.cancel.push(order);
+          break;
+        case 6:
+          allOrders.repaid.push(order);
+          break;
+        default:
+          allOrders.delivered.push(order);
+      }
+    });
   const getShopOrders = () => {
     axios({
       method: "get",
@@ -71,7 +106,11 @@ const ShopOrders = () => {
               Bạn đang có tất cả {shopOrders.length} đơn hàng
             </p>
             <div className="orders">
-              <Tabs defaultActiveKey={defaultKey}>
+              <Tabs
+                defaultActiveKey={defaultActiveKey}
+                activeKey={defaultActiveKey}
+                onTabClick={(key) => setDefaultActiveKey(key)}
+              >
                 <TabPane tab="Tất cả" key="1">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
@@ -95,9 +134,14 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  Những đơn hàng chờ xác nhận
+                  {allOrders.waiting.length > 0 &&
+                    allOrders.waiting.map((order, idx) => {
+                      if (order.customer) {
+                        return <ShopOrderCard key={idx} {...order} />;
+                      }
+                    })}
                 </TabPane>
-                <TabPane tab="Chờ lấy hàng" key="3">
+                <TabPane tab="Đang giao" key="3">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
                     <p>Tổng đơn hàng</p>
@@ -105,9 +149,14 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  Những đơn hàng chờ lấy hàng
+                  {allOrders.delivering.length > 0 &&
+                    allOrders.delivering.map((order, idx) => {
+                      if (order.customer) {
+                        return <ShopOrderCard key={idx} {...order} />;
+                      }
+                    })}
                 </TabPane>
-                <TabPane tab="Đang giao" key="4">
+                <TabPane tab="Đã giao" key="4">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
                     <p>Tổng đơn hàng</p>
@@ -115,9 +164,14 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  Những đơn hàng đang giao
+                  {allOrders.delivered.length > 0 &&
+                    allOrders.delivered.map((order, idx) => {
+                      if (order.customer) {
+                        return <ShopOrderCard key={idx} {...order} />;
+                      }
+                    })}
                 </TabPane>
-                <TabPane tab="Đã giao" key="5">
+                <TabPane tab="Đã hủy" key="5">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
                     <p>Tổng đơn hàng</p>
@@ -125,9 +179,14 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  Những đã giao
+                  {allOrders.cancel.length > 0 &&
+                    allOrders.cancel.map((order, idx) => {
+                      if (order.customer) {
+                        return <ShopOrderCard key={idx} {...order} />;
+                      }
+                    })}
                 </TabPane>
-                <TabPane tab="Đã hủy" key="6">
+                <TabPane tab="Trả hàng/hoàn tiền" key="6">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
                     <p>Tổng đơn hàng</p>
@@ -135,17 +194,12 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  Những đơn hàng đã hủy
-                </TabPane>
-                <TabPane tab="Trả hàng/hoàn tiền" key="7">
-                  <div className="table-title">
-                    <p className="product-name">Sản phẩm</p>
-                    <p>Tổng đơn hàng</p>
-                    <p>Trạng thái</p>
-                    <p>Vận chuyển</p>
-                    <p>Thao tác</p>
-                  </div>
-                  Những đơn hàng trả hàng/hoàn tiền
+                  {allOrders.repaid.length > 0 &&
+                    allOrders.repaid.map((order, idx) => {
+                      if (order.customer) {
+                        return <ShopOrderCard key={idx} {...order} />;
+                      }
+                    })}
                 </TabPane>
               </Tabs>
             </div>

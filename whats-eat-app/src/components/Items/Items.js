@@ -1,15 +1,15 @@
-import React, {useState} from "react";
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "./Items.css";
 import "antd/dist/antd.css";
 import { Row, Col, Modal } from "antd";
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Product from "../Product/Product";
 
 const Items = ({ products, storeId }) => {
-  const [visible,setVisible] = useState(false)
-  const [selectedProduct,setSelectedProduct] = useState(0)
+  const [visible, setVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState("");
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -19,32 +19,30 @@ const Items = ({ products, storeId }) => {
       url: `https://localhost:7029/api/Store/${storeId}/product/${productId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => {
-
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
     setVisible(false);
-  }
+  };
 
   const onCloseModal = () => {
     setVisible(false);
-  }
+  };
 
-  const showDeleteModal = (productId) => {
-    setSelectedProduct(productId)
-    setVisible(true)
-  }
+  const showDeleteModal = (name) => {
+    setSelectedProduct(name);
+    setVisible(true);
+  };
 
   const onUpdateProduct = (productId) => {
-    navigate(`/shop/items/update/${productId}`,{
+    navigate(`/shop/items/update/${productId}`, {
       state: {
         storeId: storeId,
-        productId: productId
-      }
-    })
-  }
+        productId: productId,
+      },
+    });
+  };
   return (
     <div className="items-container">
       <div className="items">
@@ -54,8 +52,15 @@ const Items = ({ products, storeId }) => {
             return (
               <Col span={6} className="item-col" key={productId}>
                 <Product {...item} />
-                <button className="btn" onClick={() => showDeleteModal(productId)}>Xóa</button>
-                <button className="btn" onClick={() => onUpdateProduct(productId)}>Sửa</button>
+                <button className="btn" onClick={() => showDeleteModal(name)}>
+                  Xóa
+                </button>
+                <button
+                  className="btn"
+                  onClick={() => onUpdateProduct(productId)}
+                >
+                  Sửa
+                </button>
               </Col>
             );
           })}

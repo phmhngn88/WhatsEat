@@ -27,8 +27,6 @@ const ShopItems = () => {
       });
   };
 
-  console.log(location);
-
   useEffect(() => {
     getShopProducts();
   }, [pageNumber]);

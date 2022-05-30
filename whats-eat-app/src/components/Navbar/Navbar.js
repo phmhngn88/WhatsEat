@@ -80,7 +80,7 @@ const Navbar = (props) => {
       navigate(`/search?searchTerm=${searchTerm}`);
     } else return;
   };
-  console.log(props);
+
   return (
     <div className="navbar">
       <div className="logo-and-search">
