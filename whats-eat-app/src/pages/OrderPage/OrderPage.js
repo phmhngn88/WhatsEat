@@ -46,6 +46,41 @@ const OrderPage = () => {
   const [allOrders, setAllOrders] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
 
+  // const allUserOrders = {
+  //   waiting: [],
+  //   delivering: [],
+  //   delivered: [],
+  //   cancel: [],
+  //   repaid: [],
+  // };
+
+  // allOrders.length > 0 &&
+  //   allOrders.map((order) => {
+  //     if (order.orderStatusHistories.length < 1) return;
+  //     switch (
+  //       order.orderStatusHistories[order.orderStatusHistories.length - 1]
+  //         .orderStatus.orderStatusId
+  //     ) {
+  //       case 2:
+  //         allUserOrders.waiting.push(order);
+  //         break;
+  //       case 3:
+  //         allUserOrders.delivering.push(order);
+  //         break;
+  //       case 4:
+  //         allUserOrders.delivered.push(order);
+  //         break;
+  //       case 5:
+  //         allUserOrders.cancel.push(order);
+  //         break;
+  //       case 6:
+  //         allUserOrders.repaid.push(order);
+  //         break;
+  //       default:
+  //         allUserOrders.delivered.push(order);
+  //     }
+  //   });
+
   const onSearch = () => {};
   const getCustomerOrders = () => {
     axios({

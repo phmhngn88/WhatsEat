@@ -29,9 +29,14 @@
 }
 
 .shop-cpn-container .content-container h1{
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 900;
 }
 
 .shop-cpn-container .content-container .monthly-income{
 
+}
+.shop-cpn-container .content-container .best-seller-cate .best-seller{
+    display: flex;
+    justify-content: space-between;
 }

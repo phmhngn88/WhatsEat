@@ -1,7 +1,6 @@
 import {
   LineChart,
   Line,
-  Label,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -19,7 +18,7 @@ const CustomLineChart = ({ data }) => {
         top: 5,
         right: 30,
         left: 20,
-        bottom: 5,
+        bottom: 50,
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
@@ -40,7 +39,7 @@ const CustomLineChart = ({ data }) => {
         }}
       />
       <Tooltip />
-      <Line type="monotone" dataKey="totalIncome" stroke="#8884d8" />
+      <Line type="monotone" dataKey="totalIncome" stroke="#dc4f43" />
     </LineChart>
   );
 };

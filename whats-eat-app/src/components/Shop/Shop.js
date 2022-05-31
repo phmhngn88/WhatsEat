@@ -1,6 +1,8 @@
 import React from "react";
 import ShopSidebar from "../ShopSidebar/ShopSidebar";
 import CustomLineChart from "../Charts/CustomLineChart";
+import CustomBarChart from "../Charts/CustomBarChart";
+import CustomPieChart from "../Charts/CustomPieChart";
 import "./Shop.css";
 
 const Shop = ({ storeId }) => {
@@ -15,12 +17,23 @@ const Shop = ({ storeId }) => {
               <CustomLineChart data={mock_data_income} />
             </div>
             <div className="best-seller-cate">
-              <h1>Doanh thu trong ngày</h1>
-              <CustomLineChart data={mock_data_income} />
+              <h1>Mặt hàng bán chạy nhất</h1>
+              <div className="best-seller">
+                <CustomBarChart
+                  data={mock_data_best_seller_product}
+                  labelX="Top 10 sản phẩm bán chạy nhất"
+                  color="#fe7c00"
+                />
+                <CustomBarChart
+                  data={mock_data_best_seller_cate}
+                  labelX="Top 6 danh mục đắt hàng nhất"
+                  color="#23a9f2"
+                />
+              </div>
             </div>
             <div className="best-seller-product">
-              <h1>Doanh thu trong ngày</h1>
-              <CustomLineChart data={mock_data_income} />
+              <h1>Tỉ lệ đơn hàng</h1>
+              <CustomPieChart data={mock_data_order_rate} />
             </div>
             <div className="all-order-status">
               <h1>Doanh thu trong ngày</h1>
@@ -96,4 +109,97 @@ const mock_data_income = [
     day: "Ngày 15",
     totalIncome: 2.7,
   },
+];
+
+const mock_data_best_seller_product = [
+  {
+    soLuong: 21,
+    sanPhamId: "111111",
+    tenSanPham: "Sản phẩm 1",
+  },
+  {
+    soLuong: 17,
+    sanPhamId: "111112",
+    tenSanPham: "Sản phẩm 2",
+  },
+  {
+    soLuong: 12,
+    sanPhamId: "111113",
+    tenSanPham: "Sản phẩm 3",
+  },
+  {
+    soLuong: 8,
+    sanPhamId: "111114",
+    tenSanPham: "Sản phẩm 4",
+  },
+  {
+    soLuong: 25,
+    sanPhamId: "111115",
+    tenSanPham: "Sản phẩm 5",
+  },
+  {
+    soLuong: 30,
+    sanPhamId: "111116",
+    tenSanPham: "Sản phẩm 6",
+  },
+  {
+    soLuong: 11,
+    sanPhamId: "111117",
+    tenSanPham: "Sản phẩm 7",
+  },
+  {
+    soLuong: 24,
+    sanPhamId: "111118",
+    tenSanPham: "Sản phẩm 8",
+  },
+  {
+    soLuong: 21,
+    sanPhamId: "111119",
+    tenSanPham: "Sản phẩm 9",
+  },
+  {
+    soLuong: 13,
+    sanPhamId: "111110",
+    tenSanPham: "Sản phẩm 10",
+  },
+];
+const mock_data_best_seller_cate = [
+  {
+    soLuong: 21,
+    sanPhamId: "111111",
+    tenSanPham: "Danh mục 1",
+  },
+  {
+    soLuong: 17,
+    sanPhamId: "111112",
+    tenSanPham: "Danh mục 2",
+  },
+  {
+    soLuong: 12,
+    sanPhamId: "111113",
+    tenSanPham: "Danh mục 3",
+  },
+  {
+    soLuong: 8,
+    sanPhamId: "111114",
+    tenSanPham: "Danh mục 4",
+  },
+  {
+    soLuong: 25,
+    sanPhamId: "111115",
+    tenSanPham: "Danh mục 5",
+  },
+  {
+    soLuong: 30,
+    sanPhamId: "111116",
+    tenSanPham: "Danh mục 6",
+  },
+];
+
+const mock_data_order_rate = [
+  { name: "Chờ xác nhận", value: 400 },
+  { name: "Đang giao hàng", value: 300 },
+  { name: "Đã giao hàng", value: 300 },
+  { name: "Đã hủy", value: 10 },
+  { name: "Trả hàng/Hoàn tiền", value: 50 },
 ];
