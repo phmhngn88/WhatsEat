@@ -8,20 +8,22 @@ import ModalCalo from "../../components/ModalCalCalo/ModalCalo";
 const RecommendPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [kcal, setKcal] = useState(0);
+  const [allergy, setAllergy] = useState("");
   const [menu, setMenu] = useState([]);
   const [page, setPage] = useState(0);
   const [level,setLevel] = useState("Mức độ");
   const [minTime,setMinTime] = useState(0);
   const [maxTime,setMaxTime] = useState(0);
   const user = useSelector((state) => state.auth.userInfo);
-  const handleOk = (gender, pal, weight, height, year) => {
+  const handleOk = (gender, pal, weight, height, year, allergy) => {
     console.log(gender, pal, weight, height, year);
     const body = {
       gender: gender,
       pal: pal,
       weight: weight,
       height: height,
-      year: year
+      year: year,
+      allergy:allergy
     }
     axios({
       method: "put",
@@ -30,8 +32,9 @@ const RecommendPage = () => {
       headers: { Authorization: `Bearer ${user.token}` },
     })
       .then((res) => {
-        setKcal(res.data);
-        if(res.data > 0){
+        setKcal(res.data.calo);
+        setAllergy(res.data.allergy)
+        if(res.data.calo > 0){
           getRecommendedRecipe(res.data);
         }
       })
@@ -43,10 +46,10 @@ const RecommendPage = () => {
     setIsModalVisible(false);
   };
 
-  const getRecommendedRecipe = (kcal) => {
+  const getRecommendedRecipe = (data) => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${kcal}&n_recipe=16&page=${page}&level=${level}&mintime=${minTime}&maxtime=${maxTime}`,
+      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${data.calo}&n_recipe=16&page=${page}&level=${level}&mintime=${minTime}&maxtime=${maxTime}&allergy=${data.allergy}`,
     })
       .then((res) => {
         const result = res.data;

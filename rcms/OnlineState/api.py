@@ -13,7 +13,7 @@ from math import isnan
 import sim
 import cold_start_KNN_genre
 import KRNN_recommend_engine
-
+import pickle
 app = flask.Flask(__name__)
 CORS(app)
 
@@ -31,17 +31,17 @@ def home():
     return """<h1>What's eat recommend engine</h1>
               <p>This site is APIs for getting list of recommend products.</p>"""
 
-def individual_recommend_list_recipes(id_user, user_kcal, n_recipe,page,level,mintime,maxtime):
+def individual_recommend_list_recipes(id_user, user_kcal, n_recipe,page,level,mintime,maxtime,allergy):
     cur = mysql.connection.cursor()
     rec_ids, is_newuser, is_notlove = utils.check_new_user(cur, id_user)
     if is_newuser:
         if is_notlove == 0:
             print("New user with filter!")
-            rec_list = fetch_data.get_top_recipe(cur,user_kcal,n_recipe,page,level,mintime,maxtime)['id'].to_list()
+            rec_list = fetch_data.get_top_recipe(cur,user_kcal,n_recipe,page,level,mintime,maxtime,allergy)['id'].to_list()
             cur.close()
         else:    
             print("New user detected!")
-            rec_list = fetch_data.get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxtime)['id1'].to_list()
+            rec_list = fetch_data.get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxtime,allergy)['id1'].to_list()
             cur.close()
 
     cur = mysql.connection.cursor()
@@ -66,8 +66,8 @@ def individual_recommend_list_products(id_user, n_product):
             cur.close()
     else:
         print("Old user detected!")
-        click_df = fetch_data.rating_click_df(cur)
-        sim_df = fetch_data.similarity_df(cur,id_user)
+        click_df = fetch_data.get_recpie_review(cur)
+        sim_df = fetch_data.similarity_item_df(cur,id_user)
         cur.close()
 
         rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_product, click_df, sim_df)
@@ -104,13 +104,13 @@ def individual_recipe_api():
         level = request.args['level']
         mintime = int(request.args['mintime'])
         maxtime = int(request.args['maxtime'])
-
+        allergy = request.args['allergy']
     else:
         return """Error: No id field provided. Please specify an id.
-                (URL: /individual/recipe?id_user=...&user_kcal=...&n_recipe=...&page=...&level=...&mintime=...&maxtime...)
+                (URL: /individual/recipe?id_user=...&user_kcal=...&n_recipe=...&page=...&level=...&mintime=...&maxtime...&allergy=...)
                 """
     
-    rec_list = individual_recommend_list_recipes(id_user,user_kcal,n_recipe,page,level,mintime,maxtime)
+    rec_list = individual_recommend_list_recipes(id_user,user_kcal,n_recipe,page,level,mintime,maxtime,allergy)
     return jsonify(rec_list.to_dict('records'))
 
 def individual_recommend_list_state2(id_user, n_movie):
@@ -193,5 +193,9 @@ def individual_recipe_apriori():
     cur.close()
     result['images'] = result['images'].apply(utils.to_json)
     return jsonify(result.to_dict('record'))
-
+@app.route('/test', methods=['GET'])
+def test_dump():
+    test = pickle.load(open("contentbase.pkl", "rb"))
+    test = test.head(10)
+    return jsonify(test.to_dict('record'));
 app.run(debug=True)

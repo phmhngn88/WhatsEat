@@ -7,5 +7,6 @@
         public string PAL { get; set; }
         public int Weight { get; set; }
         public int Height { get; set; }
+        public string Allergy { get; set; }
     }
 }

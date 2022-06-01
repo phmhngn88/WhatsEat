@@ -24,6 +24,7 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
     const [weight,setWeight] = useState(0)
     const [height,setHeight] = useState(0)
     const [year, setYear] = useState('')
+    const [allergy, setAllergy] = useState('')
     const [current, setCurrent] = React.useState(0);
 
     const next = () => {
@@ -36,7 +37,7 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
 
     const onFinish = () => {
         console.log(gender,pal,weight,height,year)
-        handleOk(gender,pal,weight,height,year)
+        handleOk(gender,pal,weight,height,year,allergy)
     }
 
     const onGenderChange = (e) => {
@@ -45,6 +46,10 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
 
     const onPALChange = (e) => {
         setPal(e)
+    }
+
+    const onAllgeryChange = (e) => {
+        setAllergy(e)
     }
 
     function onBirthChange(date, dateString) {
@@ -109,6 +114,22 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
                                 <Option value="1.55">Mức độ trung bình</Option>
                                 <Option value="1.725">Mức độ nhiều</Option>
                                 <Option value="1.9">Mức độ rất nhiều</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="allergy"
+                            label="Dị ứng với:">
+                            <Select
+                            onChange={onAllgeryChange}
+                            >
+                                <Option value="Cá">Cá</Option>
+                                <Option value="Tôm">Tôm</Option>
+                                <Option value="Cua">Cua</Option>
+                                <Option value="Sữa">Sữa</Option>
+                                <Option value="Trứng">Trứng</Option>
+                                <Option value="Hạt">Hạt</Option>
+                                <Option value="Đậu phộng">Đậu phộng</Option>
+                                <Option value="Đậu nành">Đậu nành</Option>
                             </Select>
                         </Form.Item>
                     </Form> : <TopDishesForYou />

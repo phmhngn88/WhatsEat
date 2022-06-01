@@ -130,25 +130,43 @@ def interactive_food(cur,recipeTypeId):
     return click_df
 
 #get list top recipe by total like
-def get_top_recipe(cur, user_kcal,n_recipe,page,level,mintime,maxtime):
-    if level != "Mức độ":
-        if maxtime > 0:
-            #filter by time and level
-            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s
-                    Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime, level,page*n_recipe,n_recipe,))
+def get_top_recipe(cur, user_kcal,n_recipe,page,level,mintime,maxtime,allergy):
+    if allergy == "":
+        if level != "Mức độ":
+            if maxtime > 0:
+                #filter by time and level
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s
+                        Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime, level,page*n_recipe,n_recipe,))
+            else:
+            #filter by level
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND level = %s
+                        Order By totalLike desc LIMIT %s,%s""",(user_kcal, level,page*n_recipe,n_recipe,))
         else:
-        #filter by level
-            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND level = %s
-                    Order By totalLike desc LIMIT %s,%s""",(user_kcal, level,page*n_recipe,n_recipe,))
+            if maxtime > 0:
+                #filter by total time
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s
+                        Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime,page*n_recipe,n_recipe,))
+            else:
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
+                Order By totalLike desc LIMIT %s,%s""",(user_kcal,page*n_recipe,n_recipe,))
     else:
-        if maxtime > 0:
-            #filter by total time
-            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s
-                    Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime,page*n_recipe,n_recipe,))
+        if level != "Mức độ":
+            if maxtime > 0:
+                #filter by time and level
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s AND Ingredients NOT LIKE %s
+                        Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime, level,"%{}%".format(allergy),page*n_recipe,n_recipe,))
+            else:
+            #filter by level
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND level = %s AND Ingredients NOT LIKE %s
+                        Order By totalLike desc LIMIT %s,%s""",(user_kcal, level,"%{}%".format(allergy),page*n_recipe,n_recipe,))
         else:
-            cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
-            Order By totalLike desc LIMIT %s,%s""",(user_kcal,page*n_recipe,n_recipe,))
-    
+            if maxtime > 0:
+                #filter by total time
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND Ingredients NOT LIKE %s
+                        Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime,"%{}%".format(allergy),page*n_recipe,n_recipe,))
+            else:
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND Ingredients NOT LIKE %s
+                Order By totalLike desc LIMIT %s,%s""",(user_kcal,"%{}%".format(allergy),page*n_recipe,n_recipe,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','calories'])
     return click_df
@@ -217,37 +235,68 @@ def get_product_by_list_id(cur,list_product_id):
     return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
     
 #get recommend list recipe cb
-def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxtime):
-    if level != "Mức độ":
-        if maxtime > 0:
-            #filter by time and level
-            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
-                from whatseat.cb_similarity CB
-                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
-                Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.totaltime >= %s AND R.totaltime <= %s
-                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,mintime,maxtime,page*n_recipe,n_recipe,))
+def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxtime,allergy):
+    if allergy == "":
+        if level != "Mức độ":
+            if maxtime > 0:
+                #filter by time and level
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.totaltime >= %s AND R.totaltime <= %s
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,mintime,maxtime,page*n_recipe,n_recipe,))
+            else:
+            #filter by level
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s 
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,page*n_recipe,n_recipe,))
         else:
-        #filter by level
-            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
-                from whatseat.cb_similarity CB
-                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
-                Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s 
-                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,page*n_recipe,n_recipe,))
+            if maxtime > 0:
+                #filter by total time
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.totaltime >= %s AND R.totaltime <= %s
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,mintime,maxtime,page*n_recipe,n_recipe,))
+            else:
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s 
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,page*n_recipe,n_recipe,))
     else:
-        if maxtime > 0:
-            #filter by total time
-            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
-                from whatseat.cb_similarity CB
-                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
-                Where CB.CustomerId LIKE %s AND Calo <= %s AND R.totaltime >= %s AND R.totaltime <= %s
-                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,mintime,maxtime,page*n_recipe,n_recipe,))
+        if level != "Mức độ":
+            if maxtime > 0:
+                #filter by time and level
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.totaltime >= %s AND R.totaltime <= %s AND R.Ingredients NOT LIKE %s
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,mintime,maxtime,"%{}%".format(allergy),page*n_recipe,n_recipe,))
+            else:
+            #filter by level
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.Ingredients NOT LIKE %s
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,"%{}%".format(allergy),page*n_recipe,n_recipe,))
         else:
-            cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
-                from whatseat.cb_similarity CB
-                JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
-                Where CB.CustomerId LIKE %s AND Calo <= %s 
-                ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,page*n_recipe,n_recipe,))
-    
+            if maxtime > 0:
+                #filter by total time
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.totaltime >= %s AND R.totaltime <= %s AND R.Ingredients NOT LIKE %s
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,mintime,maxtime,"%{}%".format(allergy),page*n_recipe,n_recipe,))
+            else:
+                cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
+                    from whatseat.cb_similarity CB
+                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    Where CB.CustomerId LIKE %s AND Calo <= %s AND R.Ingredients NOT LIKE %s
+                    ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,"%{}%".format(allergy),page*n_recipe,n_recipe,))
+
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id1','id2','similarity','calo'])
 
@@ -265,3 +314,9 @@ def get_recommend_list_product_cb(id_user,n_product,cur):
     where CustomerId LIKE %s ORDER BY Similarity DESC LIMIT %s""",(id_user,n_product))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id1','id2','similarity'])
+
+def get_recpie_review(cur):
+    cur.execute("""SELECT  CustomerId, RecipeId, Rating FROM whatseat.recipereviews""")
+    res = cur.fetchall()
+    data = pd.DataFrame(res, columns=['CustomerId','RecipeId','Rating'])
+    return data

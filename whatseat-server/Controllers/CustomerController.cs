@@ -394,7 +394,7 @@ public class CustomerController : ControllerBase
     Guid userId = new Guid(User.FindFirst("Id")?.Value);
     var customer = await _customerService.FindCustomerByIdAsync(userId);
 
-    return Ok(customer.KcalPerDay);
+    return Ok(new UpdateCaloResponse(customer.KcalPerDay, customer.Allergy));
   }
 
   [HttpPut]
@@ -417,11 +417,12 @@ public class CustomerController : ControllerBase
     if (customer.KcalPerDay == 0)
     {
       customer.KcalPerDay = calorie;
+      customer.Allergy = request.Allergy;
     }
 
     await _context.SaveChangesAsync();
 
-    return Ok(calorie);
+    return Ok(new UpdateCaloResponse(calorie,customer.Allergy));
   }
 
 
