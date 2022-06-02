@@ -9,7 +9,10 @@ import Product from "../Product/Product";
 
 const Items = ({ products, storeId }) => {
   const [visible, setVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState({
+    name: "",
+    productId: 0,
+  });
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -30,8 +33,8 @@ const Items = ({ products, storeId }) => {
     setVisible(false);
   };
 
-  const showDeleteModal = (name) => {
-    setSelectedProduct(name);
+  const showDeleteModal = (name, productId) => {
+    setSelectedProduct({ name, productId });
     setVisible(true);
   };
 
@@ -52,7 +55,10 @@ const Items = ({ products, storeId }) => {
             return (
               <Col span={6} className="item-col" key={productId}>
                 <Product {...item} />
-                <button className="btn" onClick={() => showDeleteModal(name)}>
+                <button
+                  className="btn"
+                  onClick={() => showDeleteModal(name, productId)}
+                >
                   Xóa
                 </button>
                 <button
@@ -69,12 +75,12 @@ const Items = ({ products, storeId }) => {
       <Modal
         title="Xóa sản phẩm"
         visible={visible}
-        onOk={() => onDeleteProduct(selectedProduct)}
+        onOk={() => onDeleteProduct(selectedProduct.productId)}
         onCancel={onCloseModal}
         okText="Đồng ý"
         cancelText="Hủy"
       >
-        <p>Bạn có muốn xóa sản phẩm {selectedProduct}</p>
+        <p>Bạn có muốn xóa sản phẩm {selectedProduct.name}</p>
       </Modal>
     </div>
   );

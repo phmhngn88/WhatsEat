@@ -39,6 +39,7 @@ const CustomLineChart = ({ data }) => {
         }}
       />
       <Tooltip />
+      <Legend verticalAlign="right" />
       <Line type="monotone" dataKey="totalIncome" stroke="#dc4f43" />
     </LineChart>
   );
