@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
-using whatseat_server.Constants;
 using Microsoft.EntityFrameworkCore;
+using whatseat_server.Constants;
 using whatseat_server.Data;
+using whatseat_server.Libraries;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
 using whatseat_server.Models.DTOs.Responses;
@@ -12,6 +13,18 @@ namespace whatseat_server.Services;
 public class OrderService
 {
   private readonly WhatsEatContext _context;
+  public static TreeNode<string> statusRoot = new TreeNode<string>("root");
+  // TreeNode<string> ship_cod = statusRoot.AddChild("ship_cod");
+  public static TreeNode<string> paid = statusRoot.AddChild("paid");
+  public static TreeNode<string> delivering = paid.AddChild("delivering");
+  public static TreeNode<string> cancelled = paid.AddChild("cancelled");
+  public static TreeNode<string> deliveredSuccessfully = delivering.AddChild("delivering successfully");
+  public static TreeNode<string> pendingForConfirmation = delivering.AddChild("pending for confirmation");
+  public static TreeNode<string> refundedSuccessfully = pendingForConfirmation.AddChild("refunded successfully");
+  public static TreeNode<string> deliveredSuccessfully1 = pendingForConfirmation.AddChild("delivering successfully");
+
+
+
   public OrderService(WhatsEatContext context)
   {
     _context = context;
