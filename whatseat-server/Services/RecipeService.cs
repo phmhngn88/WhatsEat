@@ -113,8 +113,13 @@ public class RecipeService
     public List<Photo> ConvertJsonToPhotos(string jsonPhotos)
     {
         jsonPhotos = jsonPhotos.Substring(1, jsonPhotos.Length - 2);
-        List<Photo> result = JsonConvert.DeserializeObject<List<Photo>>(jsonPhotos);
-        return result;
+        List<Photo> result = new List<Photo>();
+        try
+        {
+            result = JsonConvert.DeserializeObject<List<Photo>>(jsonPhotos);
+            return result;
+        }
+        catch (Exception) { return null; }
     }
 
     public List<IngredientRes> ConvertJsonToIngredients(string jsonIngredient)
