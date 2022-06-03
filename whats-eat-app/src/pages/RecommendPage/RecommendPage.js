@@ -77,8 +77,8 @@ const RecommendPage = () => {
       headers: { Authorization: `Bearer ${user.token}` },
     })
       .then((res) => {
-        setKcal(res.data);
-        if(res.data > 0){
+        setKcal(res.data.calo);
+        if(res.data.calo > 0){
           getRecommendedRecipe(res.data);
         }
       })
