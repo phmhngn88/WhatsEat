@@ -10,7 +10,7 @@
 .shop-profile-fluid .shop-profile-container{
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 100%;
     height: fit-content;
     background-color: #f6f6f6;
     margin-top: 2rem;

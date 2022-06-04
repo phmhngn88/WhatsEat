@@ -141,20 +141,6 @@ const ShopSidebar = ({ storeId }) => {
             Đơn hủy
           </a>
         </div>
-        <div>
-          <a
-            onClick={() => {
-              navigate("/shop/orders", {
-                state: {
-                  storeId: storeId,
-                  defaultKey: "6",
-                },
-              });
-            }}
-          >
-            Trả hàng/hoàn tiền
-          </a>
-        </div>
       </Collapsible>
       <Collapsible
         open={true}

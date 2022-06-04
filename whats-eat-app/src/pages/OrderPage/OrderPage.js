@@ -106,35 +106,51 @@ const OrderPage = () => {
           </h1>
           <Tabs defaultActiveKey="1">
             <TabPane tab="Tất cả đơn" key="1">
-              {allOrders.map((order) => {
-                return <Order key={order.orderId} {...order} />;
-              })}
+              {allOrders.length > 0 ? (
+                allOrders.map((order) => {
+                  return <Order key={order.orderId} {...order} />;
+                })
+              ) : (
+                <p>Bạn chưa có đơn hàng nào!</p>
+              )}
             </TabPane>
-            <TabPane tab="Đang xử lý" key="2">
-              {allUserOrders.waiting.length > 0 &&
+            <TabPane tab="Đang chờ xác nhận" key="2">
+              {allUserOrders.waiting.length > 0 ? (
                 allUserOrders.waiting.map((order) => {
                   return <Order key={order.orderId} {...order} />;
-                })}
+                })
+              ) : (
+                <p>Bạn chưa có đơn hàng đang chờ xác nhận nào!</p>
+              )}
             </TabPane>
 
             <TabPane tab="Đang vận chuyển" key="3">
-              {allUserOrders.delivering.length > 0 &&
+              {allUserOrders.delivering.length > 0 ? (
                 allUserOrders.delivering.map((order) => {
                   console.log();
                   return <Order key={order.orderId} {...order} />;
-                })}
+                })
+              ) : (
+                <p>Bạn chưa có đơn hàng đang vận chuyển nào!</p>
+              )}
             </TabPane>
             <TabPane tab="Đã giao" key="4">
-              {allUserOrders.delivered.length > 0 &&
+              {allUserOrders.delivered.length > 0 ? (
                 allUserOrders.delivered.map((order) => {
                   return <Order key={order.orderId} {...order} />;
-                })}
+                })
+              ) : (
+                <p>Bạn chưa có đơn hàng đã giao nào!</p>
+              )}
             </TabPane>
             <TabPane tab="Đã hủy" key="5">
-              {allUserOrders.cancel.length > 0 &&
+              {allUserOrders.cancel.length > 0 ? (
                 allUserOrders.cancel.map((order) => {
                   return <Order key={order.orderId} {...order} />;
-                })}
+                })
+              ) : (
+                <p>Bạn chưa có đơn hàng đã hủy nào!</p>
+              )}
             </TabPane>
           </Tabs>
         </div>

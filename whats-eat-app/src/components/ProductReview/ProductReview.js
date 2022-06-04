@@ -29,6 +29,7 @@ const ProductReview = ({ productId }) => {
       {reviews.length > 0 ? (
         reviews.map((review, idx) => {
           const { rating, comment, customer } = review;
+          const [userId] = customer.customerId.split("-");
           return (
             <div key={idx} className="single-review">
               {!customer.avatarUrl ? (
@@ -42,7 +43,7 @@ const ProductReview = ({ productId }) => {
               )}
               <div className="review-detail">
                 <p className="username">
-                  {customer.name ? customer.name : customer.customerId}
+                  {customer.name ? customer.name : `User${userId}`}
                 </p>
                 <StarRatings
                   rating={rating}
