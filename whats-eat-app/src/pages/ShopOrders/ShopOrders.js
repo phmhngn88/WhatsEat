@@ -25,7 +25,6 @@ const ShopOrders = () => {
     delivering: [],
     delivered: [],
     cancel: [],
-    repaid: [],
   };
 
   shopOrders.length > 0 &&
@@ -33,22 +32,19 @@ const ShopOrders = () => {
       if (order.orderStatusHistories.length < 1) return;
       switch (
         order.orderStatusHistories[order.orderStatusHistories.length - 1]
-          .orderStatus.orderStatusId
+          .orderStatus.value
       ) {
-        case 2:
+        case "waiting":
           allOrders.waiting.push(order);
           break;
-        case 3:
+        case "delivering":
           allOrders.delivering.push(order);
           break;
-        case 4:
+        case "delivered":
           allOrders.delivered.push(order);
           break;
-        case 5:
+        case "canceled":
           allOrders.cancel.push(order);
-          break;
-        case 6:
-          allOrders.repaid.push(order);
           break;
         default:
           allOrders.delivered.push(order);
@@ -188,7 +184,7 @@ const ShopOrders = () => {
                       }
                     })}
                 </TabPane>
-                <TabPane tab="Trả hàng/hoàn tiền" key="6">
+                {/* <TabPane tab="Trả hàng/hoàn tiền" key="6">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
                     <p>Tổng đơn hàng</p>
@@ -201,8 +197,8 @@ const ShopOrders = () => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
-                </TabPane>
+                    })} */}
+                {/* </TabPane> */}
               </Tabs>
             </div>
           </div>

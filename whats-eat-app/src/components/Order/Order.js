@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import OrderItem from "./OrderItem";
 
-const Order = ({ orderId }) => {
+const Order = ({ orderId, orderStatusHistories }) => {
   const [orderInfo, setOrderInfo] = useState();
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -48,6 +48,27 @@ const Order = ({ orderId }) => {
 
           <div className="cancel-block">
             <Link to={`/orders/${orderId}`}>Xem chi tiết...</Link>
+            <p>
+              Trạng thái đơn hàng:{" "}
+              <strong>
+                {orderStatusHistories.length > 0
+                  ? orderStatusHistories[orderStatusHistories.length - 1]
+                      .orderStatus.value === "waiting"
+                    ? "Chờ xác nhận"
+                    : orderStatusHistories[orderStatusHistories.length - 1]
+                        .orderStatus.value === "delivering"
+                    ? "Đang giao hàng"
+                    : orderStatusHistories[orderStatusHistories.length - 1]
+                        .orderStatus.value === "delivered"
+                    ? "Đã giao hàng"
+                    : orderStatusHistories[orderStatusHistories.length - 1]
+                        .orderStatus.value === "canceled"
+                    ? "Đã hủy"
+                    : "Đã giao hàng"
+                  : "Đã giao"}
+              </strong>
+            </p>
+
             {/* {status === 0 ? (
           <button className="btn cancel-btn">Hủy đơn hàng</button>
         ) : (

@@ -51,7 +51,6 @@ const OrderPage = () => {
     delivering: [],
     delivered: [],
     cancel: [],
-    repaid: [],
   };
 
   allOrders.length > 0 &&
@@ -59,22 +58,19 @@ const OrderPage = () => {
       if (order.orderStatusHistories.length < 1) return;
       switch (
         order.orderStatusHistories[order.orderStatusHistories.length - 1]
-          .orderStatus.orderStatusId
+          .orderStatus.value
       ) {
-        case 2:
+        case "waiting":
           allUserOrders.waiting.push(order);
           break;
-        case 3:
+        case "delivering":
           allUserOrders.delivering.push(order);
           break;
-        case 4:
+        case "delivered":
           allUserOrders.delivered.push(order);
           break;
-        case 5:
+        case "canceled":
           allUserOrders.cancel.push(order);
-          break;
-        case 6:
-          allUserOrders.repaid.push(order);
           break;
         default:
           allUserOrders.delivered.push(order);

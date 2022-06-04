@@ -26,3 +26,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.shop-order-item .order-info button{
+    background-color: brown;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
