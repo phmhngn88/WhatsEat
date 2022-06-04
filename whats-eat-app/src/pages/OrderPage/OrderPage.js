@@ -46,41 +46,41 @@ const OrderPage = () => {
   const [allOrders, setAllOrders] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
 
-  // const allUserOrders = {
-  //   waiting: [],
-  //   delivering: [],
-  //   delivered: [],
-  //   cancel: [],
-  //   repaid: [],
-  // };
+  const allUserOrders = {
+    waiting: [],
+    delivering: [],
+    delivered: [],
+    cancel: [],
+    repaid: [],
+  };
 
-  // allOrders.length > 0 &&
-  //   allOrders.map((order) => {
-  //     if (order.orderStatusHistories.length < 1) return;
-  //     switch (
-  //       order.orderStatusHistories[order.orderStatusHistories.length - 1]
-  //         .orderStatus.orderStatusId
-  //     ) {
-  //       case 2:
-  //         allUserOrders.waiting.push(order);
-  //         break;
-  //       case 3:
-  //         allUserOrders.delivering.push(order);
-  //         break;
-  //       case 4:
-  //         allUserOrders.delivered.push(order);
-  //         break;
-  //       case 5:
-  //         allUserOrders.cancel.push(order);
-  //         break;
-  //       case 6:
-  //         allUserOrders.repaid.push(order);
-  //         break;
-  //       default:
-  //         allUserOrders.delivered.push(order);
-  //     }
-  //   });
-
+  allOrders.length > 0 &&
+    allOrders.map((order) => {
+      if (order.orderStatusHistories.length < 1) return;
+      switch (
+        order.orderStatusHistories[order.orderStatusHistories.length - 1]
+          .orderStatus.orderStatusId
+      ) {
+        case 2:
+          allUserOrders.waiting.push(order);
+          break;
+        case 3:
+          allUserOrders.delivering.push(order);
+          break;
+        case 4:
+          allUserOrders.delivered.push(order);
+          break;
+        case 5:
+          allUserOrders.cancel.push(order);
+          break;
+        case 6:
+          allUserOrders.repaid.push(order);
+          break;
+        default:
+          allUserOrders.delivered.push(order);
+      }
+    });
+  console.log({ allUserOrders });
   const onSearch = () => {};
   const getCustomerOrders = () => {
     axios({
@@ -114,26 +114,31 @@ const OrderPage = () => {
                 return <Order key={order.orderId} {...order} />;
               })}
             </TabPane>
-            <TabPane tab="Chờ thanh toán" key="2">
-              {allOrders.map((order) => {
-                return <Order key={order.orderId} {...order} />;
-              })}
+            <TabPane tab="Đang xử lý" key="2">
+              {allUserOrders.waiting.length > 0 &&
+                allUserOrders.waiting.map((order) => {
+                  return <Order key={order.orderId} {...order} />;
+                })}
             </TabPane>
-            <TabPane tab="Đang xử lý" key="3">
-              {allOrders.map((order) => {
-                return <Order key={order.orderId} {...order} />;
-              })}
+
+            <TabPane tab="Đang vận chuyển" key="3">
+              {allUserOrders.delivering.length > 0 &&
+                allUserOrders.delivering.map((order) => {
+                  console.log();
+                  return <Order key={order.orderId} {...order} />;
+                })}
             </TabPane>
-            <TabPane tab="Đang vận chuyển" key="4">
-              Content of Tab Pane 4
+            <TabPane tab="Đã giao" key="4">
+              {allUserOrders.delivered.length > 0 &&
+                allUserOrders.delivered.map((order) => {
+                  return <Order key={order.orderId} {...order} />;
+                })}
             </TabPane>
-            <TabPane tab="Đã giao" key="5">
-              {allOrders.map((order) => {
-                return <Order key={order.orderId} {...order} />;
-              })}
-            </TabPane>
-            <TabPane tab="Đã hủy" key="6">
-              Content of Tab Pane 6
+            <TabPane tab="Đã hủy" key="5">
+              {allUserOrders.cancel.length > 0 &&
+                allUserOrders.cancel.map((order) => {
+                  return <Order key={order.orderId} {...order} />;
+                })}
             </TabPane>
           </Tabs>
         </div>

@@ -1,10 +1,47 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import "./ShopOrderItem.css";
+import { useLocation } from "react-router-dom";
 
-const ShopOrderItem = ({ productId, price, value, status }) => {
-  console.log(status);
+const ShopOrderItem = ({ productId, price, value, status, id }) => {
   const [orderInfo, setOrderInfo] = useState();
+  const location = useLocation();
+  const { storeId } = location.state;
+  const token = useSelector((state) => state.auth.userInfo.token);
+
+  const handleAcceptOrder = () => {
+    console.log(id);
+    axios({
+      method: "post",
+      url: `https://localhost:7029/api/Store/${storeId}/orders/accept`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        orderId: id,
+        message: ".",
+      },
+    })
+      .then((res) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleCancelOrder = () => {
+    axios({
+      method: "post",
+      url: `https://localhost:7029/api/Store/${storeId}/orders/cancel`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        orderId: id,
+        message: ".",
+      },
+    })
+      .then((res) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     axios({
@@ -52,7 +89,19 @@ const ShopOrderItem = ({ productId, price, value, status }) => {
             : "Đã giao hàng"}
         </p>
         <p className="delivery">{value}</p>
-        <a href="#">Xem chi tiết</a>
+
+        {/* <a href="#">Xem chi tiết</a> */}
+        {status !== "Đã giao" &&
+          status[status.length - 1].orderStatus.orderStatusId === 2 && (
+            <button onClick={handleAcceptOrder}>Chấp nhận</button>
+          )}
+
+        {status !== "Đã giao" &&
+          status[status.length - 1].orderStatus.orderStatusId === 2 && (
+            <button onClick={handleCancelOrder}>Hủy đơn</button>
+          )}
+
+        {/* <a href="#">Hủy đơn</a> */}
       </div>
     </div>
   );

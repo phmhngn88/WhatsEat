@@ -39,7 +39,7 @@ const Order = ({ orderId }) => {
         <div className="order-container">
           <h2 className="title">
             {/* {status === 0 ? "Đơn hàng đang xử lý" : "Đơn hàng thành công"} */}
-            Đơn hàng thành công
+            Đơn hàng: {orderId}
           </h2>
           {orderInfo.orderDetails.length > 0 &&
             orderInfo.orderDetails.map((order, idx) => (

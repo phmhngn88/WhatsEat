@@ -21,16 +21,16 @@ recipes_df = recipes_df.dropna()
 recipes_df['Ingredients'] = recipes_df['Ingredients'].apply(fetch.convert)
 cur = conn.cursor()
 caloList = []
-# for line in recipes_df.itertuples():
-#     caloList.append(fetch.convert_calo(cur,line[3]))
-fetch.convert_calo(cur,recipes_df['Ingredients'][1])
+for line in recipes_df.itertuples():
+    caloList.append(fetch.convert_calo(cur,line[3]))
+# fetch.convert_calo(cur,recipes_df['Ingredients'][1])
 cur.close()
 
-# recipes_df['Calo'] = caloList
+recipes_df['Calo'] = caloList
 
-# recipes_df = recipes_df[['Calo','RecipeId']]
-# tuple = list(recipes_df.itertuples(index=False, name=None))
-# fetch.update_calo(conn,tuple)
+recipes_df = recipes_df[['Calo','RecipeId']]
+tuple = list(recipes_df.itertuples(index=False, name=None))
+fetch.update_calo(conn,tuple)
 
 
 
