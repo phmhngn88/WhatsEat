@@ -244,7 +244,7 @@ public class OrderService
 
         var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Get,
-            "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district")
+            "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee")
         {
             Headers = {
                     // { HeaderNames.AcceptEncoding, "gzip, deflate, br"},
