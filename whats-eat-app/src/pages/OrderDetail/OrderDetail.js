@@ -152,30 +152,34 @@ const CusOrderDetail = () => {
               <div className="order-info-block"></div>
             </div>
           </div>
-          <div className="rate-area">
-            <h2 style={{ fontWeight: "650" }}>Đánh giá đơn hàng của bạn</h2>
-            <div className="rate-container">
-              <Rate
-                className="stars"
-                onChange={(value) => setRateValue(value)}
-                value={rateValue}
-              />
-              <div className="comment-area">
-                <textarea
-                  cols="30"
-                  rows="10"
-                  placeholder="Viết bình luận..."
-                  onChange={(e) => setComment(e.target.value)}
-                ></textarea>
+          {order.orderStatusHistories &&
+            order.orderStatusHistories[order.orderStatusHistories.length - 1]
+              .orderStatus.value === "delivered" && (
+              <div className="rate-area">
+                <h2 style={{ fontWeight: "650" }}>Đánh giá đơn hàng của bạn</h2>
+                <div className="rate-container">
+                  <Rate
+                    className="stars"
+                    onChange={(value) => setRateValue(value)}
+                    value={rateValue}
+                  />
+                  <div className="comment-area">
+                    <textarea
+                      cols="30"
+                      rows="10"
+                      placeholder="Viết bình luận..."
+                      onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <button
+                    className="btn submit-btn"
+                    onClick={() => handleSubmitRating(id)}
+                  >
+                    Đánh giá
+                  </button>
+                </div>
               </div>
-              <button
-                className="btn submit-btn"
-                onClick={() => handleSubmitRating(id)}
-              >
-                Đánh giá
-              </button>
-            </div>
-          </div>
+            )}
         </div>
       </div>
       <Footer />

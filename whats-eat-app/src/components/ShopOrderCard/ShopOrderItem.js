@@ -6,6 +6,8 @@ import { useLocation } from "react-router-dom";
 
 const ShopOrderItem = ({ productId, price, value, status, id }) => {
   const [orderInfo, setOrderInfo] = useState();
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [isCanceled, setIsCanceled] = useState(false);
   const location = useLocation();
   const { storeId } = location.state;
   const token = useSelector((state) => state.auth.userInfo.token);
@@ -21,7 +23,9 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
         message: ".",
       },
     })
-      .then((res) => {})
+      .then((res) => {
+        setIsAccepted(true);
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -37,7 +41,9 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
         message: ".",
       },
     })
-      .then((res) => {})
+      .then((res) => {
+        setIsCanceled(true);
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -78,14 +84,12 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
         <p className="status" style={{ fontWeight: 650 }}>
           {status === "Đã giao"
             ? status
-            : status[status.length - 1].orderStatus.orderStatusId === 2
+            : status[status.length - 1].orderStatus.value === "waiting"
             ? "Chờ xác nhận"
-            : status[status.length - 1].orderStatus.orderStatusId === 3
+            : status[status.length - 1].orderStatus.value === "delivering"
             ? "Đang giao hàng"
-            : status[status.length - 1].orderStatus.orderStatusId === 5
+            : status[status.length - 1].orderStatus.value === "canceled"
             ? "Đã hủy"
-            : status[status.length - 1].orderStatus.orderStatusId === 6
-            ? "Trả hàng/Hoàn tiền"
             : "Đã giao hàng"}
         </p>
         <p className="delivery">{value}</p>
@@ -93,12 +97,16 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
         {/* <a href="#">Xem chi tiết</a> */}
         {status !== "Đã giao" &&
           status[status.length - 1].orderStatus.orderStatusId === 2 && (
-            <button onClick={handleAcceptOrder}>Chấp nhận</button>
+            <button onClick={handleAcceptOrder}>
+              {isAccepted ? "Đã nhận đơn" : "Chấp nhận"}
+            </button>
           )}
 
         {status !== "Đã giao" &&
           status[status.length - 1].orderStatus.orderStatusId === 2 && (
-            <button onClick={handleCancelOrder}>Hủy đơn</button>
+            <button onClick={handleCancelOrder}>
+              {isCanceled ? "Đã hủy đơn" : "Hủy đơn"}
+            </button>
           )}
 
         {/* <a href="#">Hủy đơn</a> */}

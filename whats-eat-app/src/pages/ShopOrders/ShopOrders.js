@@ -25,7 +25,6 @@ const ShopOrders = () => {
     delivering: [],
     delivered: [],
     cancel: [],
-    repaid: [],
   };
 
   shopOrders.length > 0 &&
@@ -33,22 +32,19 @@ const ShopOrders = () => {
       if (order.orderStatusHistories.length < 1) return;
       switch (
         order.orderStatusHistories[order.orderStatusHistories.length - 1]
-          .orderStatus.orderStatusId
+          .orderStatus.value
       ) {
-        case 2:
+        case "waiting":
           allOrders.waiting.push(order);
           break;
-        case 3:
+        case "delivering":
           allOrders.delivering.push(order);
           break;
-        case 4:
+        case "delivered":
           allOrders.delivered.push(order);
           break;
-        case 5:
+        case "canceled":
           allOrders.cancel.push(order);
-          break;
-        case 6:
-          allOrders.repaid.push(order);
           break;
         default:
           allOrders.delivered.push(order);
@@ -121,12 +117,15 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  {shopOrders.length > 0 &&
+                  {shopOrders.length > 0 ? (
                     shopOrders?.map((order, idx) => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
+                    })
+                  ) : (
+                    <p>Bạn chưa có đơn hàng nào!</p>
+                  )}
                 </TabPane>
                 <TabPane tab="Chờ xác nhận" key="2">
                   <div className="table-title">
@@ -136,12 +135,15 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  {allOrders.waiting.length > 0 &&
+                  {allOrders.waiting.length > 0 ? (
                     allOrders.waiting.map((order, idx) => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
+                    })
+                  ) : (
+                    <p>Bạn chưa có đơn hàng chờ xác nhận nào!</p>
+                  )}
                 </TabPane>
                 <TabPane tab="Đang giao" key="3">
                   <div className="table-title">
@@ -151,12 +153,15 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  {allOrders.delivering.length > 0 &&
+                  {allOrders.delivering.length > 0 ? (
                     allOrders.delivering.map((order, idx) => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
+                    })
+                  ) : (
+                    <p>Bạn chưa có đơn hàng đang giao nào!</p>
+                  )}
                 </TabPane>
                 <TabPane tab="Đã giao" key="4">
                   <div className="table-title">
@@ -166,12 +171,15 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  {allOrders.delivered.length > 0 &&
+                  {allOrders.delivered.length > 0 ? (
                     allOrders.delivered.map((order, idx) => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
+                    })
+                  ) : (
+                    <p>Bạn chưa có đơn hàng đã giao nào!</p>
+                  )}
                 </TabPane>
                 <TabPane tab="Đã hủy" key="5">
                   <div className="table-title">
@@ -181,14 +189,17 @@ const ShopOrders = () => {
                     <p>Vận chuyển</p>
                     <p>Thao tác</p>
                   </div>
-                  {allOrders.cancel.length > 0 &&
+                  {allOrders.cancel.length > 0 ? (
                     allOrders.cancel.map((order, idx) => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
+                    })
+                  ) : (
+                    <p>Bạn chưa có đơn hàng đã hủy nào!</p>
+                  )}
                 </TabPane>
-                <TabPane tab="Trả hàng/hoàn tiền" key="6">
+                {/* <TabPane tab="Trả hàng/hoàn tiền" key="6">
                   <div className="table-title">
                     <p className="product-name">Sản phẩm</p>
                     <p>Tổng đơn hàng</p>
@@ -201,8 +212,8 @@ const ShopOrders = () => {
                       if (order.customer) {
                         return <ShopOrderCard key={idx} {...order} />;
                       }
-                    })}
-                </TabPane>
+                    })} */}
+                {/* </TabPane> */}
               </Tabs>
             </div>
           </div>

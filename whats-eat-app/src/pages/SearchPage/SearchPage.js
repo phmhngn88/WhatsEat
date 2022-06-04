@@ -28,8 +28,8 @@ const menuList = [
 const SearchPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  const [minPrice, setMinPrice] = useState("0");
+  const [maxPrice, setMaxPrice] = useState("10000000");
   const [filterCondition, setFilterCondition] = useState("asc");
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   const [searchProductResult, setSearchProductResult] = useState([]);

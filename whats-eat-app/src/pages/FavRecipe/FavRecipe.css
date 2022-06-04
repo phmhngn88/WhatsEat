@@ -17,8 +17,11 @@
     text-align: center;
 }
 
-.profile img{
+.profile img,
+.profile .img-avt{
     border: 1px solid black;
+    width: 5rem;
+    height: 5rem;
     border-radius: 50px;
 }
 .profile .username{

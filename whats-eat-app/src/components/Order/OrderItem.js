@@ -12,7 +12,6 @@ const OrderItem = ({ productId, price }) => {
     })
       .then((res) => {
         const result = res.data;
-        console.log(result);
         setOrderInfo(result);
       })
       .catch((error) => {
