@@ -62,6 +62,20 @@ public class PaymentController : ControllerBase
             });
         }
 
+        LineItems.Add(new SessionLineItemOptions
+        {
+            PriceData = new SessionLineItemPriceDataOptions
+            {
+                Currency = "vnd",
+                ProductData = new SessionLineItemPriceDataProductDataOptions
+                {
+                    Name = "SHIPPING_FEE",
+                },
+                UnitAmount = order.ShippingFee
+            },
+            Quantity = 1,
+        });
+
         string appHost = _configuration["AppHost"];
 
         var options = new SessionCreateOptions
