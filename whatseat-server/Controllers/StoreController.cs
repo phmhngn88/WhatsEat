@@ -242,21 +242,27 @@ public class StoreController : ControllerBase
         IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
 
         Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
-
-        if (!_storeService.UserIsStore(user, store))
+        try
         {
-            return Forbid();
-        }
-        var order = await _orderService.getOrderOrderId(request.OrderId);
+            if (!_storeService.UserIsStore(user, store))
+            {
+                return Forbid();
+            }
+            var order = await _orderService.getOrderOrderId(request.OrderId);
 
-        if (store != order.Store)
+            if (store != order.Store)
+            {
+                return Forbid();
+            }
+
+            var status = await _orderService.StoreAcceptOrder(order, request.Message);
+
+            return Ok(status);
+        }
+        catch (NullReferenceException)
         {
-            return Forbid();
+            return BadRequest();
         }
-
-        var status = await _orderService.StoreAcceptOrder(order, request.Message);
-
-        return Ok(status);
     }
 
     [HttpPost]
@@ -268,21 +274,27 @@ public class StoreController : ControllerBase
         IdentityUser user = await _userManager.FindByIdAsync(userId.ToString());
 
         Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
-
-        if (!_storeService.UserIsStore(user, store))
+        try
         {
-            return Forbid();
-        }
-        var order = await _orderService.getOrderOrderId(request.OrderId);
+            if (!_storeService.UserIsStore(user, store))
+            {
+                return Forbid();
+            }
+            var order = await _orderService.getOrderOrderId(request.OrderId);
 
-        if (store != order.Store)
+            if (store != order.Store)
+            {
+                return Forbid();
+            }
+
+            OrderStatusHistory status = await _orderService.StoreCancelOrder(order, request.Message);
+
+            return Ok(status);
+        }
+        catch (NullReferenceException)
         {
-            return Forbid();
+            return BadRequest();
         }
-
-        OrderStatusHistory status = await _orderService.StoreCancelOrder(order, request.Message);
-
-        return Ok(status);
     }
 
     [HttpPost]
@@ -295,20 +307,28 @@ public class StoreController : ControllerBase
 
         Store store = await _storeService.FindStoreByStoreIdAsync(storeId);
 
-        if (!_storeService.UserIsStore(user, store))
+        try
         {
-            return Forbid();
-        }
-        var order = await _orderService.getOrderOrderId(request.OrderId);
+            if (!_storeService.UserIsStore(user, store))
+            {
+                return Forbid();
+            }
+            var order = await _orderService.getOrderOrderId(request.OrderId);
 
-        if (store != order.Store)
+            if (store != order.Store)
+            {
+                return Forbid();
+            }
+
+            order.IsPaid = true;
+            OrderStatusHistory status = await _orderService.UpdateStatus(order, OrderStatusConstant.Delivered);
+
+            return Ok(status);
+        }
+        catch (NullReferenceException)
         {
-            return Forbid();
+            return BadRequest();
         }
-
-        OrderStatusHistory status = await _orderService.UpdateStatus(order, OrderStatusConstant.Delivered);
-
-        return Ok(status);
     }
 
 
