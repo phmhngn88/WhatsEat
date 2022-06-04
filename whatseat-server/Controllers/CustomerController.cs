@@ -161,14 +161,18 @@ public class CustomerController : ControllerBase
 
         List<Order> orders = new List<Order>();
         Dictionary<int, Order>.ValueCollection values = classifiedOrders.Values;
-        foreach (var val in values)
+        using (var dbContextTransaction = await _context.Database.BeginTransactionAsync())
         {
-            orders.Add(val);
-            OrderStatusHistory orderStatusWaiting = await _orderService.UpdateStatus(val, OrderStatusConstant.Waiting);
+            foreach (var val in values)
+            {
+                orders.Add(val);
+                OrderStatusHistory orderStatusWaiting = await _orderService.UpdateStatus(val, OrderStatusConstant.Waiting);
+            }
+            await dbContextTransaction.CommitAsync();
         }
 
-        await _context.Orders.AddRangeAsync(orders);
-        await _context.SaveChangesAsync();
+        // await _context.Orders.AddRangeAsync(orders);
+        // await _context.SaveChangesAsync();
 
 
         return Ok(orders);
@@ -375,7 +379,7 @@ public class CustomerController : ControllerBase
                 return BadRequest(
                     new
                     {
-                        message = "Order cancelation failed"
+                        message = "Order cancellation failed"
                     }
                 );
             }
