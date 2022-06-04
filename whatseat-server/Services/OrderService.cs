@@ -94,7 +94,7 @@ public class OrderService
 
     public async Task<OrderStatusHistory> StoreAcceptOrder(Order order, string message)
     {
-        OrderStatus acceptStatus = await GetOrderStatusByName(OrderStatusConstant.Accepted);
+        OrderStatus acceptStatus = await GetOrderStatusByName(OrderStatusConstant.Delivering);
         OrderStatusHistory orderStatusHistory = new OrderStatusHistory
         {
             OrderStatus = acceptStatus,
@@ -140,7 +140,7 @@ public class OrderService
 
     public bool IsCancelable(string status)
     {
-        if (status.Equals(OrderStatusConstant.Canceled) || status.Equals(OrderStatusConstant.Shipping))
+        if (status.Equals(OrderStatusConstant.Canceled) || status.Equals(OrderStatusConstant.Delivering))
         {
             return false;
         }
