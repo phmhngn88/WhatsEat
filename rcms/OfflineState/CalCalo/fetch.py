@@ -7,7 +7,7 @@ import time
 def update_calo(conn,tuple):
     cursor = conn.cursor()
 
-    query_string =  """Update whatseat.recipes set Calo = %s where RecipeId = %s"""
+    query_string =  """Update whatseat.recipes set Calories = %s where RecipeId = %s"""
     
     cursor.executemany(query_string, tuple)
     conn.commit()
@@ -51,14 +51,14 @@ def convert_calo(cur, list_ingredient):
                     else:
                         quantity = float(i['quantity'])
                     calo = calo_df(cur,i['name'])
-                    if(calo == 0):
-                        url = "https://www.myfitnesspal.com/public/nutrition"
-                        PARAMS = {'q':i['name'],'page':1,'per_page':10}
-                        r = requests.get(url = url, params = PARAMS)
-                        data = r.json()
-                        print(data['items'][0])
-                        time.sleep(5)
-                    if(calo > 0):
-                        caloOfFood = calo * (quantity/100)
-                        sum_calories += caloOfFood
+                    # if(calo == 0):
+                    #     url = "https://www.myfitnesspal.com/public/nutrition"
+                    #     PARAMS = {'q':i['name'],'page':1,'per_page':10}
+                    #     r = requests.get(url = url, params = PARAMS)
+                    #     data = r.json()
+                    #     print(data['items'][0])
+                    #     time.sleep(5)
+                    # if(calo > 0):
+                    caloOfFood = calo * (quantity/100)
+                    sum_calories += caloOfFood
     return sum_calories
