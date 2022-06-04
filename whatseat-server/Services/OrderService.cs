@@ -230,7 +230,7 @@ public class OrderService
     {
         CalculateShippingFeeRequest shippingFeeRequest = new CalculateShippingFeeRequest
         {
-            ServiceId = 53321,
+            ServiceId = request.ServiceId,
             InsuranceValue = 50000,
             Coupon = null,
             FromDistrictId = request.FromDistrictId,
@@ -244,12 +244,12 @@ public class OrderService
 
         var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Get,
-            "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee")
+            "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district")
         {
             Headers = {
                     // { HeaderNames.AcceptEncoding, "gzip, deflate, br"},
                     {HeaderNames.Accept, "*/*"},
-                    {"Token", "a0047ed7-e3df-11ec-8eb7-42466f71e088"}
+                    {"Token", "a56ffb3c-e407-11ec-a1f9-5689a5719baa"}
                 },
             Content = new StringContent(JsonConvert.SerializeObject(shippingFeeRequest), Encoding.UTF8, "application/json")
         };

@@ -140,7 +140,8 @@ public class CustomerController : ControllerBase
                     {
                         FromDistrictId = product.Store.DistrictCode,
                         ToDistrictId = currentOrder.ShippingInfo.DistrictCode,
-                        ToWardCode = currentOrder.ShippingInfo.DistrictCode
+                        ToWardCode = currentOrder.ShippingInfo.DistrictCode,
+                        ServiceId = request.ServiceId
                     });
 
                     if (currentOrder.ShippingFee < 0)
