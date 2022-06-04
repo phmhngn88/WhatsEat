@@ -8,7 +8,6 @@ import Footer from "../../components/Footer/Footer";
 import ShopOrderCard from "../../components/ShopOrderCard/ShopOrderCard";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopOrders.css";
-import { keyboard } from "@testing-library/user-event/dist/keyboard";
 
 const { TabPane } = Tabs;
 
@@ -55,6 +54,7 @@ const ShopOrders = () => {
           allOrders.delivered.push(order);
       }
     });
+  console.log({ allOrders });
   const getShopOrders = () => {
     axios({
       method: "get",
@@ -88,9 +88,11 @@ const ShopOrders = () => {
   //       console.log(error);
   //     });
   // }
+
   useEffect(() => {
     setDefaultActiveKey(defaultKey);
   }, [defaultKey]);
+
   useEffect(() => {
     getShopOrders();
   }, []);

@@ -98,6 +98,16 @@ const CusOrderDetail = () => {
                         case 2:
                           return <Timeline.Item>Chờ xác nhận</Timeline.Item>;
                           break;
+                        case 3:
+                          return <Timeline.Item>Đang giao hàng</Timeline.Item>;
+                          break;
+                        case 4:
+                          return <Timeline.Item>Đã giao hàng</Timeline.Item>;
+                          break;
+                        case 5:
+                          return <Timeline.Item>Đơn hủy</Timeline.Item>;
+                          break;
+
                         default:
                           return <></>;
                       }

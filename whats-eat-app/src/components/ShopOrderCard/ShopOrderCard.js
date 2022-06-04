@@ -22,6 +22,7 @@ const ShopOrderCard = ({
               key={idx}
               {...order}
               {...paymentMethod}
+              id={orderId}
               status={
                 orderStatusHistories.length > 0
                   ? orderStatusHistories
