@@ -1,6 +1,10 @@
 using System;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using whatseat_server.Constants;
 using whatseat_server.Data;
 using whatseat_server.Libraries;
@@ -13,6 +17,8 @@ namespace whatseat_server.Services;
 public class OrderService
 {
     private readonly WhatsEatContext _context;
+    private readonly IHttpClientFactory _httpClientFactory;
+
     public static TreeNode<string> statusRoot = new TreeNode<string>("root");
     // TreeNode<string> ship_cod = statusRoot.AddChild("ship_cod");
     public static TreeNode<string> paid = statusRoot.AddChild("paid");
@@ -24,10 +30,10 @@ public class OrderService
     public static TreeNode<string> deliveredSuccessfully1 = pendingForConfirmation.AddChild("delivering successfully");
 
 
-
-    public OrderService(WhatsEatContext context)
+    public OrderService(WhatsEatContext context, IHttpClientFactory httpClientFactory)
     {
         _context = context;
+        _httpClientFactory = httpClientFactory;
     }
 
     public async Task<PagedList<Order>> GetUserPagedOrders(Customer customer, OrderPagedRequest request)
@@ -218,6 +224,50 @@ public class OrderService
         await _context.SaveChangesAsync();
 
         return res.Entity;
+    }
+
+    public async Task<long> CalculateFee(OrderShippingFeeRequest request)
+    {
+        CalculateShippingFeeRequest shippingFeeRequest = new CalculateShippingFeeRequest
+        {
+            ServiceId = 53321,
+            InsuranceValue = 50000,
+            Coupon = null,
+            FromDistrictId = request.FromDistrictId,
+            ToDistrictId = request.ToDistrictId,
+            ToWardCode = request.ToWardCode.ToString(),
+            Height = 15,
+            Length = 15,
+            Weight = 1000,
+            Width = 15
+        };
+
+        var httpRequestMessage = new HttpRequestMessage(
+            HttpMethod.Get,
+            "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee")
+        {
+            Headers = {
+                    // { HeaderNames.AcceptEncoding, "gzip, deflate, br"},
+                    {HeaderNames.Accept, "*/*"},
+                    {"Token", "a0047ed7-e3df-11ec-8eb7-42466f71e088"}
+                },
+            Content = new StringContent(JsonConvert.SerializeObject(shippingFeeRequest), Encoding.UTF8, "application/json")
+        };
+
+
+        var httpClient = _httpClientFactory.CreateClient();
+
+        var HttpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+        if (HttpResponseMessage.IsSuccessStatusCode)
+        {
+            var contentStream = await HttpResponseMessage.Content.ReadAsStringAsync();
+            CalculateShippingFeeResponse feeRes = JsonConvert.DeserializeObject<CalculateShippingFeeResponse>(contentStream);
+            return feeRes.Data.Total;
+        }
+
+        return -1;
+
     }
 
 }

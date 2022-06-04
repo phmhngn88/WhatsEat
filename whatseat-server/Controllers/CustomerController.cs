@@ -99,7 +99,7 @@ public class CustomerController : ControllerBase
     [HttpPost]
     [Route("order")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
-    public async Task<IActionResult> AddOrder([FromBody] OrderRequest request)
+    public async Task<IActionResult> AddOrder([FromBody] OrderCreateRequest request)
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
 
@@ -133,8 +133,20 @@ public class CustomerController : ControllerBase
                         OrderDetails = new List<OrderDetail>(),
                         CreatedOn = DateTime.UtcNow,
                         ShippingInfo = _context.ShippingInfos.FirstOrDefault(si => si.ShippingInfoId == request.ShippingInfoId),
-                        PaymentMethod = _context.PaymentMethods.FirstOrDefault(pm => pm.PaymentMethodId == request.PaymentMethodId)
+                        PaymentMethod = _context.PaymentMethods.FirstOrDefault(pm => pm.PaymentMethodId == request.PaymentMethodId),
                     };
+
+                    currentOrder.ShippingFee = await _orderService.CalculateFee(new OrderShippingFeeRequest
+                    {
+                        FromDistrictId = product.Store.DistrictCode,
+                        ToDistrictId = currentOrder.ShippingInfo.DistrictCode,
+                        ToWardCode = currentOrder.ShippingInfo.DistrictCode
+                    });
+
+                    if (currentOrder.ShippingFee < 0)
+                    {
+                        return BadRequest(new { Message = "Cannot calculate shipping fee" });
+                    }
                     classifiedOrders.Add(storeId, currentOrder);
                 }
 
@@ -467,6 +479,22 @@ public class CustomerController : ControllerBase
         catch (FormatException ex)
         {
             return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpGet]
+    [Route("ShippingFee")]
+    public async Task<IActionResult> CalculateFee([FromQuery] OrderShippingFeeRequest request)
+    {
+        var shippingFee = await _orderService.CalculateFee(request);
+
+        if (shippingFee < 0)
+        {
+            return BadRequest(new { Message = "Calculate shipping fee failed", ShippingFee = -1 });
+        }
+        else
+        {
+            return Ok(new { Message = "Success", ShippingFee = shippingFee });
         }
     }
 }
