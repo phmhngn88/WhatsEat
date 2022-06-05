@@ -138,7 +138,7 @@ public class CustomerController : ControllerBase
 
                     currentOrder.ShippingFee = await _orderService.CalculateFee(new OrderShippingFeeRequest
                     {
-                        FromDistrictId = product.Store.DistrictCode,
+                        // FromDistrictId = product.Store.DistrictCode,
                         ToDistrictId = currentOrder.ShippingInfo.DistrictCode,
                         ToWardCode = currentOrder.ShippingInfo.DistrictCode,
                         ServiceId = request.ServiceId

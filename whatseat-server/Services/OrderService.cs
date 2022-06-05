@@ -238,7 +238,7 @@ public class OrderService
             ToWardCode = request.ToWardCode.ToString(),
             Height = 15,
             Length = 15,
-            Weight = 1000,
+            Weight = 200,
             Width = 15
         };
 
