@@ -142,13 +142,16 @@ const SingleDishPage = () => {
     return (
       <div
         style={{
-          height: "100vh",
+          height: "85vh",
           display: "flex",
           alignItem: "center",
           justifyContent: "center",
+          fontSize: "3rem",
+          fontWeight: "900",
+          marginTop: "15rem",
         }}
       >
-        <img src="../../assets/Banner/preloader.gif" alt="" />
+        <p>Loading...</p>
       </div>
     );
   }

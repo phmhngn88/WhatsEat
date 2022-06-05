@@ -76,8 +76,6 @@ const OrderPage = () => {
           allUserOrders.delivered.push(order);
       }
     });
-  console.log({ allUserOrders });
-  const onSearch = () => {};
   const getCustomerOrders = () => {
     axios({
       method: "get",

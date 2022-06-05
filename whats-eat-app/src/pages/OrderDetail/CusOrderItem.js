@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { message, Modal, Rate } from "antd";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./OrderDetail.css";
 
-const CusOrderItem = ({ productId, price }) => {
+const CusOrderItem = ({ productId, price, ratingAvailable }) => {
   const [orderInfo, setOrderInfo] = useState();
   const [store, setStore] = useState();
+  const [isRating, setIsRating] = useState(false);
+  const [isRated, setIsRated] = useState(false);
+  const [rateValue, setRateValue] = useState(5);
+  const [comment, setComment] = useState("");
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.userInfo.token);
 
   const getStore = () => {
     if (orderInfo) {
@@ -22,6 +29,29 @@ const CusOrderItem = ({ productId, price }) => {
           console.log(error);
         });
     }
+  };
+
+  const handleReviewProduct = () => {
+    console.log({ productId, rateValue, comment });
+    axios({
+      method: "POST",
+      url: "https://localhost:7029/api/Product/review",
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        productId: productId,
+        rating: rateValue,
+        comment: comment,
+      },
+    })
+      .then((res) => {
+        message.success("Cảm ơn đánh giá của bạn!");
+        setIsRating(false);
+        setIsRated(true);
+      })
+      .catch((err) => {
+        message.error("Đánh giá không thành công!");
+        setIsRating(false);
+      });
   };
   useEffect(() => {
     axios({
@@ -71,6 +101,38 @@ const CusOrderItem = ({ productId, price }) => {
             currency: "VND",
           })}
         </h3>
+
+        {ratingAvailable && (
+          <button
+            className="rating-btn"
+            disabled={isRated ? true : false}
+            onClick={() => setIsRating(true)}
+          >
+            {isRated ? "Đã đánh giá" : "Đánh giá sản phẩm"}
+          </button>
+        )}
+        <Modal
+          title={`Đánh giá sản phẩm ${orderInfo.name ? orderInfo.name : ""}`}
+          visible={isRating}
+          cancelText="Hủy"
+          okText="Đánh giá"
+          onOk={handleReviewProduct}
+          onCancel={() => setIsRating(false)}
+        >
+          <Rate
+            className="stars"
+            onChange={(value) => setRateValue(value)}
+            value={rateValue}
+          />
+          <div className="comment-area">
+            <textarea
+              cols="30"
+              rows="10"
+              placeholder="Viết bình luận..."
+              onChange={(e) => setComment(e.target.value)}
+            ></textarea>
+          </div>
+        </Modal>
       </div>
     </>
   );

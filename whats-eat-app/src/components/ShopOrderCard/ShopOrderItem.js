@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import "./ShopOrderItem.css";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ShopOrderItem = ({ productId, price, value, status, id }) => {
   const [orderInfo, setOrderInfo] = useState();
@@ -111,6 +111,7 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
 
         {/* <a href="#">Hủy đơn</a> */}
       </div>
+      <Link to={`/orders/${id}`}>Xem chi tiết...</Link>
     </div>
   );
 };

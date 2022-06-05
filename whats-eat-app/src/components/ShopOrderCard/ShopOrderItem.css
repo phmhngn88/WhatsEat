@@ -16,6 +16,8 @@
 
 .shop-order-item .order-info .product-info img{
     width: 3rem;
+    height:3rem;
+    object-fit:cover;
 }
 
 .shop-order-item .order-info .product-info span{
