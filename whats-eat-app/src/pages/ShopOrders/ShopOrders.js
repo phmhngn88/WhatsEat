@@ -50,7 +50,6 @@ const ShopOrders = () => {
           allOrders.delivered.push(order);
       }
     });
-  console.log({ allOrders });
   const getShopOrders = () => {
     axios({
       method: "get",
@@ -66,6 +65,7 @@ const ShopOrders = () => {
       });
   };
 
+  console.log(shopOrders);
   // const handleGetOrderDetails = () =>{
   //   axios({
   //     method: "get",

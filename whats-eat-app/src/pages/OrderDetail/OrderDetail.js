@@ -89,29 +89,33 @@ const CusOrderDetail = () => {
               <div className="status">
                 <p className="order-id">Mã đơn hàng: {order.orderId}</p>
                 <Timeline>
-                  {order.orderStatusHistories &&
+                  {order.orderStatusHistories.length > 0 ? (
                     order.orderStatusHistories.map((status) => {
-                      switch (status.orderStatus.orderStatusId) {
-                        case 1:
-                          return <Timeline.Item>Đã thanh toán</Timeline.Item>;
-                          break;
-                        case 2:
+                      switch (status.orderStatus.value) {
+                        case "waiting":
                           return <Timeline.Item>Chờ xác nhận</Timeline.Item>;
                           break;
-                        case 3:
+                        case "delivering":
                           return <Timeline.Item>Đang giao hàng</Timeline.Item>;
                           break;
-                        case 4:
+                        case "delivered":
                           return <Timeline.Item>Đã giao hàng</Timeline.Item>;
                           break;
-                        case 5:
+                        case "canceled":
                           return <Timeline.Item>Đơn hủy</Timeline.Item>;
                           break;
 
                         default:
                           return <></>;
                       }
-                    })}
+                    })
+                  ) : (
+                    <>
+                      <Timeline.Item>Chờ xác nhận</Timeline.Item>
+                      <Timeline.Item>Đang giao hàng</Timeline.Item>
+                      <Timeline.Item>Đã giao hàng</Timeline.Item>
+                    </>
+                  )}
                 </Timeline>
               </div>
             </div>
@@ -135,16 +139,26 @@ const CusOrderDetail = () => {
                       })}
                     </p>
                     <p>
-                      {(30000).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {order.shippingFee
+                        ? order.shippingFee.toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })
+                        : (30000).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                     </p>
                     <p>
-                      {(total + 30000).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {order.shippingFee
+                        ? (total + order.shippingFee).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })
+                        : (total + 30000).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                     </p>
                   </div>
                 </div>
@@ -152,7 +166,7 @@ const CusOrderDetail = () => {
               <div className="order-info-block"></div>
             </div>
           </div>
-          {order.orderStatusHistories &&
+          {/* {order.orderStatusHistories &&
             order.orderStatusHistories[order.orderStatusHistories.length - 1]
               .orderStatus.value === "delivered" && (
               <div className="rate-area">
@@ -179,7 +193,7 @@ const CusOrderDetail = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
         </div>
       </div>
       <Footer />

@@ -43,17 +43,18 @@ const CusOrderItem = ({ productId, price }) => {
 
   return (
     <>
-      <div className="shop-name">
+      <div
+        className="shop-name"
+        style={{ cursor: "pointer" }}
+        onClick={() =>
+          navigate(`/viewshop/${store.storeId}`, {
+            state: {
+              storeId: store.storeId,
+            },
+          })
+        }
+      >
         {store.shopName}{" "}
-        <a
-          onClick={() =>
-            navigate(`/viewshop/${store.storeId}`, {
-              state: {
-                storeId: store.storeId,
-              },
-            })
-          }
-        >{`Xem shop >`}</a>
       </div>
       <div className="order-block">
         <div className="item-info">

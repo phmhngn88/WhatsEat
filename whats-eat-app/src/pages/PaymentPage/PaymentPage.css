@@ -125,7 +125,7 @@
     align-items: center;
     font-size: 1rem;
     padding: 0.5rem 1rem;
-    width: 60%;
+    width: 40%;
 }
 
 .deliver .title{
@@ -143,6 +143,14 @@
 .deliver a{
     text-transform: uppercase;
     margin-left: 3rem;
+}
+
+.products-block .message-box .shipping-fee{
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-left: 1.5px solid #c4c4c4;
 }
 
 .payment-fluid .payment-container .btn:hover,
