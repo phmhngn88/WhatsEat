@@ -18,7 +18,7 @@ import "./SingleDishPage.css";
 import IngredientBox from "../../components/IngredientBox/IngredientBox";
 import TopItems from "../../components/TopItems/TopItems";
 import RecommendedRecipes from "../../components/TopItems/RecommendedRecipes";
-import { Input, Checkbox } from "antd";
+import { Input, Checkbox, Form } from "antd";
 
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
@@ -32,6 +32,7 @@ const SingleDishPage = () => {
   const recipeId = location.state.recipeId;
   const calculatedArray = [];
   const [newIngreadients, setNewIngreadients] = useState([]);
+  const [form] = Form.useForm();
   const {
     description,
     avgRating,
@@ -104,6 +105,7 @@ const SingleDishPage = () => {
     });
 
     setNewIngreadients(list);
+    form.resetFields();
     console.log(servingNumber, calculatedArray, newIngreadients);
   };
 
@@ -216,34 +218,38 @@ const SingleDishPage = () => {
               </div>
             </div>
             <div className="form-calc">
-              <>
+              <Form form={form}>
                 <h1 className="form-title">
                   Bạn muốn thay đổi số người ăn? Tính toán lượng nguyên liệu tại
                   đây.
                 </h1>
                 <p className="label">Nhập số người ăn:</p>
-                <Input
-                  type="number"
-                  placeholder="Nhập số người..."
-                  onChange={(e) => setServingNumber(+e.target.value)}
-                />
+                <Form.Item>
+                  <Input
+                    type="number"
+                    placeholder="Nhập số người..."
+                    onChange={(e) => setServingNumber(+e.target.value)}
+                  />
+                </Form.Item>
                 <div className="checkbox-area">
                   <p className="label">Chọn loại nguyên liệu muốn tính:</p>
                   <div>
-                    {ingredients?.map((item, idx) => {
-                      return (
-                        <Checkbox
-                          key={idx}
-                          onChange={(e) => {
-                            if (e.target.checked === true) {
-                              calculatedArray.push(item);
-                            } else calculatedArray.splice(idx, 1);
-                          }}
-                        >
-                          {item.name}
-                        </Checkbox>
-                      );
-                    })}
+                    <Form.Item name="listIngredients">
+                      {ingredients?.map((item, idx) => {
+                        return (
+                          <Checkbox
+                            key={idx}
+                            onChange={(e) => {
+                              if (e.target.checked === true) {
+                                calculatedArray.push(item);
+                              } else calculatedArray.splice(idx, 1);
+                            }}
+                          >
+                            {item.name}
+                          </Checkbox>
+                        );
+                      })}
+                    </Form.Item>
                   </div>
                 </div>
                 <button
@@ -252,7 +258,7 @@ const SingleDishPage = () => {
                 >
                   Xem kết quả
                 </button>
-              </>
+              </Form>
               {newIngreadients.length > 0 && (
                 <>
                   <h1 className="form-title">
