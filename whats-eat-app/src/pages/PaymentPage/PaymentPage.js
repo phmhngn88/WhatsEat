@@ -29,11 +29,14 @@ const PaymentPage = () => {
   const [wardName, setWardName] = useState("");
   const [wardList, setWardList] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(1);
+  const [shippingFee, setShippingFee] = useState(0);
+  const [services, setServices] = useState([]);
+  const [choosenService, setChoosenService] = useState();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const token = useSelector((state) => state.auth.userInfo.token);
   const getTotalPrice = (cartItems) => {
     return cartItems.reduce((total, cartItem) => {
-      return cartItem.totalPrice + total;
+      return cartItem.totalPrice + total + shippingFee;
     }, 0);
   };
 
@@ -51,7 +54,10 @@ const PaymentPage = () => {
       setIsUpdateProfileVisible(true);
     } else if (!shippingInfoId) {
       message.error("Vui lòng chọn địa chỉ giao hàng");
+    } else if (!choosenService) {
+      message.error("Vui lòng chọn gói dịch vụ giao hàng");
     } else {
+      console.log({ paymentMethod, shippingInfoId, carts, choosenService });
       axios({
         method: "POST",
         url: "https://localhost:7029/api/Customer/order",
@@ -60,6 +66,7 @@ const PaymentPage = () => {
           paymentMethodId: paymentMethod,
           shippingInfoId: shippingInfoId,
           productList: carts,
+          serviceId: +choosenService,
         },
       })
         .then((res) => {
@@ -209,6 +216,94 @@ const PaymentPage = () => {
   }, []);
 
   useEffect(() => {
+    if (addressList.length > 0) {
+      if (!choosenAddress) {
+        axios({
+          method: "GET",
+          url: `https://localhost:7029/api/Customer/ShippingFee?ServiceId=${
+            choosenService
+              ? choosenService
+              : services.length > 0
+              ? services[0].service_id
+              : 0
+          }&FromDistrictId=1463&ToDistrictId=${
+            addressList[0].districtCode
+          }&ToWardCode=${addressList[0].wardCode}`,
+        })
+          .then((res) => {
+            console.log(res.data);
+            setShippingFee(res.data.shippingFee);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios({
+          method: "GET",
+          url: `https://localhost:7029/api/Customer/ShippingFee?ServiceId=${
+            choosenService
+              ? choosenService
+              : services.length > 0
+              ? services[0].service_id
+              : 0
+          }&FromDistrictId=1463&ToDistrictId=${
+            choosenAddress.districtCode
+          }&ToWardCode=${choosenAddress.wardCode}`,
+        })
+          .then((res) => {
+            console.log(res.data);
+            setShippingFee(res.data.shippingFee);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }, [choosenAddress, choosenService]);
+
+  useEffect(() => {
+    if (addressList.length > 0) {
+      if (!choosenAddress) {
+        axios({
+          method: "GET",
+          url: `https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services`,
+          headers: { token: `a11d1949-dc33-11ec-987f-ea8994b0d064` },
+          params: {
+            shop_id: 3021285,
+            from_district: 1463,
+            to_district: addressList[0].districtCode,
+          },
+        })
+          .then((res) => {
+            console.log(res.data);
+            setServices(res.data.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios({
+          method: "GET",
+          url: `https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services`,
+          headers: { token: `a11d1949-dc33-11ec-987f-ea8994b0d064` },
+          params: {
+            shop_id: 3021285,
+            from_district: 1463,
+            to_district: choosenAddress.districtCode,
+          },
+        })
+          .then((res) => {
+            console.log(res.data);
+            setServices(res.data.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }, [choosenAddress]);
+
+  useEffect(() => {
     axios({
       method: "GET",
       url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/province",
@@ -318,14 +413,17 @@ const PaymentPage = () => {
                       handleGetDistrict(id);
                     }}
                   >
-                    {provinceList.map((province) => (
-                      <Option
-                        key={province.ProvinceID}
-                        value={`${province.Code}.${province.ProvinceID}.${province.ProvinceName}`}
-                      >
-                        {province.ProvinceName}
-                      </Option>
-                    ))}
+                    {provinceList.map(
+                      (province) =>
+                        province.Code === "8" && (
+                          <Option
+                            key={province.ProvinceID}
+                            value={`${province.Code}.${province.ProvinceID}.${province.ProvinceName}`}
+                          >
+                            {province.ProvinceName}
+                          </Option>
+                        )
+                    )}
                   </Select>
                 </Form.Item>
                 <Form.Item name="districtCode" label="Huyện">
@@ -333,7 +431,7 @@ const PaymentPage = () => {
                     placeholder="Chọn huyện"
                     onChange={(value) => {
                       const [code, id, name] = value.split(".");
-                      setDistrict(+code);
+                      setDistrict(+id);
                       setDistrictName(name);
                       handleGetWard(id);
                     }}
@@ -397,7 +495,9 @@ const PaymentPage = () => {
                     }}
                   >
                     <div>
-                      <p className="username">Trần Nhật Hiệp</p>
+                      <p className="username">
+                        {address.name ? address.name : "Trần Nhật Hiệp"}
+                      </p>
                       <p className="phone">{address.phoneNumber}</p>
                       <p className="address">{address.address}</p>
                     </div>
@@ -457,17 +557,36 @@ const PaymentPage = () => {
               </div>
               <div className="deliver">
                 <div className="title">
-                  Đơn vị vận chuyển:
+                  Dịch vụ giao hàng:
                   <Select
                     labelInValue
-                    defaultValue={{ value: 1 }}
-                    onChange={(value) => setDeliver(value.value)}
+                    onChange={(value) => setChoosenService(value.value)}
                     bordered={false}
                   >
-                    <Option value={1}>Giao hàng nhanh</Option>
-                    <Option value={2}>Giao hàng tiết kiệm</Option>
+                    {services.length > 0 &&
+                      services.map((service) => {
+                        return (
+                          <Option
+                            key={service.service_id}
+                            value={service.service_id}
+                          >
+                            {service.short_name === "Đi bộ"
+                              ? "Giao hàng tiêu chuẩn"
+                              : service.short_name}
+                          </Option>
+                        );
+                      })}
                   </Select>
                 </div>
+              </div>
+              <div className="shipping-fee">
+                <p>
+                  Phí vận chuyển:{" "}
+                  {shippingFee.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+                </p>
               </div>
             </div>
             <div className="payment-method-box">

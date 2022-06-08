@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CusOrderItem from "./CusOrderItem";
 import Footer from "../../components/Footer/Footer";
 import "./OrderDetail.css";
@@ -11,8 +11,6 @@ import "./OrderDetail.css";
 const CusOrderDetail = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
-  const [rateValue, setRateValue] = useState(5);
-  const [comment, setComment] = useState("");
   const token = useSelector((state) => state.auth.userInfo.token);
 
   const getOrder = () => {
@@ -31,31 +29,27 @@ const CusOrderDetail = () => {
       });
   };
 
-  const handleSubmitRating = (id) => {
-    axios({
-      method: "POST",
-      url: "https://localhost:7029/api/Product/review",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      data: {
-        productId: id,
-        rating: rateValue,
-        comment: comment,
-      },
-    })
-      .then((res) => {
-        message.success("Cảm ơn đánh giá của bạn!");
-      })
-      .catch((err) => {
-        message.error("Đánh giá không thành công!");
-      });
-  };
-
   useEffect(() => {
     getOrder();
   }, []);
 
   let total = 0;
-  if (!order) return <p>Loading</p>;
+  if (!order)
+    return (
+      <div
+        style={{
+          height: "85vh",
+          display: "flex",
+          alignItem: "center",
+          justifyContent: "center",
+          fontSize: "3rem",
+          fontWeight: "900",
+          marginTop: "15rem",
+        }}
+      >
+        <p>Loading...</p>
+      </div>
+    );
   else {
     if (order.orderDetails !== null) {
       order.orderDetails &&
@@ -89,29 +83,33 @@ const CusOrderDetail = () => {
               <div className="status">
                 <p className="order-id">Mã đơn hàng: {order.orderId}</p>
                 <Timeline>
-                  {order.orderStatusHistories &&
+                  {order.orderStatusHistories.length > 0 ? (
                     order.orderStatusHistories.map((status) => {
-                      switch (status.orderStatus.orderStatusId) {
-                        case 1:
-                          return <Timeline.Item>Đã thanh toán</Timeline.Item>;
-                          break;
-                        case 2:
+                      switch (status.orderStatus.value) {
+                        case "waiting":
                           return <Timeline.Item>Chờ xác nhận</Timeline.Item>;
                           break;
-                        case 3:
+                        case "delivering":
                           return <Timeline.Item>Đang giao hàng</Timeline.Item>;
                           break;
-                        case 4:
+                        case "delivered":
                           return <Timeline.Item>Đã giao hàng</Timeline.Item>;
                           break;
-                        case 5:
+                        case "canceled":
                           return <Timeline.Item>Đơn hủy</Timeline.Item>;
                           break;
 
                         default:
                           return <></>;
                       }
-                    })}
+                    })
+                  ) : (
+                    <>
+                      <Timeline.Item>Chờ xác nhận</Timeline.Item>
+                      <Timeline.Item>Đang giao hàng</Timeline.Item>
+                      <Timeline.Item>Đã giao hàng</Timeline.Item>
+                    </>
+                  )}
                 </Timeline>
               </div>
             </div>
@@ -119,7 +117,16 @@ const CusOrderDetail = () => {
               <div className="item-info">
                 {order.orderDetails.length > 0 &&
                   order.orderDetails.map((item, idx) => (
-                    <CusOrderItem key={idx} {...item} />
+                    <CusOrderItem
+                      key={idx}
+                      {...item}
+                      ratingAvailable={
+                        order.orderStatusHistories.length > 0 &&
+                        order.orderStatusHistories[
+                          order.orderStatusHistories.length - 1
+                        ].orderStatus.value === "delivered"
+                      }
+                    />
                   ))}
                 <div className="payment-info">
                   <div className="label">
@@ -135,16 +142,26 @@ const CusOrderDetail = () => {
                       })}
                     </p>
                     <p>
-                      {(30000).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {order.shippingFee
+                        ? order.shippingFee.toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })
+                        : (30000).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                     </p>
                     <p>
-                      {(total + 30000).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {order.shippingFee
+                        ? (total + order.shippingFee).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })
+                        : (total + 30000).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                     </p>
                   </div>
                 </div>
@@ -152,7 +169,7 @@ const CusOrderDetail = () => {
               <div className="order-info-block"></div>
             </div>
           </div>
-          {order.orderStatusHistories &&
+          {/* {order.orderStatusHistories &&
             order.orderStatusHistories[order.orderStatusHistories.length - 1]
               .orderStatus.value === "delivered" && (
               <div className="rate-area">
@@ -179,7 +196,7 @@ const CusOrderDetail = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
         </div>
       </div>
       <Footer />
