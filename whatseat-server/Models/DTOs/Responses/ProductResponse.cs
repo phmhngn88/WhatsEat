@@ -15,4 +15,5 @@ public class ProductResponse
     public List<List<Photo>> Images { get; set; }
     public int StoreId { get; internal set; }
     public string StoreName { get; internal set; }
+    public bool Status { get; internal set; }
 }

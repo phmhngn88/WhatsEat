@@ -59,7 +59,7 @@ public class StoreService
 
     public async Task<Store> FindStoreByStoreIdAsync(int storeId)
     {
-        return await _context.Stores.Include(s => s.User).FirstOrDefaultAsync(s => s.StoreId == storeId);
+        return await _context.Stores.Include(s => s.User).Include(s => s.Products).FirstOrDefaultAsync(s => s.StoreId == storeId);
     }
 
     internal async Task<StoreReview> storeReview(StoreReviewRequest reviewRequest, Customer customer)
