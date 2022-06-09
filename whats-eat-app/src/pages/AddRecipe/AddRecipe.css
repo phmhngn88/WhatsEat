@@ -96,3 +96,13 @@
     margin-top: 0.5rem;
     float: right;
 }
+
+.add-recipe .my-recipes h1{
+    font-weight: 900;
+}
+
+.add-recipe .my-recipes{
+    width: 70%;
+    padding: 2rem 1rem;
+    margin: 1rem auto;
+}
