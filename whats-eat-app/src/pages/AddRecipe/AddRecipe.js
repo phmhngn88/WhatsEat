@@ -1,9 +1,10 @@
-import { Form, Input, Image, Select, message } from "antd";
+import { Form, Input, Row, Col, Image, Select, message } from "antd";
 import "antd/dist/antd.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../../components/Footer/Footer";
+import Dish from "../../components/Dish/Dish";
 import "./AddRecipe.css";
 
 const { TextArea } = Input;
@@ -70,6 +71,7 @@ const AddRecipe = () => {
   const [stepsContent, setStepsContent] = useState("");
   const [stepsRecipe, setStepsRecipe] = useState([]);
   const [data, setData] = useState();
+  const [myRecipes, setMyRecipes] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
 
   const uploadThumbImage = (value) => {
@@ -172,6 +174,21 @@ const AddRecipe = () => {
       });
     // console.log(stepsRecipe);
   };
+
+  useEffect(() => {
+    axios({
+      method: "Get",
+      url: `https://localhost:7029/api/Customer/own-recipes`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        console.log(res.data);
+        setMyRecipes(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="add-recipe">
@@ -359,6 +376,30 @@ const AddRecipe = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="my-recipes">
+        <h1>Công thức của bạn</h1>
+        <Row gutter={[16, 16]}>
+          {myRecipes.length > 0 &&
+            myRecipes.map((dish) => {
+              return (
+                <Col
+                  span={6}
+                  key={dish.recipeId}
+                  className="dish-col"
+                  // onClick={() =>
+                  //   navigate(`/singledish/${dish.recipeId}`, {
+                  //     state: {
+                  //       recipeId: dish.recipeId,
+                  //     },
+                  //   })
+                  // }
+                >
+                  <Dish {...dish} />
+                </Col>
+              );
+            })}
+        </Row>
       </div>
       <Footer />
     </div>

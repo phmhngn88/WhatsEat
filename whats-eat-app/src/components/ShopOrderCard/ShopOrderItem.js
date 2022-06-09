@@ -7,6 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 const ShopOrderItem = ({ productId, price, value, status, id }) => {
   const [orderInfo, setOrderInfo] = useState();
   const [isAccepted, setIsAccepted] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const location = useLocation();
   const { storeId } = location.state;
@@ -25,6 +26,25 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
     })
       .then((res) => {
         setIsAccepted(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleCompleteOrder = () => {
+    console.log(id);
+    axios({
+      method: "post",
+      url: `https://localhost:7029/api/Store/${storeId}/orders/complete`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        orderId: id,
+        message: ".",
+      },
+    })
+      .then((res) => {
+        setIsComplete(true);
       })
       .catch((error) => {
         console.log(error);
@@ -96,14 +116,21 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
 
         {/* <a href="#">Xem chi tiết</a> */}
         {status !== "Đã giao" &&
-          status[status.length - 1].orderStatus.orderStatusId === 2 && (
+          status[status.length - 1].orderStatus.value === "waiting" && (
             <button onClick={handleAcceptOrder}>
               {isAccepted ? "Đã nhận đơn" : "Chấp nhận"}
             </button>
           )}
 
         {status !== "Đã giao" &&
-          status[status.length - 1].orderStatus.orderStatusId === 2 && (
+          status[status.length - 1].orderStatus.value === "delivering" && (
+            <button onClick={handleCompleteOrder}>
+              {isComplete ? "Đã giao hàng" : "Giao hàng"}
+            </button>
+          )}
+
+        {status !== "Đã giao" &&
+          status[status.length - 1].orderStatus.value === "waiting" && (
             <button onClick={handleCancelOrder}>
               {isCanceled ? "Đã hủy đơn" : "Hủy đơn"}
             </button>
