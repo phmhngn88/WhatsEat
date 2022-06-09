@@ -68,7 +68,11 @@ const CusOrderDetail = () => {
             <div className="address-and-status">
               <div className="address">
                 <h2>Địa Chỉ Nhận Hàng</h2>
-                <p className="customer-name">Trần Nhật Hiệp</p>
+                <p className="customer-name">
+                  {order.shippingInfo.name
+                    ? order.shippingInfo.name
+                    : "Trần Nhật Hiệp"}
+                </p>
                 <p className="phone-number">
                   {order.shippingInfo
                     ? order.shippingInfo.phoneNumber
