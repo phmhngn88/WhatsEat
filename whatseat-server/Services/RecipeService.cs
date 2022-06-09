@@ -24,6 +24,11 @@ public class RecipeService
     {
         return await _context.Recipes.FirstOrDefaultAsync(p => p.RecipeId == recipeId);
     }
+    public async Task<List<Recipe>> FindRecipeByCreator(Customer customer)
+    {
+        return await _context.Recipes.Where(p => p.Creator.CustomerId == customer.CustomerId).ToListAsync();
+    }
+
 
     public async Task<PagedList<Recipe>> SearchRecipeFullText(RecipeFilter recipeFilter)
     {

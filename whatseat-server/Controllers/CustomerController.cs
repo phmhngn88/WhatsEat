@@ -20,13 +20,15 @@ public class CustomerController : ControllerBase
     private readonly CartService _cartService;
     private readonly WhatsEatContext _context;
     private readonly OrderService _orderService;
+    private readonly RecipeService _recipeService;
     private readonly ILogger<CustomerController> _logger;
     public CustomerController(CustomerService customerService,
         ProductService productService,
         CartService cartService,
         OrderService orderService,
         ILogger<CustomerController> logger,
-        WhatsEatContext context
+        WhatsEatContext context,
+        RecipeService recipeService
     )
     {
         _orderService = orderService;
@@ -35,6 +37,7 @@ public class CustomerController : ControllerBase
         _cartService = cartService;
         _context = context;
         _logger = logger;
+        _recipeService = recipeService;
     }
 
     [HttpGet]
@@ -497,5 +500,41 @@ public class CustomerController : ControllerBase
         {
             return Ok(new { Message = "Success", ShippingFee = shippingFee });
         }
+    }
+
+    [HttpGet]
+    [Route("own-recipes")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Customer)]
+    public async Task<ActionResult> GetOwnRecipeAsync()
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipesByCreator = await _recipeService.FindRecipeByCreator(customer);
+
+        var recipeRes = new List<RecipeResponse>();
+
+        foreach (var item in recipesByCreator)
+        {
+            recipeRes.Add(new RecipeResponse
+            {
+                RecipeId = item.RecipeId,
+                Name = item.Name,
+                Description = item.Description,
+                Serving = item.Serving,
+                CreatedOn = item.CreatedOn,
+                Creator = item.Creator,
+                TotalTime = item.TotalTime,
+                AvgRating = item.AvgRating,
+                TotalRating = item.TotalRating,
+                TotalView = item.TotalView,
+                totalLike = item.totalLike,
+                videoUrl = item.videoUrl,
+                RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == item.RecipeId).ToListAsync(),
+                Level = item.Level,
+                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl)
+            });
+        }
+
+        return Ok(recipeRes);
     }
 }
