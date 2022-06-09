@@ -22,7 +22,7 @@ public class RecipeService
 
     public async Task<Recipe> FindRecipeById(int recipeId)
     {
-        return await _context.Recipes.FirstOrDefaultAsync(p => p.RecipeId == recipeId);
+        return await _context.Recipes.Include(r => r.Creator).FirstOrDefaultAsync(p => p.RecipeId == recipeId);
     }
 
     public async Task<PagedList<Recipe>> SearchRecipeFullText(RecipeFilter recipeFilter)
@@ -32,6 +32,8 @@ public class RecipeService
         {
             recipes = _context.Recipes.FromSqlInterpolated($"select * from recipes where MATCH(name) against ({recipeFilter.searchTerm})");
         }
+
+        recipes = recipes.Where(r => r.Status == true);
 
         if (!String.IsNullOrEmpty(recipeFilter.level))
         {

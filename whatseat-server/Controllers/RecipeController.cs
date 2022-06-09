@@ -101,7 +101,8 @@ public class RecipeController : ControllerBase
                 videoUrl = item.videoUrl,
                 RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == item.RecipeId).ToListAsync(),
                 Level = item.Level,
-                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl)
+                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl),
+                Status = item.Status
             });
         }
 
@@ -153,7 +154,8 @@ public class RecipeController : ControllerBase
                 videoUrl = item.videoUrl,
                 RecipeTypes = await _context.RecipeRecipeTypes.Where(rrt => rrt.RecipeId == item.RecipeId).ToListAsync(),
                 Level = item.Level,
-                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl)
+                Images = _recipeService.ConvertJsonToPhotos(item.ThumbnailUrl),
+                Status = item.Status
             });
         }
 
@@ -315,7 +317,8 @@ public class RecipeController : ControllerBase
             Steps = request.Steps,
             Level = request.Level,
             RecipeRecipeTypes = recipeTypes,
-            CreatedOn = DateTime.UtcNow
+            CreatedOn = DateTime.UtcNow,
+            Status = true
         };
 
         foreach (var item in request.RecipeTypeIds)
@@ -341,6 +344,27 @@ public class RecipeController : ControllerBase
         {
             message = "Success"
         });
+    }
+
+    [HttpDelete]
+    [Route("{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> DeleteRecipe(int recipeId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var recipe = await _recipeService.FindRecipeById(recipeId);
+
+        if (recipe.Creator == customer)
+        {
+            recipe.Status = false;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        else
+        {
+            return Forbid();
+        }
     }
 
 }
