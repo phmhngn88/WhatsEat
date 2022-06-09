@@ -18,6 +18,7 @@ public class OrderService
 {
     private readonly WhatsEatContext _context;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ProductService _productService;
 
     public static TreeNode<string> statusRoot = new TreeNode<string>("root");
     // TreeNode<string> ship_cod = statusRoot.AddChild("ship_cod");
@@ -30,10 +31,11 @@ public class OrderService
     public static TreeNode<string> deliveredSuccessfully1 = pendingForConfirmation.AddChild("delivering successfully");
 
 
-    public OrderService(WhatsEatContext context, IHttpClientFactory httpClientFactory)
+    public OrderService(WhatsEatContext context, IHttpClientFactory httpClientFactory, ProductService productService)
     {
         _context = context;
         _httpClientFactory = httpClientFactory;
+        _productService = productService;
     }
 
     public async Task<PagedList<Order>> GetUserPagedOrders(Customer customer, OrderPagedRequest request)
@@ -50,7 +52,7 @@ public class OrderService
 
     public async Task<Order> getOrderDetails(Customer customer, int orderId)
     {
-        var order = await _context.Orders.AsNoTracking().Include(o => o.OrderDetails).Include(o => o.OrderStatusHistories).ThenInclude(h => h.OrderStatus)
+        var order = await _context.Orders.Include(o => o.OrderDetails).Include(o => o.OrderStatusHistories).ThenInclude(h => h.OrderStatus)
         .Include(od => od.Customer).Include(od => od.Shipper).Include(od => od.ShippingInfo).Include(od => od.PaymentMethod)
             .FirstOrDefaultAsync(o => o.Customer == customer && o.OrderId == orderId);
         return order;
@@ -67,7 +69,7 @@ public class OrderService
             CreatedOn = DateTime.UtcNow,
             ByUser = true
         };
-
+        await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
         await _context.SaveChangesAsync();
         var res = await getOrderDetails(customer, order.OrderId);
         return res;
@@ -158,7 +160,8 @@ public class OrderService
 
     public async Task<Order> getOrderOrderId(int orderId)
     {
-        return await _context.Orders.Include(o => o.Store).FirstOrDefaultAsync(o => o.OrderId == orderId);
+        return await _context.Orders.Include(o => o.Store).Include(o => o.OrderDetails).ThenInclude(od => od.Product).FirstOrDefaultAsync(o => o.OrderId == orderId);
+
     }
 
     public async Task<OrderStatusHistory> StoreCancelOrder(Order order, string message)
@@ -172,6 +175,12 @@ public class OrderService
             CreatedOn = DateTime.UtcNow,
             ByUser = false
         };
+
+        foreach (var orderDetail in order.OrderDetails)
+        {
+            orderDetail.Product.InStock += orderDetail.Quantity;
+            await _context.SaveChangesAsync();
+        }
         await _context.OrderStatusHistories.AddAsync(orderStatusHistory);
 
         await _context.SaveChangesAsync();
