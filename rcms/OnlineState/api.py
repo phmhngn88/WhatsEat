@@ -198,4 +198,31 @@ def test_dump():
     test = pickle.load(open("contentbase.pkl", "rb"))
     test = test.head(10)
     return jsonify(test.to_dict('record'));
+
+def individual_item_based(id_user):
+    cur = mysql.connection.cursor()
+    print("Old user detected!")
+    ratings = fetch_data.get_recpie_review(cur)
+    sim_df= fetch_data.similarity_item_df(cur)
+        #get matrix data 
+    data = ratings.pivot_table(index=['RecipeId'],columns=['CustomerId'],values='Rating')
+
+    #convert to dictionary
+    sdd = data.dropna(how = 'all').to_dict()
+    clean_dict = {k: {j: sdd[k][j] for j in sdd[k] if not isnan(sdd[k][j])} for k in sdd}
+
+    dataset = clean_dict
+
+    return KRNN_recommend_engine.recommendation_phase(id_user,dataset,sim_df)
+
+
+@app.route('/test/itembased', methods=['GET'])
+def test_itembased():
+    if 'id_user' in request.args:
+        id_user = request.args['id_user']
+    else:
+        abort(500,'{"message":"Error: No id field provided. Please specify an id.(URL: /individual/product/apriori?id_product= ... &id_product= ...)"}')
+    recommend_sys = individual_item_based(id_user)
+    print(recommend_sys)
+    return jsonify(recommend_sys);
 app.run(debug=True)
