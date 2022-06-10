@@ -17,4 +17,5 @@ public class RecipeResponse
     public List<RecipeRecipeType> RecipeTypes { get; set; }
     public string Level { get; set; }
     public List<Photo> Images { get; set; }
+    public bool Status { get; internal set; } = true;
 }
