@@ -10,6 +10,7 @@ import "./OrderDetail.css";
 
 const CusOrderDetail = () => {
   const { id } = useParams();
+  const [isCancel, setIsCancel] = useState(false);
   const [order, setOrder] = useState(null);
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -23,6 +24,24 @@ const CusOrderDetail = () => {
         const result = res.data;
         console.log(result);
         setOrder(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleCancelOrder = () => {
+    axios({
+      method: "put",
+      url: `https://localhost:7029/api/Customer/order`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        orderId: order.orderId,
+        message: ".",
+      },
+    })
+      .then((res) => {
+        setIsCancel(true);
       })
       .catch((error) => {
         console.log(error);
@@ -173,34 +192,15 @@ const CusOrderDetail = () => {
               <div className="order-info-block"></div>
             </div>
           </div>
-          {/* {order.orderStatusHistories &&
-            order.orderStatusHistories[order.orderStatusHistories.length - 1]
-              .orderStatus.value === "delivered" && (
-              <div className="rate-area">
-                <h2 style={{ fontWeight: "650" }}>Đánh giá đơn hàng của bạn</h2>
-                <div className="rate-container">
-                  <Rate
-                    className="stars"
-                    onChange={(value) => setRateValue(value)}
-                    value={rateValue}
-                  />
-                  <div className="comment-area">
-                    <textarea
-                      cols="30"
-                      rows="10"
-                      placeholder="Viết bình luận..."
-                      onChange={(e) => setComment(e.target.value)}
-                    ></textarea>
-                  </div>
-                  <button
-                    className="btn submit-btn"
-                    onClick={() => handleSubmitRating(id)}
-                  >
-                    Đánh giá
-                  </button>
-                </div>
-              </div>
-            )} */}
+          {order.orderStatusHistories.length > 0 &&
+          order.orderStatusHistories[order.orderStatusHistories.length - 1]
+            .orderStatus.value === "waiting" ? (
+            <button className="btn cancel-btn" onClick={handleCancelOrder}>
+              {isCancel ? "Đã hủy đơn" : "Hủy đơn hàng"}
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <Footer />

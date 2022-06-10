@@ -7,7 +7,26 @@ import OrderItem from "./OrderItem";
 
 const Order = ({ orderId, orderStatusHistories }) => {
   const [orderInfo, setOrderInfo] = useState();
+  const [isCancel, setIsCancel] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
+
+  const handleCancelOrder = () => {
+    axios({
+      method: "put",
+      url: `https://localhost:7029/api/Customer/order`,
+      headers: { Authorization: `Bearer ${token}` },
+      data: {
+        orderId: orderId,
+        message: ".",
+      },
+    })
+      .then((res) => {
+        setIsCancel(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     axios({
@@ -38,8 +57,8 @@ const Order = ({ orderId, orderStatusHistories }) => {
       <div className="order">
         <div className="order-container">
           <h2 className="title">
-            {/* {status === 0 ? "Đơn hàng đang xử lý" : "Đơn hàng thành công"} */}
-            Đơn hàng: {orderId}
+            <span>Đơn hàng: {orderId}</span>
+            <Link to={`/orders/${orderId}`}>Xem chi tiết...</Link>
           </h2>
           {orderInfo.orderDetails.length > 0 &&
             orderInfo.orderDetails.map((order, idx) => (
@@ -47,7 +66,6 @@ const Order = ({ orderId, orderStatusHistories }) => {
             ))}
 
           <div className="cancel-block">
-            <Link to={`/orders/${orderId}`}>Xem chi tiết...</Link>
             <p>
               Trạng thái đơn hàng:{" "}
               <strong>
@@ -68,13 +86,16 @@ const Order = ({ orderId, orderStatusHistories }) => {
                   : "Đã giao"}
               </strong>
             </p>
-
-            {/* {status === 0 ? (
-          <button className="btn cancel-btn">Hủy đơn hàng</button>
-        ) : (
-          <></>
-        )} */}
           </div>
+          {orderStatusHistories.length > 0 &&
+          orderStatusHistories[orderStatusHistories.length - 1].orderStatus
+            .value === "waiting" ? (
+            <button className="btn cancel-btn" onClick={handleCancelOrder}>
+              {isCancel ? "Đã hủy đơn" : "Hủy đơn hàng"}
+            </button>
+          ) : (
+            <></>
+          )}
 
           <div className="total">
             <p>
