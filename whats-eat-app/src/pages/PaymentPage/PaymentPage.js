@@ -36,7 +36,7 @@ const PaymentPage = () => {
   const token = useSelector((state) => state.auth.userInfo.token);
   const getTotalPrice = (cartItems) => {
     return cartItems.reduce((total, cartItem) => {
-      return cartItem.totalPrice + total + shippingFee;
+      return cartItem.totalPrice + total;
     }, 0);
   };
 
@@ -609,10 +609,13 @@ const PaymentPage = () => {
               <p className="total-payment">
                 Tổng tiền:{" "}
                 <span>
-                  {getTotalPrice(cartItems).toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  })}
+                  {(getTotalPrice(cartItems) + shippingFee).toLocaleString(
+                    "vi-VN",
+                    {
+                      style: "currency",
+                      currency: "VND",
+                    }
+                  )}
                 </span>
               </p>
             </div>

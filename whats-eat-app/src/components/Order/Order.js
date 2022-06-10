@@ -79,7 +79,7 @@ const Order = ({ orderId, orderStatusHistories }) => {
           <div className="total">
             <p>
               Tổng số tiền:{" "}
-              {total.toLocaleString("vi-VN", {
+              {(total + orderInfo.shippingFee).toLocaleString("vi-VN", {
                 style: "currency",
                 currency: "VND",
               })}

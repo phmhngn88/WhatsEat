@@ -1,73 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import "./ShopOrderItem.css";
 import { Link, useLocation } from "react-router-dom";
 
 const ShopOrderItem = ({ productId, price, value, status, id }) => {
   const [orderInfo, setOrderInfo] = useState();
-  const [isAccepted, setIsAccepted] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  const [isCanceled, setIsCanceled] = useState(false);
-  const location = useLocation();
-  const { storeId } = location.state;
-  const token = useSelector((state) => state.auth.userInfo.token);
-
-  const handleAcceptOrder = () => {
-    console.log(id);
-    axios({
-      method: "post",
-      url: `https://localhost:7029/api/Store/${storeId}/orders/accept`,
-      headers: { Authorization: `Bearer ${token}` },
-      data: {
-        orderId: id,
-        message: ".",
-      },
-    })
-      .then((res) => {
-        setIsAccepted(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleCompleteOrder = () => {
-    console.log(id);
-    axios({
-      method: "post",
-      url: `https://localhost:7029/api/Store/${storeId}/orders/complete`,
-      headers: { Authorization: `Bearer ${token}` },
-      data: {
-        orderId: id,
-        message: ".",
-      },
-    })
-      .then((res) => {
-        setIsComplete(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleCancelOrder = () => {
-    axios({
-      method: "post",
-      url: `https://localhost:7029/api/Store/${storeId}/orders/cancel`,
-      headers: { Authorization: `Bearer ${token}` },
-      data: {
-        orderId: id,
-        message: ".",
-      },
-    })
-      .then((res) => {
-        setIsCanceled(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   useEffect(() => {
     axios({
@@ -113,32 +50,8 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
             : "Đã giao hàng"}
         </p>
         <p className="delivery">{value}</p>
-
-        {/* <a href="#">Xem chi tiết</a> */}
-        {status !== "Đã giao" &&
-          status[status.length - 1].orderStatus.value === "waiting" && (
-            <button onClick={handleAcceptOrder}>
-              {isAccepted ? "Đã nhận đơn" : "Chấp nhận"}
-            </button>
-          )}
-
-        {status !== "Đã giao" &&
-          status[status.length - 1].orderStatus.value === "delivering" && (
-            <button onClick={handleCompleteOrder}>
-              {isComplete ? "Đã giao hàng" : "Giao hàng"}
-            </button>
-          )}
-
-        {status !== "Đã giao" &&
-          status[status.length - 1].orderStatus.value === "waiting" && (
-            <button onClick={handleCancelOrder}>
-              {isCanceled ? "Đã hủy đơn" : "Hủy đơn"}
-            </button>
-          )}
-
-        {/* <a href="#">Hủy đơn</a> */}
       </div>
-      <Link to={`/orders/${id}`}>Xem chi tiết...</Link>
+      {/* <Link to={`/orders/${id}`}>Xem chi tiết...</Link> */}
     </div>
   );
 };

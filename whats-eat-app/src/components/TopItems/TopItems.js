@@ -54,8 +54,15 @@ const TopItems = () => {
           />
           <Row gutter={[16, 16]}>
             {topProduct.map((item) => {
-              const { productId, name, basePrice, weightServing, images } =
-                item;
+              const {
+                productId,
+                name,
+                basePrice,
+                weightServing,
+                images,
+                status,
+              } = item;
+              if (!status) return <></>;
               return (
                 <Col span={4} className="item-col" key={productId}>
                   <Product {...item} />

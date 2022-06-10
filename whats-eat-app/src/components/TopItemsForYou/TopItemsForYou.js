@@ -13,7 +13,7 @@ const TopItemsForYou = () => {
   const [topProduct, setTopProduct] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const userId = useSelector((state) => state.auth.userInfo.userId)
+  const userId = useSelector((state) => state.auth.userInfo.userId);
 
   useEffect(() => {
     axios({
@@ -54,8 +54,15 @@ const TopItemsForYou = () => {
           />
           <Row gutter={[16, 16]}>
             {topProduct.map((item) => {
-              const { productId, name, basePrice, weightServing, images } =
-                item;
+              const {
+                productId,
+                name,
+                basePrice,
+                weightServing,
+                images,
+                status,
+              } = item;
+              if (!status) return <></>;
               return (
                 <Col span={4} className="item-col" key={productId}>
                   <Product {...item} />
