@@ -1,5 +1,6 @@
 .order-card{
     margin-top: 1rem;
+    padding-bottom: 0.5rem;
     border: 1.5px solid #c4c4c4;
     border-radius: 5px;
 }
@@ -17,3 +18,14 @@
      
     margin-bottom: 0;
  }
+
+ .order-card button{
+    background-color: brown;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+}

@@ -51,7 +51,8 @@ const Items = ({ products, storeId }) => {
       <div className="items">
         <Row gutter={[16, 16]}>
           {products.map((item) => {
-            const { productId, name, basePrice, weightServing, images } = item;
+            const { productId, name, status } = item;
+            if (!status) return <></>;
             return (
               <Col span={6} className="item-col" key={productId}>
                 <Product {...item} />

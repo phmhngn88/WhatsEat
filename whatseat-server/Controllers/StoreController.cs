@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -362,7 +363,8 @@ public class StoreController : ControllerBase
                 StoreName = item.Store.ShopName,
                 StoreId = item.Store.StoreId,
                 CreatedOn = item.CreatedOn,
-                TotalView = await _productService.GetProductViews(item)
+                TotalView = await _productService.GetProductViews(item),
+                Status = item.Status
             });
         }
         var metadata = new
@@ -503,7 +505,8 @@ public class StoreController : ControllerBase
             StoreName = newProduct.Store.ShopName,
             StoreId = newProduct.Store.StoreId,
             CreatedOn = newProduct.CreatedOn,
-            TotalView = await _productService.GetProductViews(newProduct)
+            TotalView = await _productService.GetProductViews(newProduct),
+            Status = newProduct.Status
         });
     }
 
@@ -554,6 +557,7 @@ public class StoreController : ControllerBase
             StoreName = product.Store.ShopName,
             StoreId = product.Store.StoreId,
             CreatedOn = product.CreatedOn,
+            Status = product.Status,
             TotalView = await _productService.GetProductViews(product)
         });
     }

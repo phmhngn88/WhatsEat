@@ -94,6 +94,7 @@ public class ProductController : ControllerBase
                 StoreName = item.Store.ShopName,
                 StoreId = item.Store.StoreId,
                 CreatedOn = item.CreatedOn,
+                Status = item.Status,
                 TotalView = await _productService.GetProductViews(item)
             });
         }

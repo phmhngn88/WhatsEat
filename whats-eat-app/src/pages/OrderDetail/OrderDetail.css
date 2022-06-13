@@ -49,6 +49,16 @@ h2{
     background-color: #F6F6F6;
 }
 
+.order-detail-container .cancel-btn{
+    border: none;
+    background-color: brown;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+
 .detail .item-info .shop-name{
     margin: 0 1rem;
     font-size: 1.2rem;
