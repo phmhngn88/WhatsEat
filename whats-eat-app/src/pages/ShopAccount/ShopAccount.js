@@ -1,6 +1,7 @@
 import { Space, Table } from "antd";
 import "antd/dist/antd.css";
 import React from "react";
+import { useLocation } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopAccount.css";
@@ -77,11 +78,13 @@ const data = [
 ];
 
 const ShopAccount = () => {
+  const location = useLocation();
+  const storeId = location.state.storeId;
   return (
     <div className="shop-account">
       <div className="shop-account-fluid">
         <div className="shop-account-container">
-          <ShopSidebar />
+          <ShopSidebar storeId={storeId} />
           <div className="content-container">
             <div className="shop-account-nav">
               <div>

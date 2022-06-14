@@ -34,7 +34,7 @@ const ShopItems = () => {
     <div className="shop-items">
       <div className="shop-items-fluid">
         <div className="shop-items-container">
-          <ShopSidebar />
+          <ShopSidebar storeId={storeId} />
           <div className="content-container">
             <h1 className="title">Tất cả sản phẩm</h1>
             <Items products={listProducts} storeId={storeId} />

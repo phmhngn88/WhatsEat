@@ -1,4 +1,4 @@
-import { Form, Input, Button, Image } from "antd";
+import { Form, Input, Button, Image, message } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import React, { useState } from "react";
@@ -65,9 +65,11 @@ const ShopAddItem = () => {
       },
     })
       .then((res) => {
-        console.log("Thêm sản phẩm thành công!");
+        message.success("Thêm sản phẩm thành công!");
+        form.resetFields();
       })
       .catch((err) => {
+        message.error("Thêm sản phẩm thất bại!");
         console.log(err);
       });
   };

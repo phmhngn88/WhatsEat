@@ -19,8 +19,8 @@ const Footer = () => {
       <p>Tên đề tài: Hệ thống đi chợ tích hợp gợi ý thực đơn cho người dùng</p>
       <p>Giảng viên hướng dẫn: Hồ Thị Hoàng Vy</p>
       <p>
-        Sinh viên thực hiện: Nguyễn Văn Hảo, Phạm Hoàng An, Trần Nhật Hiệp, Đinh
-        Thị Minh Hiếu, Trần Thị Vi, Lý Quỳnh Trâm
+        Sinh viên thực hiện: Nguyễn Văn Hảo, Phạm Hoàng An, Trần Nhật Hiệp, Trần
+        Thị Vi, Lý Quỳnh Trâm
       </p>
       <div className="social-contact">
         <a href="https://www.facebook.com/">
