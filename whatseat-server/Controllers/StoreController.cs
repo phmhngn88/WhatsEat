@@ -601,4 +601,12 @@ public class StoreController : ControllerBase
         var totalIncome = await _storeService.GetIncomeByDay();
         return Ok(totalIncome);
     }
+
+    [HttpGet]
+    [Route("number-order-by-statuses")]
+    public async Task<IActionResult> GetNumberOrderByStatusAsync()
+    {
+        var orderByStatuses = await _storeService.GetNumberOrderByStatus();
+        return Ok(orderByStatuses);
+    }
 }
