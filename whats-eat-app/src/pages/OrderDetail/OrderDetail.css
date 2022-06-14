@@ -154,7 +154,7 @@ h2{
 }
 
 
-.stars{
+.order-block .stars{
     display: flex;
     justify-content: flex-start;
     align-items: center;
