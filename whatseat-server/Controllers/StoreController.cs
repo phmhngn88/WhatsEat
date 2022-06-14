@@ -593,4 +593,12 @@ public class StoreController : ControllerBase
         List<ProductCategory> productCategories = await _storeService.GetStoreProductCategories(storeId);
         return Ok(productCategories);
     }
+
+    [HttpGet]
+    [Route("income-by-day")]
+    public async Task<IActionResult> GetIncomeByDayAsync()
+    {
+        var totalIncome = await _storeService.GetIncomeByDay();
+        return Ok(totalIncome);
+    }
 }

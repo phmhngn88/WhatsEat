@@ -115,4 +115,24 @@ public class StoreService
             .ToListAsync();
         return categories;
     }
+
+    public async Task<List<TotalIncomeByMonthResponse>> GetIncomeByDay()
+    {
+        var currentYear = DateTime.Now.Year;
+        var currentMonth = DateTime.Now.Month;
+        var orders = await _context.Orders.Include(x => x.OrderDetails).Select(o => new
+        {
+            OrderId = o.OrderId,
+            CreatedOn = o.CreatedOn,
+            TotalCharge = o.OrderDetails.Sum(x => x.Quantity * x.Price)
+        }).Select(k => new { k.CreatedOn.Year, k.CreatedOn.Month, k.CreatedOn.Day, k.TotalCharge }).Where(k => k.Year == currentYear && k.Month == currentMonth).GroupBy(x => new { x.Year, x.Month, x.Day }, (key, group) => new TotalIncomeByMonthResponse
+        {
+            Year = key.Year,
+            Month = key.Month,
+            Day = key.Day,
+            Total = group.Sum(k => k.TotalCharge)
+        }).ToListAsync();
+
+        return orders;
+    }
 }
