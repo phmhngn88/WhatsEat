@@ -9,51 +9,73 @@ import {
   AiOutlineClockCircle,
   AiFillThunderbolt,
   AiOutlineBarChart,
-  AiFillPlusCircle
+  AiFillPlusCircle,
 } from "react-icons/ai";
-import { Checkbox } from 'antd';
 
-const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, isShowRecipe, addRecipe }) => {
+const Dish = ({
+  recipeId,
+  name,
+  totalTime,
+  totalView,
+  level,
+  images,
+  calories,
+  isShowRecipe,
+  addRecipe,
+}) => {
   const [isLikeRecipe, setIsLikeRecipe] = useState(false);
-  const token = useSelector((state) => state.auth.userInfo.token);
+  const { token, userName } = useSelector((state) => state.auth.userInfo);
+
   const navigate = useNavigate();
 
   const addRecipeToMenu = (e) => {
-    e.stopPropagation()
-    addRecipe({ recipeId, name, totalTime, totalView, level, images, calories })
-  }
+    e.stopPropagation();
+    addRecipe({
+      recipeId,
+      name,
+      totalTime,
+      totalView,
+      level,
+      images,
+      calories,
+    });
+  };
 
   const handleLikeRecipe = (e) => {
-    e.stopPropagation()
-    setIsLikeRecipe(!isLikeRecipe);
-    if (isLikeRecipe) {
-      axios({
-        method: "POST",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-        headers: { Authorization: `Bearer ${token}` },
-        data: {
-          recipeId: recipeId,
-          // userName: userName,
-        },
-      })
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
+    e.stopPropagation();
+    if (!userName) {
+      navigate(`/login`);
     } else {
-      axios({
-        method: "DELETE",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
-        headers: { Authorization: `Bearer ${token}` },
-        data: {
-          recipeId: recipeId,
-          // userName: userName,
-        },
-      })
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
+      setIsLikeRecipe(!isLikeRecipe);
+      if (isLikeRecipe) {
+        axios({
+          method: "POST",
+          url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+          headers: { Authorization: `Bearer ${token}` },
+          data: {
+            recipeId: recipeId,
+            // userName: userName,
+          },
+        })
+          .then((res) => {})
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axios({
+          method: "DELETE",
+          url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+          headers: { Authorization: `Bearer ${token}` },
+          data: {
+            recipeId: recipeId,
+            // userName: userName,
+          },
+        })
+          .then((res) => {})
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   };
   console.log(isLikeRecipe);
@@ -83,18 +105,20 @@ const Dish = ({ recipeId, name, totalTime, totalView, level, images, calories, i
       }
     >
       <img src={images[0].url || ""} alt={name} className="dish-img" />
-      {isShowRecipe ? 
-      <div className="add-icon" onClick={addRecipeToMenu}>
-        <AiFillPlusCircle className="icon"  />
-      </div>
-       : <div
-        className={`${
-          isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
-        } heart-icon`}
-        onClick={handleLikeRecipe}
-      >
-        <AiFillHeart className="icon" />
-      </div>}
+      {isShowRecipe ? (
+        <div className="add-icon" onClick={addRecipeToMenu}>
+          <AiFillPlusCircle className="icon" />
+        </div>
+      ) : (
+        <div
+          className={`${
+            isLikeRecipe ? "recipe-liked" : "recipe-not-liked"
+          } heart-icon`}
+          onClick={handleLikeRecipe}
+        >
+          <AiFillHeart className="icon" />
+        </div>
+      )}
       <h3 className="dish-name">{name}</h3>
       <div className="dish-info">
         <div className="info-detail">
