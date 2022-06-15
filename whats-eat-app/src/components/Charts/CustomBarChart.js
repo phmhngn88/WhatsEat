@@ -9,7 +9,7 @@ import {
   Legend,
 } from "recharts";
 
-const CustomBarChart = ({ data, labelX, color }) => {
+const CustomBarChart = ({ data, dataKeyX, labelX, color }) => {
   return (
     <BarChart
       width={500}
@@ -24,7 +24,7 @@ const CustomBarChart = ({ data, labelX, color }) => {
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis
-        dataKey="tenSanPham"
+        dataKey={dataKeyX}
         label={{
           value: labelX,
           position: "insideBottom",
@@ -42,7 +42,7 @@ const CustomBarChart = ({ data, labelX, color }) => {
       />
       <Tooltip />
       <Legend verticalAlign="top" />
-      <Bar dataKey="soLuong" fill={color} />
+      <Bar dataKey="Số lượng bán" fill={color} />
     </BarChart>
   );
 };

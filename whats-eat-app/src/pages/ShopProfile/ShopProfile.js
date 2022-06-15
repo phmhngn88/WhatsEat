@@ -25,7 +25,6 @@ const ShopProfile = () => {
   const token = useSelector((state) => state.auth.userInfo.token);
 
   const onFormFinish = (values) => {
-    console.log(values);
     axios({
       method: "PUT",
       url: "https://localhost:7029/api/Store/info",

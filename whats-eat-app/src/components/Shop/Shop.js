@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ShopSidebar from "../ShopSidebar/ShopSidebar";
 import CustomLineChart from "../Charts/CustomLineChart";
 import CustomBarChart from "../Charts/CustomBarChart";
@@ -6,39 +7,158 @@ import CustomPieChart from "../Charts/CustomPieChart";
 import "./Shop.css";
 
 const Shop = ({ storeId }) => {
+  const [dataIncomeByDay, setDataIncomeByDay] = useState([]);
+  const [dataStatusOrders, setDataStatusOrders] = useState([]);
+  const [dataBestProducts, setDataBestProducts] = useState([]);
+  const [dataBestCategories, setDataBestCategories] = useState([]);
+  const [month, setMonth] = useState();
+  const [year, setYear] = useState();
+
+  const newDataIncome = [];
+  dataIncomeByDay.map((income) => {
+    const { day, total } = income;
+    newDataIncome.push({ Ngày: `Ngày ${day}`, "Doanh thu": total / 1000000 });
+  });
+
+  const newDataStatusOrders = [];
+  dataStatusOrders.map((status) => {
+    const { orderStatusName, count } = status;
+    if (orderStatusName === "waiting") {
+      newDataStatusOrders.push({
+        name: `Chờ xác nhận`,
+        value: count,
+      });
+    }
+    if (orderStatusName === "delivering") {
+      newDataStatusOrders.push({
+        name: `Đang vận chuyển`,
+        value: count,
+      });
+    }
+    if (orderStatusName === "delivered") {
+      newDataStatusOrders.push({
+        name: `Đã giao hàng`,
+        value: count,
+      });
+    }
+    if (orderStatusName === "canceled") {
+      newDataStatusOrders.push({
+        name: `Đơn hủy`,
+        value: count,
+      });
+    }
+  });
+
+  const newDataBestProducts = [];
+  dataBestProducts.map((product) => {
+    newDataBestProducts.push({
+      "Mã sản phẩm": product.productId,
+      "Số lượng bán": product.amount,
+      "Tên sản phẩm": product.productName,
+    });
+  });
+  console.log({ newDataBestProducts });
+
+  const newDataBestCategories = [];
+  dataBestCategories.map((category) => {
+    newDataBestCategories.push({
+      "Mã danh mục": category.productCategoryId,
+      "Số lượng bán": category.amount,
+      "Tên danh mục": category.productCategoryName,
+    });
+  });
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Store/income-by-day",
+    })
+      .then((res) => {
+        setDataIncomeByDay(res.data);
+        setMonth(res.data[0].month);
+        setYear(res.data[0].year);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Store/number-order-by-statuses",
+    })
+      .then((res) => {
+        setDataStatusOrders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Store/best-seller-of-months",
+    })
+      .then((res) => {
+        setDataBestProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:7029/api/Store/best-category-of-months",
+    })
+      .then((res) => {
+        setDataBestCategories(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <div className="shop-cpn">
       <div className="shop-cpn-fluid">
         <div className="shop-cpn-container">
           <ShopSidebar storeId={storeId} />
           <div className="content-container">
-            <div className="monthly-income">
-              <h1>Doanh thu theo từng ngày</h1>
-              <CustomLineChart data={mock_data_income} />
-            </div>
+            {newDataIncome.length > 0 && (
+              <div className="monthly-income">
+                <h1>
+                  Doanh thu theo từng ngày trong tháng {month}/{year}
+                </h1>
+                <CustomLineChart data={newDataIncome} />
+              </div>
+            )}
             <div className="best-seller-cate">
-              <h1>Mặt hàng bán chạy nhất</h1>
+              <h1>Mặt hàng bán chạy nhất trong tháng</h1>
               <div className="best-seller">
                 <CustomBarChart
-                  data={mock_data_best_seller_product}
-                  labelX="Top 10 sản phẩm bán chạy nhất"
+                  data={newDataBestProducts}
+                  dataKeyX="Tên sản phẩm"
+                  labelX={`Top ${newDataBestProducts.length} sản phẩm bán chạy nhất trong tháng`}
                   color="#fe7c00"
                 />
                 <CustomBarChart
-                  data={mock_data_best_seller_cate}
-                  labelX="Top 6 danh mục đắt hàng nhất"
+                  data={newDataBestCategories}
+                  dataKeyX="Tên danh mục"
+                  labelX={`Top ${newDataBestCategories.length} danh mục đắt hàng nhất trong tháng`}
                   color="#23a9f2"
                 />
               </div>
             </div>
-            <div className="best-seller-product">
-              <h1>Tỉ lệ đơn hàng</h1>
-              <CustomPieChart data={mock_data_order_rate} />
-            </div>
-            <div className="all-order-status">
+            {newDataStatusOrders.length > 0 && (
+              <div className="best-seller-product">
+                <h1>Tỉ lệ đơn hàng</h1>
+                <CustomPieChart data={newDataStatusOrders} />
+              </div>
+            )}
+            {/* <div className="all-order-status">
               <h1>Doanh thu trong ngày</h1>
-              <CustomLineChart data={mock_data_income} />
-            </div>
+              <CustomLineChart data={mock_data_order_rate} />
+            </div> */}
           </div>
         </div>
       </div>
@@ -47,69 +167,6 @@ const Shop = ({ storeId }) => {
 };
 
 export default Shop;
-
-const mock_data_income = [
-  {
-    day: "Ngày 1",
-    totalIncome: 3.5,
-  },
-  {
-    day: "Ngày 2",
-    totalIncome: 1.5,
-  },
-  {
-    day: "Ngày 3",
-    totalIncome: 1.7,
-  },
-  {
-    day: "Ngày 4",
-    totalIncome: 2.2,
-  },
-  {
-    day: "Ngày 5",
-    totalIncome: 2.5,
-  },
-  {
-    day: "Ngày 6",
-    totalIncome: 3,
-  },
-  {
-    day: "Ngày 7",
-    totalIncome: 2.8,
-  },
-  {
-    day: "Ngày 8",
-    totalIncome: 3.5,
-  },
-  {
-    day: "Ngày 9",
-    totalIncome: 4.2,
-  },
-  {
-    day: "Ngày 10",
-    totalIncome: 4,
-  },
-  {
-    day: "Ngày 11",
-    totalIncome: 2.9,
-  },
-  {
-    day: "Ngày 12",
-    totalIncome: 3.3,
-  },
-  {
-    day: "Ngày 13",
-    totalIncome: 3.1,
-  },
-  {
-    day: "Ngày 14",
-    totalIncome: 3,
-  },
-  {
-    day: "Ngày 15",
-    totalIncome: 2.7,
-  },
-];
 
 const mock_data_best_seller_product = [
   {
@@ -194,12 +251,4 @@ const mock_data_best_seller_cate = [
     sanPhamId: "111116",
     tenSanPham: "Danh mục 6",
   },
-];
-
-const mock_data_order_rate = [
-  { name: "Chờ xác nhận", value: 400 },
-  { name: "Đang giao hàng", value: 300 },
-  { name: "Đã giao hàng", value: 300 },
-  { name: "Đã hủy", value: 10 },
-  { name: "Trả hàng/Hoàn tiền", value: 50 },
 ];

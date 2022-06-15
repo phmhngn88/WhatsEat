@@ -23,7 +23,7 @@ const CustomLineChart = ({ data }) => {
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis
-        dataKey="day"
+        dataKey="Ngày"
         label={{
           value: "Thống kê doanh thu từng ngày trong tháng",
           position: "bottom",
@@ -40,7 +40,7 @@ const CustomLineChart = ({ data }) => {
       />
       <Tooltip />
       <Legend verticalAlign="right" />
-      <Line type="monotone" dataKey="totalIncome" stroke="#dc4f43" />
+      <Line type="monotone" dataKey="Doanh thu" stroke="#dc4f43" />
     </LineChart>
   );
 };

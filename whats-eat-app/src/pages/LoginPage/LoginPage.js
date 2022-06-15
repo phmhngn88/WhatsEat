@@ -22,8 +22,6 @@ const LoginPage = ({ login }) => {
   const location = useLocation();
   const startPath = location?.state?.startPath;
 
-  console.log("startPath:", startPath);
-
   const getPassword = (event) => {
     setPassword(event.target.value);
   };
@@ -32,17 +30,17 @@ const LoginPage = ({ login }) => {
   };
   const handleSubmit = () => {
     login({ email, password })
-    .then(() => {
-      setIsFailed(false);
-      setTimeout(() => {
-        if (startPath) {
-          navigate("/");
-        } else navigate(-1);
-      }, 1000);
-    })
-    .catch(() =>{
-      setIsFailed(true);
-    });
+      .then(() => {
+        setIsFailed(false);
+        setTimeout(() => {
+          if (startPath) {
+            navigate("/");
+          } else navigate(-1);
+        }, 1000);
+      })
+      .catch(() => {
+        setIsFailed(true);
+      });
   };
 
   useEffect(() => {
@@ -108,12 +106,17 @@ const LoginPage = ({ login }) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 return handleSubmit();
-            }}}
+              }
+            }}
           >
             Đăng nhập
           </Button>
         </Form.Item>
-        {isFailed && <p className="error-message">* Email hoặc mật khẩu của bạn không hợp lệ</p>}
+        {isFailed && (
+          <p className="error-message">
+            * Email hoặc mật khẩu của bạn không hợp lệ
+          </p>
+        )}
         <p>
           Bạn chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>.
         </p>
