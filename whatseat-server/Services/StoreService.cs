@@ -145,16 +145,18 @@ public class StoreService
 
     public async Task<List<OrderStatusCountResponse>> GetNumberOrderByStatus()
     {
-        var orders = await _context.OrderStatusHistories.GroupBy(p => p.Order.OrderId).Select(x => new
+        var orders = await _context.OrderStatusHistories.Include(x => x.OrderStatus).GroupBy(p => p.Order.OrderId).Select(x => new
         {
             OrderId = x.Key,
             OrderStatusId = x.First(y => y.CreatedOn == x.Select(z => z.CreatedOn).Max()).OrderStatus.OrderStatusId,
+            OrderStatusName = x.First(y => y.CreatedOn == x.Select(z => z.CreatedOn).Max()).OrderStatus.Value,
             Lastest = x.First(y => y.CreatedOn == x.Select(z => z.CreatedOn).Max()).CreatedOn
         }).ToListAsync();
 
         var orderStatusCount = orders.GroupBy(o => o.OrderStatusId).Select(n => new OrderStatusCountResponse
         {
             OrderStatusId = n.Key,
+            OrderStatusName = n.First(pn => pn.OrderStatusId == n.Key).OrderStatusName,
             Count = n.Count()
         }).ToList();
 
