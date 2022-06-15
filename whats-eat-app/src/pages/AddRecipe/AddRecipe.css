@@ -106,3 +106,17 @@
     padding: 2rem 1rem;
     margin: 1rem auto;
 }
+
+.add-recipe .my-recipes .dish-box-container{
+    position: relative;
+}
+.dish-box-container .icon-delete{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.dish-box-container .icon-delete:hover{
+    color: red;
+}
