@@ -1,6 +1,7 @@
-import { Form, Input, Row, Col, Image, Select, message } from "antd";
+import { Form, Input, Row, Col, Image, Select, Modal, message } from "antd";
 import "antd/dist/antd.css";
 import React, { useState, useEffect } from "react";
+import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../../components/Footer/Footer";
@@ -72,6 +73,9 @@ const AddRecipe = () => {
   const [stepsRecipe, setStepsRecipe] = useState([]);
   const [data, setData] = useState();
   const [myRecipes, setMyRecipes] = useState([]);
+  const [isVisible, setIsVisible] = useState(false);
+  const [deleteRecipeId, setDeleteRecipeId] = useState();
+  const [triggerReload, setTriggerReload] = useState(true);
   const token = useSelector((state) => state.auth.userInfo.token);
 
   const uploadThumbImage = (value) => {
@@ -108,12 +112,10 @@ const AddRecipe = () => {
   };
 
   const handleAddIngredient = () => {
-    console.log("Add ingredient");
     setIngredients((prevIngre) => [...prevIngre, "ingredient"]);
   };
 
   const handleAddStep = () => {
-    console.log("Add step");
     setStepImage();
 
     setSteps((prevSteps) => [...prevSteps, "textarea"]);
@@ -128,7 +130,6 @@ const AddRecipe = () => {
         quantity: ingredientQuantity,
       },
     ]);
-    console.log({ ingredientList });
   };
 
   const handleDoneBtn = () => {
@@ -139,7 +140,6 @@ const AddRecipe = () => {
         photos: [[{ url: stepImage, height: 0, width: 0 }]],
       },
     ]);
-    console.log({ stepsRecipe });
   };
 
   const onFormFinish = (values) => {
@@ -168,11 +168,35 @@ const AddRecipe = () => {
     })
       .then((res) => {
         message.success("Thêm công thức thành công");
+        setTriggerReload(!triggerReload);
+        form.resetFields();
       })
       .catch((error) => {
         console.log(error);
       });
-    // console.log(stepsRecipe);
+  };
+
+  const handleDeleteRecipe = (e, recipeId) => {
+    e.stopPropagation();
+    setIsVisible(true);
+    setDeleteRecipeId(recipeId);
+  };
+
+  const confirmDelete = () => {
+    axios({
+      method: "delete",
+      url: `https://localhost:7029/api/Customer/recipe/${deleteRecipeId}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        message.success("Xóa công thức thành công!");
+        setTriggerReload(!triggerReload);
+        setIsVisible(false);
+      })
+      .catch((error) => {
+        message.error("Xóa công thức thất bại!");
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -182,13 +206,12 @@ const AddRecipe = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
-        console.log(res.data);
         setMyRecipes(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [triggerReload]);
 
   return (
     <div className="add-recipe">
@@ -379,28 +402,38 @@ const AddRecipe = () => {
       </div>
       <div className="my-recipes">
         <h1>Công thức của bạn</h1>
+        {myRecipes.length === 0 && <p>Bạn chưa có công thức nấu ăn nào!</p>}
         <Row gutter={[16, 16]}>
           {myRecipes.length > 0 &&
             myRecipes.map((dish) => {
               return (
-                <Col
-                  span={6}
-                  key={dish.recipeId}
-                  className="dish-col"
-                  // onClick={() =>
-                  //   navigate(`/singledish/${dish.recipeId}`, {
-                  //     state: {
-                  //       recipeId: dish.recipeId,
-                  //     },
-                  //   })
-                  // }
-                >
-                  <Dish {...dish} />
-                </Col>
+                <>
+                  {dish.status && (
+                    <Col span={6} key={dish.recipeId} className="dish-col">
+                      <div className="dish-box-container">
+                        <Dish {...dish} />
+                        <FaTrash
+                          className="icon-delete"
+                          onClick={(e) => handleDeleteRecipe(e, dish.recipeId)}
+                        />
+                      </div>
+                    </Col>
+                  )}
+                </>
               );
             })}
         </Row>
       </div>
+      <Modal
+        title="Xóa sản phẩm"
+        visible={isVisible}
+        onOk={() => confirmDelete()}
+        onCancel={() => setIsVisible(false)}
+        okText="Xóa"
+        cancelText="Hủy"
+      >
+        <p>Bạn có chắc muốn xóa sản phẩm này không?</p>
+      </Modal>
       <Footer />
     </div>
   );
