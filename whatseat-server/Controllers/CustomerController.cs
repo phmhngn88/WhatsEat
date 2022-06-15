@@ -537,4 +537,18 @@ public class CustomerController : ControllerBase
 
         return Ok(recipeRes);
     }
+
+    [HttpDelete]
+    [Route("recipe/{recipeId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Customer)]
+    public async Task<IActionResult> DeleteProduct(int recipeId)
+    {
+        var recipesByCreator = await _recipeService.FindRecipeById(recipeId);
+
+        recipesByCreator.Status = false;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

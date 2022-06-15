@@ -430,6 +430,26 @@ public class StoreController : ControllerBase
         return Ok(reviewResponses);
     }
 
+    [HttpGet]
+    [Route("product-reviews")]
+    public async Task<IActionResult> GetProductReviews([FromQuery] PagedRequest reviewRequest)
+    {
+        PagedList<ProductReview> productReviews = await _storeService.GetPagedAllProductReview(reviewRequest);
+        var metadata = new
+        {
+            productReviews.TotalCount,
+            productReviews.PageSize,
+            productReviews.CurrentPage,
+            productReviews.TotalPages,
+            productReviews.HasNext,
+            productReviews.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+        return Ok(productReviews);
+    }
+
     [HttpDelete]
     [Route("{storeId}/product/{productId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = RoleConstants.Store)]
@@ -608,5 +628,21 @@ public class StoreController : ControllerBase
     {
         var orderByStatuses = await _storeService.GetNumberOrderByStatus();
         return Ok(orderByStatuses);
+    }
+
+    [HttpGet]
+    [Route("best-seller-of-months")]
+    public async Task<IActionResult> GetBestSallerOfMonthAsync()
+    {
+        var orderByBestSales = await _storeService.GetBestSallerOfMonth();
+        return Ok(orderByBestSales);
+    }
+
+    [HttpGet]
+    [Route("best-category-of-months")]
+    public async Task<IActionResult> GetBestCategoryOfMonthAsync()
+    {
+        var orderByCategories = await _storeService.GetCategorySallerOfMonth();
+        return Ok(orderByCategories);
     }
 }

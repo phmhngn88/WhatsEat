@@ -98,6 +98,13 @@ public class StoreService
         return await PagedList<StoreReview>.ToPagedList(storeReviews, reviewRequest.PageNumber, reviewRequest.PageSize);
     }
 
+    public async Task<PagedList<ProductReview>> GetPagedAllProductReview(PagedRequest reviewRequest)
+    {
+        var storeReviews = _context.ProductReviews.AsNoTracking().Include(sr => sr.Customer).AsQueryable();
+
+        return await PagedList<ProductReview>.ToPagedList(storeReviews, reviewRequest.PageNumber, reviewRequest.PageSize);
+    }
+
     public bool UserIsStore(IdentityUser user, Store store)
     {
         return store.User == user;
@@ -152,5 +159,49 @@ public class StoreService
         }).ToList();
 
         return orderStatusCount;
+    }
+
+    public async Task<List<GetBestSellerOfMonth>> GetBestSallerOfMonth()
+    {
+        
+        var currentMonth = DateTime.Now.Month;
+        var orderIds = await _context.Orders.Where(ods => ods.CreatedOn.Month == currentMonth).Select(x => x.OrderId).ToListAsync();
+
+        var orderDetails = await _context.OrderDetails.Include(x => x.Product).Where(x => orderIds.Contains(x.OrderId)).Select(x  => new
+        {
+            ProductId = x.ProductId,
+            Quantity = x.Quantity,
+            ProductName = x.Product.Name,
+        }).ToListAsync();
+        var result = orderDetails.GroupBy(od => od.ProductId).Select(x => new GetBestSellerOfMonth
+        {
+            ProductId = x.Key,
+            Amount = x.Sum(a => a.Quantity),
+            ProductName = x.First(pn => pn.ProductId == x.Key).ProductName,
+        }).OrderBy(x => x.Amount).Take(10).ToList();
+
+        return result;
+    }
+
+    public async Task<List<GetBestCategoryOfMonthResponse>> GetCategorySallerOfMonth()
+    {
+
+        var currentMonth = DateTime.Now.Month;
+        var orderIds = await _context.Orders.Where(ods => ods.CreatedOn.Month == currentMonth).Select(x => x.OrderId).ToListAsync();
+
+        var orderDetails = await _context.OrderDetails.Include(x => x.Product.ProductCategory).Where(x => orderIds.Contains(x.OrderId)).Select(x => new
+        {
+            CategoryId = x.Product.ProductCategory.ProductCategoryId,
+            ProductCategoryName = x.Product.ProductCategory.Name
+        }).ToListAsync();
+        var result = orderDetails.GroupBy(od => od.CategoryId).Select(x => new GetBestCategoryOfMonthResponse
+        {
+            ProductCategoryId = x.Key,
+            Amount = x.Count(),
+            ProductCategoryName = x.First(pn => pn.CategoryId == x.Key).ProductCategoryName,
+
+        }).ToList();
+
+        return result;
     }
 }
