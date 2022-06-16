@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+import AppContext from "../../context/AppContext";
 import "./ShopOrderCard.css";
 import ShopOrderItem from "./ShopOrderItem";
 
@@ -19,6 +21,8 @@ const ShopOrderCard = ({
   const location = useLocation();
   const { storeId } = location.state;
 
+  const { triggerReload, setTriggerReload } = useContext(AppContext);
+
   const handleAcceptOrder = () => {
     axios({
       method: "post",
@@ -31,6 +35,7 @@ const ShopOrderCard = ({
     })
       .then((res) => {
         setIsAccepted(true);
+        setTriggerReload(!triggerReload);
       })
       .catch((error) => {
         console.log(error);
@@ -49,6 +54,7 @@ const ShopOrderCard = ({
     })
       .then((res) => {
         setIsComplete(true);
+        setTriggerReload(!triggerReload);
       })
       .catch((error) => {
         console.log(error);
@@ -66,6 +72,7 @@ const ShopOrderCard = ({
       },
     })
       .then((res) => {
+        setTriggerReload(!triggerReload);
         setIsCanceled(true);
       })
       .catch((error) => {

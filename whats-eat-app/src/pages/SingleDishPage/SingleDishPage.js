@@ -19,6 +19,9 @@ import IngredientBox from "../../components/IngredientBox/IngredientBox";
 import TopItems from "../../components/TopItems/TopItems";
 import RecommendedRecipes from "../../components/TopItems/RecommendedRecipes";
 import { Input, Checkbox, Form } from "antd";
+import { AppProvider } from "../../context/AppContext";
+
+console.log("reload");
 
 const SingleDishPage = () => {
   const [dishDetail, setDishDetail] = useState([]);
@@ -159,6 +162,7 @@ const SingleDishPage = () => {
   }
 
   return (
+    // <AppProvider>
     <div className="single-dish">
       <div className="single-dish-fluid">
         <div className="single-dish-container">
@@ -311,6 +315,7 @@ const SingleDishPage = () => {
       <TopItems />
       <Footer />
     </div>
+    // </AppProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import "./Comment.css";
 
 import axios from "axios";
@@ -7,12 +7,14 @@ import { message, Rate } from "antd";
 import "antd/dist/antd.css";
 import { AiOutlineCamera, AiFillFileImage } from "react-icons/ai";
 import { FiSend } from "react-icons/fi";
+import AppContext from "../../context/AppContext";
 
 const Comment = ({ recipeId }) => {
   const [isCommented, setIsCommented] = useState(false);
   const [rateValue, setRateValue] = useState(5);
   const [comment, setComment] = useState("");
-  const token = useSelector((state) => state.auth.userInfo.token);
+  const { token, userName } = useSelector((state) => state.auth.userInfo);
+  const { triggerReload, setTriggerReload } = useContext(AppContext);
 
   const handleSubmitRating = (recipeId) => {
     console.log(recipeId, rateValue, comment);
@@ -29,6 +31,7 @@ const Comment = ({ recipeId }) => {
       .then((res) => {
         message.success("Cảm ơn đánh giá của bạn!");
         setComment("");
+        setTriggerReload(!triggerReload);
       })
       .catch((err) => {
         message.error("Đánh giá không thành công!");
@@ -39,7 +42,14 @@ const Comment = ({ recipeId }) => {
     return (
       <div className="comment-container">
         <h1 className="title">Bình luận</h1>
-        <div className="comment-box" onClick={() => setIsCommented(true)}>
+        <div
+          className="comment-box"
+          onClick={() => {
+            if (!userName) {
+              message.error("Vui lòng đăng nhập trước khi bình luận");
+            } else setIsCommented(true);
+          }}
+        >
           <div className="comment-fluid">
             <AiOutlineCamera className="camera-icon" />
             <p>Đăng bình luận...</p>
@@ -65,13 +75,14 @@ const Comment = ({ recipeId }) => {
           cols="30"
           rows="10"
           placeholder="Mô tả"
+          value={comment}
           onChange={(e) => setComment(e.target.value)}
         ></textarea>
       </div>
       <div className="submit-area">
-        <button className="btn img-load-btn">
+        {/* <button className="btn img-load-btn">
           <AiFillFileImage className="img-icon" /> TẢI THÊM ẢNH
-        </button>
+        </button> */}
         <button
           className="btn submit-btn"
           onClick={() => handleSubmitRating(recipeId)}

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Order.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
 import OrderItem from "./OrderItem";
 
@@ -9,6 +10,7 @@ const Order = ({ orderId, orderStatusHistories }) => {
   const [orderInfo, setOrderInfo] = useState();
   const [isCancel, setIsCancel] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
+  const { triggerReload, setTriggerReload } = useContext(AppContext);
 
   const handleCancelOrder = () => {
     axios({
@@ -22,6 +24,7 @@ const Order = ({ orderId, orderStatusHistories }) => {
     })
       .then((res) => {
         setIsCancel(true);
+        setTriggerReload(!triggerReload);
       })
       .catch((error) => {
         console.log(error);

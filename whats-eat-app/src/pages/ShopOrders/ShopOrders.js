@@ -3,11 +3,12 @@ import "antd/dist/antd.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Footer from "../../components/Footer/Footer";
 import ShopOrderCard from "../../components/ShopOrderCard/ShopOrderCard";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
 import "./ShopOrders.css";
+import AppContext from "../../context/AppContext";
 
 const { TabPane } = Tabs;
 
@@ -19,6 +20,7 @@ const ShopOrders = () => {
   const location = useLocation();
   const { storeId, defaultKey } = location.state;
   const token = useSelector((state) => state.auth.userInfo.token);
+  const { triggerReload } = useContext(AppContext);
 
   const allOrders = {
     waiting: [],
@@ -65,7 +67,6 @@ const ShopOrders = () => {
       });
   };
 
-  console.log(shopOrders);
   // const handleGetOrderDetails = () =>{
   //   axios({
   //     method: "get",
@@ -91,9 +92,10 @@ const ShopOrders = () => {
 
   useEffect(() => {
     getShopOrders();
-  }, []);
+  }, [triggerReload]);
 
   return (
+    // <AppProvider>
     <div className="shop-orders">
       <div className="shop-orders-fluid">
         <div className="shop-orders-container">
@@ -221,6 +223,7 @@ const ShopOrders = () => {
       </div>
       <Footer />
     </div>
+    // </AppProvider>
   );
 };
 

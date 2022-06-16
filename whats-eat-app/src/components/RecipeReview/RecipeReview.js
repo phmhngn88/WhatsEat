@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./RecipeReview.css";
 import StarRatings from "react-star-ratings";
 import { BsFillPersonFill } from "react-icons/bs";
 import axios from "axios";
+import AppContext from "../../context/AppContext";
 
 const RecipeReview = ({ recipeId }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const [reviews, setReviews] = useState([]);
+  const { triggerReload } = useContext(AppContext);
 
   useEffect(() => {
     axios({
@@ -21,7 +23,7 @@ const RecipeReview = ({ recipeId }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [triggerReload]);
 
   return (
     <div className="recipe-reviews-container">
@@ -67,33 +69,3 @@ const RecipeReview = ({ recipeId }) => {
 };
 
 export default RecipeReview;
-
-// const reviews = [
-//   {
-//     rating: 3,
-//     comment: "Ngon qua!",
-//     customer: {
-//       name: "NhatHiepisme",
-//       avatarUrl:
-//         "https://image.cooky.vn/recipe/g6/50880/s240x240/cooky-recipe-637102378373968618.png",
-//     },
-//   },
-//   {
-//     rating: 5,
-//     comment: "Xung dang 5 sao",
-//     customer: {
-//       name: "NhatHiephehe",
-//       avatarUrl:
-//         "https://image.cooky.vn/recipe/g6/50880/s240x240/cooky-recipe-637102378373968618.png",
-//     },
-//   },
-//   {
-//     rating: 4,
-//     comment: "Rat de nau!",
-//     customer: {
-//       name: "NhatHiepsadboiz",
-//       avatarUrl:
-//         "https://image.cooky.vn/recipe/g6/50880/s240x240/cooky-recipe-637102378373968618.png",
-//     },
-//   },
-// ];

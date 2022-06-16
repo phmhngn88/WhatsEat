@@ -1,50 +1,21 @@
-import { Input, Tabs } from "antd";
+import { Tabs } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer/Footer";
+import AppContext from "../../context/AppContext";
 import Order from "../../components/Order/Order";
 import "./OrderPage.css";
 
 const { TabPane } = Tabs;
-const { Search } = Input;
-
-const items = [
-  {
-    id: 0,
-    item_name: "Gà Ta Bình Định Thả Vườn",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/6997/s/8f099d38-a334-4315-8be3-5c4a3ead7ee2.jpeg",
-    price: 169000,
-    quantity: "500g",
-    status: 0,
-  },
-  {
-    id: 1,
-    item_name: "Classic Romance Set",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/14322/s/587a187b-069d-479d-87b7-3d5299cd5382.jpeg",
-    price: 159000,
-    quantity: "1",
-    status: 0,
-  },
-  {
-    id: 2,
-    item_name: "Thăn Lưng Bò Canada (Ribeye) Cắt Hotpot",
-    img_url:
-      "https://image.cooky.vn/posproduct/g0/15513/s400x400/66572bb6-d1ea-4221-a523-d33289117088.jpeg",
-    price: 119000,
-    quantity: "500g",
-    status: 1,
-  },
-];
 
 const OrderPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [allOrders, setAllOrders] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
+  const { triggerReload } = useContext(AppContext);
 
   const allUserOrders = {
     waiting: [],
@@ -93,7 +64,7 @@ const OrderPage = () => {
   };
   useEffect(() => {
     getCustomerOrders();
-  }, []);
+  }, [triggerReload]);
 
   return (
     <div className="orders">
