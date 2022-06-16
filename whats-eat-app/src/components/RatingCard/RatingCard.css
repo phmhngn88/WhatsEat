@@ -30,6 +30,8 @@
 }
 .product-info img{
     width: 3rem;
+    height: 3rem;
+    object-fit: cover;
 }
 .product-info p{
     margin-left: 0.5rem;

@@ -62,7 +62,7 @@ const ShopSidebar = ({ storeId }) => {
               });
             }}
           >
-            Đánh giá Shop
+            Đánh giá sản phẩm
           </a>
         </div>
       </Collapsible>

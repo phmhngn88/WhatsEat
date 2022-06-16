@@ -42,16 +42,21 @@ const mock_rating = [
 ];
 
 const ShopRating = () => {
-  const [shopRating, setShopRating] = useState(5);
   const [reviews, setReviews] = useState([]);
   const location = useLocation();
   const storeId = location.state.storeId;
+
+  const ratingArr = [];
+  reviews.map((review) => ratingArr.push(review.rating));
+  const average = ratingArr.reduce((a, b) => a + b, 0) / ratingArr.length;
+
   useEffect(() => {
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/review?StoreId=${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/product-reviews?PageNumber=1&PageSize=80`,
     })
       .then((res) => {
+        console.log(res.data);
         setReviews(res.data);
       })
       .catch((err) => {
@@ -72,7 +77,7 @@ const ShopRating = () => {
                 <p className="note">Xem đánh giá shop của bạn</p>
               </div>
               <p className="evarage-rating">
-                <span>{shopRating}</span> / 5
+                <span>{reviews.length > 0 ? average : 5}</span> / 5
               </p>
             </div>
             {reviews.length > 0 ? (
@@ -85,13 +90,6 @@ const ShopRating = () => {
                       <p>Trả lời đánh giá của bạn</p>
                     </div>
                     {reviews?.map((review, idx) => {
-                      const {
-                        storeReviewId,
-                        rating,
-                        comment,
-                        storeId,
-                        customerId,
-                      } = review;
                       return <Ratingcard key={idx} {...review} />;
                     })}
                   </TabPane>
