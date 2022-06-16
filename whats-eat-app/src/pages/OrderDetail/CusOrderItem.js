@@ -104,7 +104,7 @@ const CusOrderItem = ({ productId, price, ratingAvailable }) => {
 
         {ratingAvailable && (
           <button
-            className="rating-btn"
+            className={`rating-btn${isRated ? " disable" : ""}`}
             disabled={isRated ? true : false}
             onClick={() => setIsRating(true)}
           >

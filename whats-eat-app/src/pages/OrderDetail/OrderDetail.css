@@ -78,6 +78,11 @@ h2{
     align-self: center;
 }
 
+.detail .disable{
+    background-color: #c4c4c4;
+    cursor: unset;
+}
+
 .item-info .shop-name a{
     font-size: 1rem;
     font-weight: 400;
