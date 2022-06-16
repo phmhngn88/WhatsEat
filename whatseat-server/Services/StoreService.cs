@@ -100,7 +100,7 @@ public class StoreService
 
     public async Task<PagedList<ProductReview>> GetPagedAllProductReview(PagedRequest reviewRequest)
     {
-        var storeReviews = _context.ProductReviews.AsNoTracking().Include(sr => sr.Customer).AsQueryable();
+        var storeReviews = _context.ProductReviews.AsNoTracking().Include(sr => sr.Customer).Include(p => p.Product).AsQueryable();
 
         return await PagedList<ProductReview>.ToPagedList(storeReviews, reviewRequest.PageNumber, reviewRequest.PageSize);
     }
@@ -165,11 +165,11 @@ public class StoreService
 
     public async Task<List<GetBestSellerOfMonth>> GetBestSallerOfMonth()
     {
-        
+
         var currentMonth = DateTime.Now.Month;
         var orderIds = await _context.Orders.Where(ods => ods.CreatedOn.Month == currentMonth).Select(x => x.OrderId).ToListAsync();
 
-        var orderDetails = await _context.OrderDetails.Include(x => x.Product).Where(x => orderIds.Contains(x.OrderId)).Select(x  => new
+        var orderDetails = await _context.OrderDetails.Include(x => x.Product).Where(x => orderIds.Contains(x.OrderId)).Select(x => new
         {
             ProductId = x.ProductId,
             Quantity = x.Quantity,
