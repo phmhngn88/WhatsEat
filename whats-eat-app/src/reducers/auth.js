@@ -5,7 +5,7 @@ const initialState = {
   userInfo: {
     userName: null,
     token: null,
-    userId: null
+    userId: null,
   },
 };
 
@@ -26,10 +26,13 @@ const { loginSuccess } = auth.actions;
 export const login =
   ({ email, password }) =>
   async (dispatch) => {
-    const res = await axios.post("https://localhost:7029/api/auth/login", {
-      email,
-      password,
-    });
+    const res = await axios.post(
+      `${process.env.REACT_APP_ASP_API_KEY}/api/auth/login`,
+      {
+        email,
+        password,
+      }
+    );
     dispatch(loginSuccess(res.data));
   };
 

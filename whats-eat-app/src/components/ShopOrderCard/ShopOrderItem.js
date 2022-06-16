@@ -9,7 +9,7 @@ const ShopOrderItem = ({ productId, price, value, status, id }) => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/${productId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/${productId}`,
     })
       .then((res) => {
         const result = res.data;

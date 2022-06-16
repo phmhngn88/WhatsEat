@@ -26,7 +26,7 @@ const ShopOrderCard = ({
   const handleAcceptOrder = () => {
     axios({
       method: "post",
-      url: `https://localhost:7029/api/Store/${storeId}/orders/accept`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/orders/accept`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         orderId: orderId,
@@ -45,7 +45,7 @@ const ShopOrderCard = ({
   const handleCompleteOrder = () => {
     axios({
       method: "post",
-      url: `https://localhost:7029/api/Store/${storeId}/orders/complete`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/orders/complete`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         orderId: orderId,
@@ -64,7 +64,7 @@ const ShopOrderCard = ({
   const handleCancelOrder = () => {
     axios({
       method: "post",
-      url: `https://localhost:7029/api/Store/${storeId}/orders/cancel`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/orders/cancel`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         orderId: orderId,

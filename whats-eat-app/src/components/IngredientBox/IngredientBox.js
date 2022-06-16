@@ -13,7 +13,7 @@ const IngredientBox = ({ name, quantity, unit }) => {
   const handleShowProduct = (name) => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?searchTerm=${name}&PageNumber=1&PageSize=4`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product?searchTerm=${name}&PageNumber=1&PageSize=4`,
     })
       .then((res) => {
         setProducts(res.data);

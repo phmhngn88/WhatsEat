@@ -17,7 +17,7 @@ const CategoryPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/categories/${categoryId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/categories/${categoryId}`,
     })
       .then((res) => {
         const result = res.data;

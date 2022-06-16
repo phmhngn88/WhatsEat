@@ -15,7 +15,7 @@ const TopDishes = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/search?sortAvgRating=desc&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/search?sortAvgRating=desc&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         setTopRecipe(res.data);

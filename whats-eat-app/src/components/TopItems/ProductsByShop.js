@@ -16,7 +16,7 @@ const ProductsByShop = ({ storeId }) => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/${storeId}/products?PageNumber=1&PageSize=12`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/products?PageNumber=1&PageSize=12`,
     })
       .then((res) => {
         setProductByShop(res.data);

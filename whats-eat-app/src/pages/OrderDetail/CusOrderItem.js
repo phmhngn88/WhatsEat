@@ -19,7 +19,9 @@ const CusOrderItem = ({ productId, price, ratingAvailable }) => {
     if (orderInfo) {
       axios({
         method: "get",
-        url: `https://localhost:7029/api/Store/${orderInfo.storeId || 1}`,
+        url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${
+          orderInfo.storeId || 1
+        }`,
       })
         .then((res) => {
           const result = res.data;
@@ -35,7 +37,7 @@ const CusOrderItem = ({ productId, price, ratingAvailable }) => {
     console.log({ productId, rateValue, comment });
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Product/review",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/review`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         productId: productId,
@@ -56,7 +58,7 @@ const CusOrderItem = ({ productId, price, ratingAvailable }) => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/${productId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/${productId}`,
     })
       .then((res) => {
         const result = res.data;

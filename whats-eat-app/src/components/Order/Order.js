@@ -15,7 +15,7 @@ const Order = ({ orderId, orderStatusHistories }) => {
   const handleCancelOrder = () => {
     axios({
       method: "put",
-      url: `https://localhost:7029/api/Customer/order`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/order`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         orderId: orderId,
@@ -34,7 +34,7 @@ const Order = ({ orderId, orderStatusHistories }) => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Customer/order/${orderId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/order/${orderId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

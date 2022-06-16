@@ -28,7 +28,7 @@ const SingleProductPage = () => {
   const getProductDetail = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/${productId}`, //TODO: Changle hard code into idProduct
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/${productId}`, //TODO: Changle hard code into idProduct
     })
       .then((res) => {
         const result = res.data;

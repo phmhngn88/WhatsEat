@@ -54,7 +54,7 @@ const SingleDishPage = () => {
   const getTotalLove = () => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Recipe/love/total/${recipeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/total/${recipeId}`,
     })
       .then((res) => {
         //TODO: handle logic set total like
@@ -71,7 +71,7 @@ const SingleDishPage = () => {
       console.log("like recipe");
       axios({
         method: "POST",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/${recipeId}`,
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => {
@@ -84,7 +84,7 @@ const SingleDishPage = () => {
       console.log("unlike recipe");
       axios({
         method: "DELETE",
-        url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+        url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/${recipeId}`,
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => {
@@ -115,7 +115,7 @@ const SingleDishPage = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Recipe/love/isLoved/${recipeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/isLoved/${recipeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -130,7 +130,7 @@ const SingleDishPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/${recipeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/${recipeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

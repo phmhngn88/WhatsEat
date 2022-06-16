@@ -27,7 +27,7 @@ const ViewShopPage = () => {
   const getShopInfo = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}`,
     })
       .then((res) => {
         const result = res.data;
@@ -40,7 +40,7 @@ const ViewShopPage = () => {
   const getShopCategories = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/storeCategories/${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/storeCategories/${storeId}`,
     })
       .then((res) => {
         const result = res.data;
@@ -54,7 +54,7 @@ const ViewShopPage = () => {
   const getShopProducts = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/${storeId}/products?PageNumber=${pageNumber}&PageSize=30`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/products?PageNumber=${pageNumber}&PageSize=30`,
     })
       .then((res) => {
         const result = res.data;
@@ -67,7 +67,7 @@ const ViewShopPage = () => {
   const postLikeShop = () => {
     axios({
       method: "POST",
-      url: `https://localhost:7029/api/Store/like/${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/like/${storeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})
@@ -78,7 +78,7 @@ const ViewShopPage = () => {
   const deleteLikeShop = () => {
     axios({
       method: "DELETE",
-      url: `https://localhost:7029/api/Store/dislike/${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/dislike/${storeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})
@@ -89,7 +89,7 @@ const ViewShopPage = () => {
   const getLikeShop = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/is-like/${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/is-like/${storeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -107,7 +107,7 @@ const ViewShopPage = () => {
     } else {
       axios({
         method: "get",
-        url: `https://localhost:7029/api/Product?productCategories=${key}&PageNumber=${pageNumber}&PageSize=30`,
+        url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product?productCategories=${key}&PageNumber=${pageNumber}&PageSize=30`,
       })
         .then((res) => {
           setProductsByCate(res.data);

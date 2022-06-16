@@ -14,7 +14,7 @@ const RecipeReview = ({ recipeId }) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Recipe/reviews?RecipeId=${recipeId}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/reviews?RecipeId=${recipeId}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         console.log(res.data);

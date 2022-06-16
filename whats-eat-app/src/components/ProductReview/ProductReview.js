@@ -12,7 +12,7 @@ const ProductReview = ({ productId }) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Product/reviews?ProductId=${productId}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/reviews?ProductId=${productId}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         console.log(res.data);

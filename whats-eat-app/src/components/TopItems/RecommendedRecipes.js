@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./TopItems.css";
 import axios from "axios";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +13,15 @@ const RecommendedRecipes = (props) => {
   const [topRecipe, setTopRecipe] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(12);
-  let params = ''
-  props.productIds.forEach(element => {
-    params += `id_recipe=${element}&`
+  let params = "";
+  props.productIds.forEach((element) => {
+    params += `id_recipe=${element}&`;
   });
-  const url = params.substring(0, params.length - 1)
+  const url = params.substring(0, params.length - 1);
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/apriori?${url}`,
+      url: `${process.env.REACT_APP_PYTHON_API_KEY}/individual/recipe/apriori?${url}`,
     })
       .then((res) => {
         setTopRecipe(res.data);
@@ -32,7 +32,7 @@ const RecommendedRecipes = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [pageNumber,url]);
+  }, [pageNumber, url]);
   const navigate = useNavigate();
 
   if (!topRecipe) {
@@ -40,7 +40,7 @@ const RecommendedRecipes = (props) => {
   }
   return (
     <div className="top-items-container">
-      {(topRecipe.length > 0) && (
+      {topRecipe.length > 0 && (
         <div className="top-items">
           <h1 className="title">Món ăn dùng cùng</h1>
           <Row gutter={[16, 16]}>
@@ -61,4 +61,3 @@ const RecommendedRecipes = (props) => {
 };
 
 export default RecommendedRecipes;
-

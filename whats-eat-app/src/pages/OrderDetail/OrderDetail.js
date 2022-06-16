@@ -17,7 +17,7 @@ const CusOrderDetail = () => {
   const getOrder = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Customer/order/${id}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/order/${id}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -33,7 +33,7 @@ const CusOrderDetail = () => {
   const handleCancelOrder = () => {
     axios({
       method: "put",
-      url: `https://localhost:7029/api/Customer/order`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/order`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         orderId: order.orderId,

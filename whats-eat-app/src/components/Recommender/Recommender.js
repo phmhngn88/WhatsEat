@@ -9,17 +9,17 @@ import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
 import { AiFillDelete } from "react-icons/ai";
-import { Progress, Pagination } from 'antd';
+import { Progress, Pagination } from "antd";
 const { Option } = Select;
 
-const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
+const Recommender = ({ kcal, menu, setCurrentPage, onFilter }) => {
   const [listRecipes, setListRecipes] = useState([]);
   const [status, setStatus] = useState("");
   const [percent, setPercent] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [level,setLevel] = useState("Mức độ");
-  const [minTime,setMinTime] = useState(0);
-  const [maxTime,setMaxTime] = useState(0);
+  const [level, setLevel] = useState("Mức độ");
+  const [minTime, setMinTime] = useState(0);
+  const [maxTime, setMaxTime] = useState(0);
   const token = useSelector((state) => state.auth.userInfo.token);
   const recipes = [];
   let listRecipe = [];
@@ -29,10 +29,10 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
   const handleSaveMenu = () => {
     axios({
       method: "post",
-      url: "https://localhost:7029/api/Menu",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Menu`,
       data: {
         menuName: `Menu ngày ${getCurrentDate()}`,
-        recipeIds: listRecipes.map(a => a.recipeId), //TODO: Get array of id in menu
+        recipeIds: listRecipes.map((a) => a.recipeId), //TODO: Get array of id in menu
       },
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -45,47 +45,46 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
   };
 
   const addRecipe = (recipe) => {
-    setListRecipes([...listRecipes, recipe])
-  }
+    setListRecipes([...listRecipes, recipe]);
+  };
 
   const removeRecipe = (recipeId) => {
-    setListRecipes(listRecipes.filter(item => item.recipeId !== recipeId))
-  }
+    setListRecipes(listRecipes.filter((item) => item.recipeId !== recipeId));
+  };
 
   const onPageChage = (page) => {
-    setCurrent(page)
-    setCurrentPage(page-1)
-  }
+    setCurrent(page);
+    setCurrentPage(page - 1);
+  };
 
   useEffect(() => {
     let totalKcal = listRecipes.reduce((sum, a) => sum + a.calories, 0);
-    let per = totalKcal / kcal * 100
+    let per = (totalKcal / kcal) * 100;
     if (per > 100) {
-      setStatus("exception")
+      setStatus("exception");
+    } else {
+      setStatus("active");
     }
-    else {
-      setStatus("active")
-    }
-    setPercent(per.toFixed(2))
-  }, [listRecipes])
+    setPercent(per.toFixed(2));
+  }, [listRecipes]);
 
-  const onSelectLevel  = (value) => {
+  const onSelectLevel = (value) => {
     setLevel(value);
-  }
+  };
 
   const onChangeMinTime = (e) => {
-    setMinTime(e.target.value)
-  }
+    setMinTime(e.target.value);
+  };
 
   const onChangeMaxTime = (e) => {
-    setMaxTime(e.target.value)
-  }
+    setMaxTime(e.target.value);
+  };
 
   const onFilterClick = () => {
-    onFilter(level,minTime,maxTime);
-  }
+    onFilter(level, minTime, maxTime);
+  };
 
-  console.log('list', listRecipes)
+  console.log("list", listRecipes);
   return (
     <div className="recommender-body">
       <div className="recommender-container">
@@ -100,7 +99,12 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
                   <Row>
                     <Col span={18}>{name}</Col>
                     <Col span={4}>{calories.toFixed(2)}</Col>
-                    <Col span={2}><AiFillDelete className="remove-recipe" onClick={() => removeRecipe(recipeId)} /></Col>
+                    <Col span={2}>
+                      <AiFillDelete
+                        className="remove-recipe"
+                        onClick={() => removeRecipe(recipeId)}
+                      />
+                    </Col>
                   </Row>
                 </p>
               );
@@ -122,21 +126,25 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
           <BiSave className="save-icon" /> Thêm vào Menu của tôi
         </Button>
         <div className="menu-items">
-          <Pagination 
-              className="recommendation-panigation"
-              pageSize={16} 
-              current={current}
-              total={1000}
-              showSizeChanger={false}
-              onChange={onPageChage}
-              />
+          <Pagination
+            className="recommendation-panigation"
+            pageSize={16}
+            current={current}
+            total={1000}
+            showSizeChanger={false}
+            onChange={onPageChage}
+          />
           <div>
             <div>
-              <Row style={{marginTop:10}}>
+              <Row style={{ marginTop: 10 }}>
                 <Col>
                   <Input.Group>
                     <span>Mức độ: </span>
-                    <Select style={{width:110}} defaultValue={level} onChange={onSelectLevel}>
+                    <Select
+                      style={{ width: 110 }}
+                      defaultValue={level}
+                      onChange={onSelectLevel}
+                    >
                       <Option value="Dễ">Dễ</Option>
                       <Option value="Trung bình">Trung bình</Option>
                       <Option value="Khó">Khó</Option>
@@ -146,11 +154,11 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
                 <Col>
                   <Row>
                     <Input.Group compact>
-                      <span className="time-cooking">Thời gian nấu: </span> 
+                      <span className="time-cooking">Thời gian nấu: </span>
                       <Input
                         style={{
                           width: 100,
-                          textAlign: 'center',
+                          textAlign: "center",
                         }}
                         onChange={onChangeMinTime}
                         placeholder="Tối thiểu"
@@ -161,7 +169,7 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
                           width: 30,
                           borderLeft: 0,
                           borderRight: 0,
-                          pointerEvents: 'none',
+                          pointerEvents: "none",
                         }}
                         placeholder="~"
                         disabled
@@ -170,7 +178,7 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
                         className="site-input-right"
                         style={{
                           width: 100,
-                          textAlign: 'center',
+                          textAlign: "center",
                         }}
                         onChange={onChangeMaxTime}
                         placeholder="Tối đa"
@@ -183,14 +191,14 @@ const Recommender = ({ kcal, menu, setCurrentPage,onFilter }) => {
             </div>
           </div>
           <DishBox menu={menu} addRecipe={addRecipe} />
-          <Pagination 
+          <Pagination
             className="recommendation-panigation"
-            pageSize={16} 
+            pageSize={16}
             current={current}
             total={1000}
             showSizeChanger={false}
             onChange={onPageChage}
-             />
+          />
         </div>
         {/* <div className="expand-container">
           <h2 className="title">Thêm món</h2>

@@ -27,7 +27,7 @@ const ShopProfile = () => {
   const onFormFinish = (values) => {
     axios({
       method: "PUT",
-      url: "https://localhost:7029/api/Store/info",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/info`,
       headers: { Authorization: `Bearer ${token}` },
       data: values,
     })

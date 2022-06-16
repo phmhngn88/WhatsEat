@@ -16,7 +16,7 @@ const FavMenu = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Customer",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

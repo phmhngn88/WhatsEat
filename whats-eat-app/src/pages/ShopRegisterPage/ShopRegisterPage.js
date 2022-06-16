@@ -32,7 +32,7 @@ const ShopRegisterPage = () => {
   const handleSubmitShopRegister = () => {
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Store/register",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/register`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         shopName: shopName,

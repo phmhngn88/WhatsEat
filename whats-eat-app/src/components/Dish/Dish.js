@@ -50,7 +50,7 @@ const Dish = ({
       if (isLikeRecipe) {
         axios({
           method: "POST",
-          url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+          url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/${recipeId}`,
           headers: { Authorization: `Bearer ${token}` },
           data: {
             recipeId: recipeId,
@@ -64,7 +64,7 @@ const Dish = ({
       } else {
         axios({
           method: "DELETE",
-          url: `https://localhost:7029/api/Recipe/love/${recipeId}`,
+          url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/${recipeId}`,
           headers: { Authorization: `Bearer ${token}` },
           data: {
             recipeId: recipeId,
@@ -82,7 +82,7 @@ const Dish = ({
   useEffect(() => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Recipe/love/isLoved/${recipeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/isLoved/${recipeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

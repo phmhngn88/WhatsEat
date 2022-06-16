@@ -19,7 +19,7 @@ const Items = ({ products, storeId }) => {
   const onDeleteProduct = (productId) => {
     axios({
       method: "delete",
-      url: `https://localhost:7029/api/Store/${storeId}/product/${productId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/product/${productId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {})

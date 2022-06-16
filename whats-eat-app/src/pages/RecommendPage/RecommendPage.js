@@ -11,9 +11,9 @@ const RecommendPage = () => {
   const [allergy, setAllergy] = useState("");
   const [menu, setMenu] = useState([]);
   const [page, setPage] = useState(0);
-  const [level,setLevel] = useState("Mức độ");
-  const [minTime,setMinTime] = useState(0);
-  const [maxTime,setMaxTime] = useState(0);
+  const [level, setLevel] = useState("Mức độ");
+  const [minTime, setMinTime] = useState(0);
+  const [maxTime, setMaxTime] = useState(0);
   const user = useSelector((state) => state.auth.userInfo);
   const handleOk = (gender, pal, weight, height, year, allergy) => {
     console.log(gender, pal, weight, height, year);
@@ -23,22 +23,22 @@ const RecommendPage = () => {
       weight: weight,
       height: height,
       year: year,
-      allergy:allergy
-    }
+      allergy: allergy,
+    };
     axios({
       method: "put",
-      url: `https://localhost:7029/api/Customer/update-calo-per-day`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/update-calo-per-day`,
       data: body,
       headers: { Authorization: `Bearer ${user.token}` },
     })
       .then((res) => {
         setKcal(res.data.calo);
-        setAllergy(res.data.allergy)
-        if(res.data.calo > 0){
+        setAllergy(res.data.allergy);
+        if (res.data.calo > 0) {
           getRecommendedRecipe(res.data);
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
     setIsModalVisible(false);
   };
 
@@ -49,7 +49,7 @@ const RecommendPage = () => {
   const getRecommendedRecipe = (data) => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/recipe/?id_user=${user.userId}&user_kcal=${data.calo}&n_recipe=16&page=${page}&level=${level}&mintime=${minTime}&maxtime=${maxTime}&allergy=${data.allergy}`,
+      url: `${process.env.REACT_APP_PYTHON_API_KEY}/individual/recipe/?id_user=${user.userId}&user_kcal=${data.calo}&n_recipe=16&page=${page}&level=${level}&mintime=${minTime}&maxtime=${maxTime}&allergy=${data.allergy}`,
     })
       .then((res) => {
         const result = res.data;
@@ -58,42 +58,49 @@ const RecommendPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
-  const onPageChange = (page) =>{
-    setPage(page)
-  }
+  const onPageChange = (page) => {
+    setPage(page);
+  };
 
-  const onFilter = (level,minTime,maxTime) => {
+  const onFilter = (level, minTime, maxTime) => {
     setLevel(level);
     setMaxTime(maxTime);
     setMinTime(minTime);
-  }
+  };
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Customer/get-calo-per-day`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/get-calo-per-day`,
       headers: { Authorization: `Bearer ${user.token}` },
     })
       .then((res) => {
         setKcal(res.data.calo);
-        if(res.data.calo > 0){
+        if (res.data.calo > 0) {
           getRecommendedRecipe(res.data);
         }
       })
-      .catch((err) => { });
-  }, [page,level,minTime,maxTime])
+      .catch((err) => {});
+  }, [page, level, minTime, maxTime]);
 
   return (
     <div className="recommend">
-      <Recommender kcal={kcal} menu={menu} setCurrentPage={onPageChange} onFilter={onFilter}/>
+      <Recommender
+        kcal={kcal}
+        menu={menu}
+        setCurrentPage={onPageChange}
+        onFilter={onFilter}
+      />
       <Footer />
-      {kcal === 0 && <ModalCalo
-        isModalVisible={isModalVisible}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-      />}
+      {kcal === 0 && (
+        <ModalCalo
+          isModalVisible={isModalVisible}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
+        />
+      )}
     </div>
   );
 };

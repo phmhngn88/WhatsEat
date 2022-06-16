@@ -60,7 +60,7 @@ const PaymentPage = () => {
       console.log({ paymentMethod, shippingInfoId, carts, choosenService });
       axios({
         method: "POST",
-        url: "https://localhost:7029/api/Customer/order",
+        url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/order`,
         headers: { Authorization: `Bearer ${token}` },
         data: {
           paymentMethodId: paymentMethod,
@@ -76,7 +76,7 @@ const PaymentPage = () => {
           } else {
             axios({
               method: "POST",
-              url: `https://localhost:7029/api/Payment/${res.data[0].orderId}`,
+              url: `${process.env.REACT_APP_ASP_API_KEY}/api/Payment/${res.data[0].orderId}`,
               headers: { Authorization: `Bearer ${token}` },
             })
               .then((res) => {
@@ -105,7 +105,7 @@ const PaymentPage = () => {
   const showChooseAddressModal = () => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Customer/shippingInfos",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/shippingInfos`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -163,7 +163,7 @@ const PaymentPage = () => {
     setIsAddAddressModalVisible(false);
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Customer/shippingInfos",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/shippingInfos`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         name: values.name,
@@ -185,7 +185,7 @@ const PaymentPage = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Customer/shippingInfos",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/shippingInfos`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -203,7 +203,7 @@ const PaymentPage = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Customer",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -220,7 +220,9 @@ const PaymentPage = () => {
       if (!choosenAddress) {
         axios({
           method: "GET",
-          url: `https://localhost:7029/api/Customer/ShippingFee?ServiceId=${
+          url: `${
+            process.env.REACT_APP_ASP_API_KEY
+          }/api/Customer/ShippingFee?ServiceId=${
             choosenService
               ? choosenService
               : services.length > 0
@@ -240,7 +242,9 @@ const PaymentPage = () => {
       } else {
         axios({
           method: "GET",
-          url: `https://localhost:7029/api/Customer/ShippingFee?ServiceId=${
+          url: `${
+            process.env.REACT_APP_ASP_API_KEY
+          }/api/Customer/ShippingFee?ServiceId=${
             choosenService
               ? choosenService
               : services.length > 0

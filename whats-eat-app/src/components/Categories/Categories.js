@@ -86,7 +86,7 @@ const Categories = () => {
   const getCategories = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product/categories`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/categories`,
     })
       .then((res) => {
         const result = res.data;
@@ -121,7 +121,11 @@ const Categories = () => {
                   })
                 }
               >
-                <img src={category.images} alt={category.name} className="category-img" />
+                <img
+                  src={category.images}
+                  alt={category.name}
+                  className="category-img"
+                />
                 <h3 className="category-title">{category.name}</h3>
               </Col>
             );

@@ -67,25 +67,6 @@ const ShopOrders = () => {
       });
   };
 
-  // const handleGetOrderDetails = () =>{
-  //   axios({
-  //     method: "get",
-  //     url: `https://localhost:7029/api/Customer/${hh}`,
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   })
-  //     .then((res) => {
-  //       const result = res.data;
-  //       console.log(result);
-  //       setShopOrders(result);
-  //       if(result.length > 0){
-  //         handleGetOrderDetails()
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }
-
   useEffect(() => {
     setDefaultActiveKey(defaultKey);
   }, [defaultKey]);

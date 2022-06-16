@@ -49,7 +49,7 @@ const ShopRating = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Store/review?StoreId=${storeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/review?StoreId=${storeId}`,
     })
       .then((res) => {
         setReviews(res.data);

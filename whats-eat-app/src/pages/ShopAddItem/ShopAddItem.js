@@ -55,7 +55,7 @@ const ShopAddItem = () => {
     });
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Store/add-product",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/add-product`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         ...values,

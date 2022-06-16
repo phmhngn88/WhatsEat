@@ -15,7 +15,7 @@ const ShopItems = () => {
   const getShopProducts = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/${storeId}/products?PageSize=30`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/products?PageSize=30`,
     })
       .then((res) => {
         const result = res.data;

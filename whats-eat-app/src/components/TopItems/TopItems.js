@@ -16,7 +16,9 @@ const TopItems = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?sortTotalSell=desc&PageNumber=${pageNumber}&PageSize=${
+      url: `${
+        process.env.REACT_APP_ASP_API_KEY
+      }/api/Product?sortTotalSell=desc&PageNumber=${pageNumber}&PageSize=${
         pageSize + 4
       }`,
     })

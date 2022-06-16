@@ -17,7 +17,7 @@ const FavorShop = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Store/followings`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/followings`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

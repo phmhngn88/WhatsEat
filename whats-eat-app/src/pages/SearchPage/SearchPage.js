@@ -47,7 +47,7 @@ const SearchPage = () => {
   const handleFilter = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&MinPrice=${minPrice}&MaxPrice=${maxPrice}&PageNumber=${pageNumber}&PageSize=12`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&MinPrice=${minPrice}&MaxPrice=${maxPrice}&PageNumber=${pageNumber}&PageSize=12`,
     })
       .then((res) => {
         console.log("Data product filter:", res.data);
@@ -61,7 +61,7 @@ const SearchPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&MinPrice=${minPrice}&MaxPrice=${maxPrice}&PageNumber=${pageNumber}&PageSize=12`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product?searchTerm=${searchTerm}&sortPrice=${filterCondition}&MinPrice=${minPrice}&MaxPrice=${maxPrice}&PageNumber=${pageNumber}&PageSize=12`,
     })
       .then((res) => {
         console.log("Data product search:", res.data);
@@ -75,7 +75,7 @@ const SearchPage = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/search?searchTerm=${searchTerm}&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         setSearchRecipeResult(res.data);

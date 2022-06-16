@@ -18,7 +18,9 @@ const TopItemsForYou = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/individual/product?id_user=${userId}&n_product=${12}`,
+      url: `${
+        process.env.REACT_APP_PYTHON_API_KEY
+      }/individual/product?id_user=${userId}&n_product=${12}`,
     })
       .then((res) => {
         setTopProduct(res.data);

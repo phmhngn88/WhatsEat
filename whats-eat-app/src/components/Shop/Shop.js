@@ -71,7 +71,7 @@ const Shop = ({ storeId }) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Store/income-by-day",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/income-by-day`,
     })
       .then((res) => {
         setDataIncomeByDay(res.data);
@@ -85,7 +85,7 @@ const Shop = ({ storeId }) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Store/number-order-by-statuses",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/number-order-by-statuses`,
     })
       .then((res) => {
         setDataStatusOrders(res.data);
@@ -97,7 +97,7 @@ const Shop = ({ storeId }) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Store/best-seller-of-months",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/best-seller-of-months`,
     })
       .then((res) => {
         setDataBestProducts(res.data);
@@ -109,7 +109,7 @@ const Shop = ({ storeId }) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Store/best-category-of-months",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/best-category-of-months`,
     })
       .then((res) => {
         setDataBestCategories(res.data);

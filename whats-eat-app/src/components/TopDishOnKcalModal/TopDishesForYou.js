@@ -5,7 +5,7 @@ import axios from "axios";
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 import Dish from "../Dish/Dish";
-import {BsChevronCompactRight, BsChevronCompactLeft} from "react-icons/bs"
+import { BsChevronCompactRight, BsChevronCompactLeft } from "react-icons/bs";
 const TopDishesForYou = () => {
   const [topRecipe, setTopRecipe] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
@@ -14,7 +14,7 @@ const TopDishesForYou = () => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Recipe/search?sortAvgRating=desc&PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/search?sortAvgRating=desc&PageNumber=${pageNumber}&PageSize=${pageSize}`,
     })
       .then((res) => {
         setTopRecipe(res.data);
@@ -45,14 +45,10 @@ const TopDishesForYou = () => {
             }icon-pagination right-icon`}
             onClick={() => setPageNumber(pageNumber + 1)}
           />
-          <Row gutter={[16,16]}>
+          <Row gutter={[16, 16]}>
             {topRecipe.map((dish) => {
               return (
-                <Col
-                  span={6}
-                  key={dish.recipeId}
-                  className="dish-col"
-                >
+                <Col span={6} key={dish.recipeId} className="dish-col">
                   <Dish {...dish} />
                 </Col>
               );

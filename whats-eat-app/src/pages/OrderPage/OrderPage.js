@@ -50,7 +50,7 @@ const OrderPage = () => {
   const getCustomerOrders = () => {
     axios({
       method: "get",
-      url: `https://localhost:7029/api/Customer/orders-list?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/orders-list?PageNumber=${pageNumber}&PageSize=${pageSize}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

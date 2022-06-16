@@ -162,7 +162,7 @@ const AddRecipe = () => {
     console.log(payloadData);
     axios({
       method: "POST",
-      url: `https://localhost:7029/api/Recipe/recipe`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/recipe`,
       headers: { Authorization: `Bearer ${token}` },
       data: payloadData,
     })
@@ -185,7 +185,7 @@ const AddRecipe = () => {
   const confirmDelete = () => {
     axios({
       method: "delete",
-      url: `https://localhost:7029/api/Customer/recipe/${deleteRecipeId}`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/recipe/${deleteRecipeId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -202,7 +202,7 @@ const AddRecipe = () => {
   useEffect(() => {
     axios({
       method: "Get",
-      url: `https://localhost:7029/api/Customer/own-recipes`,
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer/own-recipes`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

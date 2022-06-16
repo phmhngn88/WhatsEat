@@ -48,7 +48,7 @@ const Profile = () => {
     console.log({ ...values, avatarUrl: image });
     axios({
       method: "PUT",
-      url: "https://localhost:7029/api/Customer",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer`,
       headers: { Authorization: `Bearer ${token}` },
       data: { ...values, avatarUrl: image },
     })
@@ -64,7 +64,7 @@ const Profile = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Customer",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

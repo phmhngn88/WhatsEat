@@ -22,7 +22,7 @@ const RegisterPage = () => {
   const handleSubmit = () => {
     axios({
       method: "post",
-      url: "https://localhost:7029/api/auth/register",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/auth/register`,
       data: {
         userName: userName,
         email: email,

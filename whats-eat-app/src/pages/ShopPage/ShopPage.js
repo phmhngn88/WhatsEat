@@ -14,7 +14,7 @@ const ShopPage = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Store/myStores",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/myStores`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

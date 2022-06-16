@@ -17,7 +17,9 @@ const FavRecipe = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `https://localhost:7029/api/Recipe/love?PageNumber=${1}&PageSize=${30}`,
+      url: `${
+        process.env.REACT_APP_ASP_API_KEY
+      }/api/Recipe/love?PageNumber=${1}&PageSize=${30}`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -30,7 +32,7 @@ const FavRecipe = () => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:7029/api/Customer",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Customer`,
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {

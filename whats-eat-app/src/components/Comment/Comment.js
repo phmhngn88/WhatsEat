@@ -20,7 +20,7 @@ const Comment = ({ recipeId }) => {
     console.log(recipeId, rateValue, comment);
     axios({
       method: "POST",
-      url: "https://localhost:7029/api/Recipe/reviews",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/reviews`,
       headers: { Authorization: `Bearer ${token}` },
       data: {
         recipeId: recipeId,
