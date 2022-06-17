@@ -66,6 +66,11 @@
 .ingredient-box button{
     width: 20%;
 }
+.register-form .disable{
+    color: #fff;
+    background-color: #C4C4C4;
+    cursor: not-allowed;
+}
 .register-form .single-step{
     margin-top: 0.35rem;
     margin-bottom: 0.15rem;

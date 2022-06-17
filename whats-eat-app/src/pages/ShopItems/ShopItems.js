@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Items from "../../components/Items/Items";
 import Footer from "../../components/Footer/Footer";
 import ShopSidebar from "../../components/ShopSidebar/ShopSidebar";
+import AppContext from "../../context/AppContext";
 import "./ShopItems.css";
 
 const ShopItems = () => {
   const [listProducts, setListProducts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const location = useLocation();
+  const { triggerReload } = useContext(AppContext);
   const storeId = location.state.storeId;
 
   const getShopProducts = () => {
@@ -29,7 +31,7 @@ const ShopItems = () => {
 
   useEffect(() => {
     getShopProducts();
-  }, [pageNumber]);
+  }, [pageNumber, triggerReload]);
   return (
     <div className="shop-items">
       <div className="shop-items-fluid">

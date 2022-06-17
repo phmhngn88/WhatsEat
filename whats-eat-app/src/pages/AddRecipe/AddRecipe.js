@@ -37,23 +37,25 @@ const DoneIngreButton = ({ onDoneIngre }) => {
           onDoneIngre();
         } else return;
       }}
+      disabled={isDone}
     >
       {isDone ? "Đã thêm" : "Thêm"}
     </button>
   );
 };
-const DoneButton = ({ onDone }) => {
+const DoneButton = ({ onDone, disable }) => {
   const [isDone, setIsDone] = useState(false);
+  console.log(disable);
   return (
     <button
-      className={`btn done-btn${isDone ? " disable" : ""}`}
+      className={`btn done-btn${isDone || disable ? " disable" : ""}`}
       onClick={() => {
         if (!isDone) {
-          console.log("done");
           setIsDone(true);
           onDone();
         } else return;
       }}
+      disabled={disable}
     >
       {isDone ? "Đã xong bước" : "Xong bước"}
     </button>
@@ -75,6 +77,9 @@ const AddRecipe = () => {
   const [myRecipes, setMyRecipes] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [deleteRecipeId, setDeleteRecipeId] = useState();
+  const [isDisableAddIngre, setIsDisableAddIngre] = useState(true);
+  const [isDisableAddStep, setIsDisableAddStep] = useState(true);
+  const [disableDoneStep, setDisableDoneStep] = useState(true);
   const [triggerReload, setTriggerReload] = useState(true);
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -104,21 +109,25 @@ const AddRecipe = () => {
       .post(`https://api.cloudinary.com/v1_1/dexdbltsd/image/upload`, formData)
       .then((res) => {
         setStepImage(res.data.url);
-        console.log("image step:", res.data.url);
+        setDisableDoneStep(false);
       })
       .catch((err) => {
+        message.error("Upload ảnh thất bại!");
         console.log(err);
       });
   };
 
   const handleAddIngredient = () => {
     setIngredients((prevIngre) => [...prevIngre, "ingredient"]);
+    setIsDisableAddIngre(true);
   };
 
   const handleAddStep = () => {
     setStepImage();
 
     setSteps((prevSteps) => [...prevSteps, "textarea"]);
+    setIsDisableAddStep(true);
+    setDisableDoneStep(true);
   };
 
   const handleDoneIngre = () => {
@@ -130,6 +139,7 @@ const AddRecipe = () => {
         quantity: ingredientQuantity,
       },
     ]);
+    setIsDisableAddIngre(false);
   };
 
   const handleDoneBtn = () => {
@@ -140,6 +150,7 @@ const AddRecipe = () => {
         photos: [[{ url: stepImage, height: 0, width: 0 }]],
       },
     ]);
+    setIsDisableAddStep(false);
   };
 
   const onFormFinish = (values) => {
@@ -311,7 +322,7 @@ const AddRecipe = () => {
                             />
                             <Input
                               type="number"
-                              placeholder="Nhập trọng lượng"
+                              placeholder="Nhập trọng lượng (gr)"
                               onChange={(e) =>
                                 setIngredientQuantity(e.target.value)
                               }
@@ -320,8 +331,11 @@ const AddRecipe = () => {
                           </div>
                         ))}
                         <button
-                          className="btn"
+                          className={`btn${
+                            isDisableAddIngre ? " disable" : ""
+                          }`}
                           style={{ float: "right" }}
+                          disabled={isDisableAddIngre}
                           onClick={handleAddIngredient}
                         >
                           Thêm nguyên liệu
@@ -370,12 +384,18 @@ const AddRecipe = () => {
                                 }}
                               />
 
-                              <DoneButton onDone={handleDoneBtn} />
+                              <DoneButton
+                                disable={disableDoneStep}
+                                onDone={handleDoneBtn}
+                              />
                             </div>
                           );
                         })}
                         <button
-                          className="btn add-step-btn"
+                          className={`btn add-step-btn${
+                            isDisableAddStep ? " disable" : ""
+                          }`}
+                          disabled={isDisableAddStep}
                           onClick={handleAddStep}
                         >
                           Thêm bước

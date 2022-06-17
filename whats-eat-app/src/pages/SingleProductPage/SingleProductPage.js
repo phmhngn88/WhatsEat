@@ -83,7 +83,7 @@ const SingleProductPage = () => {
   };
   useEffect(() => {
     getProductDetail();
-  }, []);
+  }, [productId]);
 
   if (!productDetail.images) {
     return (

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import "./Items.css";
 import "antd/dist/antd.css";
 import { Row, Col, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AppContext from "../../context/AppContext";
 import Product from "../Product/Product";
 
 const Items = ({ products, storeId }) => {
@@ -13,6 +14,7 @@ const Items = ({ products, storeId }) => {
     name: "",
     productId: 0,
   });
+  const { triggerReload, setTriggerReload } = useContext(AppContext);
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.userInfo.token);
 
@@ -22,7 +24,9 @@ const Items = ({ products, storeId }) => {
       url: `${process.env.REACT_APP_ASP_API_KEY}/api/Store/${storeId}/product/${productId}`,
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((res) => {})
+      .then((res) => {
+        setTriggerReload(!triggerReload);
+      })
       .catch((err) => {
         console.log(err);
       });
