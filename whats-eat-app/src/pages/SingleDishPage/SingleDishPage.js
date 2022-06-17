@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import StarRatings from "react-star-ratings";
 import {
   AiFillThunderbolt,
@@ -19,7 +19,7 @@ import IngredientBox from "../../components/IngredientBox/IngredientBox";
 import TopItems from "../../components/TopItems/TopItems";
 import RecommendedRecipes from "../../components/TopItems/RecommendedRecipes";
 import { Input, Checkbox, Form } from "antd";
-import { AppProvider } from "../../context/AppContext";
+import AppContext from "../../context/AppContext";
 
 console.log("reload");
 
@@ -32,6 +32,7 @@ const SingleDishPage = () => {
   const [isCalculated, setIsCalculated] = useState(false);
   const token = useSelector((state) => state.auth.userInfo.token);
   const location = useLocation();
+  const { triggerReload } = useContext(AppContext);
   const recipeId = location.state.recipeId;
   const calculatedArray = [];
   const [newIngreadients, setNewIngreadients] = useState([]);
@@ -142,7 +143,7 @@ const SingleDishPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [triggerReload]);
   if (!steps || !images || !ingredients) {
     return (
       <div

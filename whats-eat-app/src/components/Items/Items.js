@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import "./Items.css";
 import "antd/dist/antd.css";
-import { Row, Col, Modal } from "antd";
+import { Row, Col, Modal, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AppContext from "../../context/AppContext";
@@ -26,8 +26,10 @@ const Items = ({ products, storeId }) => {
     })
       .then((res) => {
         setTriggerReload(!triggerReload);
+        message.success("Xóa sản phẩm thành công!");
       })
       .catch((err) => {
+        message.error("Xóa sản phẩm thất bại!");
         console.log(err);
       });
     setVisible(false);
