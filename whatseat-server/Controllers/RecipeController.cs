@@ -201,6 +201,10 @@ public class RecipeController : ControllerBase
         };
 
         var addRes = await _context.RecipeReviews.AddAsync(recipeReview);
+
+        recipe.AvgRating = (recipe.AvgRating * recipe.TotalRating + recipeReview.Rating) / (recipe.TotalRating + 1);
+        recipe.TotalRating++;
+
         var changRes = await _context.SaveChangesAsync();
 
         return Ok(new { message = "Success" });
