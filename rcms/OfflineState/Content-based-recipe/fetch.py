@@ -12,7 +12,6 @@ def get_list_user(cur):
     data = pd.DataFrame(res, columns=['CustomerId'])
     return data
 
-
 def get_user(cur, user_id):
     cur.execute("""SELECT CustomerId, RecipeId FROM whatseat.lovedrecipes where CustomerId Like %s""",(user_id,))
     res = cur.fetchall()

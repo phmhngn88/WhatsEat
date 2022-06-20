@@ -30,7 +30,8 @@ def display_results(mysql,list_item_id):
 def check_new_user(cur, id_user):
     # get movies that had watched by input user from database
     recipeIds = fetch_data.recipe_love_by_user(cur, id_user)
-    return recipeIds, len(recipeIds) < 20, len(recipeIds)
+    isModelBuild = fetch_data.get_sim_cb(cur,id_user)
+    return recipeIds, len(recipeIds) < 50, len(recipeIds) , isModelBuild
 
 def check_new_user_product(cur,id_user):
     productIds = fetch_data.product_love_by_user(cur, id_user)
