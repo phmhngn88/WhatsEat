@@ -108,8 +108,8 @@ def list_recipents(cur, list_recipents_id):
 
 #get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, re.Calories/re.Serving as Calo FROM whatseat.recipes re
-     WHERE re.RecipeId IN %s""",(tuple(list_recipents_id),))
+    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, Calories/Serving as Calo FROM whatseat.recipes
+     WHERE RecipeId IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','calories'])
 
@@ -208,10 +208,10 @@ def product_love_by_user(cur, id_user):
 
 #filter by low price
 def get_top_product_low_price(cur,list_product_id):
-    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell, Status from
     whatseat.products where ProductId IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
     res = cur.fetchall()
-    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
+    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell','status'])
 
 #get product with apriori
 def get_product_priori(cur,list_product_id):
@@ -320,3 +320,10 @@ def get_recpie_review(cur):
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['CustomerId','RecipeId','Rating'])
     return data
+
+def get_sim_cb(cur,id_user):
+    cur.execute("""SELECT CustomerId FROM whatseat.cb_similarity WHERE CustomerId = %s """,(id_user,))
+    res = cur.fetchall()
+    print('res',len(res))
+    
+    return len(res)
