@@ -20,8 +20,6 @@ def item_similarity(conn,dataset):
                 item1_ratings = [[dataset[k][item1] for k,v in both_rated.items() if item1 in dataset[k] and item2 in dataset[k]]]
                 # danh sách các điểm đánh giá của tất cả người dùng trong hệ thống đã từng đánh giá item2
                 item2_ratings = [[dataset[k][item2] for k, v in both_rated.items() if item1 in dataset[k] and item2 in dataset[k]]]
-                #print("{} ratings :: {}".format(item1,item1_ratings))
-            #print("{} ratings :: {}".format(item2,item2_ratings))
                 # sử dụng consine_similarity để tính độ tương đồng của 2 item
                 cs = cosine_similarity(item1_ratings,item2_ratings)
                 list_sim.append((item1,item2,cs[0][0]))
