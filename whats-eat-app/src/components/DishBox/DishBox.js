@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./DishBox.css";
-import Dish from "../Dish/Dish";
+import DishRecommended from "../Dish/DishRecommended";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
-import { Row, Col } from 'antd';
+import { Row, Col } from "antd";
 const DishBox = ({ menu, category, addRecipe }) => {
   const [isShowRecipe, setIsShowRecipe] = useState(true);
   const handleShow = () => setIsShowRecipe(true);
@@ -17,21 +17,36 @@ const DishBox = ({ menu, category, addRecipe }) => {
     //     </div>
     //   </div>
     // </div>
-    <div >
+    <div>
       <h2>Món ăn cho bạn</h2>
       <div className="list-dish">
         <Row gutter={[16, 24]}>
-          {
-            menu.map((dish) => {
-              const { recipeId, name, images, totalLike, totalTime, totalView, recipeTypeId, calories } = dish;
-              return (<Col className="gutter-row" span={6}>
-                <Dish {...dish} className="single-dish" isShowRecipe={isShowRecipe} addRecipe={addRecipe} />;
-              </Col>)
-            })}
+          {menu.map((dish) => {
+            const {
+              recipeId,
+              name,
+              images,
+              totalLike,
+              totalTime,
+              totalView,
+              recipeTypeId,
+              calories,
+            } = dish;
+            return (
+              <Col className="gutter-row" span={6}>
+                <DishRecommended
+                  {...dish}
+                  className="single-dish"
+                  isShowRecipe={isShowRecipe}
+                  addRecipe={addRecipe}
+                />
+                ;
+              </Col>
+            );
+          })}
         </Row>
       </div>
     </div>
-
   );
 };
 
