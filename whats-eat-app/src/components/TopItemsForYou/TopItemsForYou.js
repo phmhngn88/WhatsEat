@@ -42,18 +42,6 @@ const TopItemsForYou = () => {
       {topProduct.length > 0 && (
         <div className="top-items">
           <h1 className="title">Dành cho bạn</h1>
-          <FaChevronCircleLeft
-            className={`${
-              pageNumber === 1 ? "hidden " : ""
-            }icon-pagination left-icon`}
-            onClick={() => setPageNumber(pageNumber - 1)}
-          />
-          <FaChevronCircleRight
-            className={`${
-              pageNumber === 10 || topProduct.length < 12 ? "hidden " : ""
-            }icon-pagination right-icon`}
-            onClick={() => setPageNumber(pageNumber + 1)}
-          />
           <Row gutter={[16, 16]}>
             {topProduct.map((item) => {
               const {

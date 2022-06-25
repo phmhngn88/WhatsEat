@@ -28,73 +28,6 @@ def get_fav_food(cur, user_id):
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['CustomerId', 'RecipeId'])
     return click_df
-# similarity_df function: fetch user-user similarity data from database
-# Input: 
-# + cur: mysql cursor
-# + user_id: id of user
-# Output:
-# + dataframe of similarity score with two columns: 
-#       - id_user_2: ids of users that are similarity calculated with input user_id
-#       - similarity: similarity score
-
-# user_factor fuction: fetch user's factors data from the database
-# Input: 
-# + cur: mysql cursor
-# + user_id: id of user
-# Output:
-# + np array of user factors of input user with (1,k) shape
-def user_factor(cur, user_id):
-    cur.execute("""SELECT * FROM moviedb.user_factors WHERE id_user = %s""",(user_id,))
-    res = cur.fetchall()
-    user_factor = np.asarray(res, dtype= float).flatten()[1:]
-    return user_factor
-
-# item_factor function: fetch items' factors from the database
-# Input: 
-# + cur: mysql cursor
-# Output:
-# + np array of all item factors with (n_item,k) shape
-def item_factor(cur):
-    cur.execute("""SELECT * FROM moviedb.movie_factors """)
-    res = cur.fetchall()
-    res = [ele[1:] for ele in res]
-    movie_factor = np.asarray(res, dtype= float)
-    return movie_factor
-
-# user_bias function: fetch user' bias score from the database
-# Input: 
-# + cur: mysql cursor
-# + user_id: id of user
-# Output:
-# + user bias (float)
-def user_bias(cur, user_id):
-    cur.execute("""SELECT * FROM moviedb.user_biases WHERE id_user = %s""",(user_id,))
-    res = cur.fetchall()
-    user_bias = np.asarray(res, dtype= float).flatten()[1]
-    return user_bias
-
-# item_bias fuction: fetch items' bias scores from the database
-# Input: 
-# + cur: mysql cursor
-# Output:
-# + item bias in (n_item, 1) shape
-def item_bias(cur):
-    cur.execute("""SELECT * FROM moviedb.movie_biases""")
-    res = cur.fetchall()
-    res = [ele[1:] for ele in res]
-    movie_bias = np.asarray(res, dtype= float).flatten()
-    return movie_bias
-
-# global_rating_mean function: fetch global rating mean from the database
-# Input: 
-# + cur: mysql cursor
-# Output:
-# + average global rating (float)
-def global_rating_mean(cur ):
-    cur.execute("""SELECT * FROM moviedb.global_mean_ratings """)
-    res = cur.fetchall()
-    global_mean_rating = np.asarray(res, dtype= float).flatten()[0]
-    return global_mean_rating
 
 def list_product(cur, list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice, Description FROM whatseat.products WHERE ProductId IN %s""",(tuple(list_product_id),))
@@ -108,8 +41,8 @@ def list_recipents(cur, list_recipents_id):
 
 #get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT re.RecipeId, re.Name, re.TotalTime, re.TotalView, re.totalLike, re.ThumbnailUrl, re.Calories/re.Serving as Calo FROM whatseat.recipes re
-     WHERE re.RecipeId IN %s""",(tuple(list_recipents_id),))
+    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, Calories/Serving as Calo FROM whatseat.recipes
+     WHERE RecipeId IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','calories'])
 
@@ -208,10 +141,10 @@ def product_love_by_user(cur, id_user):
 
 #filter by low price
 def get_top_product_low_price(cur,list_product_id):
-    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell, Status from
     whatseat.products where ProductId IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
     res = cur.fetchall()
-    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
+    return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell','status'])
 
 #get product with apriori
 def get_product_priori(cur,list_product_id):
@@ -320,3 +253,10 @@ def get_recpie_review(cur):
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['CustomerId','RecipeId','Rating'])
     return data
+
+def get_sim_cb(cur,id_user):
+    cur.execute("""SELECT CustomerId FROM whatseat.cb_similarity WHERE CustomerId = %s """,(id_user,))
+    res = cur.fetchall()
+    print('res',len(res))
+    
+    return len(res)

@@ -1,5 +1,4 @@
 import json
-import mysql.connector
 
 def convert_content(text):
     L = []
