@@ -167,13 +167,3 @@ def individual_item_based(id_user):
 
     return KRNN_recommend_engine.recommendation_phase(id_user,dataset,sim_df)
 
-@app.route('/test/itembased', methods=['GET'])
-def test_itembased():
-    if 'id_user' in request.args:
-        id_user = request.args['id_user']
-    else:
-        abort(500,'{"message":"Error: No id field provided. Please specify an id.(URL: /individual/product/apriori?id_product= ... &id_product= ...)"}')
-    recommend_sys = individual_item_based(id_user)
-    print(recommend_sys)
-    return jsonify(recommend_sys);
-app.run(debug=True)
