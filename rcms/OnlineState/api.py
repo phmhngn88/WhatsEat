@@ -6,7 +6,6 @@ import fetch_data
 import utils
 from math import isnan
 import KRNN_recommend_engine
-import pickle
 app = flask.Flask(__name__)
 CORS(app)
 

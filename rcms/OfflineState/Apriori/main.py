@@ -1,8 +1,4 @@
-import numpy as np
 import pandas as pd
-from pandas.io import sql
-import matplotlib.pyplot as plt
-from mlxtend.frequent_patterns import apriori, association_rules
 import MySQLdb
 import fetch
 from mlxtend.preprocessing import TransactionEncoder
