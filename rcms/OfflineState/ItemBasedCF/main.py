@@ -10,11 +10,11 @@ from math import isnan
 def main():
     conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
     cur = conn.cursor()
-    ratings = fetch.recipe_ratings(cur)
+    ratings = fetch.product_ratings(cur)
     ratings.dropna()
 
     #get matrix data 
-    data = ratings.pivot_table(index=['RecipeId'],columns=['CustomerId'],values='Rating')
+    data = ratings.pivot_table(index=['ProductId'],columns=['CustomerId'],values='Rating')
 
     #convert to dictionary
     sdd = data.dropna(how = 'all').to_dict()
@@ -22,6 +22,10 @@ def main():
 
     dataset = clean_dict
 
+    cursor = conn.cursor()
+    cursor.execute("TRUNCATE TABLE whatseat.item_base_similarity")
+    cursor.close()
+    
     sim.item_similarity(conn,dataset)
 
 if __name__ == "__main__":

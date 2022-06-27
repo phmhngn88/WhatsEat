@@ -13,14 +13,25 @@ def main():
     recipe_df = recipe_df.dropna()
     cur.close()
 
-    # recipe_df['Steps'] = recipe_df['Steps'].apply(utils.convert_content)
+    cur = conn.cursor()
+    type_df=fetch.recipes_type_df(cur)
+    type_df.head()
+    cur.close()
+
+    re_type_df = type_df.groupby('RecipeId').apply(lambda x: x.to_json(orient='records',force_ascii=False))
+    re_type_df = pd.DataFrame({'RecipeId':re_type_df.index, 'Types':re_type_df.values})
+
+    recipe_df = pd.merge(recipe_df, re_type_df, on='RecipeId')
+    recipe_df = recipe_df[['RecipeId','Name','Steps','Ingredients','Types']]
+
+    recipe_df['Types'] = recipe_df['Types'].apply(utils.convert_type)
     recipe_df['Ingredients'] = recipe_df['Ingredients'].apply(utils.convert_ingredient)
-    recipe_df['tags'] = recipe_df['Ingredients']
-    new = recipe_df.drop(columns=['Steps','Ingredients'])
+    recipe_df['tags'] = recipe_df['Ingredients'] + recipe_df['Types']
+    new = recipe_df.drop(columns=['Steps','Ingredients','Types'])
 
     new['tags'] = new['tags'].apply(lambda x: " ".join(x))
 
-    cv = TfidfVectorizer(max_features=20447,stop_words='english')
+    cv = TfidfVectorizer(max_features=20447)
     vector = cv.fit_transform(new['tags']).toarray()
 
     dataframe = pd.DataFrame(vector,index = recipe_df['RecipeId'])
@@ -66,3 +77,5 @@ def main():
         my_conn = create_engine("mysql+mysqldb://root:11111111@localhost/whatseat")
         df_reorder.to_sql(con=my_conn,name='cb_similarity',if_exists='append',index=False)
 
+if __name__ == "__main__":
+    main()

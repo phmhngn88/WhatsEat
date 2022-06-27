@@ -17,3 +17,9 @@ def get_user(cur, user_id):
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['CustomerId','RecipeId'])
     return data
+
+def recipes_type_df(cur):
+    cur.execute("""SELECT rrp.RecipeId, rrp.RecipeTypeId, rp.Name FROM whatseat.reciperecipetypes rrp JOIN recipetypes rp ON rrp.RecipeTypeId = rp.RecipeTypeId""")
+    res = cur.fetchall()
+    data = pd.DataFrame(res, columns=['RecipeId', 'RecipeTypeId','Type'])
+    return data

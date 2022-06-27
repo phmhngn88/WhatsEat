@@ -23,6 +23,7 @@ def item_similarity(conn,dataset):
                 # sử dụng consine_similarity để tính độ tương đồng của 2 item
                 cs = cosine_similarity(item1_ratings,item2_ratings)
                 list_sim.append((item1,item2,cs[0][0]))
+
         fields = ("id1", "id2", "similarity")
         upsert(conn, "item_base_similarity", fields, list_sim)
         print(str(item1) +"upserts successfully")

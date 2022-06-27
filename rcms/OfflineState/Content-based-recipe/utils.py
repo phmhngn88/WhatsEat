@@ -71,3 +71,11 @@ def convertDataframeToList(dataframe):
             column, row = col, idx
             L.append([column,row,value])
     return L
+
+def convert_type(text):
+    
+    L = []
+    for i in json.loads(text):
+        if(i['Type'] != None):
+            L.append(i['Type']) 
+    return L 

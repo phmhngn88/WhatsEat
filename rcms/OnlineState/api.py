@@ -34,9 +34,7 @@ def individual_recommend_list_recipes(id_user, user_kcal, n_recipe,page,level,mi
         else:    
             print("New user detected!")
             rec_list = fetch_data.get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxtime,allergy)['id1'].to_list()
-            cur.close()
-    else:
-        rec_list = individual_item_based(id_user)
+            cur.close()    
 
     cur = mysql.connection.cursor()
     print(rec_list)
@@ -60,12 +58,8 @@ def individual_recommend_list_products(id_user, n_product):
             rec_list = fetch_data.get_recommend_list_product_cb(id_user,n_product,cur)['id1'].to_list()
             cur.close()
     else:
-        print("Old user detected!")
-        click_df = fetch_data.get_recpie_review(cur)
-        sim_df = fetch_data.similarity_item_df(cur,id_user)
-        cur.close()
+        rec_list = individual_item_based(id_user)
 
-        rec_df, rec_list = KRNN_recommend_engine.recommend_sys(id_user, n_product, click_df, sim_df)
     cur = mysql.connection.cursor()
     rec_list2 = fetch_data.get_top_product_low_price(cur,rec_list)
     cur.close()
