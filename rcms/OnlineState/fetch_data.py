@@ -248,10 +248,10 @@ def get_recommend_list_product_cb(id_user,n_product,cur):
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['id1','id2','similarity'])
 
-def get_recpie_review(cur):
-    cur.execute("""SELECT  CustomerId, RecipeId, Rating FROM whatseat.recipereviews""")
+def get_product_review(cur):
+    cur.execute("""SELECT  CustomerId, ProductId, Rating FROM whatseat.productreviews""")
     res = cur.fetchall()
-    data = pd.DataFrame(res, columns=['CustomerId','RecipeId','Rating'])
+    data = pd.DataFrame(res, columns=['CustomerId','ProductId','Rating'])
     return data
 
 def get_sim_cb(cur,id_user):

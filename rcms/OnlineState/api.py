@@ -2,6 +2,7 @@ import flask
 from flask import request, jsonify, abort
 from flask_mysqldb import MySQL
 from flask_cors import CORS
+from sqlalchemy import true
 import fetch_data
 import utils
 from math import isnan
@@ -55,10 +56,14 @@ def individual_recommend_list_products(id_user, n_product):
             cur.close()
         else:    
             print("New user detected!")
+            rec_list = []
             rec_list = fetch_data.get_recommend_list_product_cb(id_user,n_product,cur)['id1'].to_list()
             cur.close()
     else:
-        rec_list = individual_item_based(id_user)
+        rec_list = []
+        for rating ,id_product in individual_item_based(id_user):
+            if(rating >= 3):
+                rec_list.append(id_product)
 
     cur = mysql.connection.cursor()
     rec_list2 = fetch_data.get_top_product_low_price(cur,rec_list)
@@ -148,10 +153,11 @@ def individual_recipe_apriori():
 def individual_item_based(id_user):
     cur = mysql.connection.cursor()
     print("Old user detected!")
-    ratings = fetch_data.get_recpie_review(cur)
+    ratings = fetch_data.get_product_review(cur)
     sim_df= fetch_data.similarity_item_df(cur)
+
     #get matrix data 
-    data = ratings.pivot_table(index=['RecipeId'],columns=['CustomerId'],values='Rating')
+    data = ratings.pivot_table(index=['ProductId'],columns=['CustomerId'],values='Rating')
 
     #convert to dictionary
     sdd = data.dropna(how = 'all').to_dict()
@@ -161,3 +167,4 @@ def individual_item_based(id_user):
 
     return KRNN_recommend_engine.recommendation_phase(id_user,dataset,sim_df)
 
+app.run(debug=true)
