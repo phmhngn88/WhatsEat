@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Modal, Input, Form, DatePicker, Select, Steps, Button, message } from 'antd';
+import moment from 'moment'
 import './ModalCalo.css'
 import TopDishesForYou from '../TopDishOnKcalModal/TopDishesForYou'
 import locale from 'antd/es/date-picker/locale/vi_VN';
@@ -16,14 +17,16 @@ const steps = [
     }
 ];
 
+const dateFormat = 'YYYY-MM-DD';
+
 const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
     const [form] = Form.useForm();
 
-    const [gender, setGender] = useState(1)
-    const [pal, setPal] = useState(0)
-    const [weight,setWeight] = useState(0)
-    const [height,setHeight] = useState(0)
-    const [year, setYear] = useState('')
+    const [gender, setGender] = useState('male')
+    const [pal, setPal] = useState('1.55')
+    const [weight,setWeight] = useState(58)
+    const [height,setHeight] = useState(168)
+    const [year, setYear] = useState(moment('2000-01-01', dateFormat))
     const [allergy, setAllergy] = useState('')
     const [current, setCurrent] = React.useState(0);
 
@@ -81,12 +84,12 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
                         <Form.Item
                             name="year"
                             label="Năm sinh">
-                            <DatePicker locale={locale} style={{width: "100%"}} onChange={onBirthChange} />
+                            <DatePicker defaultValue={year} locale={locale} style={{width: "100%"}} onChange={onBirthChange} />
                         </Form.Item>
                         <Form.Item
                             name="gender"
                             label="Giới tính">
-                            <Select style={{alignItems:'flex-start',display: "flex"}}
+                            <Select defaultValue={gender} style={{alignItems:'flex-start',display: "flex"}}
                             onChange={onGenderChange}
                             >
                                 <Option value="male">Nam</Option>
@@ -96,17 +99,18 @@ const ModalCalo = ({ isModalVisible, handleOk, handleCancel }) => {
                         <Form.Item
                             name="weight"
                             label="Cân nặng (kg)">
-                            <Input onChange={e => setWeight(e.target.value)}></Input>
+                            <Input defaultValue={weight} onChange={e => setWeight(e.target.value)}></Input>
                         </Form.Item>
                         <Form.Item
                             name="height"
                             label="Chiều cao (cm)">
-                            <Input onChange={e => setHeight(e.target.value)}></Input>
+                            <Input defaultValue={height} onChange={e => setHeight(e.target.value)}></Input>
                         </Form.Item>
                         <Form.Item
                             name="PAL"
                             label="Mức độ hoạt động ">
                             <Select
+                            defaultValue={pal}
                             onChange={onPALChange}
                             >
                                 <Option value="1.2">Không hoạt động thể chất</Option>
