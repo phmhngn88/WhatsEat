@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 
 namespace whatseat_server.Services;
 
@@ -44,9 +45,20 @@ public class MenuService
             .Include(m => m.Customer).FirstOrDefaultAsync(m => m.MenuId == menuId);
     }
 
-    public async Task<List<Menu>> GetMenusByCustomer(Customer customer)
+    public async Task<List<SimpleMenuDetailResponse>> GetMenusByCustomer(Customer customer)
     {
-        return await _context.Menus.Where(m => m.Customer == customer).ToListAsync();
+        var menuIds  = await _context.Menus.Include(x => x.MenuDetails).Where(m => m.Customer == customer).Select(x => new SimpleMenuDetailResponse
+        {
+            MenuId = x.MenuId,
+            MenuName = x.MenuName,
+            SimpleMenuDetail = x.MenuDetails.Select(md => new SimpleMenuDetail
+            {
+                RecipeId = md.RecipeId,
+                RecipeName = md.Recipe.Name,
+                Calories = md.Recipe.Calories
+            }).ToList()
+        }).ToListAsync();
+        return menuIds;
     }
 
     public async Task<Menu> GetMenuById(Customer customer, int menuId)

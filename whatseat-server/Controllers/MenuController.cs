@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using whatseat_server.Data;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
+using whatseat_server.Models.DTOs.Responses;
 using whatseat_server.Services;
 
 namespace whatseat_server.Controllers;
@@ -37,7 +38,7 @@ public class MenuController : ControllerBase
     {
         Guid userId = new Guid(User.FindFirst("Id")?.Value);
         var customer = await _customerService.FindCustomerByIdAsync(userId);
-        List<Menu> menu = await _menuService.GetMenusByCustomer(customer);
+        List<SimpleMenuDetailResponse> menu = await _menuService.GetMenusByCustomer(customer);
         return Ok(menu);
     }
     [HttpGet]

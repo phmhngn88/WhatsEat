@@ -1,14 +1,15 @@
 import React from "react";
 import "./FavMenuCard.css";
 
-const FavMenuCard = ({ menu }) => {
-  console.log("menu:", menu);
+const FavMenuCard = (props) => {
+  const menu = props.menu;
   return (
     <div className="fav-menu-card">
-      <h3>Thực đơn ngày ...</h3>
-      {menu.map((dish, idx) => (
-        <div>
-          <p key={idx}>{dish.dish_name}</p>
+      <h3>{menu.menuName}</h3>
+
+      {menu.simpleMenuDetail.map((dish, idx) => (
+        <div key={idx}>
+          <p>{dish.recipeName} <span>{dish.calories}</span></p> 
         </div>
       ))}
       <h4>Được thêm bởi ...</h4>

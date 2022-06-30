@@ -11,6 +11,7 @@ import "./FavMenu.css";
 
 const FavMenu = () => {
   const [user, setUser] = useState();
+  const [menus, setMenus] = useState([]);
   const token = useSelector((state) => state.auth.userInfo.token);
 
   useEffect(() => {
@@ -25,7 +26,20 @@ const FavMenu = () => {
       .catch((err) => {
         console.log(err);
       });
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Menu`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        setMenus(res.data);
+        console.log('menu',res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
+
   if (!user) return <></>;
 
   const [userId] = user.customerId.split("-");
@@ -49,9 +63,9 @@ const FavMenu = () => {
             <button>Thêm gợi ý thực đơn...</button>
           </div>
           <Row gutter={[16, 16]}>
-            {recommendedMenu.map((menu, idx) => (
+            {menus.map((menu, idx) => (
               <Col span={6} key={idx} className="dish-col">
-                <FavMenuCard {...menu} />
+                <FavMenuCard menu={menu} />
               </Col>
             ))}
           </Row>
