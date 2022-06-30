@@ -8,9 +8,10 @@ import {
   AiFillHeart,
   AiOutlineClockCircle,
   AiFillThunderbolt,
-  AiOutlineBarChart,
+  AiFillEye,
   AiFillPlusCircle,
   AiOutlineUnorderedList,
+  AiFillFire
 } from "react-icons/ai";
 
 const DishRecommended = ({
@@ -134,13 +135,13 @@ const DishRecommended = ({
         </div>
         <div className="info-detail">
           <div>
-            <AiOutlineBarChart className="icon" /> <span>{totalView}</span> xem
+            <AiFillEye className="icon" /> <span>{totalView}</span>
           </div>
         </div>
         <div className="info-detail">
           <div>
-            <AiOutlineUnorderedList className="icon" /> <span>{calories}</span>{" "}
-            xem
+            <AiFillFire className="icon" /> <span>{calories.toFixed(1)} cal</span>{" "}
+            
           </div>
         </div>
       </div>
