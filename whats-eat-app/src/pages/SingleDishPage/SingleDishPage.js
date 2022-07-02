@@ -99,8 +99,16 @@ const SingleDishPage = () => {
 
   const handleCalculateIngredients = () => {
     const list = calculatedArray.map((item) => {
+      console.log(+item.quantity);
+      if(item.quantity==='1/2'){
+        item.quantity = '0.5'
+      }
+      else if(item.quantity==='1/4'){
+        item.quantity = '0.25'
+      }
       const ingreQuantity =
         Math.round(((+item.quantity * servingNumber) / serving) * 2) / 2;
+        console.log(ingreQuantity);
       return {
         name: item.name,
         unit: item.unit.unit,

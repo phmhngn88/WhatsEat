@@ -45,7 +45,7 @@ public class OrderService
         .ThenInclude(o => o.OrderStatus)
         .Include(o => o.Store).Include(o => o.OrderDetails).Where(o => (o.Customer == customer));
 
-        var orderList = await PagedList<Order>.ToPagedList(orders, request.PageNumber, request.PageSize);
+        var orderList = await PagedList<Order>.ToPagedList(orders, request.PageNumber, 1000);
 
         return orderList;
     }

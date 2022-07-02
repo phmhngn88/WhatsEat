@@ -47,7 +47,8 @@ const Dish = ({
       navigate(`/login`);
     } else {
       setIsLikeRecipe(!isLikeRecipe);
-      if (isLikeRecipe) {
+      const isLike = !isLikeRecipe
+      if (isLike) {
         axios({
           method: "POST",
           url: `${process.env.REACT_APP_ASP_API_KEY}/api/Recipe/love/${recipeId}`,
@@ -91,7 +92,7 @@ const Dish = ({
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [recipeId, token]);
 
   return (
     <div

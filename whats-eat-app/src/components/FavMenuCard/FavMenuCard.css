@@ -2,6 +2,9 @@
     padding: 1rem;
     background-color: #fff;
     border-radius: 10px;
+    height: 250px;
+    overflow-y: auto;
+
 }
 
 .fav-menu-card h3{
@@ -15,3 +18,12 @@
     color: #c4c4c4;
 }
 
+.fav-menu-card .single-dish-name{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fav-menu-card .single-dish-name span{
+    vertical-align: middle;
+}
