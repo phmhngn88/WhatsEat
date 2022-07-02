@@ -445,14 +445,14 @@ const AddRecipe = () => {
         </Row>
       </div>
       <Modal
-        title="Xóa sản phẩm"
+        title="Xóa công thức"
         visible={isVisible}
         onOk={() => confirmDelete()}
         onCancel={() => setIsVisible(false)}
         okText="Xóa"
         cancelText="Hủy"
       >
-        <p>Bạn có chắc muốn xóa sản phẩm này không?</p>
+        <p>Bạn có chắc muốn xóa công thức này không?</p>
       </Modal>
       <Footer />
     </div>
