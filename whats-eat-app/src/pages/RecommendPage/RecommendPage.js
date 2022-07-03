@@ -7,6 +7,7 @@ import "./RecommendPage.css";
 import ModalCalo from "../../components/ModalCalCalo/ModalCalo";
 const RecommendPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
   const [kcal, setKcal] = useState(0);
   const [allergy, setAllergy] = useState("");
   const [menu, setMenu] = useState([]);
@@ -70,6 +71,10 @@ const RecommendPage = () => {
     setMinTime(minTime);
   };
 
+  const handleShowPopup = () => {
+    setShowPopup(true);
+  };
+
   useEffect(() => {
     axios({
       method: "get",
@@ -92,15 +97,17 @@ const RecommendPage = () => {
         menu={menu}
         setCurrentPage={onPageChange}
         onFilter={onFilter}
+        onShowPopup={handleShowPopup}
       />
       <Footer />
-      {kcal === 0 && (
-        <ModalCalo
-          isModalVisible={isModalVisible}
-          handleOk={handleOk}
-          handleCancel={handleCancel}
-        />
-      )}
+      {kcal === 0 ||
+        (showPopup && (
+          <ModalCalo
+            isModalVisible={isModalVisible}
+            handleOk={handleOk}
+            handleCancel={handleCancel}
+          />
+        ))}
     </div>
   );
 };

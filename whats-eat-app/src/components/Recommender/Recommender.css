@@ -38,8 +38,14 @@
     margin-bottom: 0rem;
 }
 
+
+.recommender-body .recommender-container .btn-block{
+    display: flex;
+}
+
 .recommender-body .recommender-container .save-btn{
     margin-top: 1rem;
+    margin-right: 1rem;
     height: 3rem;
     display: flex;
     align-items: center;

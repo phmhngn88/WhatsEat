@@ -9,10 +9,11 @@ import { Link } from "react-router-dom";
 import { BiSave } from "react-icons/bi";
 import DishBox from "../DishBox/DishBox";
 import { AiFillDelete } from "react-icons/ai";
+import { MdPublishedWithChanges } from "react-icons/md";
 import { Progress, Pagination } from "antd";
 const { Option } = Select;
 
-const Recommender = ({ kcal, menu, setCurrentPage, onFilter }) => {
+const Recommender = ({ kcal, menu, setCurrentPage, onFilter, onShowPopup }) => {
   const [listRecipes, setListRecipes] = useState([]);
   const [status, setStatus] = useState("");
   const [percent, setPercent] = useState(0);
@@ -122,9 +123,15 @@ const Recommender = ({ kcal, menu, setCurrentPage, onFilter }) => {
             </h3>
           </div>
         </div>
-        <Button className="save-btn" onClick={handleSaveMenu}>
-          <BiSave className="save-icon" /> Thêm vào Menu của tôi
-        </Button>
+        <div className="btn-block">
+          <Button className="save-btn" onClick={handleSaveMenu}>
+            <BiSave className="save-icon" /> Thêm vào Menu của tôi
+          </Button>
+          <Button className="save-btn" onClick={onShowPopup}>
+            <MdPublishedWithChanges className="save-icon" /> Thay đổi thông tin
+            cá nhân
+          </Button>
+        </div>
         <div className="menu-items">
           <Pagination
             className="recommendation-panigation"
