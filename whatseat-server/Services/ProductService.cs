@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using whatseat_server.Data;
+using whatseat_server.Migrations;
 using whatseat_server.Models;
 using whatseat_server.Models.DTOs.Requests;
 using whatseat_server.Models.DTOs.Responses;
@@ -169,5 +170,50 @@ public class ProductService
     public async Task<ProductCategory> FindProductCategoryByProductCategoryId(int productCategoryId)
     {
         return await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.ProductCategoryId == productCategoryId);
+    }
+
+    public async Task<bool> AddLoveHistory(Customer customer, Product product)
+    {
+        var newLoved = await _context.LovedProducts.AddAsync(new LovedProduct
+        {
+            CreatedOn = DateTime.UtcNow,
+            Customer = customer,
+            Product = product
+        });
+        await _context.SaveChangesAsync();
+        return newLoved.IsKeySet;
+    }
+
+    public async Task<LovedProduct> RemoveLoveHistory(Customer customer, Product product)
+    {
+        LovedProduct LovedProduct = await GetLoveProduct(customer, product);
+        var res = _context.LovedProducts.Remove(LovedProduct).Entity;
+        await _context.SaveChangesAsync();
+        return res;
+    }
+
+    private async Task<LovedProduct> GetLoveProduct(Customer customer, Product product)
+    {
+        return await _context.LovedProducts.FirstOrDefaultAsync(lp => lp.Customer == customer && lp.Product == product);
+    }
+
+    public async Task<PagedList<LovedProduct>> GetLovedProduct(PagedRequest request, Customer customer)
+    {
+        var lovedProducts = _context.LovedProducts
+        .Include(s => s.Product)
+        .ThenInclude(s => s.ProductCategory)
+        .Include(s => s.Product)
+        .ThenInclude(s => s.Store)
+        .Include(s => s.Customer)
+        .Where(l => l.Customer == customer)
+        .OrderByDescending(l => l.CreatedOn);
+        
+        var res = await PagedList<LovedProduct>.ToPagedList(lovedProducts, request.PageNumber, request.PageSize);
+        return res;
+    }
+
+    public async Task<bool> CheckLove(int productId, Guid userId)
+    {
+        return await _context.LovedProducts.AsNoTracking().AnyAsync(s => s.ProductId == productId && s.CustomerId == userId);
     }
 }

@@ -194,6 +194,6 @@ public class RecipeService
 
     public async Task<Boolean> CheckLove(int recipeId, Guid userId)
     {
-        return await _context.LovedRecipes.AsNoTracking().AnyAsync(s => s.RecipeId == recipeId && s.CustomerId == s.CustomerId);
+        return await _context.LovedRecipes.AsNoTracking().AnyAsync(s => s.RecipeId == recipeId && s.CustomerId == userId);
     }
 }

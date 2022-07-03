@@ -208,4 +208,90 @@ public class ProductController : ControllerBase
     {
         return Ok(await _context.PaymentMethods.AsNoTracking().ToListAsync());
     }
+
+    [HttpPost]
+    [Route("love/productId")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> LoveProduct(int productId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var product = await _productService.FindProductById(productId);
+        var lovedProduct = await _productService.AddLoveHistory(customer, product);
+        return Ok();
+    }
+
+    [HttpDelete]
+    [Route("love/productId")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> RemoveLovedProduct(int productId)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+        var product = await _productService.FindProductById(productId);
+        var lovedProduct = await _productService.RemoveLoveHistory(customer, product);
+        return Ok();
+    }
+
+    [HttpGet]
+    [Route("love")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    public async Task<IActionResult> GetLovedProducts([FromQuery] PagedRequest request)
+    {
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        var customer = await _customerService.FindCustomerByIdAsync(userId);
+
+       var lovedProducts = await _productService.GetLovedProduct( request, customer);
+        var lovedProductRes = new List<LovedProductReponse>();
+        foreach (var item in lovedProducts)
+        {
+            var prodRes = new LovedProductReponse
+            {
+                LovedOn = item.CreatedOn,
+                Images = _productService.ConvertJsonToPhotos(item.Product?.PhotoJson),
+                ProductId = item.Product.ProductId,
+                Name = item.Product?.Name,
+                InStock = item.Product.InStock,
+                BasePrice = item.Product.BasePrice,
+                Description = item.Product?.Description,
+                WeightServing = item.Product?.WeightServing,
+                TotalSell = item.Product.TotalSell,
+                ProductCategoryId = item.Product.ProductCategory.ProductCategoryId,
+                StoreName = item.Product?.Store.ShopName,
+                StoreId = item.Product.Store.StoreId,
+                CreatedOn = (DateTime)(item.Product?.CreatedOn),
+                Status = item.Product.Status,
+                TotalView = await _productService.GetProductViews(item.Product)
+            };
+            lovedProductRes.Add(prodRes);
+        }
+        var metadata = new
+        {
+            lovedProducts.TotalCount,
+            lovedProducts.PageSize,
+            lovedProducts.CurrentPage,
+            lovedProducts.TotalPages,
+            lovedProducts.HasNext,
+            lovedProducts.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+        return Ok(lovedProductRes);
+    }
+
+    [HttpGet]
+    [Route("love/isLoved/{productId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "customer")]
+    [AllowAnonymous]
+    public async Task<IActionResult> CheckLove(int productId)
+    {
+        if (User.FindFirst("Id") is null)
+        {
+            return Ok(false);
+        }
+        Guid userId = new Guid(User.FindFirst("Id")?.Value);
+        return Ok(await _productService.CheckLove(productId, userId));
+    }
+
+
 }
