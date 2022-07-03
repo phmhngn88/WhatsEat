@@ -31,7 +31,7 @@ import ShopAddItem from "./pages/ShopAddItem/ShopAddItem";
 import ShopInfringingItems from "./pages/ShopInfringingItems/ShopInfringingItems";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FavorShop from "./pages/FavorShop/FavorShop";
-import FavorItem from "./pages/FavorItem/FavorItem";
+import FavProducts from "./pages/FavProducts/FavProducts";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
 import AddRecipe from "./pages/AddRecipe/AddRecipe";
 import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
@@ -74,7 +74,10 @@ function App({ auth, cartItems }) {
             <Route path="/orders" element={<OrderPage />}></Route>
             <Route path="/orders/:id" element={<OrderDetail />}></Route>
             <Route path="/shop/items" element={<ShopItems />}></Route>
-            <Route path="/shop/items/update/:id" element={<ShopItemUpdate />}></Route>
+            <Route
+              path="/shop/items/update/:id"
+              element={<ShopItemUpdate />}
+            ></Route>
             <Route path="/shop/additem" element={<ShopAddItem />}></Route>
             <Route path="/addrecipe" element={<AddRecipe />}></Route>
             <Route
@@ -83,7 +86,7 @@ function App({ auth, cartItems }) {
             ></Route>
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/favorshop" element={<FavorShop />}></Route>
-            <Route path="/favoritem" element={<FavorItem />}></Route>
+            <Route path="/favorproducts" element={<FavProducts />}></Route>
             <Route path="/payment/success" element={<PaymentSuccess />}></Route>
           </Routes>
         </Content>

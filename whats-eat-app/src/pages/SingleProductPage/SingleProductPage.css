@@ -98,6 +98,10 @@
     border-radius: 3px;
 }
 
+.btn-block .product-liked{
+    background-color: #86e1f1;
+}
+
 .product-block .product-info .btn:hover,
 .product-block .product-info .btn:active{
     cursor: pointer;

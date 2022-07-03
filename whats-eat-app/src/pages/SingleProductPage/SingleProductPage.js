@@ -20,8 +20,10 @@ const SingleProductPage = () => {
   const [productDetail, setProductDetail] = useState({});
   const [count, setCount] = useState(1);
   const [productIds, setProductIds] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.userInfo.token);
   const auth = useSelector((state) => state.auth.userInfo);
   const navigate = useNavigate();
   const productId = location.state.productId;
@@ -81,9 +83,36 @@ const SingleProductPage = () => {
       navigate(`/login`);
     }
   };
+
+  const handleLoveProduct = () => {
+    setIsLiked(true);
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/love/productId?productId=${productId}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     getProductDetail();
   }, [productId]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_ASP_API_KEY}/api/Product/love/isLoved/${productId}`,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        setIsLiked(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   if (!productDetail.images) {
     return (
@@ -142,9 +171,9 @@ const SingleProductPage = () => {
                 </p>
               </div>
               <div className="btn-block">
-                <button className="btn save-btn">
-                  <BsHeart className="icon" />
-                  <span>Lưu</span>
+                <button onClick={handleLoveProduct} className="btn save-btn">
+                  {!isLiked && <BsHeart className={`icon`} />}
+                  <span>{!isLiked ? "Lưu" : "Đã lưu"}</span>
                 </button>
                 <button className="btn cart-btn" onClick={addToCart}>
                   <BsCartPlus className="icon" />

@@ -13,7 +13,7 @@ import {
   BsMenuButtonWideFill,
   BsPersonCircle,
   BsPlusSquare,
-  BsShop,
+  BsBoxSeam,
   BsShopWindow,
 } from "react-icons/bs";
 import { FaPizzaSlice } from "react-icons/fa";
@@ -81,11 +81,11 @@ const Navbar = (props) => {
         </Menu.Item>
       )}
 
-      {/* <Menu.Item key="5">
-        <a href="/favorshop" className="single-option">
-          <BsShop /> <span>Shop yêu thích</span>
-        </a>
-      </Menu.Item> */}
+      <Menu.Item key="5">
+        <Link to="/favorproducts" className="single-option">
+          <BsBoxSeam /> <span>Sản phẩm yêu thích</span>
+        </Link>
+      </Menu.Item>
       {(role === "store" || role === "guest") && (
         <Menu.Item key="6">
           <Link to="/shop" className="single-option">
