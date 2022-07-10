@@ -435,11 +435,9 @@ public class CustomerController : ControllerBase
         var calorie = (float)Math.Round(brm * float.Parse(request.PAL), 2);
 
         var customer = await _customerService.FindCustomerByIdAsync(userId);
-        if (customer.KcalPerDay == 0)
-        {
-            customer.KcalPerDay = calorie;
-            customer.Allergy = request.Allergy;
-        }
+        
+        customer.KcalPerDay = calorie;
+        customer.Allergy = request.Allergy;
 
         await _context.SaveChangesAsync();
 

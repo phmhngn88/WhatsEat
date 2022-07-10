@@ -100,14 +100,14 @@ const RecommendPage = () => {
         onShowPopup={handleShowPopup}
       />
       <Footer />
-      {kcal === 0 ||
-        (showPopup && (
+      {(kcal === 0 ||
+        showPopup) && (
           <ModalCalo
             isModalVisible={isModalVisible}
             handleOk={handleOk}
             handleCancel={handleCancel}
           />
-        ))}
+        )}
     </div>
   );
 };

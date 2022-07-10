@@ -2,6 +2,7 @@ import { Form, Input, message, Image } from "antd";
 import "antd/dist/antd.css";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import "./Profile.css";
@@ -21,6 +22,7 @@ const validateMessages = {
 };
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [image, setImage] = useState("");
 
   const token = useSelector((state) => state.auth.userInfo.token);
@@ -54,6 +56,7 @@ const Profile = () => {
     })
       .then((res) => {
         message.success("Cập nhật thông tin thành công!");
+        navigate(-1);
       })
       .catch((err) => {
         console.log(err);
