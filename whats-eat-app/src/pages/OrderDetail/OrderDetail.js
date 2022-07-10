@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import CusOrderItem from "./CusOrderItem";
 import Footer from "../../components/Footer/Footer";
 import "./OrderDetail.css";
+import dayjs from "dayjs";
 
 const CusOrderDetail = () => {
   const { id } = useParams();
@@ -102,6 +103,12 @@ const CusOrderDetail = () => {
                     ? order.shippingInfo.address
                     : "Default address"}
                 </p>
+                <h3 style={{ marginTop: "2rem" }}>
+                  Ngày mua hàng:{" "}
+                  <span style={{ fontSize: "1rem" }}>
+                    {dayjs(order.createdOn).format("DD/MM/YYYY")}
+                  </span>
+                </h3>
               </div>
               <div className="status">
                 <p className="order-id">Mã đơn hàng: {order.orderId}</p>
