@@ -112,7 +112,7 @@ const SingleProductPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [productId]);
 
   if (!productDetail.images) {
     return (

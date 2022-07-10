@@ -34,7 +34,7 @@ const ShopOrderCard = ({
       },
     })
       .then((res) => {
-        setIsAccepted(true);
+        // setIsAccepted(true);
         setTriggerReload(!triggerReload);
       })
       .catch((error) => {
@@ -53,7 +53,7 @@ const ShopOrderCard = ({
       },
     })
       .then((res) => {
-        setIsComplete(true);
+        // setIsComplete(true);
         setTriggerReload(!triggerReload);
       })
       .catch((error) => {
@@ -73,7 +73,7 @@ const ShopOrderCard = ({
     })
       .then((res) => {
         setTriggerReload(!triggerReload);
-        setIsCanceled(true);
+        // setIsCanceled(true);
       })
       .catch((error) => {
         console.log(error);
