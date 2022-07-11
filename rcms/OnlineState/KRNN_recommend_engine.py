@@ -9,17 +9,17 @@ def unique_items(dataset):
     return unique_items_list
 
 def target_products_to_users(target_person,dataset):
-    target_person_movie_lst = []
+    target_person_product_lst = []
     unique_list =unique_items(dataset)
     for products in dataset[target_person]:
-        target_person_movie_lst.append(products)
+        target_person_product_lst.append(products)
 
     s=set(unique_list)
-    recommended_products=list(s.difference(target_person_movie_lst))
+    recommended_products=list(s.difference(target_person_product_lst))
     a = len(recommended_products)
     if a == 0:
         return 0
-    return recommended_products,target_person_movie_lst
+    return recommended_products,target_person_product_lst
 
 def recommendation_phase(target_person,dataset,sim_df):
     if target_products_to_users(target_person=target_person,dataset=dataset) == 0:
@@ -30,8 +30,9 @@ def recommendation_phase(target_person,dataset,sim_df):
     weighted_avg,weighted_sim = 0,0
     rankings =[]
     for i in not_seen_products:
-        for rate,movie in seen_ratings:
-            item_sim =sim_df[(sim_df['id1']==i)&(sim_df['id2']==movie)].similarity.values[0]
+        for rate,product in seen_ratings:
+            print((sim_df['id1']==i))
+            item_sim =sim_df[(sim_df['id1']==i)&(sim_df['id2']==product)].similarity.values[0]
             weighted_avg +=(item_sim*rate)
             weighted_sim +=item_sim
         if weighted_sim != 0:

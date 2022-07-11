@@ -59,11 +59,6 @@ def individual_recommend_list_products(id_user, n_product):
             rec_list = []
             rec_list = fetch_data.get_recommend_list_product_cb(id_user,n_product,cur)['id1'].to_list()
             cur.close()
-    else:
-        rec_list = []
-        for rating ,id_product in individual_item_based(id_user):
-            if(rating >= 3):
-                rec_list.append(id_product)
 
     cur = mysql.connection.cursor()
     rec_list2 = fetch_data.get_top_product_low_price(cur,rec_list)
@@ -149,7 +144,26 @@ def individual_recipe_apriori():
     cur.close()
     result['images'] = result['images'].apply(utils.to_json)
     return jsonify(result.to_dict('record'))
-    
+
+@app.route('/individual/product/ib',methods=['GET'])
+def individual_product_ib():
+    if 'id_user' in request.args:
+        id_user = request.args['id_user']
+    else:
+        return """Error: No id field provided. Please specify an id.
+                (URL: /individual/product?id_user= ...&n_product=...)
+                """
+    rec_list = []
+    for rating ,id_product in individual_item_based(id_user):
+        if(rating >= 3):
+            rec_list.append(id_product)
+
+    cur = mysql.connection.cursor()
+    rec_list2 = fetch_data.get_top_product_low_price(cur,rec_list)
+    cur.close()
+    rec_list2['images'] = rec_list2['images'].apply(utils.to_json_product)
+    return jsonify(rec_list2.to_dict('records'))
+
 def individual_item_based(id_user):
     cur = mysql.connection.cursor()
     print("Old user detected!")

@@ -7,6 +7,7 @@ import TopDishes from "../../components/TopDishes/TopDishes";
 import TopItems from "../../components/TopItems/TopItems";
 import TopShops from "../../components/TopShops/TopShops";
 import TopItemsForYou from "../../components/TopItemsForYou/TopItemsForYou"
+import RecItemsForYou from "../../components/RecItemsForYou/RecItemsForYou"
 const HomePage = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   // const location = useLocation();
@@ -19,6 +20,7 @@ const HomePage = () => {
       <Categories />
       <TopItems />
       <TopItemsForYou />
+      <RecItemsForYou />
       <TopDishes />
       <TopShops />
       <Footer />
