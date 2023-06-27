@@ -1,0 +1,35 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  db:
+    container_name: db
+    image: mysql:8
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 11111111
+      MYSQL_DATABASE: whatseat
+      MYSQL_PASSWORD: 11111111
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 30s
+      retries: 5
+
+  whatseatserver:
+    depends_on:
+      db:
+        condition: service_healthy
+    image: whatseatserver
+    build:
+      context: .
+      dockerfile: whatseat-server/Dockerfile
+    ports:
+      - 5095:80
+
+volumes:
+    dbdata:

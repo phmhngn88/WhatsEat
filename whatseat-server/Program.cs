@@ -31,9 +31,10 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 
-builder.Services.AddDbContext<WhatsEatContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("Database"),
-        new MySqlServerVersion(new Version())));
+builder.Services.AddDbContext<WhatsEatContext>(
+    options =>
+        options.UseMySql(builder.Configuration.GetConnectionString("Database"),
+            new MySqlServerVersion(new Version()), option => option.EnableRetryOnFailure(maxRetryCount:5, maxRetryDelay: System.TimeSpan.FromSeconds(30), errorNumbersToAdd: null)));
 
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<ProductService>();
@@ -82,12 +83,20 @@ builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+// }
 
+using(var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<WhatsEatContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+}
 StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeAPIKey");
 
 // app.UseHttpsRedirection();
