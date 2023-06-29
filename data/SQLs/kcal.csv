@@ -29,3 +29,9 @@
 28;25;51;"female";1.8;2400
 29;51;65;"female";1.8;2200
 30;65;200;"female";1.8;2100
+
+{
+  "userName": "admin",
+  "email": "user@admin.com",
+  "password": "Testing123!"
+}

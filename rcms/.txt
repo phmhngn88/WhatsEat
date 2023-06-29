@@ -1,0 +1,5 @@
+RUN #python3 OfflineState/Apriori/main.py
+RUN #python3 OfflineState/CalCalo/main.py
+RUN #python3 OfflineState/Content-based-product/main.py
+RUN #python3 OfflineState/Content-based-recipe/main.py
+RUN #python3 OfflineState/ItemBasedCF/main.py

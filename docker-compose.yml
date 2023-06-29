@@ -31,5 +31,16 @@ services:
     ports:
       - 5095:80
 
+  rcms:
+    depends_on:
+      db:
+        condition: service_healthy
+    image: recommender
+    build:
+      context: .
+      dockerfile: rcms/Dockerfile
+    ports:
+      - 8000:5000
+
 volumes:
     dbdata:

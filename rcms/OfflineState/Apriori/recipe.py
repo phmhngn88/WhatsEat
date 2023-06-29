@@ -9,7 +9,7 @@ from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import association_rules, apriori
 from sqlalchemy import create_engine
 
-conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
+conn = MySQLdb.connect(host="127.0.0.1:3306", user="root", passwd="11111111", db="whatseat")
 cur = conn.cursor()
 
 #lấy dataframe món ăn
