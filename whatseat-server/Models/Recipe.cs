@@ -16,7 +16,7 @@ public class Recipe
     public DateTime CreatedOn { get; set; }
     public Customer Creator { get; set; }
     public int TotalTime { get; set; }
-    public float AvgRating { get; set; }
+    public float AvgRating { get; set; } = 0.0f;
     public int TotalRating { get; set; }
     public int TotalView { get; set; }
     public int totalLike { get; set; }
