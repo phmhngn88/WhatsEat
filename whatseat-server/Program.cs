@@ -89,14 +89,14 @@ var app = builder.Build();
     app.UseSwaggerUI();
 // }
 
-using(var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<WhatsEatContext>();
-    if (context.Database.GetPendingMigrations().Any())
-    {
-        context.Database.Migrate();
-    }
-}
+// using(var scope = app.Services.CreateScope())
+// {
+//     var context = scope.ServiceProvider.GetRequiredService<WhatsEatContext>();
+//     if (context.Database.GetPendingMigrations().Any())
+//     {
+//         context.Database.Migrate();
+//     }
+// }
 StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeAPIKey");
 
 // app.UseHttpsRedirection();

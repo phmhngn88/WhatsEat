@@ -7,13 +7,16 @@ services:
     container_name: db
     image: mysql:8
     ports:
-      - "3306"
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: 11111111
       MYSQL_DATABASE: whatseat
       MYSQL_PASSWORD: 11111111
+      MYSQL_ROOT_HOST: '%'
     volumes:
       - dbdata:/var/lib/mysql
+      - ./init/init.sql:/script/init.sql
+    command: "--init-file /script/init.sql"
     restart: always
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
@@ -25,11 +28,13 @@ services:
       db:
         condition: service_healthy
     image: whatseatserver
+    environment:
+      - ASPNETCORE_URLS=http://+:5095
     build:
       context: .
       dockerfile: whatseat-server/Dockerfile
     ports:
-      - 5095:80
+      - 5095:5095
 
   rcms:
     depends_on:
@@ -40,7 +45,21 @@ services:
       context: .
       dockerfile: rcms/Dockerfile
     ports:
-      - 8000:5000
+      - 5000:5000
+  
+  react:
+    depends_on:
+      db:
+        condition: service_healthy
+    image: react
+    build:
+      context: .
+      dockerfile: whats-eat-app/Dockerfile
+    ports:
+      - 3000:80
+    volumes:
+      - /app/node_modules
+      - ./whats-eat-app:/app
 
 volumes:
     dbdata:
