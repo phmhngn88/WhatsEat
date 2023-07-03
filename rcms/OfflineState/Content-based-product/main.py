@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import MySQLdb
 import fetch
@@ -6,7 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy import spatial
 from sqlalchemy import create_engine
 
-conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
+conn = MySQLdb.connect(host=os.environ.get('MYSQL_HOST'), user="admin", passwd="11111111", db="whatseat")
 cur = conn.cursor()
 product_df = fetch.product_df(cur)
 product_df = product_df.dropna()
@@ -60,7 +61,7 @@ for user in list_user:
     df_reorder = df_reorder.sort_values(by='Similarity', ascending=False)
 
     object_list = list(df_reorder.to_records(index=False))
-    my_conn = create_engine("mysql+mysqldb://root:11111111@localhost/whatseat")
+    my_conn = create_engine("mysql+mysqldb://admin:11111111@localhost/whatseat")
     df_reorder.to_sql(con=my_conn,name='cb_product_similarity',if_exists='append',index=False)
     # fields = ("ProductId", "CustomerId", "Similarity")
 

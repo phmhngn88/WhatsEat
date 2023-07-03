@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import MySQLdb
 import fetch
@@ -7,7 +8,7 @@ from scipy import spatial
 from sqlalchemy import create_engine
 
 def main():
-    conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
+    conn = MySQLdb.connect(host=os.environ.get('MYSQL_HOST'), user="admin", passwd="11111111", db="whatseat")
     cur = conn.cursor()
     recipe_df = fetch.recipes_df(cur)
     recipe_df = recipe_df.dropna()
@@ -63,6 +64,6 @@ def main():
         df_reorder = df_reorder.head(2000)
         print(df_reorder)
 
-        my_conn = create_engine("mysql+mysqldb://root:11111111@localhost/whatseat")
+        my_conn = create_engine("mysql+mysqldb://admin:11111111@localhost/whatseat")
         df_reorder.to_sql(con=my_conn,name='cb_similarity',if_exists='append',index=False)
 

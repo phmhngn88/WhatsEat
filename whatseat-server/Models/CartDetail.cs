@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace whatseat_server.Models;
-
 public class CartDetail
 {
     public int ProductId { get; set; }

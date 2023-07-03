@@ -1,4 +1,5 @@
 #import sklearn library
+import os
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import MySQLdb
@@ -8,7 +9,7 @@ from math import isnan
 
 
 def main():
-    conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
+    conn = MySQLdb.connect(host=os.environ.get('MYSQL_HOST'), user="admin", passwd="11111111", db="whatseat")
     cur = conn.cursor()
     ratings = fetch.recipe_ratings(cur)
     ratings.dropna()

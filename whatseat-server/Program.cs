@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                    {
-                       builder.WithOrigins("http://localhost:3000")
+                       builder.AllowAnyOrigin()
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                    });
@@ -81,6 +81,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
+
 
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
@@ -89,19 +91,18 @@ var app = builder.Build();
     app.UseSwaggerUI();
 // }
 
-// using(var scope = app.Services.CreateScope())
-// {
-//     var context = scope.ServiceProvider.GetRequiredService<WhatsEatContext>();
-//     if (context.Database.GetPendingMigrations().Any())
-//     {
-//         context.Database.Migrate();
-//     }
-// }
+using(var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<WhatsEatContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+}
 StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeAPIKey");
 
 // app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 

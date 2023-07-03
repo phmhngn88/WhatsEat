@@ -1,3 +1,4 @@
+import os
 from random import triangular
 import pandas as pd
 import numpy as np
@@ -9,7 +10,7 @@ import fetch
 
 
 
-conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
+conn = MySQLdb.connect(host=os.environ.get('MYSQL_HOST'), user="admin", passwd="11111111", db="whatseat")
 cur = conn.cursor()
 
 #lấy dataframe món ăn

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import MySQLdb
 import fetch
@@ -5,7 +6,7 @@ from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import association_rules, apriori
 from sqlalchemy import create_engine
 
-conn = MySQLdb.connect(host="127.0.0.1", user="root", passwd="11111111", db="whatseat")
+conn = MySQLdb.connect(host=os.environ.get('MYSQL_HOST'), user="admin", passwd="11111111", db="whatseat")
 cur = conn.cursor()
 
 #lấy dataframe món ăn
@@ -36,6 +37,6 @@ frequent_itemsets['length'] = frequent_itemsets['itemsets'].apply(lambda x: len(
 rules.sort_values('confidence', ascending = False)
 rules['antecedents'] = rules['antecedents'].apply(fetch.convert_frozenset)
 rules['consequents'] = rules['consequents'].apply(fetch.convert_frozenset)
-my_conn = create_engine("mysql+mysqldb://root:11111111@localhost/whatseat")
+my_conn = create_engine("mysql+mysqldb://admin:11111111@localhost/whatseat")
 rules = rules.drop(columns=['conviction'])
 rules.to_sql(con=my_conn,name='apriori',if_exists='append',index=False)

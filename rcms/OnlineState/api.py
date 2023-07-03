@@ -1,3 +1,4 @@
+import os
 import flask
 from flask import request, jsonify, abort
 from flask_mysqldb import MySQL
@@ -9,8 +10,8 @@ import KRNN_recommend_engine
 app = flask.Flask(__name__)
 CORS(app)
 
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_PORT'] = None
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST')
+app.config['MYSQL_PORT'] = 3066
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '11111111'
 app.config['MYSQL_DB'] = 'whatseat'

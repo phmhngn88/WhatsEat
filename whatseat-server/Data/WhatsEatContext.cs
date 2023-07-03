@@ -13,6 +13,7 @@ public class WhatsEatContext : IdentityDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<OrderDetail>().HasKey(od => new { od.OrderId, od.ProductId });
         modelBuilder.Entity<CartDetail>().HasKey(cd => new { cd.ProductId, cd.CustomerId });
         modelBuilder.Entity<CustomerStore>().HasKey(cs => new { cs.CustomerId, cs.StoreId });
@@ -30,8 +31,15 @@ public class WhatsEatContext : IdentityDbContext
             .HasOne<RecipeType>(rrt => rrt.RecipeType)
             .WithMany(rt => rt.RecipeRecipeTypes)
             .HasForeignKey(rrt => rrt.RecipeTypeId);
+        
+        // foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        // {
+        //     if (entity?.GetTableName() != null)
+        //     {
+        //         entity.SetTableName(entity.GetTableName()?.ToLower());
+        //     }
+        // }
 
-        base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
