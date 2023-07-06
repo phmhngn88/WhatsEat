@@ -6,7 +6,7 @@ import numpy as np
 # Input: mysql cursor
 # Output: pandas dataframe of clicks data with three columns: id_user, id_movie, rating
 def rating_recipe_df(cur):
-    cur.execute("""SELECT CustomerId, RecipeId, Rating FROM whatseat.recipereviews""")
+    cur.execute("""SELECT CustomerId, RecipeId, Rating FROM whatseat.RecipeReviews""")
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['CustomerId', 'RecipeId', 'Rating'])
     return click_df
@@ -24,24 +24,24 @@ def rating_love_df(cur):
     return click_df
 
 def get_fav_food(cur, user_id):
-    cur.execute("""SELECT CustomerId, RecipeId FROM whatseat.recipereviews where rating >= 4 and CustomerId = %s """,(user_id,))
+    cur.execute("""SELECT CustomerId, RecipeId FROM whatseat.RecipeReviews where rating >= 4 and CustomerId = %s """,(user_id,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['CustomerId', 'RecipeId'])
     return click_df
 
 def list_product(cur, list_product_id):
-    cur.execute("""SELECT ProductId, Name, InStock, BasePrice, Description FROM whatseat.products WHERE ProductId IN %s""",(tuple(list_product_id),))
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice, Description FROM whatseat.Products WHERE ProductId IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','description'])
 
 def list_recipents(cur, list_recipents_id):
-    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl FROM whatseat.recipes WHERE RecipeId IN %s""",(tuple(list_recipents_id),))
+    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl FROM whatseat.Recipes WHERE RecipeId IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images'])
 
 #get list recipe by index
 def get_list_recipents_by_index(cur, list_recipents_id):
-    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, Calories/Serving as Calo FROM whatseat.recipes
+    cur.execute("""SELECT RecipeId, Name, TotalTime, TotalView, totalLike, ThumbnailUrl, Calories/Serving as Calo FROM whatseat.Recipes
      WHERE RecipeId IN %s""",(tuple(list_recipents_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['recipeId','name','totalTime','totalView','totalLike','images','calories'])
@@ -55,8 +55,8 @@ def product_recommendation(cur):
 #get interactive recipe
 def interactive_food(cur,recipeTypeId):
     cur.execute("""SELECT review.CustomerId, review.RecipeId, review.Rating 
-                        FROM whatseat.recipereviews review
-                        JOIN whatseat.reciperecipetypes re ON review.RecipeId = re.RecipeId
+                        FROM whatseat.RecipeReviews review
+                        JOIN whatseat.RecipeRecipeTypes re ON review.RecipeId = re.RecipeId
                         Where re.RecipeTypeId = %s""",(recipeTypeId,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id_user', 'id_food', 'rating'])
@@ -68,37 +68,37 @@ def get_top_recipe(cur, user_kcal,n_recipe,page,level,mintime,maxtime,allergy):
         if level != "Mức độ":
             if maxtime > 0:
                 #filter by time and level
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s
                         Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime, level,page*n_recipe,n_recipe,))
             else:
             #filter by level
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND level = %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND level = %s
                         Order By totalLike desc LIMIT %s,%s""",(user_kcal, level,page*n_recipe,n_recipe,))
         else:
             if maxtime > 0:
                 #filter by total time
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s
                         Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime,page*n_recipe,n_recipe,))
             else:
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s
                 Order By totalLike desc LIMIT %s,%s""",(user_kcal,page*n_recipe,n_recipe,))
     else:
         if level != "Mức độ":
             if maxtime > 0:
                 #filter by time and level
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s AND Ingredients NOT LIKE %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND level = %s AND Ingredients NOT LIKE %s
                         Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime, level,"%{}%".format(allergy),page*n_recipe,n_recipe,))
             else:
             #filter by level
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND level = %s AND Ingredients NOT LIKE %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND level = %s AND Ingredients NOT LIKE %s
                         Order By totalLike desc LIMIT %s,%s""",(user_kcal, level,"%{}%".format(allergy),page*n_recipe,n_recipe,))
         else:
             if maxtime > 0:
                 #filter by total time
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND Ingredients NOT LIKE %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND totalTime >= %s AND totalTime <= %s AND Ingredients NOT LIKE %s
                         Order By totalLike desc LIMIT %s,%s""",(user_kcal, mintime, maxtime,"%{}%".format(allergy),page*n_recipe,n_recipe,))
             else:
-                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.recipes Where Calo <= %s AND Ingredients NOT LIKE %s
+                cur.execute("""SELECT RecipeId, (Calories/Serving) as Calo FROM whatseat.Recipes Where Calo <= %s AND Ingredients NOT LIKE %s
                 Order By totalLike desc LIMIT %s,%s""",(user_kcal,"%{}%".format(allergy),page*n_recipe,n_recipe,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','calories'])
@@ -107,7 +107,7 @@ def get_top_recipe(cur, user_kcal,n_recipe,page,level,mintime,maxtime,allergy):
 
 #get list top product by total sell
 def get_top_products(cur, n_product):
-    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell FROM whatseat.products 
+    cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell FROM whatseat.Products 
      Order By TotalSell desc LIMIT %s""",(n_product,))
     res = cur.fetchall()
     click_df = pd.DataFrame(res, columns=['id','name','inStock','basePrice','images','weightServing','totalSell'])
@@ -115,8 +115,8 @@ def get_top_products(cur, n_product):
 
 #get list recipe id love by user
 def recipe_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(RecipeNo) FROM whatseat.lovedrecipes IR
-    JOIN whatseat.recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(RecipeNo) FROM whatseat.LovedRecipes IR
+    JOIN whatseat.Recipes R ON IR.RecipeId = R.RecipeId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
     print('res',res)
     res = res[0][1]
@@ -128,8 +128,8 @@ def recipe_love_by_user(cur, id_user):
 
 #get list product id love by user
 def product_love_by_user(cur, id_user):
-    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(ProductNo) FROM whatseat.lovedproducts IP
-    JOIN whatseat.products P ON IP.ProductId = P.ProductId WHERE CustomerId = %s """,(id_user,))
+    cur.execute("""SELECT CustomerId ,GROUP_CONCAT(ProductNo) FROM whatseat.LovedProducts IP
+    JOIN whatseat.Products P ON IP.ProductId = P.ProductId WHERE CustomerId = %s """,(id_user,))
     res = cur.fetchall()
     print('res',res)
     res = res[0][1]
@@ -142,7 +142,7 @@ def product_love_by_user(cur, id_user):
 #filter by low price
 def get_top_product_low_price(cur,list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell, Status from
-    whatseat.products where ProductId IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
+    whatseat.Products where ProductId IN %s ORDER BY BasePrice ASC LIMIT 12""",(tuple(list_product_id),))
     res = cur.fetchall()
     return pd.DataFrame(res, columns=['productId','name','inStock','basePrice','images','weightServing','totalSell','status'])
 
@@ -163,7 +163,7 @@ def get_recipe_priori(cur,list_recipe_id):
 #get product by list id
 def get_product_by_list_id(cur,list_product_id):
     cur.execute("""SELECT ProductId, Name, InStock, BasePrice,PhotoJson,WeightServing, TotalSell from
-    whatseat.products where ProductId IN %s""",(tuple(list_product_id),))
+    whatseat.Products where ProductId IN %s""",(tuple(list_product_id),))
     res = cur.fetchall()
     return pd.DataFrame(res,columns=['productId','name','inStock','basePrice','images','weightServing','totalSell'])
     
@@ -175,14 +175,14 @@ def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxt
                 #filter by time and level
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.totaltime >= %s AND R.totaltime <= %s
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,mintime,maxtime,page*n_recipe,n_recipe,))
             else:
             #filter by level
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s 
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,page*n_recipe,n_recipe,))
         else:
@@ -190,13 +190,13 @@ def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxt
                 #filter by total time
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.totaltime >= %s AND R.totaltime <= %s
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,mintime,maxtime,page*n_recipe,n_recipe,))
             else:
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s 
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,page*n_recipe,n_recipe,))
     else:
@@ -205,14 +205,14 @@ def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxt
                 #filter by time and level
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.totaltime >= %s AND R.totaltime <= %s AND R.Ingredients NOT LIKE %s
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,mintime,maxtime,"%{}%".format(allergy),page*n_recipe,n_recipe,))
             else:
             #filter by level
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.level = %s AND R.Ingredients NOT LIKE %s
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,level,"%{}%".format(allergy),page*n_recipe,n_recipe,))
         else:
@@ -220,13 +220,13 @@ def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxt
                 #filter by total time
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.totaltime >= %s AND R.totaltime <= %s AND R.Ingredients NOT LIKE %s
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,mintime,maxtime,"%{}%".format(allergy),page*n_recipe,n_recipe,))
             else:
                 cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
                     from whatseat.cb_similarity CB
-                    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+                    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
                     Where CB.CustomerId LIKE %s AND Calo <= %s AND R.Ingredients NOT LIKE %s
                     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,"%{}%".format(allergy),page*n_recipe,n_recipe,))
 
@@ -236,7 +236,7 @@ def get_recommend_list_cb(id_user,user_kcal,n_recipe,page,cur,level,mintime,maxt
 def get_recommend_list_cb_by_time(id_user,user_kcal,n_recipe,page,cur):
     cur.execute("""SELECT CB.RecipeId , CB.CustomerId, CB.Similarity, R.Calories/R.Serving as Calo 
     from whatseat.cb_similarity CB
-    JOIN whatseat.recipes R ON CB.RecipeId = R.RecipeId 
+    JOIN whatseat.Recipes R ON CB.RecipeId = R.RecipeId 
     Where CB.CustomerId LIKE %s AND Calo <= %s 
     ORDER BY CB.Similarity DESC LIMIT %s,%s""",(id_user,user_kcal,page*n_recipe,n_recipe,))
     res = cur.fetchall()
@@ -249,7 +249,7 @@ def get_recommend_list_product_cb(id_user,n_product,cur):
     return pd.DataFrame(res, columns=['id1','id2','similarity'])
 
 def get_recpie_review(cur):
-    cur.execute("""SELECT  CustomerId, RecipeId, Rating FROM whatseat.recipereviews""")
+    cur.execute("""SELECT  CustomerId, RecipeId, Rating FROM whatseat.RecipeReviews""")
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['CustomerId','RecipeId','Rating'])
     return data

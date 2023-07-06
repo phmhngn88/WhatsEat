@@ -7,14 +7,14 @@ import time
 def update_calo(conn,tuple):
     cursor = conn.cursor()
 
-    query_string =  """Update whatseat.recipes set Calories = %s where RecipeId = %s"""
+    query_string =  """Update whatseat.Recipes set Calories = %s where RecipeId = %s"""
     
     cursor.executemany(query_string, tuple)
     conn.commit()
     print('Update calo successfully')
 
 def recipes_df(cur):
-    cur.execute("""SELECT RecipeId, Name, Ingredients FROM whatseat.recipes""")
+    cur.execute("""SELECT RecipeId, Name, Ingredients FROM whatseat.Recipes""")
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['RecipeId', 'Name', 'Ingredients'])
     return data

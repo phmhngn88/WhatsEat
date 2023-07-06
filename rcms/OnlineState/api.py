@@ -11,8 +11,8 @@ app = flask.Flask(__name__)
 CORS(app)
 
 app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST')
-app.config['MYSQL_PORT'] = 3066
-app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PORT'] = None
+app.config['MYSQL_USER'] = 'admin'
 app.config['MYSQL_PASSWORD'] = '11111111'
 app.config['MYSQL_DB'] = 'whatseat'
 app.config['JSON_AS_ASCII'] = False

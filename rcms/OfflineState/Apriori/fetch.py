@@ -1,13 +1,13 @@
 import pandas as pd
 
 def transaction_df(cur):
-    cur.execute("""SELECT OrderId, ProductId FROM whatseat.orderdetails""")
+    cur.execute("""SELECT OrderId, ProductId FROM whatseat.OrderDetails""")
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['OrderId', 'ProductId'])
     return data
 
 def menu_df(cur):
-    cur.execute("""SELECT MenuId, RecipeId FROM whatseat.menudetails""")
+    cur.execute("""SELECT MenuId, RecipeId FROM whatseat.MenuDetails""")
     res = cur.fetchall()
     data = pd.DataFrame(res, columns=['MenuId', 'RecipeId'])
     return data
